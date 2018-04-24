@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+        <groupId>uk.co.compendiumdev.testing</groupId>
+        <artifactId>testing-apps-root</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+
+    <groupId>uk.co.compendiumdev</groupId>
+    <artifactId>rest-list-system</artifactId>
+    <packaging>jar</packaging>
+    <version>1.2-SNAPSHOT</version>
+
+    <!--
+        1.1 the original test app
+        1.2 the version added to the testing-apps project
+    -->
+
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sparkjava</groupId>
+            <artifactId>spark-core</artifactId>
+            <version>2.7.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+
+
+        <!-- experiment with moving away from Jaxb -->
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.10</version>
+        </dependency>
+
+        <!-- java 1.9 compatability -->
+        <!--
+        https://stackoverflow.com/questions/43574426/how-to-resolve-java-lang-noclassdeffounderror-javax-xml-bind-jaxbexception-in-j
+        -->
+        <!--
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-core</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        -->
+
+        <!-- lightweight xml to json conversion -->
+        <!-- https://github.com/stleary/JSON-java -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20160212</version>
+        </dependency>
+
+
+        <!-- ! this adds 19 meg to the full build so only have it in test and generate the documentation.html as a resource to serve up in the app -->
+        <!-- convert documentation markdown into html and serve as a root end point -->
+        <dependency>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.26.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- thought I would need the proxy to capture raw request but found a way to use reflection in the http connection to get details sent -->
+        <!--
+        <dependency>
+            <groupId>net.lightbody.bmp</groupId>
+            <artifactId>browsermob-core</artifactId>
+            <version>2.1.4</version>
+            <scope>test</scope>
+        </dependency>
+        -->
+        
+    </dependencies>
+
+
+    <build>
+    <plugins>
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+        </configuration>
+    </plugin>
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <descriptorRefs>
+                    <!-- This tells Maven to include all dependencies -->
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+                <archive>
+                    <manifest>
+                        <mainClass>uk.co.compendiumdev.Main</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>com.heroku.sdk</groupId>
+            <artifactId>heroku-maven-plugin</artifactId>
+            <version>1.2.0</version>
+            <configuration>
+                <jdkVersion>1.8</jdkVersion>
+                <!-- Use your own application name -->
+                <appName>rest-list-system</appName>
+                <processTypes>
+                    <!-- https://devcenter.heroku.com/articles/deploying-java-applications-with-the-heroku-maven-plugin -->
+                    <!-- Tell Heroku how to launch your application -->
+                    <!-- You might have to remove the ./ in front   -->
+                    <!-- <web>java -jar /target/restmud-1.0-jar-with-dependencies.jar</web>-->
+                    <!-- try from procfile -->
+                    <web>java $JAVA_OPTS -cp target/classes:target/dependency/* uk.co.compendiumdev.Main</web>
+                </processTypes>
+            </configuration>
+        </plugin>
+    </plugins>
+    </build>
+    
+</project>

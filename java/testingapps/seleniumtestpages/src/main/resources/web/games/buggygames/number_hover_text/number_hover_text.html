@@ -1,0 +1,264 @@
+<html>
+<head>
+
+<title>Number Hover Text Game</title>
+<!--
+
+inspired by lunar lander, 
+but the aim is to hover a decreasing count on a magic number that changes
+every so often.
+
+use timer functions in javascript to change values (http://www.w3schools.com/js/js_timing.asp) 
+
+count down every second
+if on the 'magic number' get a point
+press up or down to move up and down
+up moves by 2
+down moves by 1
+up or down costs boost
+boost increased at every points change
+
+points change after X seconds
+
+
+-->
+
+<script>
+
+var debugMode=false;
+
+// TODO: should really decrease this during the game to make it harder
+var millisecondsBetweenCountDowns=100;
+
+var theTimer = window.setInterval(instructions, millisecondsBetweenCountDowns);
+var startGame = false;
+
+// when pointsChangeAfter reaches 0, change all the values
+var pointsChangeAfter=10;
+// start at 100 as the count
+var maxCount=100;
+// on each points change, reduce maxCount (acts as a 'rounds' number)
+var theCount = maxCount;
+// when we hit the number we get points
+var magicNumber = 90; 
+// start with 0 points
+var points=0;
+// automatically lose if you drop the count to 0
+var youLoseAt = 0;
+
+// hide Stats at round 50
+var hideStatsAtRound=50;
+
+var boost=1000;
+var boostCost=10;
+
+// up and down values
+var upCount = 2;
+var minUpCount = 1;
+var downCount = 1;
+
+
+
+function setValuesToStartingValues(){
+
+	debugMode = getSpanText("debugMode");
+	
+	if(debugMode){
+	
+		millisecondsBetweenCountDowns = parseInt(getSpanText("Default_millisecondsBetweenCountDowns"));
+		pointsChangeAfter = parseInt(getSpanText("Default_pointsChangeAfter"));
+		maxCount = parseInt(getSpanText("Default_maxCount"));
+		theCount = parseInt(getSpanText("Default_theCount"));
+		boost = parseInt(getSpanText("Default_boost"));
+		youLoseAt = parseInt(getSpanText("Default_youLoseAt"));
+		boostCost = parseInt(getSpanText("Default_boostCost"));
+		minUpCount = parseInt(getSpanText("Default_minUpCount"));		
+	
+	}else{
+	
+		millisecondsBetweenCountDowns=100;
+		pointsChangeAfter=10;
+		// removed for debugging
+		//maxCount=100;
+		theCount=maxCount;
+		boost=1000;
+		youLoseAt = 0;
+	}
+	points=0;
+	magicNumber = getRandomInt(1,maxCount);
+}
+
+function instructions(){
+	document.getElementById('gameboard').style.display = 'none';
+	if(startGame){
+		window.clearInterval(theTimer);
+		document.getElementById('instructions').style.display = 'none';
+		document.getElementById('gameboard').style.display = 'block';
+		setValuesToStartingValues();
+		theTimer = window.setInterval(countDown, millisecondsBetweenCountDowns);
+		startGame=false;
+	}
+}
+
+function countDown(){
+	theCount--;
+	changeSpanText('theCount',theCount);
+	
+	if(theCount == magicNumber){
+		points++;
+		if(points%5==0){
+			// if you get good, then stats go away faster
+			hideStatsAtRound++;
+		}
+	}
+	changeSpanText('thePoints',points);
+	
+	changeSpanText('boost',boost);
+	
+	pointsChangeAfter--;
+	changeSpanText('info',"Points Change in " + pointsChangeAfter);
+	
+	if(pointsChangeAfter <= 0){
+		
+		// change the points and values
+		magicNumber = getRandomInt(1,maxCount);
+		maxCount--;
+		boost+= getRandomInt(maxCount/2,maxCount*2);
+		pointsChangeAfter = getRandomInt(maxCount/2, maxCount);
+		
+		// TODO: upCount and downCount should really be based on the distance from here to theCount
+		upCount = getRandomInt(minUpCount,5);
+		downCount = getRandomInt(1,5);
+		changeSpanText('info',"Points Changed");
+		changeSpanText('up',upCount);
+		changeSpanText('down',downCount);
+		changeSpanText('magic',magicNumber);
+		changeSpanText('maxCount',maxCount);
+		changeSpanText('hideStatsAt',hideStatsAtRound);
+		
+		if(maxCount<=hideStatsAtRound){
+			document.getElementById('stats').style.display = 'none';
+		}
+	}
+	
+	
+	if(theCount < youLoseAt){
+		window.clearInterval(theTimer);
+		changeSpanText('info',"You Lose, but you scored " + points);
+		document.getElementById('instructions').style.display = 'block';
+		document.getElementById('gameboard').style.display = 'none';
+		startGame=false;
+		theTimer = window.setInterval(instructions, millisecondsBetweenCountDowns);		
+	}
+}
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function changeSpanText(id, spanText){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		theSpan.textContent = spanText;
+	} else {
+		theSpan.innerText = spanText;
+	}
+}
+
+function getSpanText(id){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		return theSpan.textContent;
+	} else {
+		return theSpan.innerText;
+	}
+}
+
+document.onkeydown = function onkeydown(event) {
+	
+	// console.log(event.keyCode);
+	// 38 - up
+	// 40 - down
+	// 37 - left
+	// 39 - right
+	// 32 - space
+	
+	var countChange=0;
+	
+	if(event.keyCode==38){
+		countChange=upCount;
+	}
+	
+	if(event.keyCode==40){
+		countChange-=downCount;
+	}
+	
+	if(event.keyCode==32){
+		startGame=true;
+	}
+	
+	// only change count if we have boost left
+	if(countChange!=0){
+		if(boost>0){
+			boost-=boostCost;
+			theCount+=countChange;
+		}
+	}
+	
+	if(theCount > maxCount){
+		// set a ceiling
+		theCount=maxCount;
+	}
+  
+}
+
+</script>
+
+</head>
+
+<body>
+
+<div id="instructions">
+	<h1>Instructions</h1>
+	<p>Count down decreases every 1/10th of a second</p>
+	<p>If count is on the 'magic number' then you get a point.</p>
+	<p>press up or down to increase count up or down.</p>
+	<p>up count increment and down count increment are controlled by up and down stats.</p>
+	<p>up or down costs boost</p>
+	<p>boost increased at every points change</p>
+	<p>stats will disappear if you start to get good - no-one is that good.</p>
+	<p>Stats show the:</p>
+	<p>* UP (amount to increase count when you press up)</p>
+	<p>* DOWN (amount to decrease count when you press down)</p>
+	<p>* MAGIC (amount to match the count to score points)</p>
+	<p>* ROUNDS (number of rounds left until game is too hard to play, also maximum count value)</p>
+	<p>* HIDE (number of rounds before stats are hidden)</p>
+	<p>Game ends if you let count hit zero.</p>
+	<h2>Press space to start game</h2>
+</div>
+
+<div id="defaults" style="display:none">
+	<!-- SPECIFICATION: use these as defaults in code -->
+	<p><span id="debugMode">0</span></p>
+	<p><span id="Default_millisecondsBetweenCountDowns">100</span></p>
+	<p><span id="Default_pointsChangeAfter">10</span></p>
+	<p><span id="Default_maxCount">100</span></p>
+	<p><span id="Default_theCount">100</span></p>
+	<p><span id="Default_boost">1000</span></p>
+	<p><span id="Default_youLoseAt">0</span></p>
+	<p><span id="Default_boostCost">10</span></p>
+	<p><span id="Default_minUpCount">2</span></p>
+	
+</div>
+
+<div id="gameboard">
+	<h1>Count:<span id='theCount'></span></h1>
+	<h1>Points: <span id='thePoints'></span></h1>
+	<h1>Boost Left: <span id='boost'></span></h1>
+	<h2 id="stats">Stats: UP [<span id="up"></span>] DOWN [<span id="down"></span>] MAGIC [<span id="magic"></span>] ROUNDS [<span id="maxCount"></span>] HIDE [<span id="hideStatsAt"></span>] 
+</div>
+
+<h1>Info: <span id='info'></span></h1>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>Think of a number</title>
+
+		<!--
+			In this version I have functions wrapping around elements
+			and setting visibility, and setting help text
+		-->
+
+	<!-- todo why can I use document.controlzone.thinkOfANumber i.e. form and name, instead of getElementById ? -->
+
+
+		<script language="JavaScript">
+		var computerNumber=0;
+		var allowedGuesses=3;
+		//var numberOfGuesses=0;
+		//var score=0;
+
+		function myGuess(){
+			return document.getElementById("myguess");
+		}
+
+		function iGuessed(){
+			return document.getElementById("iguessed");
+		}
+
+		function helpText(){
+			return document.getElementById("helptext");
+		}
+
+		function thinkOfANumberButton(){
+			return document.getElementById("thinkOfANumber");	
+		}
+
+		function setHelpText(helpTextString){
+			helpText().innerHTML=helpTextString;
+		}
+
+		function startGameVisibility(visibility_value){
+			if(visibility_value){
+				showElement(thinkOfANumberButton());	
+			}else{
+				hideElement(thinkOfANumberButton());	
+			}
+		}
+
+		//http://www.w3schools.com/css/css_display_visibility.asp
+		function showElement(anElement){
+			//anElement.style.visibility='visible';	
+			anElement.style.display='inline';
+		}
+
+		function hideElement(anElement){
+			//anElement.style.visibility='hidden';	
+			anElement.style.display='none';	
+		}
+
+
+		function guessingVisibility(visibility_value){
+			if(visibility_value){
+				showElement(myGuess());	
+				showElement(iGuessed());	
+			}else{
+				hideElement(myGuess());	
+				hideElement(iGuessed());	
+			}			
+		}
+
+		function allowStartGame(){
+			startGameVisibility(true);
+			guessingVisibility(false);
+		}
+
+		function allowGuessing(){
+			startGameVisibility(false);
+			guessingVisibility(true);
+		}
+
+		function randomNumberBetween(from, to){
+			return (Math.floor(Math.random() * to) + from);	
+		}
+
+		function startGame()
+		{
+			myGuess().value= "";
+			computerNumber = randomNumberBetween(1,6);
+			allowedGuesses=3;
+			setHelpText("You have " + allowedGuesses + " guesses left");
+			allowGuessing();
+			//numberOfGuesses=0;
+			//score=0;
+		}
+
+
+		function checkGuess(){
+			if(computerNumber==myGuess().value){
+				setHelpText("Correct well done, game over");
+				allowStartGame();
+				//score=score+1;
+			}else{
+
+				allowedGuesses = allowedGuesses - 1;
+				setHelpText("incorrect, you have " + allowedGuesses + " guesses left");
+
+				if(allowedGuesses==0){
+					setHelpText("Game Over, I was thinking of " + computerNumber);
+					allowStartGame();
+				}
+				
+				//numberOfGuesses = numberOfGuesses+1;
+			}
+			myGuess().value= "";			
+		}
+
+
+
+		</script>
+
+	</head>
+	<body>
+		<!-- found colour codes from w3 schoools color picker
+		 http://www.w3schools.com/tags/ref_colorpicker.asp -->
+		<h1 style="color: #33CC33">Play the think of a number game between 1 and 6</h1>
+
+		<p id="helptext">You haven't started the game yet</p>
+	
+		<input style="background: #33CC33" id="thinkOfANumber" type="button" name="thinkOfANumber" onclick="startGame()" value="Start a new game"/>
+
+
+		<input id="myguess" name="myGuess" value=""/>
+		<input id="iguessed" type="button" name="iguessed" onclick="checkGuess()" value="I Guessed"/>
+
+		<!-- this form will submit automatically on enter when there is only a single input 
+		http://www.alanflavell.org.uk/www/formquestion.html
+		I added a non-displayed field to stop that
+
+		Or could have made the p an input and made it readonly e.g. http://www.javascriptkit.com/script/script2/ageguess.shtml
+		but make prompt readonly="readonly"
+		-->
+		<!-- no need for this line if I remove the 'form' tags 
+			<input name="tryToStopEnter" style="display:none" value=""/>
+		-->
+
+
+		<script language="JavaScript">
+			allowStartGame();
+		</script>
+
+
+	</body>
+
+</html>

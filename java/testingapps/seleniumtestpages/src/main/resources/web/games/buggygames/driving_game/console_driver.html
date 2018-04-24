@@ -1,0 +1,330 @@
+<html>
+<head>
+    <title>Console Driver</title>
+
+
+<script>
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function changeSpanText(id, spanText){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		theSpan.textContent = spanText;
+	} else {
+		theSpan.innerText = spanText;
+	}
+}
+
+
+function getTrackLine(left, roadWidth, trackWidth){
+
+    var track="";
+
+    for(var i=0; i < left; i++){
+        track+="*";
+    }
+
+    // create the width
+    for(var i=0; i < roadWidth; i++){
+        track += " ";
+    }
+
+    for(var i=left+roadWidth; i < trackWidth; i++){
+      track+="*";
+    }
+
+    return track;
+}
+
+document.onkeydown = function onkeydown(event) {
+
+	// console.log(event.keyCode);
+  var LEFT_KEY = 37;
+  var RIGHT_KEY = 39;
+  var UP_KEY = 38;
+  var DOWN_KEY = 40;
+  var SPACE_KEY = 32;
+  var ENTER_KEY = 13;
+
+	if(event.keyCode==LEFT_KEY){
+		carPosition-=1;
+	}
+
+	if(event.keyCode==RIGHT_KEY){
+		carPosition+=1;
+	}
+
+	if(event.keyCode==SPACE_KEY){
+		startGame=true;
+	}
+
+  if(event.keyCode==ENTER_KEY){
+    promptForValues=true;
+  }
+
+}
+
+
+function instructions(){
+	document.getElementById('gameboard').style.display = 'none';
+	if(startGame){
+    changeSpanText('info', "Drive Safely");
+		window.clearInterval(theTimer);
+		document.getElementById('instructions').style.display = 'none';
+		document.getElementById('gameboard').style.display = 'block';
+		setValuesToStartingValues();
+
+    // set level prototype
+    setLevelElement = document.getElementById('setLevel');
+    if(setLevelElement.style.display != 'none'){
+        var setLevelTo = parseInt(setLevelElement.value);
+        setDifficultyLevel(setLevelTo);
+    }
+
+		theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
+		startGame=false;
+	}
+}
+
+function playGame(){
+
+  // calculate points etc.
+  distanceTravelled++;
+  points=distanceTravelled/10;
+  changeSpanText('thePoints', points);
+  changeSpanText('theSpeed', millisecondsBetweenScrolls/500);
+
+  // change speed
+  distanceToNextSpeedChange--;
+  if(distanceToNextSpeedChange<0){
+      millisecondsBetweenScrolls-=50;
+
+      if(millisecondsBetweenScrolls<maxSpeedMillis){
+        millisecondsBetweenScrolls=maxSpeedMillis;
+      }
+
+      window.clearInterval(theTimer);
+      theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
+
+      speedChanges++;
+
+
+      //5, 10, 20, 50,
+      switch(speedChanges){
+          case 0:
+            distanceToNextSpeedChange=5;
+            trackWidthChangeModulus=2;
+            break;
+          case 1:
+          case 2:
+          case 3:
+            distanceToNextSpeedChange=10;
+            trackWidthChangeModulus=5;
+            break;
+          case 4:
+          case 5:
+          case 6:
+            distanceToNextSpeedChange=30;
+            trackWidthChangeModulus=10;
+            break;
+          default:
+            distanceToNextSpeedChange=50;
+            trackWidthChangeModulus=20;
+      }
+  }
+
+  // change track width
+  if(distanceTravelled%trackWidthChangeModulus==0){
+      widthOfTrack-=getRandomInt(0, maxWidthOfTrackIncrement);
+      if(widthOfTrack < minWidthOfTrack){
+        widthOfTrack = minWidthOfTrack;
+      }
+  }
+
+  displayTheTrackToTheConsole();
+  adjustTheTrackForRoadWeaving();
+
+	if(hasCrashed){
+    endGame();
+	}
+}
+
+function setDifficultyLevel(theLevel){
+
+  var levels =[{s:500,w:40},
+               {s:450,w:35},
+               {s:400,w:30},
+               {s:350,w:25},
+               {s:300,w:20},
+               {s:250,w:15},
+               {s:200,w:10}
+            ];
+
+  var setToLevel=0;
+  if(theLevel>=0 && theLevel<levels.length){
+    setToLevel=theLevel;
+  }
+
+  if(theLevel>=levels.length){
+    setToLevel=levels.length-1;
+  }
+
+  millisecondsBetweenScrolls=levels[setToLevel].s;
+  widthOfTrack=levels[setToLevel].w;
+  carPosition = posOfLeftOfTrack + Math.floor(widthOfTrack/2);
+}
+
+function endGame(){
+  changeSpanText('info', "!!GAME OVER!! You Crashed! You Scored " + points);
+  startGame=false;
+  window.clearInterval(theTimer);
+  document.getElementById('instructions').style.display = 'block';
+  document.getElementById('gameboard').style.display = 'none';
+  theTimer = window.setInterval(instructions, millisecondsBetweenScrolls);
+
+}
+
+function displayTheTrackToTheConsole(){
+
+  var trackDisplay = getTrackLine(posOfLeftOfTrack, widthOfTrack, maxWidthOfArena);
+
+  var trackArray = trackDisplay.split("");
+  var carSpace = trackArray[carPosition];
+
+  // use array above instead of string manipulationg - seems simpler
+  //var leftOfTrack = trackDisplay.substring(0,carPosition);
+  //var carSpace = trackDisplay.substr(carPosition, 1);
+  //var rightOfTrack = trackDisplay.slice(carPosition);
+
+
+  //if(carSpace != " "){  // are you on a road?
+  if(carSpace == "*"){ // have you hit a wall?
+    carDisplay = "X";
+    hasCrashed=true;
+  }
+
+  // add car to the track
+  //trackDisplay = leftOfTrack + carDisplay + rightOfTrack;
+  trackArray[carPosition] = carDisplay;
+
+  trackDisplay = trackArray.join("");
+
+  console.log(trackDisplay);
+
+}
+
+
+function adjustTheTrackForRoadWeaving(){
+  var leftNudge = getRandomInt(-1, 1);
+
+  posOfLeftOfTrack += leftNudge;
+  if(posOfLeftOfTrack<1){
+    posOfLeftOfTrack=1;
+  }
+  if((posOfLeftOfTrack+widthOfTrack) > maxWidthOfArena){
+    posOfLeftOfTrack = maxWidthOfArena - widthOfTrack - 1;
+  }
+}
+
+function setValuesToStartingValues(){
+
+   posOfLeftOfTrack=1;
+   maxWidthOfArena=60;
+   widthOfTrack=58;
+   minWidthOfTrack=4;
+
+   points=0;
+   startGame = false;
+   trackString = " - ";
+   carDisplay = "V";
+   hasCrashed = false;
+   millisecondsBetweenScrolls=500;
+   distanceTravelled=0;
+   distanceToNextSpeedChange=5;
+   speedChanges=0;
+   maxSpeedMillis=100;
+   trackWidthChangeModulus=20;
+   maxWidthOfTrackIncrement=3;
+
+   if(promptForValues){
+      var promptedValue = window.prompt("Enter Max Arena Width",maxWidthOfArena);
+      if(promptedValue!=null){
+        maxWidthOfArena = parseInt(promptedValue);
+      }
+
+      promptedValue = window.prompt("Enter Start Width of Track",widthOfTrack);
+      if(promptedValue!=null){
+        widthOfTrack = parseInt(promptedValue);
+      }
+
+      promptedValue = window.prompt("Enter initial milliseconds between scrolls (speed - high is slower)",millisecondsBetweenScrolls);
+      if(promptedValue!=null){
+        millisecondsBetweenScrolls = parseInt(millisecondsBetweenScrolls);
+      }
+
+      promptForValues=false;
+   }
+
+   posOfLeftOfTrack = getRandomInt(1,(maxWidthOfArena/2)-(widthOfTrack/2)-1);
+   carPosition = posOfLeftOfTrack + Math.floor(widthOfTrack/2);
+
+}
+
+
+  var distanceTravelled, distanceToNextSpeedChange, speedChanges;
+  var posOfLeftOfTrack=1;
+  var maxWidthOfArena=60;
+  var widthOfTrack=maxWidthOfArena-6;
+  var minWidthOfTrack=8;
+  var trackWidthChangeModulus=50;
+
+  var carPosition = posOfLeftOfTrack + (widthOfTrack/2);
+  var points=0;
+  var startGame = false;
+  var promptForValues=false;
+  // build a string and display to the console
+  // randomly shift track left or right
+
+  var trackString = " - ";
+
+  var carDisplay = "V";
+  var hasCrashed = false;
+
+  // initially show the instructions
+  var millisecondsBetweenScrolls=500;
+  var maxSpeedMillis=50;
+  var theTimer = window.setInterval(instructions, millisecondsBetweenScrolls);
+  var maxWidthOfTrackIncrement=3;
+
+
+
+</script>
+
+</head>
+<body>
+
+<h1>Console Driver</h1>
+
+  <div id="instructions">
+  	<h1>Instructions</h1>
+  	<p>Use left and Right to keep your car 'V' on the track.</p>
+  	<p>Hit a wall '*' and you explode 'X'.</p>
+  	<h2>Press space to start game</h2>
+    <!-- prototype for set start level difficulty -->
+    <input id="setLevel" style="display:none" value="1" />
+  </div>
+
+  <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
+
+  <div id="gameboard">
+  	<h1>Points: <span id='thePoints'></span></h1>
+    <h1>Speed: <span id='theSpeed'></span></h1>
+  </div>
+
+  <h1>Info: <span id='info'></span></h1>
+
+</body>
+</html>

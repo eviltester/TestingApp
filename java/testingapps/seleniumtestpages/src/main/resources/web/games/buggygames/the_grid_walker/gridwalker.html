@@ -1,0 +1,242 @@
+<html>
+<head>
+<title>The Grid Walker Game</title>
+<!-- tested on Firefox 45.0.1, IE11, Chrome -->
+<style>
+td{
+	padding: 15px;
+    text-align: center;
+	border: 1px solid black;
+}
+
+td.selected{
+	background-color:red;
+}
+
+td.visited{
+	background-color:grey;
+}
+
+</style>
+<script type="text/javascript">
+
+var colours = ["blue", "white", "green", "black", "pink"];
+
+var gridRows=10;
+var gridCols=10;
+var moves=0;
+var score=0;
+var atCell="";
+var status="";
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+// http://stackoverflow.com/questions/5597060/detecting-arrow-key-presses-in-javascript
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+
+    e = e || window.event;
+
+	var colinc=0;
+	var rowinc=0;
+	
+    if (e.keyCode == '38') {
+        rowinc=-1;
+    }
+    else if (e.keyCode == '40') {
+        rowinc=1;
+    }
+    else if (e.keyCode == '37') {
+       colinc=-1;
+    }
+    else if (e.keyCode == '39') {
+       colinc=1;
+    }
+	
+	var coords = atCell.split(",");
+	var nextcoords = [];
+	nextcoords[0] = parseInt(coords[0])+colinc;
+	nextcoords[1] = parseInt(coords[1])+rowinc;
+	var theId=nextcoords[0] +","+nextcoords[1];
+	
+	if(nextcoords[0]>=gridCols){
+		checkWin();
+		return;
+	}
+	
+	moveToCell(nextcoords, coords, theId);
+	showScoresEtc();
+
+}
+
+function tableClick(event){
+	var clickedOn = event.target;
+	var theId = clickedOn.id;
+	
+	if(theId.length==0){
+		status="You need to click on a cell";
+		showScoresEtc();
+		return;
+	}
+				
+				// ideally use startsWith("h") but not all browsers support that
+	if(theId.substring(0,1)=="h"){
+		// remove the h to get the co-ords
+		theId = theId.substring(1);
+	}
+	
+	if(moves==0){
+		//first click sets the first cell
+		if(theId.substring(0,1)=="0"){
+			atCell=theId;
+			moves++;
+			clickedOn.className="selected";
+			score = score + parseInt(clickedOn.getAttribute("score"));
+			status="Playing";
+		}else{
+			status="You need to click on a cell on the left to start";
+		}
+	}else{
+		if(clickedOn.className!="selected" && clickedOn.className!="visited"){
+			var nextcoords = theId.split(",");
+			var coords = atCell.split(",");
+			
+			moveToCell(nextcoords, coords, theId);
+		}
+	}
+
+	showScoresEtc();
+	
+}
+
+function moveToCell(nextcoords, coords, theId){
+
+			var invalidCell=false;
+			
+			var xdiff = Math.abs(nextcoords[0] - coords[0]);
+			if(xdiff>1){
+				status="Too far to go";
+				showScoresEtc();
+				return;
+			}
+			
+			var ydiff = Math.abs(nextcoords[1] - coords[1]);
+			if(ydiff>1){
+				status="Too far away to go";
+				showScoresEtc();
+				return;
+			}
+			
+			document.getElementById(atCell).className="visited";
+			atCell=theId;
+			moves++;			
+			var nextCell = document.getElementById(theId);
+			nextCell.className="selected";
+			score = score + parseInt(nextCell.getAttribute("score"));
+			nextCell.setAttribute("score",0);
+			status="Moved to " + theId;
+
+}
+
+function generate(){
+	
+	moves=0;
+	score=0;
+	
+	var theTable = document.getElementById("gridland");
+	theTable.innerHTML="";
+	theTable.onclick = tableClick;
+	
+	// create table representation
+	for(var row = 0; row < gridRows; row++){
+        var tr = theTable.insertRow();
+        for(var col = 0; col < gridCols; col++){
+		
+			var cellscore = getRandomInt(0,9);
+			
+			var td = tr.insertCell();
+			td.id=col + "," + row;
+			td.setAttribute("score", cellscore);
+			
+			var h2 = document.createElement('h2');
+			// add an id to the header to fix bug where can't click on cell in IE
+			h2.id="h" + col + "," + row;
+			
+			h2.appendChild(document.createTextNode(cellscore));
+			td.appendChild(h2);
+        }
+    }	
+	
+	status="Click on a square on the left to start";
+	showScoresEtc();
+}
+
+function changeSpanText(id, spanText){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		theSpan.textContent = spanText;
+	} else {
+		theSpan.innerText = spanText;
+	}
+}
+
+function showScoresEtc(){
+	changeSpanText("movestally",moves);
+	changeSpanText("scoretally",score);
+	changeSpanText("atcell",atCell);
+	changeSpanText("status",status);
+}
+
+function checkWin(){
+
+	var coords = atCell.split(",");
+	var rightMostCol = parseInt(coords[0])+1;
+	
+	if(rightMostCol!=gridCols){
+		status="You are not on the right of the grid";
+		showScoresEtc();
+		return;
+	}
+
+	// wanted to use endsWith but IE does not support it
+	//var winCheck = score.toString().endsWith("0");
+	var winCheck = (score.toString().charAt(score.toString().length-1)=="0");
+	if(winCheck){
+		status="Winner!";
+		showScoresEtc();
+		alert("You Win!");
+	}else{
+		status="You lost. You did not get a correct total.";
+		showScoresEtc();
+	}
+}
+
+</script>
+
+</head>
+<h1>The Grid Walker Game</h1>
+<p>The aim of the game is to walk through the grid and exit with a total score ending in zero.</p>
+<p>You can only walk left, right, up, or down.</p>
+<p>Use the Arrow keys, or click on the next grid square to move to it.</p>
+<p>You can only walk on each square once.</p>
+<p>Enter the grid on the left, exit the grid on the right.</p>
+<p>The number in each cell will be added to your total score.</p>
+<p><strong>Exit on the right with a score ending in zero, to win.</strong></p>
+<p>If moving with the mouse then click the [Exit The Grid] button when on the left of the grid to exit.</p>
+
+<!-- inspired by Chapter 6 - The Magic Forest in Computer Puzzles For Spectrum & ZX81 by Ian Stewart and Robin Jones, Shiva Micro Puzzle Books, 1982 -->
+ 
+<hr/>
+<h2>Status: <span id="status">Ready to Generate</span></h2>
+<button id="generateButton" onclick="generate()">Generate</button>
+<table id="gridland" border="0">
+	<tr>		
+	</tr>
+</table>
+<button id="exitButton" onclick="checkWin()">Exit The Grid</button>
+<p><strong>Total Score:</strong> <span id="scoretally">0</span> | <strong>Moves:</strong> <span id="movestally">0</span> | <strong>Position:</strong> <span id="atcell">0</span></p>
+</html>

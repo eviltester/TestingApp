@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<title>Think of a number</title>
+
+		<!-- todo: refactor to remove repeating code -->
+		<!-- the hidden, non hidden was to fix a state based bug where you can continue to play after finishing -->
+
+		<script language="JavaScript">
+		var computerNumber=0;
+		var allowedGuesses=3;
+		//var numberOfGuesses=0;
+		//var score=0;
+
+		function startGame()
+		{
+			document.guesszone.myGuess.value= "";
+			computerNumber = Math.floor(Math.random() * 6) + 1;
+			allowedGuesses=3;
+			document.getElementById("helptext").innerHTML="You have " + allowedGuesses + " guesses left";
+			document.controlzone.thinkOfANumber.style.visibility='hidden'; 
+			document.guesszone.myGuess.style.visibility='visible'; 
+			document.guesszone.iguessed.style.visibility='visible'; 
+			//numberOfGuesses=0;
+			//score=0;
+		}
+		function checkGuess(){
+			if(computerNumber==document.guesszone.myGuess.value){
+				document.getElementById("helptext").innerHTML="Correct well done, game over";
+				document.controlzone.thinkOfANumber.style.visibility='visible';
+				document.guesszone.myGuess.style.visibility='hidden'; 
+				document.guesszone.iguessed.style.visibility='hidden'; 
+				//score=score+1;
+			}else{
+
+				allowedGuesses = allowedGuesses -1;
+				document.getElementById("helptext").innerHTML="incorrect, you have " + allowedGuesses + " guesses left";
+
+				if(allowedGuesses==0){
+					document.getElementById("helptext").innerHTML="Game Over, I was thinking of " + computerNumber;
+					document.controlzone.thinkOfANumber.style.visibility='visible';
+					document.guesszone.myGuess.style.visibility='hidden'; 
+					document.guesszone.iguessed.style.visibility='hidden'; 
+				}
+				
+				//numberOfGuesses = numberOfGuesses+1;
+			}
+			document.guesszone.myGuess.value= "";
+			
+		}
+
+
+
+		</script>
+
+	</head>
+	<body>
+		<!-- found colour codes from w3 schoools color picker
+		 http://www.w3schools.com/tags/ref_colorpicker.asp -->
+		<h1 style="color: #33CC33">Play the think of a number game between 1 and 6</h1>
+
+		<form name="controlzone">
+			<input type="button" name="thinkOfANumber" onclick="startGame()" value="Start a new game"/>
+		</form>	
+
+		<!-- todo how to handle enter key as a submit guess? -->
+		<form name="guesszone">
+			<p id="helptext">You haven't started the game yet</p>
+			<input name="myGuess" value=""/>
+			<input type="button" name="iguessed" onclick="checkGuess()" value="I Guessed"/>
+		</form>	
+
+		<script language="JavaScript">
+			document.guesszone.myGuess.style.visibility='hidden'; 
+			document.guesszone.iguessed.style.visibility='hidden'; 
+		</script>
+
+
+	</body>
+
+</html>

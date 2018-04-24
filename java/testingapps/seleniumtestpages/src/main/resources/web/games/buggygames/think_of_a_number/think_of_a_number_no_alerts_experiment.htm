@@ -1,0 +1,94 @@
+<html>
+	<head>
+		<title>Think of a number</title>
+
+		<!-- todo: refactor to remove repeating code -->
+		<!-- the hidden, non hidden button and was to fix a state based bug where you can continue to play after finishing -->
+
+	<!-- todo why can I use document.controlzone.thinkOfANumber i.e. form and name, instead of getElementById ? -->
+
+
+		<script language="JavaScript">
+		var computerNumber=0;
+		var allowedGuesses=3;
+		//var numberOfGuesses=0;
+		//var score=0;
+
+
+		function startGame()
+		{
+			document.controlzone.myGuess.value= "";
+			computerNumber = Math.floor(Math.random() * 6) + 1;
+			allowedGuesses=3;
+			document.getElementById("helptext").innerHTML="You have " + allowedGuesses + " guesses left";
+			document.controlzone.thinkOfANumber.style.visibility='hidden'; 
+			document.controlzone.myGuess.style.visibility='visible'; 
+			document.controlzone.iguessed.style.visibility='visible'; 
+			//numberOfGuesses=0;
+			//score=0;
+		}
+		function checkGuess(){
+			if(computerNumber==document.controlzone.myGuess.value){
+				document.getElementById("helptext").innerHTML="Correct well done, game over";
+				document.controlzone.thinkOfANumber.style.visibility='visible';
+				document.controlzone.myGuess.style.visibility='hidden'; 
+				document.controlzone.iguessed.style.visibility='hidden'; 
+				//score=score+1;
+			}else{
+
+				allowedGuesses = allowedGuesses -1;
+				document.getElementById("helptext").innerHTML="incorrect, you have " + allowedGuesses + " guesses left";
+
+				if(allowedGuesses==0){
+					document.getElementById("helptext").innerHTML="Game Over, I was thinking of " + computerNumber;
+					document.controlzone.thinkOfANumber.style.visibility='visible';
+					document.controlzone.myGuess.style.visibility='hidden'; 
+					document.controlzone.iguessed.style.visibility='hidden'; 
+				}
+				
+				//numberOfGuesses = numberOfGuesses+1;
+			}
+			document.controlzone.myGuess.value= "";
+			
+		}
+
+
+
+		</script>
+
+	</head>
+	<body>
+		<!-- found colour codes from w3 schoools color picker
+		 http://www.w3schools.com/tags/ref_colorpicker.asp -->
+		<h1 style="color: #33CC33">Play the think of a number game between 1 and 6</h1>
+
+			<p id="helptext">You haven't started the game yet</p>
+
+
+
+		<form onsubmit="" name="controlzone" action="">
+			<input type="button" name="thinkOfANumber" onclick="startGame()" value="Start a new game"/>
+
+
+			<input name="myGuess" value=""/>
+			<input type="button" name="iguessed" onclick="checkGuess()" value="I Guessed"/>
+
+			<!-- this form will submit automatically on enter when there is only a single input 
+			http://www.alanflavell.org.uk/www/formquestion.html
+			I added a non-displayed field to stop that
+
+			Or could have made the p an input and made it readonly e.g. http://www.javascriptkit.com/script/script2/ageguess.shtml
+			but make prompt readonly="readonly"
+			-->
+			<input name="tryToStopEnter" style="display:none" value=""/>
+		</form>	
+
+		<script language="JavaScript">
+			document.controlzone.myGuess.style.visibility='hidden'; 
+			document.controlzone.iguessed.style.visibility='hidden'; 
+		</script>
+
+
+	</body>
+
+</html>

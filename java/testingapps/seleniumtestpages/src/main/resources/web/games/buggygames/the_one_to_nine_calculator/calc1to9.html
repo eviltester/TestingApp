@@ -1,0 +1,146 @@
+<html>
+<head>
+<title>The One to Nine Calculator Game</title>
+
+<!-- inspired by Chapter 4 - Stringing The Ton in Computer Puzzles For Spectrum & ZX81 by Ian Stewart and Robin Jones, Shiva Micro Puzzle Books, 1982 -->
+
+<script type="text/javascript">
+
+// TODO Obfuscate and minimise
+
+var totalToGet=0;
+var calcOperators="-+/* ";
+var showWhyLosing=false;
+var hintCountAt=10;
+var tries=0;
+
+function randomCharFromString(aString){
+	return aString.charAt(Math.floor(Math.random() * aString.length));
+}
+
+function generate(){
+	// generate a calculation to work out
+	var calculation = "";
+	
+	for(calcVal = 1; calcVal <= 9; calcVal++){
+		calculation = calculation + calcVal.toString();
+		
+		// nothing after 9
+		if(calcVal!=9){
+			calculation = calculation + randomCharFromString(calcOperators);
+		}
+	}
+	
+	// clear out old inputs
+	for(calcVal = 1; calcVal <= 9; calcVal++){
+		document.getElementById(calcVal).value="";
+	}
+
+	calculation = calculation.replace(/\s+/g, '');
+	//TODO: remove from release otherwise you can see the formula
+	//console.log(calculation);
+	
+	totalToGet = eval(calculation);
+	changeAskedForText(totalToGet);
+	changeStatusText("Playing");
+	hintCountAt=10;
+}
+
+function changeSpanText(id, spanText){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		theSpan.textContent = spanText;
+	} else {
+		theSpan.innerText = spanText;
+	}
+}
+
+function changeStatusText(statusText){
+	changeSpanText('status', statusText);
+}
+
+function changeAskedForText(askedForValue){
+	changeSpanText('askedfor', askedForValue);
+}
+
+
+function calculate(){
+
+	var calculatedTotal = 0;
+	var calculation = "";
+	tries++;
+	
+	for(calcVal = 1; calcVal <= 9; calcVal++){
+		calculation = calculation + calcVal.toString();
+		var elemVal = document.getElementById(calcVal.toString()).value;
+		if(elemVal==null){elemVal="";}
+		calculation = calculation + elemVal;
+	}
+	
+	// TODO:remove from prod
+	//console.log(calculation);
+	
+	calculatedTotal = eval(calculation);
+	
+	var winCheck = (calculatedTotal==totalToGet);
+	if(winCheck){
+		changeStatusText("Winner!");
+		alert("You Win!");
+	}else{
+		hintCountAt -= 1;
+		
+		if(hintCountAt==0){
+			// true = OK, false = Cancel
+			hintWanted = window.confirm("Would you like to see hints?");
+			if(hintWanted){
+				showWhyLosing=true;		
+			}
+		}
+		
+		var losing = "Tries: " + tries + " Losing...";
+		if(showWhyLosing){
+			losing += "because " + calculation + " != " + totalToGet;
+		}
+		changeStatusText(losing);
+	}
+}
+
+</script>
+
+</head>
+<h1>The One To Nine Calculator Game</h1>
+<p>The aim of the game is fill in the blanks with +,-,/,* to create a calculation that will equal the asked for amount.</p>
+<ol>
+<li>Press the [Generate] button, to create a new 'asked for amount'.</li>
+<li>Fill in the blanks with +,-,/,* to create a calculation that will equal the asked for amount.</li>
+<li>Press the [Calculate] button, when your calculation is correct, to win.</li>
+</ol>
+
+<p>Status: <span id="status">Playing</span></p>
+
+<p><button id="theButton" onclick="generate()">Generate</button></p>
+<p>Asked For Amount: <span id="askedfor">0</span></p>
+<table border="0">
+	<tr>
+		<td>1</td>
+		<td><input id="1" size="1"/></td>
+		<td>2</td>
+		<td><input id="2" size="1"/></td>
+		<td>3</td>			
+		<td><input id="3" size="1"/></td>
+		<td>4</td>
+		<td><input id="4" size="1"/></td>
+		<td>5</td>
+		<td><input id="5" size="1"/></td>
+		<td>6</td>
+		<td><input id="6" size="1"/></td>
+		<td>7</td>
+		<td><input id="7" size="1"/></td>
+		<td>8</td>
+		<td><input id="8" size="1"/></td>
+		<td>9<input style="visibility: hidden" id="9" size="1"/></td>
+	</tr>
+</table>
+
+<p><button id="theButton" onclick="calculate()">Calculate</button></p>
+</html>

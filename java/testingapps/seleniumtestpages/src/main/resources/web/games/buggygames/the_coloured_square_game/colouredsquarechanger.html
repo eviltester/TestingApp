@@ -1,0 +1,206 @@
+<html>
+<head>
+<title>The Coloured Square Changing Game</title>
+
+<script type="text/javascript">
+
+var colours = ["blue", "white", "green", "black", "pink", "red", "grey"];
+
+function getRandomColour(){
+	return colours[Math.floor(Math.random() * colours.length)];
+}
+
+function changeColourOfSquare(){
+	var colour = getRandomColour();
+	changeColourOfSquareTo(colour);
+	changeStatusText(colour);
+}
+
+function changeColourOfSquareTo(colour){	
+	document.getElementById("theSquare").style.backgroundColor=colour;
+	changeLinkText("Change From " + colour);
+}
+
+function changeColourOfButton(){
+	var colour = getRandomColour();
+	changeColourOfButtonTo(colour);
+}
+
+function changeColourOfButtonTo(colour){
+	var theButton=document.getElementById("theButton");
+	theButton.style.backgroundColor=colour;
+	var textWillBe = "It is ..." + colour;
+	if(colourBlindModeEnabled){
+		changeIdText("theButtonColour",colour);
+	}
+	if ('textContent' in theButton) {
+		theButton.textContent = textWillBe;
+	} else {
+		theButton.innerText = textWillBe;
+	}
+}
+
+function changeStatusText(statusText){
+	var statusSpan = document.getElementById('status');
+	var theStatusText = statusText;
+
+	if(showScoreMode){
+		theStatusText = theStatusText + " score " + score;
+	}
+	if(showLivesMode){
+		theStatusText = theStatusText + " lives " + lives ;
+	}
+	if(debugMode){
+		theStatusText = theStatusText + " sq " + timeToChangeSquare + " btn " + timeToChangeButton; 
+	}
+
+
+	if ('textContent' in statusSpan) {
+		statusSpan.textContent = theStatusText;
+	} else {
+		statusSpan.innerText = theStatusText;
+	}
+}
+
+function changeLinkText(linkText){
+	var linkA = document.getElementById('changeLink');
+	if ('textContent' in linkA) {
+		linkA.textContent = linkText;
+	} else {
+		linkA.innerText = linkText;
+	}
+}
+
+function changeIdText(theId, theText){
+	var linkA = document.getElementById(theId);
+	if ('textContent' in linkA) {
+		linkA.textContent = theText;
+	} else {
+		linkA.innerText = theText;
+	}
+}
+
+function checkColour(){
+
+	var colour = document.getElementById("theSquare").style.backgroundColor;
+	var buttonColour = document.getElementById("theButton").style.backgroundColor;
+	var winCheck = colour == buttonColour;
+
+	if(winCheck){
+		score++;
+		changeStatusText("Winning..." + score );
+		timeToChangeSquare-=squareDecrement;
+		timeToChangeButton-=buttonDecrement;
+		changeColourOfButton();
+	}else{
+		changeStatusText("Losing..." + lives);
+		timeToChangeSquare+=squareDecrement;
+		timeToChangeButton+=buttonDecrement;
+		changeColourOfSquare();
+		lives--;
+	}
+
+	if(lives===0){
+		document.getElementById("theButton").style.display="none";
+		clearInterval(changeSquareColourTimer);
+		clearInterval(changeButtonColourTimer);
+		changeStatusText("Game Over! You Scored " + score);
+	}
+
+
+}
+
+var showScoreMode = true;
+var showLivesMode = true;
+var debugMode = false;
+var colourBlindModeEnabled = false;
+
+var changeSquareColourTimer;
+var squareChangesPriorToTimeChange=10;
+var currentSquareChanges=0;
+var squareDecrement=500;
+var timeToChangeSquare = 7000;
+
+var changeButtonColourTimer;
+var buttonChangesPriorToTimeChange=5;
+var currentButtonChanges=0;
+var timeToChangeButton = 10000;
+var buttonDecrement=750;
+var score = 0;
+var lives = 5;
+var minButtonSpeed = 500;
+var minSquareSpeed = 500;
+
+
+
+
+function timerChangeSquareColour(){
+	
+	currentSquareChanges++;
+	changeColourOfSquare();
+
+	if(currentSquareChanges>squareChangesPriorToTimeChange){
+		currentSquareChanges=0;		
+		timeToChangeSquare-=squareDecrement;
+
+		if(timeToChangeSquare<minSquareSpeed){
+			timeToChangeSquare = minSquareSpeed;
+		}
+
+		setTimerChangeSquareColour();
+	}	
+}
+
+function setTimerChangeSquareColour(){
+	clearInterval(changeSquareColourTimer);
+	 changeSquareColourTimer = setInterval(timerChangeSquareColour, timeToChangeSquare);
+}
+
+function timerChangeButtonColour(){
+	
+	currentButtonChanges++;
+	changeColourOfButton();
+
+	if(currentButtonChanges>buttonChangesPriorToTimeChange){
+		currentButtonChanges=0;		
+		timeToChangeButton-=buttonDecrement;
+
+		if(timeToChangeButton<minButtonSpeed){
+			timeToChangeButton = minButtonSpeed;
+		}
+
+		setTimerChangeButtonColour();
+	}	
+}
+
+function setTimerChangeButtonColour(){
+	clearInterval(changeButtonColourTimer);
+	 changeButtonColourTimer = setInterval(timerChangeButtonColour, timeToChangeButton);
+}
+
+
+// start game
+setTimerChangeSquareColour();
+setTimerChangeButtonColour();
+
+</script>
+
+</head>
+<h1>The Coloured Square Changing Game</h1>
+<p>The aim of the game is to Press the [It is ...] button, when the square is the same colour as the button, to score a point.</p>
+<p>Get it wrong and lose a life.</p>
+
+
+<p>Status: <span id="status">Playing</span></p>
+<a id="changeLink" href="#" onclick="changeColourOfSquare()" style="display:none">Change</a>
+<table border="0">
+	<tr>
+		<td id="theSquare" style="background-color:grey" width="200px" height="200px" onclick="changeColour()">
+			
+		</td>
+		
+	</tr>
+</table>
+
+<p><button id="theButton" style="background-color:red" onclick="checkColour()">It is ...Red</button><span id="theButtonColour"></span></p>
+</html>

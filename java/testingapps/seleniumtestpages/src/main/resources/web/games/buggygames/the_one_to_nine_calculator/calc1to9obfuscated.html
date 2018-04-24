@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>The One to Nine Calculator Game</title>
+
+<!-- inspired by Chapter 4 - Stringing The Ton in Computer Puzzles For Spectrum & ZX81 by Ian Stewart and Robin Jones, Shiva Micro Puzzle Books, 1982 -->
+
+<script type="text/javascript">
+var _0x14be=["\x2D\x2B\x2F\x2A\x20","\x72\x61\x6E\x64\x6F\x6D","\x6C\x65\x6E\x67\x74\x68","\x66\x6C\x6F\x6F\x72","\x63\x68\x61\x72\x41\x74","","\x76\x61\x6C\x75\x65","\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64","\x72\x65\x70\x6C\x61\x63\x65","\x50\x6C\x61\x79\x69\x6E\x67","\x74\x65\x78\x74\x43\x6F\x6E\x74\x65\x6E\x74","\x69\x6E\x6E\x65\x72\x54\x65\x78\x74","\x73\x74\x61\x74\x75\x73","\x61\x73\x6B\x65\x64\x66\x6F\x72","\x57\x69\x6E\x6E\x65\x72\x21","\x59\x6F\x75\x20\x57\x69\x6E\x21","\x57\x6F\x75\x6C\x64\x20\x79\x6F\x75\x20\x6C\x69\x6B\x65\x20\x74\x6F\x20\x73\x65\x65\x20\x68\x69\x6E\x74\x73\x3F","\x63\x6F\x6E\x66\x69\x72\x6D","\x4C\x6F\x73\x69\x6E\x67\x2E\x2E\x2E","\x62\x65\x63\x61\x75\x73\x65\x20","\x20\x21\x3D\x20"];var totalToGet=0;var calcOperators=_0x14be[0];var showWhyLosing=false;var hintCountAt=10;function randomCharFromString(_0xfcd9x6){return _0xfcd9x6[_0x14be[4]](Math[_0x14be[3]](Math[_0x14be[1]]()*_0xfcd9x6[_0x14be[2]]))}function generate(){var _0xfcd9x8=_0x14be[5];for(calcVal=1;calcVal<=9;calcVal++){_0xfcd9x8=_0xfcd9x8+calcVal.toString();if(calcVal!=9){_0xfcd9x8=_0xfcd9x8+randomCharFromString(calcOperators)}};for(calcVal=1;calcVal<=9;calcVal++){document[_0x14be[7]](calcVal)[_0x14be[6]]=_0x14be[5]};_0xfcd9x8=_0xfcd9x8[_0x14be[8]](/\s+/g,_0x14be[5]);totalToGet=eval(_0xfcd9x8);changeAskedForText(totalToGet);changeStatusText(_0x14be[9]);hintCountAt=10}function changeSpanText(_0xfcd9xa,_0xfcd9xb){var _0xfcd9xc=document[_0x14be[7]](_0xfcd9xa);if(_0x14be[10] in _0xfcd9xc){_0xfcd9xc[_0x14be[10]]=_0xfcd9xb}else {_0xfcd9xc[_0x14be[11]]=_0xfcd9xb}}function changeStatusText(_0xfcd9xe){changeSpanText(_0x14be[12],_0xfcd9xe)}function changeAskedForText(_0xfcd9x10){changeSpanText(_0x14be[13],_0xfcd9x10)}function calculate(){var _0xfcd9x12=0;var _0xfcd9x8=_0x14be[5];for(calcVal=1;calcVal<=9;calcVal++){_0xfcd9x8=_0xfcd9x8+calcVal.toString();var _0xfcd9x13=document[_0x14be[7]](calcVal.toString())[_0x14be[6]];if(_0xfcd9x13==null){_0xfcd9x13=_0x14be[5]};_0xfcd9x8=_0xfcd9x8+_0xfcd9x13};_0xfcd9x12=eval(_0xfcd9x8);var _0xfcd9x14=(_0xfcd9x12==totalToGet);if(_0xfcd9x14){changeStatusText(_0x14be[14]);alert(_0x14be[15])}else {hintCountAt-=1;if(hintCountAt==0){hintWanted=window[_0x14be[17]](_0x14be[16]);if(hintWanted){showWhyLosing=true}};var _0xfcd9x15=_0x14be[18];if(showWhyLosing){_0xfcd9x15+=_0x14be[19]+_0xfcd9x8+_0x14be[20]+totalToGet};changeStatusText(_0xfcd9x15)}}
+</script>
+
+</head>
+<h1>The One To Nine Calculator Game</h1>
+<p>The aim of the game is fill in the blanks with +,-,/,* to create a calculation that will equal the asked for amount.</p>
+<ol>
+<li>Press the [Generate] button, to create a new 'asked for amount'.</li>
+<li>Fill in the blanks with +,-,/,* to create a calculation that will equal the asked for amount.</li>
+<li>Press the [Calculate] button, when your calculation is correct, to win.</li>
+</ol>
+
+<p>Status: <span id="status">Playing</span></p>
+
+<p><button id="theButton" onclick="generate()">Generate</button></p>
+<p>Asked For Amount: <span id="askedfor">0</span></p>
+<table border="0">
+	<tr>
+		<td>1</td>
+		<td><input id="1" size="1"/></td>
+		<td>2</td>
+		<td><input id="2" size="1"/></td>
+		<td>3</td>			
+		<td><input id="3" size="1"/></td>
+		<td>4</td>
+		<td><input id="4" size="1"/></td>
+		<td>5</td>
+		<td><input id="5" size="1"/></td>
+		<td>6</td>
+		<td><input id="6" size="1"/></td>
+		<td>7</td>
+		<td><input id="7" size="1"/></td>
+		<td>8</td>
+		<td><input id="8" size="1"/></td>
+		<td>9<input style="visibility: hidden" id="9" size="1"/></td>
+	</tr>
+</table>
+
+<p><button id="theButton" onclick="calculate()">Calculate</button></p>
+</html>

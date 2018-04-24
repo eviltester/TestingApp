@@ -1,0 +1,45 @@
+<html>
+<head>
+<title>HTML Frames Example - Content</title>
+<style type="text/css">
+body {
+	font-family:verdana,arial,sans-serif;
+	font-size:10pt;
+	margin:30px;
+	background-color:#ffcc00;
+	}
+</style>
+</head>
+<body>
+<h1>Content</h1>
+<ul>
+	<li><a href="index.html" target="_top">Load Main Frames Page</a></li>
+</ul>
+
+<p>Original page templates created by Quackit.com</p>
+
+<h2>Replacing the Contents of the Current Frame</h2>
+<p>Clicking on these links will open the new page within the current frame.</p>
+<ul>
+	<li><a href="white.html" target="content">Load white page</a></li>
+	<li><a href="green.html" target="content">Load green page</a></li>
+</ul>
+
+<h2>Replacing the Whole Frameset</h2>
+<p>When you click on any of the following links, the whole frameset is replaced with the new website. This is because we're using <code>target="_top"</code> in the anchor links.</p>
+<ul>
+	<li>The frames templates provided by <a href="http://www.quackit.com" target="_top">Quackit</a></li>
+	<li><a href="http://www.quackit.com/html/templates/frames/" target="_top">HTML Frames Templates</a></li>
+	<li>Learn more about frames with the <a href="http://www.quackit.com/html/tutorial/html_frames.cfm" target="_top">frames tutorial</a><//li>
+</ul>
+
+<h2>Open a New Window</h2>
+<p>These links open in a new browser window. This is because we use <code>target="_blank"</code>.</p>
+<ul>
+	<li><a id='goevil' href="" onclick="window.open('http://www.eviltester.com','evil')">EvilTester.com</a></li>
+	<li><a href="http://www.compendiumdev.co.uk" target="compdev">Compendium Developments</a></li>
+	<li><a href="http://www.seleniumsimplified.com" target="_blank">Selenium Simplified.com</a></li>
+</ul>
+
+</body>
+</html>

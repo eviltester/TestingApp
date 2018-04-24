@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=windows-1250">
+  
+  <title>Basic Ajax</title>
+  
+    <!-- based on http://remysharp.com/wp-content/uploads/2007/01/select.html -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.js"></script>
+		<script type="text/javascript" charset="utf-8">
+		$(function(){
+			$("select#combo1").change(function(){
+				$('#ajaxBusy').show();
+				$.getJSON("ajaxselect.php",{id: $(this).val()}, function(j){
+					var options = '';
+					for (var i = 0; i < j.length; i++) {
+						options += '<option value="' + j[i].optionValue + '">' + j[i].optionDisplay + '</option>';
+					}
+					$("#combo2").html(options);
+					$('#combo2 option:first').attr('selected', 'selected');
+				$('#ajaxBusy').hide();
+				})
+			})			
+		})
+		
+		function checkGT30(value) {
+			if (value>30)
+				alert("Enter a value less than 30");
+			}
+		</script>
+  
+  
+  </head>
+  <body>
+
+    <form method="post" action="form_processor.php?ajax=1">
+      <label for="combo1">Category:</label>
+      <select name="id" id="combo1">
+        <option value="1">Web</option>
+        <option value="2">Desktop</option>
+        <option value="3">Server</option>
+      </select>
+      <noscript>
+        <input type="submit" name="submitbutton" value="Load Individuals" />
+      </noscript>
+      <label for="combo2">Language:</label>
+      <select name="language_id" id="combo2">
+        <option value="1">Javascript</option>
+        <option value="2">VBScript</option>
+        <option value="3">Flash</option>
+      </select>
+	  <span id="ajaxBusy" style="display: none;"><img src="ajax-loader.gif"/></span>
+	
+    <input type="submit" name="submitbutton" value="Code In It" />
+	
+	</br>
+	Values Less Than 30 please : <input type="text" id="lteq30" onBlur="checkGT30(this.value)">
+    </form>
+
+  </body>
+</html>

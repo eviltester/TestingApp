@@ -1,0 +1,42 @@
+<html>
+<head>
+<script type="text/javascript">
+function show_alert()
+{
+	alert("I am an alert box!");
+}
+function show_confirm()
+{
+    if(confirm("I am a confirm alert")){
+		document.getElementById('confirmreturn').innerHTML="true";
+	}else{
+		document.getElementById('confirmreturn').innerHTML="false";
+	}
+}
+function show_prompt()
+{
+	var promptRet=prompt("I prompt you","change me");
+	if(promptRet!=null){
+		document.getElementById('promptreturn').innerHTML = promptRet;
+	}
+}
+
+</script>
+</head>
+<body>
+
+<input id="alertexamples" type="button" onclick="show_alert()" value="Show alert box" />
+
+<br/>
+
+<input id="confirmexample" type="button" onclick="show_confirm()" value="Show confirm box" />
+<br/>
+<p id='confirmreturn'>cret</p>
+
+<br/>
+
+<input id="promptexample" type="button" onclick="show_prompt()" value="Show prompt box" />
+<p id='promptreturn'>pret</p>
+
+</body>
+</html>

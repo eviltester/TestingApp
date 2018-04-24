@@ -1,0 +1,39 @@
+# Notes to the developer
+
+`mvn package` to create the jar file configured in the pom.xml
+
+run from target for local testing
+
+java -jar target\rest-list-system-1.1-SNAPSHOT-jar-with-dependencies
+
+java -jar target\rest-list-system-1.1-SNAPSHOT-jar-with-dependencies -bugfixes=false -port=1234
+
+
+
+
+
+For heroku:
+
+mvn heroku:deploy
+heroku local web -f Procfile.windows
+
+
+
+Heroku
+
+- view logs from More - `view logs`
+
+- edit environment variables on `Settings`, `Config Variables`
+   - `Reveal Config Vars`
+   - add variables
+      - currently none used
+
+- start app on Resources page
+    - click edit
+    - flip 'on' switch to 'on'
+    - confirm
+
+- stop app on Resources page
+    - click edit
+    - flip 'on' switch to 'off'
+    - confirm

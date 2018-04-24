@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>Think of a number</title>
+
+		<script language="JavaScript">
+		var computerNumber=0;
+		var allowedGuesses=3;
+		//var numberOfGuesses=0;
+		//var score=0;
+
+		function startGame()
+		{
+			document.guesszone.myGuess.value= "";
+			computerNumber = Math.floor(Math.random() * 6) + 1;
+			allowedGuesses=3;
+			//numberOfGuesses=0;
+			//score=0;
+		}
+		function checkGuess(){
+			if(computerNumber==document.guesszone.myGuess.value){
+				alert("correct well done, game over");
+				startGame();
+				//score=score+1;
+			}else{
+
+				allowedGuesses = allowedGuesses -1;
+				alert("incorrect, you have " + allowedGuesses + " guesses left");
+
+				if(allowedGuesses==0){
+					alert("Game Over, I was thinking of " + computerNumber);
+					startGame();
+				}
+				
+				//numberOfGuesses = numberOfGuesses+1;
+			}
+			
+		}
+
+		</script>
+
+	</head>
+	<body>
+		<!-- found colour codes from w3 schoools color picker
+		 http://www.w3schools.com/tags/ref_colorpicker.asp -->
+		<h1 style="color: #33CC33">Play the think of a number game between 1 and 6</h1>
+
+		<form name="controlzone">
+			<input type="button" name="thinkOfANumber" onclick="startGame()" value="Start a new game"/>
+		</form>	
+
+		<form name="guesszone">
+			<input name="myGuess" value=""/>
+			<input type="button" name="iguessed" onclick="checkGuess()" value="I Guessed"/>
+			<!--
+				onclick
+					compare myGuess with computerNumber
+					tell me if I'm right or wrong
+			-->
+		</form>	
+
+
+	</body>
+
+</html>

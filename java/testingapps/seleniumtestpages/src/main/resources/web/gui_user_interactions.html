@@ -1,0 +1,124 @@
+<html>
+<head>
+	<title>GUI User Interactions</title>
+	<!-- Useful links
+    based heavily on http://jqueryui.com/demos/droppable/
+    -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+
+</head>
+<body>
+<style>
+	.draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; background-color:yellow;}
+	.droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:red;}
+</style>
+<script>
+	$(function() {
+		$( "#draggable1" ).draggable();
+		$( "#draggable2" ).draggable();
+		$( "#droppable1" ).droppable({
+			drop: function( event, ui ) {
+				if($(ui.draggable).attr('id')=='draggable1'){
+					$( this )
+							.find( "p" )
+							.html( "Dropped!" );
+				}else{
+					$(this).find("p").html("Get Off Me!");
+				}
+			}
+		});
+		$( "#droppable2" ).droppable({
+			drop: function( event, ui ) {
+				$( this )
+						.find( "p" )
+						.html( "Dropped!" );
+			}
+		});
+		$(document).keydown(function(event){
+			$("#keyeventslist").append("<li> down " + event.which + "</li>");
+			if(event.which == 17) cntrlPressed = true;
+			if(event.which == 32 && cntrlPressed){
+				// ctrl space
+				$('.droppable').find("p").html("Let GO!!!");
+			}
+			if(event.which !=17){
+				if(event.which == 66 && cntrlPressed){
+					// ctrl B
+					$('#draggable1').find("p").html("Bwa! Ha! Ha!");
+					//alert(event.which);
+				}
+			}
+		});
+		$(document).keyup(function(event){
+
+			if(event.which == 17) cntrlPressed = false;
+			$('.droppable').find("p").html("Drop Here");
+		});
+
+		$(document).ready(function(){
+			drawcanvas=false;
+			canvas = $('#canvas')[0];
+			mycanvas2d = canvas.getContext("2d");
+			mycanvas2d.fillStyle="#000000";
+		});
+
+		$("#canvas").mouseup(function(){
+			/* deliberate bug */
+			drawcanvas=false;
+		});
+
+		$("#canvas").mousedown(function(){
+			drawcanvas=true;
+		});
+
+		$("#canvas").mousemove(function(event){
+			if(drawcanvas==true){
+				$("#keyeventslist").append("<li> draw " + event.clientX + ", " + event.clientY + "</li>");
+				var canvasrect = canvas.getBoundingClientRect();
+				mycanvas2d.beginPath();
+				mycanvas2d.rect(event.clientX - canvasrect.left, event.clientY - canvasrect.top, 2, 2);
+				mycanvas2d.closePath();
+				mycanvas2d.fill();
+			}
+		});
+
+	});
+</script>
+
+
+
+<div class="draganddrops">
+	<div>
+		<div id="draggable1" class="draggable">
+			<p>Drag me</p>
+		</div>
+
+		<div id="draggable2" class="draggable">
+			<p>Drag me</p>
+		</div>
+
+		<div id="droppable1" class="droppable">
+			<p>Drop here</p>
+		</div>
+
+		<div id="droppable2" class="droppable">
+			<p>No Drop here</p>
+		</div>
+	</div>
+
+</div>
+
+<div id="keyevents" style="float:right">
+	<p>Events:</p>
+	<ul id="keyeventslist">
+	</ul>
+</div>
+
+<div>
+	<canvas style="border:solid 1px #000000" id="canvas" width="300" height="300"></canvas>
+</div>
+
+
+</body>
+</html>

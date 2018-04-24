@@ -1,0 +1,103 @@
+<html>
+<head><title>Javascript Canvas Example</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var ctx;
+// useful links:
+//https://developer.mozilla.org/en-US/docs/Canvas_tutorial
+//http://www.w3schools.com/html/html_colors.asp
+
+$(document).ready(function() {
+
+//get a reference to the canvas
+ctx = $('#canvas')[0].getContext("2d");
+draw(1, 75, 75, 10, "#00A308");
+draw(0, 150, 150, 30, "#FF1C0A");
+
+});
+
+function draw(shape, x, y, size, colour) {
+  //ctx.clearRect(0,0,300,300);
+  ctx.fillStyle = colour;
+  ctx.beginPath();
+  if(shape==1){
+	ctx.arc(x, y, size, 0, Math.PI*2, true); 
+  }else{
+	ctx.rect(x, y, size, size);
+  }
+  ctx.closePath();
+  ctx.fill();
+  
+  $("#commandlist").append('<li>draw(' + shape + ',' + x + ',' + y + ',' + size + ',' + colour + ')</li>');
+}
+
+function clearCanvas(){
+	ctx.clearRect(0,0,300,300);
+	  $("#commandlist").append('<li>clear()</li>');
+}
+
+function handleUserShape(){
+	draw($('#shapeselect').val(),$('#xnum').val(),$('#ynum').val(),$('#shapesize').val(),$('#colourselect').val());
+}
+</script>
+
+
+</head>
+<body>
+<div id="commands" style="float:right">
+<p>Actions:</p>
+<ul id="commandlist">
+</ul>
+</div>
+
+<div id="thecanvas">
+<canvas border="2" id="canvas" width="300" height="300"></canvas>
+</div>
+
+<form name="userchanges">
+
+  <label for="xnum">X</label>
+  <input type="text" name="xnum" id="xnum" value="20" style="width:60px"/>
+  <label for="ynum">Y</label>
+  <input type="text" name="ynum" id="ynum" value="30" style="width:60px"/>
+  <label for="shapesize">Size</label>
+  <input type="text" name="shapesize" id="shapesize" value="65" style="width:60px"/>
+  <br/>
+  <label for="colourselect">Colour</label>
+
+<select id="colourselect" name="colour">
+  <option value="#000000">Black</option>
+  <option value="#FF0000">Red</option>
+  <option value="#00FF00">Green</option>
+  <option value="#0000FF">Blue</option>
+  <option value="#C0C0C0">Grey</option>
+ </select>
+
+ 
+  <label for="shapeselect">Shape</label>
+<select id="shapeselect" name="shape">
+  <option value="1">Circle</option>
+  <option value="0">Square</option>
+ </select>
+ <br/>
+<input name="gobutton" type="button" value="Show" onClick="handleUserShape()"/>
+<input name="clearbutton" type="button" onClick="clearCanvas()" value="Clear"/>
+
+</form>
+
+<p>Instructions:</p>
+<ul>
+<li>command: draw(shape, x, y, size, colour)</li>
+<li>command: clear()</li>
+</ul>
+<p>Note:</p>
+<ul>
+<li>shape is 1 for circle, 0 for square</li>
+<li>colour is an rgb string e.g. "#FF1C0A"</li>
+<li>size is in pixels</li>
+<li>canvas is 300 x 300</li>
+</ul>
+</body>
+</html>

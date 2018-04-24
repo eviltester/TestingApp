@@ -1,0 +1,206 @@
+<html>
+	<head>
+		<title>Think of a number</title>
+
+		<!--
+			In this version I have functions wrapping around elements
+			and setting visibility, and setting help text
+		-->
+
+	<!-- todo why can I use document.controlzone.thinkOfANumber i.e. form and name, instead of getElementById ? -->
+
+
+		<script language="JavaScript">
+		var computerNumber=0;
+		var allowedGuesses=3;
+		//var numberOfGuesses=0;
+		//var score=0;
+
+		function myGuess(){
+			return document.getElementById("myguess");
+		}
+
+		function iGuessed(){
+			return document.getElementById("iguessed");
+		}
+
+		function helpText(){
+			return document.getElementById("helptext");
+		}
+
+		function guesses(){
+			return document.getElementById("guesses");
+		}
+
+		function thinkOfANumberButton(){
+			return document.getElementById("thinkOfANumber");	
+		}
+
+		function setHelpText(helpTextString){
+			helpText().innerHTML=helpTextString;
+		}
+
+		function guessButton(buttonNumber){
+			return document.getElementById("iguessed" + buttonNumber);
+		}
+
+		function startGameVisibility(visibility_value){
+			if(visibility_value){
+				showElement(thinkOfANumberButton());	
+			}else{
+				hideElement(thinkOfANumberButton());	
+			}
+		}
+
+		//http://www.w3schools.com/css/css_display_visibility.asp
+		function showElement(anElement){
+			anElement.style.visibility='visible';	
+			//anElement.style.display='block';
+		}
+
+		function hideElement(anElement){
+			anElement.style.visibility='hidden';	
+			//anElement.style.display='none';	
+		}
+
+
+		function guessingVisibility(visibility_value){
+			if(visibility_value){
+				showElement(guesses());		
+			}else{
+				hideElement(guesses());		
+			}			
+		}
+
+		function allowStartGame(){
+			startGameVisibility(true);
+			disableGuessButtons();
+		}
+
+		function allowGuessing(){
+			startGameVisibility(false);
+			guessingVisibility(true);
+		}
+
+		function randomNumberBetween(from, to){
+			return (Math.floor(Math.random() * to) + from);	
+		}
+
+		function setGuessButtonDetails(buttonNumber, backgroundValue, disabledValue){
+			var aButton = guessButton(buttonNumber);
+			aButton.style.background = backgroundValue;
+			aButton.disabled = disabledValue;
+		}
+
+		function setGuessButtonWrong(buttonNumber){
+			setGuessButtonDetails(buttonNumber,"#FF0000", true);
+		}
+
+		function setGuessButtonRight(buttonNumber){
+			setGuessButtonDetails(buttonNumber,"#33CC33", true);
+		}
+
+		function resetGuessButton(buttonNumber){
+			setGuessButtonDetails(buttonNumber,"", false);
+		}
+
+		function resetGuessButtons(){
+			for (var buttonNumber = 1; buttonNumber <= 6; buttonNumber++) {
+ 			   resetGuessButton(buttonNumber);
+			}
+		}
+
+		function disableGuessButtons(){
+			for (var buttonNumber = 1; buttonNumber <= 6; buttonNumber++) {
+ 			   guessButton(buttonNumber).disabled=true;
+			}
+		}
+
+		function startGame()
+		{
+			//myGuess().value= "";
+			// set all buttons to normal
+			resetGuessButtons();
+			computerNumber = randomNumberBetween(1,6);
+			allowedGuesses=3;
+			setHelpText("You have " + allowedGuesses + " guesses left");
+			allowGuessing();
+			//numberOfGuesses=0;
+			//score=0;
+		}
+
+		function setGuessValue(guessvalue, correctness){
+			if(correctness){
+				setGuessButtonRight(guessvalue);
+			}else{
+				setGuessButtonWrong(guessvalue);
+			}
+		}
+
+		function checkGuess(guessvalue){
+			if(computerNumber==guessvalue){
+				setGuessValue(guessvalue,true);
+				setHelpText("Correct well done, " + guessvalue + " was correct. Game Over");
+				allowStartGame();
+				//score=score+1;
+			}else{
+
+				setGuessValue(guessvalue,false);
+				allowedGuesses = allowedGuesses - 1;
+				setHelpText("incorrect, you have " + allowedGuesses + " guesses left");
+
+				if(allowedGuesses==0){
+					setHelpText("Game Over, I was thinking of " + computerNumber);
+					allowStartGame();
+				}
+				
+				//numberOfGuesses = numberOfGuesses+1;
+			}			
+		}
+
+
+
+		</script>
+
+	</head>
+	<body>
+		<!-- found colour codes from w3 schoools color picker
+		 http://www.w3schools.com/tags/ref_colorpicker.asp -->
+		<h1 style="color: #33CC33">Play the think of a number game between 1 and 6</h1>
+
+		<p id="helptext">You haven't started the game yet</p>
+	
+		<div>
+			<input id="thinkOfANumber" type="button" name="thinkOfANumber" onclick="startGame()" value="Start a new game"/>
+		</div>
+
+		<div id="guesses">
+			<input id="iguessed1" type="button" name="iguessed1" onclick="checkGuess(1)" value="1"/>
+			<input id="iguessed2" type="button" name="iguessed2" onclick="checkGuess(2)" value="2"/>
+			<input id="iguessed3" type="button" name="iguessed3" onclick="checkGuess(3)" value="3"/>
+			<input id="iguessed4" type="button" name="iguessed4" onclick="checkGuess(4)" value="4"/>
+			<input id="iguessed5" type="button" name="iguessed5" onclick="checkGuess(5)" value="5"/>
+			<input id="iguessed6" type="button" name="iguessed6" onclick="checkGuess(6)" value="6"/>
+		</div>
+
+		<!-- this form will submit automatically on enter when there is only a single input 
+		http://www.alanflavell.org.uk/www/formquestion.html
+		I added a non-displayed field to stop that
+
+		Or could have made the p an input and made it readonly e.g. http://www.javascriptkit.com/script/script2/ageguess.shtml
+		but make prompt readonly="readonly"
+		-->
+		<!-- no need for this line if I remove the 'form' tags 
+			<input name="tryToStopEnter" style="display:none" value=""/>
+		-->
+
+
+		<script language="JavaScript">
+			startGameVisibility(true);
+			guessingVisibility(false);
+		</script>
+
+
+	</body>
+
+</html>

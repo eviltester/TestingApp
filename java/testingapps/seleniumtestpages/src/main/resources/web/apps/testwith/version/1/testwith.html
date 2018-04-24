@@ -1,0 +1,474 @@
+<html>
+<head>
+    <title>The Test With Whatifier?</title>
+</head>
+<body>
+
+<!--
+
+I TEST with ATTITUDE
+
+T.E.S.T
+-------
+Tactical
+Exploratory
+Strategic
+Testing
+
+A.T.T.I.T.U.D.E
+---------------
+Attack
+Tenacious
+Task
+Interrogate
+Technical
+Understand
+Debrief
+Experiment
+
+
+word=
+Tactical|Exploratory|Strategic|Testing
+&
+Attack|Tenacious|Task|Interrogate|Technical|Understand|Debrief|Experiment
+
+-->
+
+<div id="controls">
+    <div id="sentence">
+        <p>
+            I <span id="firstword" value="TEST">TEST</span> with <span id="secondword" value="ATTITUDE">ATTITUDE</span>
+            <button class="title" onclick="makeExplodedSentenceForm()">Clear</button>
+        </p>
+    </div>
+    <div id="explodedsentence">
+        <div id="firstwordletters" style="width:50%;float:left">
+            <div class="letterword">
+                <label for="w1lw1">(T)</label>
+                <input id="w1lw1" type="text">
+            </div>
+        </div>
+        <div id="secondwordletters"style="width:50%;float:left">
+            <div class="letterword">
+                <label for="w2lw1">(A)</label>
+                <input id="w2lw1" type="text">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2 id="result"></h2>
+    </div>
+
+    <div id="gtrig" style="display:none">
+        <div>
+            <div style="display:none">
+                <button onclick="writeMainTextToTheCanvas()">Render</button>
+                <button onclick="reportResult()">Header</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <canvas id="canvas" width="0px" height="0px"></canvas>
+
+<script>
+
+    var defaults = [];
+    defaults.wordvals=["first","second"];
+    defaults.outputWords = ["I","with"]
+    defaults.numberOfCanvasLines=6;
+    defaults.numberOfLastCanvasLine=5;
+    defaults.font="serif";
+    defaults.fontfilled=false;
+    defaults.fontfillStyle="#00FF00";
+    defaults.fontstyle="normal ";
+    defaults.boldfont="sans-serif";
+    defaults.boldfontfilled=true;
+    defaults.boldfontfillStyle="#0000FF";
+    defaults.boldfontstyle="bold ";
+    defaults.bigwordfont="Courier"
+    defaults.bigwordfontfilled=true;
+    defaults.bigwordfontfillStyle="#FF0000";
+    defaults.bigwordfontstyle="italic "
+    defaults.hideInputsWhenDisplaying=true;
+    defaults.hideCanvasWhenDisplayed=false;
+    defaults.canvasFillColour="#FFFFFF";
+    defaults.canvasRefreshTimeGap=500;
+    defaults.canvas=document.getElementById("canvas");
+    defaults.skipEmptyWordsWhenRendering = false;
+
+    function createAcronyms(words){
+        // 0 for acronyms
+        words[0] = [];
+        for(var wordsListIndex=1; wordsListIndex<words.length; wordsListIndex++){
+            var acronym = "";
+            for(var i=0;i<words[wordsListIndex].length;i++){
+                var theWord = words[wordsListIndex][i];
+                if(theWord.length>0){
+                    acronym += theWord.charAt(0)+".";
+                }
+            }
+            acronym = acronym.slice(0, -1);
+            words[0].push(acronym);
+        }
+    }
+    function collate(){
+
+        var collated = [];
+
+        //acronyms
+        collated[0] = [];
+
+        for(var wordId = 0; wordId < defaults.wordvals.length ; wordId++){
+            collated[wordId+1] = [];
+            words = document.getElementById(defaults.wordvals[wordId] + "wordletters").childNodes;
+            for(i=0; i<words.length; i++) {
+                var word = words[i].getElementsByTagName("input")[0].value;
+                collated[wordId+1][i] = word;
+            }
+        }
+
+        createAcronyms(collated)
+
+        return collated;
+    }
+
+    // todo implement validation rules as overwriteable functions
+    function checkInput(){
+        // first letter of words should match the letter
+        // words should not be blank
+    }
+
+    var canvasWriterInterval = "";
+    var canvasAcronym=1;
+    var canvasAcronymWord=0;
+    var canvasLineheight=0;
+    var canvaswords="";
+
+    function setContextTextStyle(context, isFilled, fillStyle, fontStyle, size, font){
+        if(isFilled){
+            context.fillStyle=fillStyle;
+        }
+        context.font = "normal"; // until proven otherwise
+        context.font = fontStyle + size + "px " + font;
+
+        return isFilled;
+    }
+
+    function outputTextToContext(outputWord, filled, x, y, context){
+        if(filled){
+            context.fillText(outputWord, x , y);
+        }else{
+            context.strokeText(outputWord, x , y);
+        }
+    }
+
+    function clearMyCanvas(){
+        clearCanvas(document.getElementById("canvas"));
+    }
+
+    function clearCanvas(canvas, fillColour){
+        if(fillColour===undefined){
+            fillColour = defaults.canvasFillColour;
+        }
+
+        var context = canvas.getContext("2d");
+        context.fillStyle=fillColour;
+        context.fillRect(0,0,canvas.width,canvas.height);
+    }
+
+    function writeMainTextToCanvas(words, canvas, highlightLine){
+
+        clearCanvas(canvas);
+
+        var context = canvas.getContext("2d");
+
+        var lines = getOutputWordsAndAcronymsAsArray(words);
+        defaults.numberOfLastCanvasLine = lines.length+1;
+
+        for(var w=0; w<lines.length; w++){
+
+            var filled=false;
+
+            if(w==highlightLine){
+                filled = setContextTextStyle(context, defaults.boldfontfilled, defaults.boldfontfillStyle,
+                                            defaults.boldfontstyle, canvasLineheight, defaults.boldfont);
+            }
+            else{
+                filled = setContextTextStyle(context, defaults.fontfilled, defaults.fontfillStyle,
+                                            defaults.fontstyle, canvasLineheight, defaults.font);
+            }
+
+            var outputword = lines[w];
+            var adjust = 3;
+            // is it an output word?
+            if((w%2)==0 && w<=defaults.outputWords.length){
+                adjust = 2;
+            }
+            var guestimatedWidth = Math.floor((((outputword.length/adjust)*canvasLineheight)/2));
+
+            outputTextToContext(outputword, filled, canvas.height - guestimatedWidth, canvasLineheight*(w+1), context)
+        }
+    }
+
+
+    function displayControls(isDisplayed){
+        document.getElementById("controls").style.display = isDisplayed ? 'block' : 'none';
+    }
+
+    function writeMainTextToTheCanvas(){
+
+        sizeCanvas(defaults.canvas);
+
+        writeMainTextToCanvas(collate(), canvas, -1);
+    }
+
+    function sizeCanvas(canvas){
+
+        if(canvas.width !== window.innerWidth){
+            canvas.width = window.innerWidth; //-20;
+            canvas.height = canvas.width/2; //-20;
+        }
+
+        // 5 lines of text spread over numberOfCanvasLines
+        canvasLineheight = Math.floor(canvas.height/defaults.numberOfCanvasLines);
+    }
+
+    function writeToCanvas(){
+
+        displayControls(!defaults.hideInputsWhenDisplaying);
+
+        sizeCanvas(defaults.canvas);
+
+        var words = collate();
+
+        writeMainTextToCanvas(words, canvas, 0);
+
+        canvasAcronym=1;
+        canvasAcronymWord=0;
+        canvaswords = words;
+        canvasWriterInterval = setInterval(drawCanvasBigWord,defaults.canvasRefreshTimeGap);
+    }
+
+    function drawCanvasBigWord(){
+
+        var canvas = defaults.canvas;
+        var context = canvas.getContext("2d");
+
+        if(canvasAcronym<canvaswords.length && canvasAcronymWord<canvaswords[canvasAcronym].length){
+
+            writeMainTextToCanvas(canvaswords, canvas, (canvasAcronym*2)-1);
+
+            // hacking guestimate centering of text
+            var outputword = canvaswords[canvasAcronym][canvasAcronymWord];
+
+            if(defaults.skipEmptyWordsWhenRendering){
+                while(outputword === "" && canvasAcronymWord<canvaswords[canvasAcronym].length){
+                    outputword = canvaswords[canvasAcronym][canvasAcronymWord];
+                    if(outputword === ""){
+                        canvasAcronymWord++
+                    }
+                }
+            }
+
+            var adjust = 3;
+            var guestimatedWidth = Math.floor((((outputword.length/adjust)*canvasLineheight)/2));
+
+            setContextTextStyle(context, defaults.bigwordfontfilled, defaults.bigwordfontfillStyle,
+                                    defaults.bigwordfontstyle, canvasLineheight, defaults.bigwordfont);
+            outputTextToContext(outputword, defaults.bigwordfontfilled,
+                                canvas.height - guestimatedWidth ,
+                                canvasLineheight*(defaults.numberOfLastCanvasLine),
+                                context);
+
+            if(canvasAcronymWord<canvaswords[canvasAcronym].length){
+                canvasAcronymWord++;
+            }
+            if(canvasAcronymWord==canvaswords[canvasAcronym].length){
+                canvasAcronymWord=0;
+                canvasAcronym++;
+            }
+        }
+        else
+        {
+            clearInterval(canvasWriterInterval);
+
+            // show acronyms only
+            writeMainTextToCanvas(canvaswords, canvas, -1);
+
+            displayControls(defaults.hideInputsWhenDisplaying);
+
+            if(defaults.hideCanvasWhenDisplayed){
+                defaults.canvas.setAttribute("width", "0px");
+                defaults.canvas.setAttribute("height", "0px")
+            }
+        }
+    }
+
+    function amItesting(){
+        return window.location.search.includes("AvalloneSleuth");
+    }
+
+    function getOutputWordsAndAcronymsAsArray(words){
+        var wordsToReturn = [];
+
+        var wordsToProcess = words[0]; // acronyms
+
+        for(var wordId = 0; wordId < wordsToProcess.length ; wordId++) {
+            if (wordId < defaults.outputWords.length) {
+                wordsToReturn.push(defaults.outputWords[wordId]);
+            }
+            if(wordId<wordsToProcess.length){
+                wordsToReturn.push(wordsToProcess[wordId]);
+            }
+        }
+
+        return wordsToReturn;
+
+    }
+
+    function getOutputWordsAndAcronymsAsString(words){
+
+        var wordsToProcess = getOutputWordsAndAcronymsAsArray(words);
+
+        var output = "";
+
+        for(var wordId = 0; wordId < wordsToProcess.length ; wordId++) {
+
+            if(output.length > 0){
+                output+=" ";
+            }
+            output += wordsToProcess[wordId];
+        }
+
+        return output;
+    }
+
+    function reportResult(){
+        reportResultInto(document.getElementById("result"));
+    }
+
+    function reportResultInto(elem){
+        var words = collate();
+
+        elem.innerHTML = getOutputWordsAndAcronymsAsString(words);
+    }
+
+    function testRender(){
+        if(window.location.search.includes("RenderIt")){
+            var t1=defaults.hideInputsWhenDisplaying;
+            var t2=defaults.hideCanvasWhenDisplayed;
+            var i1=defaults.canvasRefreshTimeGap;
+
+            defaults.canvasRefreshTimeGap=1000;
+            defaults.hideInputsWhenDisplaying=true;
+            defaults.hideCanvasWhenDisplayed=true;
+
+            writeToCanvas();
+
+            defaults.hideInputsWhenDisplaying=t1;
+            defaults.hideCanvasWhenDisplayed=t2;
+            defaults.canvasRefreshTimeGap=i1;
+        }
+    }
+
+    function makeExplodedSentenceForm(theVal){
+
+        for(var wordId = 0; wordId < defaults.wordvals.length ; wordId++){
+            var wordprefix = defaults.wordvals[wordId];
+            cleanDivById( wordprefix + "wordletters");
+            var word = document.getElementById(wordprefix + "word").getAttribute("value");
+            createDivLetterWordFor( wordprefix + "wordletters", wordId+1, word);
+        }
+    }
+
+    function cleanDivById(id){
+        var div = document.getElementById(id);
+        cleanDiv(div);
+    }
+
+    function cleanDiv(div){
+        while(div.firstChild){
+            div.removeChild(div.firstChild);
+        }
+    }
+
+    function createDivLetterWordFor(id, wordId, letters){
+        var div = document.getElementById(id);
+
+        for(var charIndex=0; charIndex<letters.length; charIndex++){
+            //<div class="letterword">
+
+            var node = document.createElement("div");
+            node.setAttribute("class", "letterword");
+
+            //    <label for="w2lw1">(A)</label>
+            var elem = document.createElement("label");
+            elem.setAttribute("for", "w" + wordId + "lw" + charIndex);
+            elem.innerHTML="(" + letters.charAt(charIndex) + ")";
+            node.appendChild(elem);
+
+            //    <input id="w2lw1" type="text">
+            var elem = document.createElement("input");
+            elem.setAttribute("id", "w" + wordId + "lw" + charIndex);
+            elem.setAttribute("type", "text");
+            node.appendChild(elem);
+
+            //</div>
+            div.appendChild(node);
+        }
+    }
+
+    function setGUIWordValuesFrom(collated){
+
+        for(var wordId = 0; wordId < defaults.wordvals.length ; wordId++){
+            words = document.getElementById(defaults.wordvals[wordId] + "wordletters").childNodes;
+            for(i=0; i<words.length; i++) {
+                words[i].getElementsByTagName("input")[0].value = collated[wordId+1][i];
+            }
+        }
+    }
+
+
+    function getWordsFromLocation(words){
+        //%26 == &
+        var params = window.location.search.split("&");
+        for(var paramindex=0; paramindex<params.length; paramindex++){
+            var keyvalue = params[paramindex].split("=");
+            if(keyvalue[0].includes("word")){
+                words.push(keyvalue[1].split("|"));
+            }
+        }
+    }
+
+    function setValuesForLists(words){
+        for(var guiWordIndex=0; guiWordIndex<defaults.wordvals.length; guiWordIndex++){
+            var acronym = words[0][guiWordIndex];
+            acronym = acronym.replace(/\./g,"");
+            document.getElementById(defaults.wordvals[guiWordIndex]+"word").
+            setAttribute("value",acronym);
+        }
+    }
+
+
+    if(amItesting()){
+        var words=[];
+        words[0]=[];
+        getWordsFromLocation(words);
+        createAcronyms(words);
+        setValuesForLists(words);
+        makeExplodedSentenceForm();
+        setGUIWordValuesFrom(words);
+        testRender();
+
+    }else{
+        makeExplodedSentenceForm();
+    }
+
+
+
+</script>
+
+</body>
+</html>

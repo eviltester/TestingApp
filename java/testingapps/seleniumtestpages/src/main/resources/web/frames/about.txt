@@ -1,0 +1,11 @@
+These pages use the frames templates provided free of charge by Quackit
+
+http://www.quackit.com
+http://www.quackit.com/html/templates/frames/
+
+Learn more about frames with the Quackit frames tutorial 
+http://www.quackit.com/html/tutorial/html_frames.cfm
+
+Amended by Alan Richardson to include 
+* an iframe example
+* local navigation references

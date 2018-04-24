@@ -1,0 +1,231 @@
+<html>
+<head>
+  <title>Random Canvas Walker</title>
+
+  <script>
+    // - game is to 'edit' the route in situ to make it to the exit faster
+    // [x]  canvas or Dom to render?
+    // [x] create a canvas
+    // [x] add an exit
+    // [x] add a man
+    // [x] randomly generate a route
+    // [x]  route in an input field
+    // [x] read 'next action' from input field
+    // [x] LRUD
+    // [x] if failed to reach exit and route is nearly empty regenerate route
+    // [x] if failed to reach exit and route is empty then game over
+    // [x] print game over message
+    // [x] if reach exit then game over
+    // [x] if good enough to avoid regenerating program then randomly regenerate
+    // [x]start with points, these count down, add to total score if reach exit
+    // add some instructions
+      // 20160420 surely the comments are good enough?
+
+
+
+    // space we render on is 200x200
+    var realWorldWidth = 200;
+    var realWorldHeight = 200;
+
+    // grid we live on is 20x20
+    var myWorldWidth = 20;
+    var myWorldHeight = 20;
+
+    var xScale = realWorldWidth/myWorldWidth;
+    var yScale = realWorldHeight/myWorldHeight;
+
+    // world is 0 to 19
+    var exitAt = {x:0,y:0};
+    var manAt = {x:Math.floor(myWorldWidth/2),y:Math.floor(myWorldHeight/2)};
+    var manDirections = {L:{x:-1,y:0}, R:{x:1,y:0}, U:{x:0,y:-1}, D:{x:0,y:1}};
+    var currentRoute="LRUD";
+    var maxRouteLength=10;
+    var millisecondsBetweenMoves=1000;
+    var millisecondsBetweenRegens=1000;
+    var millisecondsBetweenRegensWeighting=300;
+    var levelScore=1000;
+    var totalScore=0;
+    var regensSkipped=0;
+
+
+    function drawMan(){
+      drawSquare(manAt, "#FF0000");
+    }
+
+    function drawExit(){
+      drawSquare(exitAt, "#00FF00");
+    }
+
+
+    function drawSquare(thing, colour){
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = colour;
+      var entityX = thing.x;
+      var entityY = thing.y;
+
+      ctx.fillRect(entityX*xScale,entityY*yScale,xScale,yScale);
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function generateRoute(fromRoute){
+
+        var newRoute = fromRoute;
+
+        for(charPos=fromRoute.length; charPos < maxRouteLength; charPos++){
+          newRoute = newRoute.concat(getARAndomDirection());
+        }
+
+        return newRoute;
+    }
+
+    function getARAndomDirection(){
+        var directions="LRUD";
+        var whichDir = getRandomInt(0, directions.length-1);
+        return directions.charAt(whichDir);
+    }
+
+    function displayRoute(aRoute){
+      var route = document.getElementById("manMoves");
+      route.value = aRoute;
+    }
+
+
+    function clearCanvas(){
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function gameOver(){
+        console.log("Game Over!!");
+        console.log("You scored: " + totalScore);
+        window.clearInterval(theManRouteTimer);
+        window.clearInterval(theDrawTimer);
+    }
+
+    function levelWon(){
+        console.log("You Won!!");
+        console.log("You scored on this level: " + levelScore);
+        totalScore += levelScore;
+        gameOver();
+    }
+
+    function simLoop(){
+
+
+      clearCanvas();
+
+      // get man's next move
+      var route = document.getElementById("manMoves");
+      var queuedMoves = route.value;
+      var nextMove = queuedMoves.charAt(0);
+
+      // if no next move then it is game over
+      if(nextMove.length==0){
+        gameOver();
+        return;
+      }
+
+      // remove from queue
+      queuedMoves = queuedMoves.substr(1);
+      displayRoute(queuedMoves);
+
+      //move man
+      var dirs = manDirections[nextMove];
+      manAt.x = manAt.x + dirs.x;
+      manAt.y = manAt.y + dirs.y;
+
+      if(manAt.x==exitAt.x && manAt.y==exitAt.y){
+        levelWon();
+      }
+
+
+      // TODO - config die if go outside of bounds, or bounce back
+      // keep man within bounds (bounce back)
+      if(manAt.x>myWorldWidth-1){manAt.x=myWorldWidth-1;}
+      if(manAt.x<0){manAt.x=0;}
+      if(manAt.y>myWorldHeight-1){manAt.y=myWorldHeight-1;}
+      if(manAt.y<0){manAt.y=0;}
+
+      // redraw
+      drawMan();
+      drawExit();
+
+      levelScore-=10;
+
+    }
+
+    function updateManRouteLoop(){
+
+      console.log("Possible Regen coming up");
+
+      var route = document.getElementById("manMoves");
+      var queuedMoves = route.value;
+
+      var updateRoute=false;
+
+      // if nearly empty
+      if(queuedMoves.length<3){
+        updateRoute=true;
+      }
+
+      // if too full
+      if(queuedMoves.length>10){
+        updateRoute=true;
+      }
+
+      // if you get good we will regenerate the program anyway
+      if(!updateRoute){
+        regensSkipped++;
+
+        if(getRandomInt(1,regensSkipped)>5){
+          // regen anyway
+          regensSkipped=0;
+          updateRoute=true;
+        }
+      }
+
+      if(updateRoute){
+
+          console.log("Regen! Throw away the plan");
+
+          levelScore-=50;
+
+          var howManyToAdd = getRandomInt(1,queuedMoves.length);
+          for(x=0;x<howManyToAdd;x++){
+            route.value = route.value.concat(getARAndomDirection());
+          }
+
+          // set the update amount to a random tick
+          window.clearInterval(theManRouteTimer);
+          // update slower than consumed to have an end game situation
+          millisecondsBetweenRegens = howManyToAdd*(millisecondsBetweenMoves+millisecondsBetweenRegensWeighting);
+          theManRouteTimer = window.setInterval(updateManRouteLoop, millisecondsBetweenRegens);
+      }
+
+    }
+
+  </script>
+</head>
+<body>
+
+  <canvas id="myCanvas" width="200" height="200"></canvas><br/>
+  <input id="manMoves" type="text"/>
+
+  <script>
+    drawMan();
+    drawExit();
+    currentRoute = generateRoute(currentRoute);
+    displayRoute(currentRoute);
+
+    var theDrawTimer = window.setInterval(simLoop, millisecondsBetweenMoves);
+    var theManRouteTimer = window.setInterval(updateManRouteLoop, 500);
+
+  </script>
+</body>
+
+</html>

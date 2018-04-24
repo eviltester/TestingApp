@@ -1,0 +1,328 @@
+<html><head><title>REST Listicator Instructions</title></head><body><h1>The REST Listicator</h1>
+<ul>
+<li>Web Server based app which responds to REST HTTP Requests</li>
+<li>Features
+<ul>
+<li>List management</li>
+<li>User management</li>
+<li>Feature-Toggles to configure the app</li>
+</ul>
+</li>
+</ul>
+<h2>Install and Running</h2>
+<p><a href="http://compendiumdev.co.uk/downloads/apps/restlisticator/v1/rest-list-system.jar">download the jar</a></p>
+<ul>
+<li>run by typing:
+<ul>
+<li><code>java -jar rest-list-system.jar</code></li>
+</ul>
+</li>
+</ul>
+<p>If you double click it then it will be running in the background on port 4567 - you might have to use task manager to kill the Java VM that it is running on to exit.</p>
+<p>Three users are created by default with different permissions: <code>superadmin</code>, <code>admin</code>, <code>user</code> - all have the default password set to <code>password</code></p>
+<p>Command Line Arguments:</p>
+<ul>
+<li><code>-port=1234</code> set the port to supplied integer (defaults to 4567)</li>
+<li><code>-bugfixes=false</code> (defaults to true)</li>
+</ul>
+<h2>End Points Summary</h2>
+<ul>
+<li><code>/heartbeat</code> - is the server alive?</li>
+<li><code>/lists</code> - manage the List entities - create, amend lists</li>
+<li><code>/lists/{guid}</code> - create, amend, delete a List</li>
+<li><code>/users</code> - user management - create, delete</li>
+<li><code>/users/{username}/password</code> - amend a User's password</li>
+<li><code>/users/{username}/apikey</code> - amend a User's api key</li>
+<li><code>/feature-toggles</code> - <code>superadmin</code> can toggle app features on and off</li>
+</ul>
+<hr />
+<h2>End Points</h2>
+<h3>Heartbeat</h3>
+<ul>
+<li><code>/heartbeat</code>
+<ul>
+<li><code>GET</code> - return 200 to indicate server is running</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>Lists</h3>
+<ul>
+<li><code>/lists</code>
+<ul>
+<li><code>GET</code>
+<ul>
+<li>return all the lists in the system</li>
+</ul>
+</li>
+<li><code>POST</code>
+<ul>
+<li>requires authorized and authenticated user</li>
+<li>create a list with partial payload e.g. <code>{title:'my title'}</code></li>
+</ul>
+</li>
+<li><code>PUT</code>
+<ul>
+<li>requires authorized and authenticated user</li>
+<li>create a list with full payload i.e. <code>title</code>, <code>description</code>, <code>guid</code>, <code>createdDate</code>, <code>amendedDate</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4>Lists Examples</h4>
+<p>'GET /lists'</p>
+<p><code>Accept: application/json</code></p>
+<pre><code>{
+    &quot;lists&quot;: [
+        {
+            &quot;guid&quot;: &quot;d4625287-989a-4454-b01a-cb99545a87a6&quot;,
+            &quot;title&quot;: &quot;title&quot;,
+            &quot;description&quot;: &quot;&quot;,
+            &quot;createdDate&quot;: &quot;2017-07-19-15-53-14&quot;,
+            &quot;amendedDate&quot;: &quot;2017-07-19-15-53-14&quot;
+        }
+    ]
+}
+</code></pre>
+<p><code>Accept: application/xml</code></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;lists&gt;
+    &lt;list&gt;
+        &lt;guid&gt;d4625287-989a-4454-b01a-cb99545a87a6&lt;/guid&gt;
+        &lt;title&gt;title&lt;/title&gt;
+        &lt;description&gt;&lt;/description&gt;
+        &lt;createdDate&gt;2017-07-19-15-53-14&lt;/createdDate&gt;
+        &lt;amendedDate&gt;2017-07-19-15-53-14&lt;/amendedDate&gt;
+    &lt;/list&gt;
+&lt;/lists&gt;
+</code></pre>
+<hr />
+<h3>List</h3>
+<ul>
+<li>/lists/{guid}
+<ul>
+<li><code>GET</code> - return the details of a particular list
+<ul>
+<li>can filter list with <code>?title=exactTitle</code></li>
+<li>can filter list with <code>?title=&quot;partialTitle&quot;</code></li>
+</ul>
+</li>
+<li><code>PUT</code> - amend a list or create a new list when supplied with full details of the list</li>
+<li><code>POST</code> - amend details of a list
+<ul>
+<li>user must be authenticated</li>
+<li>only user with appropriate permission can amend a list
+<ul>
+<li>admin can amend any, user can ammend unowned, and lists they own</li>
+</ul>
+</li>
+<li>resource will be created if it does not exist</li>
+</ul>
+</li>
+<li><code>PATCH</code> - partial amend of a list
+<ul>
+<li>user must be authenticated</li>
+<li>only user with appropriate permission can delete a list</li>
+<li>resource must exist</li>
+</ul>
+</li>
+<li><code>DELETE</code> - delete a list
+<ul>
+<li>user must be authenticated</li>
+<li>only user with appropriate permission can delete a list
+<ul>
+<li>admin can delete any list</li>
+<li>users can delete their own, or unowned, or admin created lists</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>/lists/{guid}?without={fieldlist}
+<ul>
+<li><code>GET</code> - return the details of a particular list but without the fields in the comma separated <code>fieldlist</code> e.g. <code>guid,title</code></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4>List Examples</h4>
+<p>GET /lists/{guid}</p>
+<p><code>Accept: application/json</code></p>
+<pre><code>{
+    &quot;guid&quot;: &quot;d4625287-989a-4454-b01a-cb99545a87a6&quot;,
+    &quot;title&quot;: &quot;title&quot;,
+    &quot;description&quot;: &quot;&quot;,
+    &quot;createdDate&quot;: &quot;2017-07-19-15-53-14&quot;,
+    &quot;amendedDate&quot;: &quot;2017-07-19-15-53-14&quot;
+}
+</code></pre>
+<p><code>Accept: application/xml</code></p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;list&gt;
+    &lt;guid&gt;d4625287-989a-4454-b01a-cb99545a87a6&lt;/guid&gt;
+    &lt;title&gt;title&lt;/title&gt;
+    &lt;description&gt;&lt;/description&gt;
+    &lt;createdDate&gt;2017-07-19-15-53-14&lt;/createdDate&gt;
+    &lt;amendedDate&gt;2017-07-19-15-53-14&lt;/amendedDate&gt;
+&lt;/list&gt;
+</code></pre>
+<hr />
+<p>PATCH /lists/{guid}</p>
+<p>{<br />
+&quot;guid&quot;: &quot;d4625287-989a-4454-b01a-cb99545a87a6&quot;,<br />
+&quot;title&quot;: &quot;title2&quot;,<br />
+}</p>
+<p>_currently does not comply with https://tools.ietf.org/html/rfc7396 _</p>
+<hr />
+<h3>Users</h3>
+<ul>
+<li><code>/users</code>
+<ul>
+<li><code>GET</code> - return usernames of all users
+<ul>
+<li>can be filtered with <code>?username=exactmatch</code> e.g. <code>?username=admin</code></li>
+<li>can be filtered with <code>?username=&quot;partialmatch&quot;</code> e.g. <code>?username=&quot;adm&quot;</code></li>
+</ul>
+</li>
+<li><code>POST</code> - creat a user with <code>username</code> and <code>password</code>
+<ul>
+<li>calling user must be authenticated</li>
+<li>calling user must be admin or have CREATE_USER permissions</li>
+<li>username must be minimum of 6 chars</li>
+<li>password must be minimum of 6 chars</li>
+<li>201 returned on success</li>
+<li>409 returned if user already exists</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h3>User</h3>
+<ul>
+<li><code>/users/{username}</code>
+<ul>
+<li><code>GET</code> - return details of a user
+<ul>
+<li>user must be authenticated</li>
+<li>user can only get their own details, not those of anyone else</li>
+<li>admin users can get details of any user</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>/users/{username}/password</code>
+<ul>
+<li><code>PUT</code> - set the password
+<ul>
+<li>user must be authenticated</li>
+<li>user can only set their own details, not those of anyone else</li>
+<li>admin users can set details of any user</li>
+<li>password must be 6 characters minimum</li>
+<li>payload is a partial user object containing the password</li>
+<li>payload type must be set in the content-type header or assumes JSON</li>
+<li>returns 204 No Content if successful</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>PUT /users/{username}/password</code></p>
+<p>XML:</p>
+<pre><code>&lt;user&gt;&lt;password&gt;newPassword&lt;/password&gt;&lt;/user&gt;
+</code></pre>
+<p>JSON:</p>
+<pre><code>{password:'newPassword'}
+</code></pre>
+<ul>
+<li><code>/users/{username}/apikey</code>
+<ul>
+<li><code>PUT</code> - set the API AuthKey
+<ul>
+<li>user must be authenticated</li>
+<li>user can only set their own details, not those of anyone else</li>
+<li>admin users can set details of any user</li>
+<li>apikey must be 10 characters minimum</li>
+<li>payload is a partial user object containing the password</li>
+<li>payload type must be set in the content-type header or assumes JSON</li>
+<li>returns 204 No Content if successful</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>PUT /users/{username}/apikey</code></p>
+<p>XML:</p>
+<pre><code>&lt;user&gt;&lt;apikey&gt;newApiKeyIsThisYes&lt;/apikey&gt;&lt;/user&gt;
+</code></pre>
+<p>JSON:</p>
+<pre><code>{apikey:'newApiKeyIsThisYes'}
+</code></pre>
+<ul>
+<li><code>/feature-toggles</code>
+<ul>
+<li><code>GET</code> - return status of all feature toggles
+<ul>
+<li>user must be authenticated</li>
+</ul>
+</li>
+<li><code>POST</code> - amend a list of feature toggles
+<ul>
+<li>user must be authenticated</li>
+<li>only user with appropriate permission can set feature toggles</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>Payload representation</h2>
+<ul>
+<li>
+<p><code>Content-Type</code></p>
+<ul>
+<li>Use the <code>Content-Type</code> header to specify the format of the payload as either XML or JSON</li>
+<li>A value of <code>application/json</code> means the payload is represented as JSON</li>
+<li>A value of <code>application/xml</code> means the payload is represented as XML</li>
+<li>A <code>400</code> error will be returned if the payload can not be converted into the appropriate representation</li>
+<li>If no <code>Content-Type</code> is supplied then the  application assumes a JSON representation.</li>
+</ul>
+</li>
+<li>
+<p><code>Accept</code></p>
+<ul>
+<li>Use the <code>Accept</code> header to specify the format of the desired response</li>
+<li>A value of <code>application/json</code> means you want to receive JSON</li>
+<li>A value of <code>application/xml</code> means you want to receive XML</li>
+</ul>
+</li>
+</ul>
+<h2>Authentication</h2>
+<ul>
+<li>Some requests require an authenticated user.</li>
+<li>The system accepts Simple Basic Authentication
+<ul>
+<li>an <code>Authentication</code> header with the value <code>Basic</code> followed by the <code>username:password</code> base 64 encoded</li>
+</ul>
+</li>
+<li>The system also accepts a custom header <code>X-API-AUTH</code> with a value of the <code>api key</code> defined for each user. the <code>api key</code> is visible to the user when they make a <code>GET</code> request for their user details</li>
+</ul>
+<h2>Verbs</h2>
+<ul>
+<li>The system accepts the <code>X-HTTP-Method-Override</code> header to allow clients that don't support verbs such as <code>PATCH</code></li>
+</ul>
+<h2>General</h2>
+<ul>
+<li><code>OPTIONS</code> can be used on all endpoints to receive the <code>Allow</code> header with the allowed verbs.</li>
+<li><code>404</code> is returned if the end point is not recognised</li>
+<li><code>405</code> is returned if a method which is not mentioned in <code>Allow</code> is used on an an endpoint</li>
+<li><code>500</code> is returned in the event of an unhandled condition in the server - this should never occur</li>
+</ul>
+<h2>Known Bugs</h2>
+<p>The system has been coded with some known bugs - these are all fixed by default. If you would like to test your testing skills then start with <code>-bugfixes=false</code> to have the known bugs present in the application.</p>
+<p>See if you can find them.</p>
+<p><code>java -jar rest-list-system.jar -bugfixes=false</code></p>
+</body>

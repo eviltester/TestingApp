@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>The Coloured Square Game</title>
+
+<script type="text/javascript">
+
+var colours = ["blue", "white", "green", "black", "pink"];
+
+function changeColour(){
+	var colour = colours[Math.floor(Math.random() * colours.length)];
+	document.getElementById("theSquare").style.backgroundColor=colour;
+	changeLinkText("Change From " + colour);
+}
+
+function changeStatusText(statusText){
+	var statusSpan = document.getElementById('status');
+	if ('textContent' in statusSpan) {
+		statusSpan.textContent = statusText;
+	} else {
+		statusSpan.innerText = statusText;
+	}
+}
+
+function changeLinkText(linkText){
+	var linkA = document.getElementById('changeLink');
+	if ('textContent' in linkA) {
+		linkA.textContent = linkText;
+	} else {
+		linkA.innerText = linkText;
+	}
+}
+
+function checkColour(){
+	var colour = document.getElementById("theSquare").style.backgroundColor;
+	var buttonColour = document.getElementById("theButton").style.backgroundColor;
+	var winCheck = colour == buttonColour;
+	if(winCheck){
+		changeStatusText("Winner!");
+		alert("You Win!");
+	}else{
+		changeStatusText("Losing...");
+	}
+}
+
+</script>
+
+</head>
+<h1>The Coloured Square Game</h1>
+<p>The aim of the game is to click the link, to change the colour of the square.</p>
+<p>Press the [It is Red] button, when the square is red, to win.</p>
+
+<p>Status: <span id="status">Playing</span></p>
+<a id="changeLink" href="#" onclick="changeColour()">Change</a>
+<table border="0">
+	<tr>
+		<td id="theSquare" style="background-color:grey" width="200px" height="200px" onclick="changeColour()">
+			
+		</td>
+		
+	</tr>
+</table>
+
+<p><button id="theButton" style="background-color:red" onclick="checkColour()">It is Red</button></p>
+</html>
