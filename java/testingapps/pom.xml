@@ -17,5 +17,6 @@
         <module>restlisticator</module>
         <module>seleniumtestpages</module>
         <module>testingapp</module>
+        <module>thepulper</module>
     </modules>
 </project>
