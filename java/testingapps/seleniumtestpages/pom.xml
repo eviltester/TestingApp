@@ -38,12 +38,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>uk.co.compendiumdev</groupId>
-            <artifactId>rest-list-system</artifactId>
-            <version>1.2-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>

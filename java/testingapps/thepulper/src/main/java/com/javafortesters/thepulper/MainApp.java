@@ -1,16 +1,12 @@
-package com.seleniumsimplified;
+package com.javafortesters.thepulper;
 
-import com.seleniumsimplified.compendiumdev.spark.app.CompendiumDevAppsForSpark;
-import com.seleniumsimplified.seleniumtestpages.spark.app.SeleniumTestPagesForSpark;
+import com.javafortesters.pulp.spark.app.PulpAppForSpark;
 import spark.Spark;
 
+import static spark.Spark.get;
+import static spark.Spark.staticFileLocation;
 
-import static spark.Spark.*;
-
-/**
- * Created by Alan on 15/06/2016.
- */
-public class MainTestPages {
+public class MainApp {
 
     public static void main(String[] args) {
 
@@ -37,12 +33,13 @@ public class MainTestPages {
 
         // because Spark is a singleton - these just have to register their routings, they don't need to do anything else
 
-        CompendiumDevAppsForSpark appPages = new CompendiumDevAppsForSpark();
-        SeleniumTestPagesForSpark seleniumTestPages = new SeleniumTestPagesForSpark();
+        get("/", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
+        get("", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
+
+        PulpAppForSpark pulpapp = new PulpAppForSpark();
+
 
         System.out.println("Running on " + proxyport);
 
     }
-
-
 }

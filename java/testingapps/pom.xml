@@ -16,7 +16,7 @@
     <modules>
         <module>restlisticator</module>
         <module>seleniumtestpages</module>
-        <module>testingapp</module>
         <module>thepulper</module>
+        <module>testingapp</module>
     </modules>
 </project>

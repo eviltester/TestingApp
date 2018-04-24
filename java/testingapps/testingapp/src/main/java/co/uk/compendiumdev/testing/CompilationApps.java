@@ -1,7 +1,7 @@
 package co.uk.compendiumdev.testing;
 
 import com.seleniumsimplified.compendiumdev.spark.app.CompendiumDevAppsForSpark;
-import com.seleniumsimplified.pulp.spark.app.PulpAppForSpark;
+import com.javafortesters.pulp.spark.app.PulpAppForSpark;
 import com.seleniumsimplified.seleniumtestpages.spark.app.SeleniumTestPagesForSpark;
 import spark.Spark;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
