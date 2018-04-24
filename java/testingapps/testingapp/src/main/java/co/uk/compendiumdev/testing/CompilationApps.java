@@ -1,10 +1,11 @@
 package co.uk.compendiumdev.testing;
 
-import com.seleniumsimplified.compendiumdev.spark.app.CompendiumDevAppsForSpark;
+
 import com.javafortesters.pulp.spark.app.PulpAppForSpark;
 import com.seleniumsimplified.seleniumtestpages.spark.app.SeleniumTestPagesForSpark;
 import spark.Spark;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
+import uk.co.compendiumdev.spark.app.CompendiumDevAppsForSpark;
 
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;

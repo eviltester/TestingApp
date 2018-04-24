@@ -1,10 +1,10 @@
-package com.seleniumsimplified;
+package uk.co.compendiumdev;
 
-import com.seleniumsimplified.seleniumtestpages.spark.app.SeleniumTestPagesForSpark;
 import spark.Spark;
+import uk.co.compendiumdev.spark.app.CompendiumDevAppsForSpark;
 
-
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.staticFileLocation;
 
 /**
  * Created by Alan on 15/06/2016.
@@ -36,7 +36,10 @@ public class MainTestPages {
 
         // because Spark is a singleton - these just have to register their routings, they don't need to do anything else
 
-        SeleniumTestPagesForSpark seleniumTestPages = new SeleniumTestPagesForSpark();
+        get("/", (req, res) -> {res.redirect("/index.html"); return "";});
+        get("", (req, res) -> {res.redirect("/index.html"); return "";});
+
+        CompendiumDevAppsForSpark appPages = new CompendiumDevAppsForSpark();
 
         System.out.println("Running on " + proxyport);
 

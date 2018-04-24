@@ -2,25 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>uk.co.compendiumdev.testing</groupId>
         <artifactId>testing-apps-root</artifactId>
+        <groupId>uk.co.compendiumdev.testing</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>uk.co.compendiumdev.testing</groupId>
-    <artifactId>collected-testing-apps</artifactId>
-    <packaging>jar</packaging>
-    <!-- <version>1.3</version>-->
-
-    <version>1.0-SNAPSHOT</version>
-
-
-    <!--
-    v1.0 previously this was the Selenium Test Pages, now created a compilation app
-    -->
+    <artifactId>compendiumdevapps</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -30,28 +21,12 @@
         </dependency>
 
         <dependency>
-            <groupId>uk.co.compendiumdev</groupId>
-            <artifactId>rest-list-system</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.seleniumsimplified.java</groupId>
-            <artifactId>seleniumtestpages</artifactId>
-            <version>1.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>uk.co.compendiumdev.testing</groupId>
-            <artifactId>thepulper</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>uk.co.compendiumdev.testing</groupId>
-            <artifactId>compendiumdevapps</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 
     <build>
@@ -82,11 +57,12 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>co.uk.compendiumdev.testing.CompilationApps</mainClass>
+                            <mainClass>uk.co.compendiumdev.MainTestPages</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 </project>

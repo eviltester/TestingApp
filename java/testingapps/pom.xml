@@ -14,8 +14,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>restlisticator</module>
+        <module>compendiumdevapps</module>
         <module>seleniumtestpages</module>
+        <module>restlisticator</module>
         <module>thepulper</module>
         <module>testingapp</module>
     </modules>

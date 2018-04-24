@@ -1,4 +1,4 @@
-package com.seleniumsimplified.compendiumdev.spark.app;
+package uk.co.compendiumdev.spark.app;
 
 import static spark.Spark.get;
 
