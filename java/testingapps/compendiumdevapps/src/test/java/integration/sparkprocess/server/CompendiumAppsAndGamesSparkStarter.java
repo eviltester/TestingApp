@@ -1,6 +1,7 @@
 package integration.sparkprocess.server;
 
 import uk.co.compendiumdev.MainTestPages;
+import uk.co.compendiumdev.sparktesting.SparkStarter;
 
 import java.net.HttpURLConnection;
 import java.net.URL;

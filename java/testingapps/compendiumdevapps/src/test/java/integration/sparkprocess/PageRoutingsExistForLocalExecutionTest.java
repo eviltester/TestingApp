@@ -2,7 +2,6 @@ package integration.sparkprocess;
 
 import integration.sparkprocess.http.BasicHttp;
 import integration.sparkprocess.server.CompendiumAppsAndGamesSparkStarter;
-import integration.sparkprocess.server.SparkStarter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

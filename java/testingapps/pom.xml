@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>sparktesting</module>
         <module>compendiumdevapps</module>
         <module>seleniumtestpages</module>
         <module>restlisticator</module>

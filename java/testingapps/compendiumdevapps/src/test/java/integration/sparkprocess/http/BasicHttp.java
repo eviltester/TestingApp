@@ -1,7 +1,5 @@
 package integration.sparkprocess.http;
 
-import integration.sparkprocess.server.SparkStarter;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;

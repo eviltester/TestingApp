@@ -1,4 +1,4 @@
-package integration.sparkprocess.server;
+package uk.co.compendiumdev.sparktesting;
 
 import spark.Spark;
 
