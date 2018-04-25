@@ -2,10 +2,7 @@ package uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http;
 
 //import sun.net.www.MessageHeader;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -95,33 +92,11 @@ public class HttpRequestSender {
             System.out.println("Response Code : " + statusCode);
 
 
+            String responseBody = getResponseBody(con);
 
-            BufferedReader in=null;
-
-            // https://stackoverflow.com/questions/24707506/httpurlconnection-how-to-read-payload-of-400-response
-            try {
-                in = new BufferedReader(
-                        new InputStreamReader(con.getInputStream()));
-            }catch(Exception e){
-                InputStream stream = con.getErrorStream();
-                if(stream!=null) {
-                    in = new BufferedReader(
-                            new InputStreamReader(stream));
-                }
-            }
-
-            String inputLine;
-            StringBuffer responseBody = new StringBuffer();
-
-            if(in!=null) {
-                while ((inputLine = in.readLine()) != null) {
-                    responseBody.append(inputLine);
-                }
-                in.close();
-            }
 
             //print result
-            System.out.println("Response Body: " + responseBody.toString());
+            System.out.println("Response Body: " + responseBody);
             response.body = responseBody.toString();
 
 
@@ -189,5 +164,38 @@ public class HttpRequestSender {
         }
 
         return response;
+    }
+
+    private String getResponseBody(HttpURLConnection con) {
+        BufferedReader in=null;
+
+        // https://stackoverflow.com/questions/24707506/httpurlconnection-how-to-read-payload-of-400-response
+        try {
+            in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+        }catch(Exception e){
+            // handle 400 exception messages
+            InputStream stream = con.getErrorStream();
+            if(stream!=null) {
+                in = new BufferedReader(
+                        new InputStreamReader(stream));
+            }
+        }
+
+        String inputLine;
+        StringBuffer responseBody = new StringBuffer();
+
+        try{
+            if(in!=null) {
+                while ((inputLine = in.readLine()) != null) {
+                    responseBody.append(inputLine);
+                }
+                in.close();
+            }
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        return responseBody.toString();
     }
 }

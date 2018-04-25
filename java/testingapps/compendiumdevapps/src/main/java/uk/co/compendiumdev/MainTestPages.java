@@ -25,21 +25,8 @@ public class MainTestPages {
             }
         }
 
-        Spark.port(proxyport);
 
-        //port(4568); //for testing in case I forget to shutdown
-        staticFileLocation("/web");
-
-        // add a shutdown url in case left running on port 4567
-        get("/shutdown", (req, res) -> {System.exit(0); return "";});
-
-
-        // because Spark is a singleton - these just have to register their routings, they don't need to do anything else
-
-        get("/", (req, res) -> {res.redirect("/index.html"); return "";});
-        get("", (req, res) -> {res.redirect("/index.html"); return "";});
-
-        CompendiumDevAppsForSpark appPages = new CompendiumDevAppsForSpark();
+        CompendiumDevAppsForSpark appPages = CompendiumDevAppsForSpark.runLocally(proxyport);
 
         System.out.println("Running on " + proxyport);
 
