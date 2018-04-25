@@ -1,15 +1,34 @@
 package uk.co.compendiumdev.restlisticator.sparkrestserver.mock;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.SparkIntegrationTest;
+
+import spark.Spark;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 
 /**
  * A Test which uses the app to create a set of Mock request versions
  */
-public class CreateMockApiFilesTest extends SparkIntegrationTest {
+public class CreateMockApiFilesTest {
 
     // used to create the Mock API files
+
+    protected HttpMessageSender http;
+
+    @BeforeClass
+    public static void startServer() {
+        RestListicatorSparkStarter.get("localhost").startSparkAppIfNotRunning(4567);
+    }
+
+    @Before
+    public void httpConnect() {
+        http = new HttpMessageSender("http://" + "localhost:" + Spark.port());
+    }
+
+    // TODO: this looks unfinished and I don't think it does anything
 
     // get heartbeat
     @Test

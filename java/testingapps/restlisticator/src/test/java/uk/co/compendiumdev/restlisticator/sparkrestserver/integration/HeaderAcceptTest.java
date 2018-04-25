@@ -2,15 +2,30 @@ package uk.co.compendiumdev.restlisticator.sparkrestserver.integration;
 
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import spark.Spark;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 
 import java.io.IOException;
 
-public class HeaderAcceptTest extends SparkIntegrationTest{
+public class HeaderAcceptTest{
 
+    protected HttpMessageSender http;
 
+    @BeforeClass
+    public static void startServer() {
+        RestListicatorSparkStarter.get("localhost").startSparkAppIfNotRunning(4567);
+    }
+
+    @Before
+    public void httpConnect() {
+        http = new HttpMessageSender("http://" + "localhost:" + Spark.port());
+    }
 
     @Test
     public void acceptHeaderDeterminesJSONFormatOfResponse() throws IOException {

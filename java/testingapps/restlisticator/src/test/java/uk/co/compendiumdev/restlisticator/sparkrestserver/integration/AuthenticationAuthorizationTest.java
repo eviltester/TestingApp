@@ -2,21 +2,39 @@ package uk.co.compendiumdev.restlisticator.sparkrestserver.integration;
 
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import spark.Spark;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.apicalls.IntegrationApiCall;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.utils.SimpleMessageProcessor;
 
 import static uk.co.compendiumdev.strings.Quoter.dbq;
 
-public class AuthenticationAuthorizationTest extends SparkIntegrationTest{
+public class AuthenticationAuthorizationTest{
 
+
+    protected HttpMessageSender http;
+
+    @BeforeClass
+    public static void startServer() {
+        RestListicatorSparkStarter.get("localhost").startSparkAppIfNotRunning(4567);
+    }
+
+    @Before
+    public void httpConnect() {
+        http = new HttpMessageSender("http://" + "localhost:" + Spark.port());
+    }
 
     @Test
     public void wwwAuthenticateHeaderSentOn401() {
 
         // set toggle back to normal otherwise other tests might fail
-        setFeatureToggleViaAPI("BUG_004_FIXED", "true");
+        IntegrationApiCall.setFeatureToggleViaAPI("BUG_004_FIXED", "true");
 
         String xmlList;
         HttpResponse response;
@@ -32,7 +50,7 @@ public class AuthenticationAuthorizationTest extends SparkIntegrationTest{
 
 
         // SET toggle off
-        setFeatureToggleViaAPI("BUG_004_FIXED", "false");
+        IntegrationApiCall.setFeatureToggleViaAPI("BUG_004_FIXED", "false");
 
         http.setHeader(http.HEADER_CONTENT_TYPE, http.CONTENT_XML);
         http.setBasicAuth("superadmon", "passward");
@@ -46,7 +64,7 @@ public class AuthenticationAuthorizationTest extends SparkIntegrationTest{
 
 
         // set toggle back to normal otherwise other tests might fail
-        setFeatureToggleViaAPI("BUG_004_FIXED", "true");
+        IntegrationApiCall.setFeatureToggleViaAPI("BUG_004_FIXED", "true");
     }
 
 
@@ -75,7 +93,7 @@ public class AuthenticationAuthorizationTest extends SparkIntegrationTest{
         // incorrect user is authentication failure
         Assert.assertEquals(200, response.statusCode);
 
-        setFeatureToggleViaAPI("BUG_001_FIXED", "true");
+        IntegrationApiCall.setFeatureToggleViaAPI("BUG_001_FIXED", "true");
         http.deleteHeader("X-API-AUTH");
 
 

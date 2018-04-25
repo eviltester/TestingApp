@@ -1,13 +1,30 @@
 package uk.co.compendiumdev.restlisticator.sparkrestserver.integration;
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import spark.Spark;
 import uk.co.compendiumdev.restlisticator.http.HttpStatusCode;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 
-public class HeartbeatEndpointTest extends SparkIntegrationTest{
+public class HeartbeatEndpointTest{
 
+
+    protected HttpMessageSender http;
+
+    @BeforeClass
+    public static void startServer() {
+        RestListicatorSparkStarter.get("localhost").startSparkAppIfNotRunning(4567);
+    }
+
+    @Before
+    public void httpConnect() {
+        http = new HttpMessageSender("http://" + "localhost:" + Spark.port());
+    }
 
     @Test
     public void heartBeatRespondsWith200(){

@@ -2,15 +2,33 @@ package uk.co.compendiumdev.restlisticator.sparkrestserver.integration;
 
 
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import spark.Spark;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.apicalls.IntegrationApiCall;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
+import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 
 import java.io.IOException;
 
 import static uk.co.compendiumdev.strings.Quoter.dbq;
 
-public class ListsEndpointTest extends SparkIntegrationTest{
+public class ListsEndpointTest{
+
+    protected HttpMessageSender http;
+
+    @BeforeClass
+    public static void startServer() {
+        RestListicatorSparkStarter.get("localhost").startSparkAppIfNotRunning(4567);
+    }
+
+    @Before
+    public void httpConnect() {
+        http = new HttpMessageSender("http://" + "localhost:" + Spark.port());
+    }
 
     @Test
     public void listsSupportsOptions(){
@@ -79,11 +97,7 @@ public class ListsEndpointTest extends SparkIntegrationTest{
     @Test
     public void listCreationCanReturnLocationHeader() throws IOException {
 
-        http.setHeader(http.HEADER_CONTENT_TYPE,http.CONTENT_XML);
-        HttpResponse response = http.get(ApiEndPointNames.FEATURE_TOGGLES);
-        Assert.assertEquals(200, response.statusCode);
-        System.out.println(response.body);
-
+        HttpResponse response;
 
         http.setHeader(http.HEADER_CONTENT_TYPE,http.CONTENT_XML);
         http.setBasicAuth("superadmin", "password");
@@ -101,7 +115,7 @@ public class ListsEndpointTest extends SparkIntegrationTest{
 
 
         // set toggle back to normal otherwise other tests might fail
-        setFeatureToggleViaAPI("BUG_001_FIXED", "true");
+        IntegrationApiCall.setFeatureToggleViaAPI("BUG_001_FIXED", "true");
     }
 
 
