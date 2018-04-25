@@ -1,4 +1,4 @@
-package uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http;
+package uk.co.compendiumdev.http;
 
 
 import java.util.HashMap;

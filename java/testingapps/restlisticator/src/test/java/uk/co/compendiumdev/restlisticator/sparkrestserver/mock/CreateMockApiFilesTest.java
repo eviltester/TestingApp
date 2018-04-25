@@ -5,9 +5,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import spark.Spark;
+import uk.co.compendiumdev.http.HttpMessageSender;
+import uk.co.compendiumdev.http.HttpResponse;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
+
 
 /**
  * A Test which uses the app to create a set of Mock request versions

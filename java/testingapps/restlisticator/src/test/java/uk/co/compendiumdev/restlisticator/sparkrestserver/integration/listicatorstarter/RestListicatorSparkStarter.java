@@ -1,10 +1,10 @@
 package uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter;
 
 import spark.Spark;
+import uk.co.compendiumdev.http.HttpMessageSender;
+import uk.co.compendiumdev.http.HttpResponse;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
 import uk.co.compendiumdev.sparktesting.SparkStarter;
 
 public class RestListicatorSparkStarter extends SparkStarter {

@@ -6,11 +6,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import spark.Spark;
+import uk.co.compendiumdev.http.HttpMessageSender;
+import uk.co.compendiumdev.http.HttpResponse;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.apicalls.IntegrationApiCall;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.integration.listicatorstarter.RestListicatorSparkStarter;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.ApiEndPointNames;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpMessageSender;
-import uk.co.compendiumdev.restlisticator.sparkrestserver.restapi.http.HttpResponse;
+
 
 import java.io.IOException;
 
