@@ -48,7 +48,7 @@ public class RestListicatorSparkStarter extends SparkStarter {
     public void startServer() {
         //String [] args = {};
         //Main.main(args);
-        server = new RestServer();
+        server = new RestServer("");
         System.out.println("Run main to start");
     }
 

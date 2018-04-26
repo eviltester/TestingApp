@@ -13,7 +13,13 @@ public class RestServer {
 
     // by default running on port 4567
 
-    public RestServer() {
+    public void configureRestServerRouting(String nestedPath) {
+
+
+        if(nestedPath!= null && nestedPath.length()>0){
+            ApiEndPoint.setUrlPrefix(nestedPath);
+        }
+
 
         //port(1234);
 
@@ -25,7 +31,7 @@ public class RestServer {
 //        });
 
         // Documentation
-        get("/", (request, response) -> {return api.getDocumentation(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+        get(ApiEndPoint.DOCUMENTATION.getPath(), (request, response) -> {return api.getDocumentation(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
 
 
@@ -152,8 +158,13 @@ public class RestServer {
     }
 
 
-    public RestServer(String[] args) {
-        this();
+    public RestServer(String nestedPath){
+        configureRestServerRouting(nestedPath);
+    }
+
+    public RestServer(String[] args, String nestedPath) {
+
+
         // process any command line arguments which apply to Rest listicator
         for(String arg : args){
             System.out.println("Args: " + arg);
@@ -166,6 +177,8 @@ public class RestServer {
                 }
             }
         }
+
+        configureRestServerRouting(nestedPath);
 
     }
 }

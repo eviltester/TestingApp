@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.restlisticator.sparkrestserver;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import uk.co.compendiumdev.restlisticator.http.ApiEndPoint;
@@ -25,4 +26,59 @@ public class EndpointNamingTest {
         Assert.assertEquals(ApiEndPointNames.FEATURE_TOGGLES, ApiEndPoint.FEATURE_TOGGLES.getPath());
         Assert.assertEquals(ApiEndPointNames.USERS, ApiEndPoint.USERS.getPath());
     }
+
+    @Test
+    public void canMoveApi(){
+        // api might be nested in another app so we need the ability to nest the api
+        ApiEndPoint.setUrlPrefix("listicator");
+        Assert.assertEquals("/listicator/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/listicator/lists", ApiEndPoint.LISTS.getPath());
+        ApiEndPoint.clearUrlPrefix();
+    }
+
+    @Test
+    public void canMoveApiStartsWith(){
+        // api might be nested in another app so we need the ability to nest the api
+        ApiEndPoint.setUrlPrefix("/listicator");
+        Assert.assertEquals("/listicator/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/listicator/lists", ApiEndPoint.LISTS.getPath());
+        ApiEndPoint.clearUrlPrefix();
+    }
+
+    @Test
+    public void canMoveApiEndsWith(){
+        // api might be nested in another app so we need the ability to nest the api
+        ApiEndPoint.setUrlPrefix("listicator/");
+        Assert.assertEquals("/listicator/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/listicator/lists", ApiEndPoint.LISTS.getPath());
+        ApiEndPoint.clearUrlPrefix();
+    }
+
+    @Test
+    public void canMoveApiBoth(){
+        // api might be nested in another app so we need the ability to nest the api
+        ApiEndPoint.setUrlPrefix("/listicator/");
+        Assert.assertEquals("/listicator/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/listicator/lists", ApiEndPoint.LISTS.getPath());
+        ApiEndPoint.clearUrlPrefix();
+    }
+
+    @Test
+    public void canMoveApiBack(){
+        // api might be nested in another app so we need the ability to nest the api
+        ApiEndPoint.setUrlPrefix("/listicator/");
+        Assert.assertEquals("/listicator/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/listicator/lists", ApiEndPoint.LISTS.getPath());
+        ApiEndPoint.clearUrlPrefix();
+
+        Assert.assertEquals("/heartbeat", ApiEndPoint.HEARTBEAT.getPath());
+        Assert.assertEquals("/lists", ApiEndPoint.LISTS.getPath());
+
+    }
+
+    @After
+    public void clearThePrefix(){
+        ApiEndPoint.clearUrlPrefix();
+    }
+
 }

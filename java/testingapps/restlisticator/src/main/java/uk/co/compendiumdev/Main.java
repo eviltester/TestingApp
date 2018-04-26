@@ -36,14 +36,7 @@ public class Main {
 
         for(String arg : args){
             System.out.println("Args: " + arg);
-//            if(arg.startsWith("-bugfixes")){
-//                String[]details = arg.split("=");
-//                if(details!=null && details.length>1){
-//                    Boolean bugfixeson = Boolean.parseBoolean(details[1].trim());
-//                    FeatureToggles.toggleAll(bugfixeson);
-//                    System.out.println("All known bugs are now " + (bugfixeson ? "fixed" : "buggy"));
-//                }
-//            }
+
             if(arg.startsWith("-port")){
                 String[]details = arg.split("=");
                 if(details!=null && details.length>1){
@@ -53,9 +46,11 @@ public class Main {
             }
         }
 
+        // TODO: add a shutdown verb as configurable through arguments e.g. -shutdownable=false
+
         Spark.port(proxyport);
         
-        RestServer restServer = new RestServer(args);
+        RestServer restServer = new RestServer(args, "");
 
         System.out.println("Running on " + Spark.port());
 

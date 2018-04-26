@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.restlisticator.domain.users;
 
+import uk.co.compendiumdev.restlisticator.http.ApiEndPoint;
 import uk.co.compendiumdev.restlisticator.http.HttpVerb;
 
 /**
@@ -9,7 +10,7 @@ public class UserAccessPermissionBuilder {
 
     UserAccessPermission permission;
 
-    public UserAccessPermissionBuilder(String endpoint) {
+    public UserAccessPermissionBuilder(ApiEndPoint endpoint) {
         permission = new UserAccessPermission();
         permission.setEndpoint(endpoint);
     }

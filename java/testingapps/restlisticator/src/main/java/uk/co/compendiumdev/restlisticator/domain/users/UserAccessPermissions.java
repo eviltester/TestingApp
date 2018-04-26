@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class UserAccessPermissions {
 
+    // TODO: use end points in enum not permissions or add the prefix in permissions as well as enum
+
     Map<String, UserAccessPermission> permissions = new HashMap<>();
 
     public static UserAccessPermissions getDefaults(){
@@ -16,14 +18,14 @@ public class UserAccessPermissions {
         UserAccessPermissions defaults = new UserAccessPermissions();
 
         defaults.add(new UserAccessPermissionBuilder(
-                            ApiEndPoint.HEARTBEAT.getPath()).
+                            ApiEndPoint.HEARTBEAT).
                                 withDefault(false).
                                 can(HttpVerb.GET).
                                 can(HttpVerb.OPTIONS).
                         build());
 
         defaults.add(new UserAccessPermissionBuilder(
-                            ApiEndPoint.LISTS.getPath()).
+                            ApiEndPoint.LISTS).
                             withDefault(false).
                                 can(HttpVerb.GET).
                                 can(HttpVerb.POST).
@@ -33,7 +35,7 @@ public class UserAccessPermissions {
                         build());
 
         defaults.add(new UserAccessPermissionBuilder(
-                            ApiEndPoint.FEATURE_TOGGLES.getPath()).
+                            ApiEndPoint.FEATURE_TOGGLES).
                             withDefault(false).
                                 can(HttpVerb.GET).
                                 can(HttpVerb.POST).
@@ -41,7 +43,7 @@ public class UserAccessPermissions {
                             build());
 
         defaults.add(new UserAccessPermissionBuilder(
-                            ApiEndPoint.USERS.getPath()).
+                            ApiEndPoint.USERS).
                             withDefault(false).
                                 can(HttpVerb.GET).
                                 can(HttpVerb.OPTIONS).
@@ -61,7 +63,7 @@ public class UserAccessPermissions {
         for(ApiEndPoint endpoint : ApiEndPoint.values()){
 
             superAdmin.add(new UserAccessPermissionBuilder(
-                    endpoint.getPath()).
+                    endpoint).
                     withDefault(true).
                     build());
         }
@@ -83,7 +85,7 @@ public class UserAccessPermissions {
 
     public boolean can(HttpVerb verb, ApiEndPoint endpoint) {
 
-        UserAccessPermission permission = permissions.get(endpoint.getPath());
+        UserAccessPermission permission = getPermission(endpoint);
         if(permission==null){
             return false;
         }
@@ -92,13 +94,22 @@ public class UserAccessPermissions {
 
     }
 
+    private UserAccessPermission getPermission(ApiEndPoint endpoint) {
+        for(UserAccessPermission perm : permissions.values()){
+            if(perm.endpoint == endpoint){
+                return perm;
+            }
+        }
+        return null;
+    }
+
     public UserAccessPermission forEndpoint(ApiEndPoint endpoint) {
         return permissions.get(endpoint.getPath());
     }
 
     public boolean can(String permissionName, ApiEndPoint endpoint) {
 
-        UserAccessPermission permission = permissions.get(endpoint.getPath());
+        UserAccessPermission permission =getPermission(endpoint);
         if(permission==null){
             return false;
         }

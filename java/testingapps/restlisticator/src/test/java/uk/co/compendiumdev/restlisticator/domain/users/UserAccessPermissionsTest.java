@@ -2,6 +2,7 @@ package uk.co.compendiumdev.restlisticator.domain.users;
 
 import org.junit.Assert;
 import org.junit.Test;
+import uk.co.compendiumdev.restlisticator.http.ApiEndPoint;
 import uk.co.compendiumdev.restlisticator.http.HttpVerb;
 
 /**
@@ -12,7 +13,7 @@ public class UserAccessPermissionsTest {
     @Test
     public void canCreateAUserAccessPermission(){
 
-        UserAccessPermission permission = new UserAccessPermissionBuilder("/lists").build();
+        UserAccessPermission permission = new UserAccessPermissionBuilder(ApiEndPoint.LISTS).build();
 
         Assert.assertEquals("/lists", permission.getEndpoint());
         Assert.assertTrue(permission.can(HttpVerb.find("get")));
@@ -27,7 +28,7 @@ public class UserAccessPermissionsTest {
     @Test
     public void canRestrictAUserAccessPermission(){
 
-        UserAccessPermission permission = new UserAccessPermissionBuilder("/lists").
+        UserAccessPermission permission = new UserAccessPermissionBuilder(ApiEndPoint.LISTS).
                                                 cannot(HttpVerb.DELETE).
                                                 build();
 
@@ -46,7 +47,7 @@ public class UserAccessPermissionsTest {
     @Test
     public void canRestrictAllUserAccessPermission(){
 
-        UserAccessPermission permission = new UserAccessPermissionBuilder("/lists").
+        UserAccessPermission permission = new UserAccessPermissionBuilder(ApiEndPoint.LISTS).
                 withDefault(false).
                 build();
 
@@ -64,7 +65,7 @@ public class UserAccessPermissionsTest {
     @Test
     public void canMixUserAccessPermission(){
 
-        UserAccessPermission permission = new UserAccessPermissionBuilder("/lists").
+        UserAccessPermission permission = new UserAccessPermissionBuilder(ApiEndPoint.LISTS).
                 withDefault(false).
                 can("delete").
                 build();

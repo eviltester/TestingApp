@@ -1,5 +1,6 @@
 package uk.co.compendiumdev.restlisticator.domain.users;
 
+import uk.co.compendiumdev.restlisticator.http.ApiEndPoint;
 import uk.co.compendiumdev.restlisticator.http.HttpVerb;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class UserAccessPermission {
     public static final String CAN_AMEND_ANY = "CanAmendAny";
 
 
-    String endpoint;
+    ApiEndPoint endpoint;
     Map<String, Boolean> permissions = new HashMap<>();
 
     public UserAccessPermission(){
@@ -41,13 +42,13 @@ public class UserAccessPermission {
         return can(verb.getName());
     }
 
-    public UserAccessPermission setEndpoint(String endpoint) {
+    public UserAccessPermission setEndpoint(ApiEndPoint endpoint) {
         this.endpoint = endpoint;
         return this;
     }
 
     public String getEndpoint() {
-        return endpoint;
+        return endpoint.getPath();
     }
 
     public UserAccessPermission setPermission(String key, Boolean permitted){
