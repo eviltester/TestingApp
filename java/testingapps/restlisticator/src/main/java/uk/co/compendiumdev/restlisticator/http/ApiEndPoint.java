@@ -30,6 +30,10 @@ public enum ApiEndPoint {
         prefix = "";
     }
 
+    public static String getUrlPrefix() {
+        return prefix;
+    }
+
     private void setPath(String path) {
         this.path = path;
     }

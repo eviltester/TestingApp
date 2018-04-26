@@ -43,6 +43,7 @@ public class CompilationApps {
         SeleniumTestPagesForSpark seleniumTestPages = new SeleniumTestPagesForSpark();
         PulpAppForSpark pulpapp = new PulpAppForSpark();
         RestServer restServer = new RestServer(args, "/listicator");
+        restServer.documentationDetails(proxyport);
 
 
         System.out.println("Running on " + proxyport);

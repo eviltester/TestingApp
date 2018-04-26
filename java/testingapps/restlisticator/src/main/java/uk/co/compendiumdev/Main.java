@@ -51,6 +51,7 @@ public class Main {
         Spark.port(proxyport);
         
         RestServer restServer = new RestServer(args, "");
+        restServer.documentationDetails(proxyport);
 
         System.out.println("Running on " + Spark.port());
 

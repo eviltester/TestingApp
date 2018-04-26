@@ -23,7 +23,7 @@ public class Api {
 
     // TODO split this into App - listicator, usermanager and Api(wrapper around app)
     private final TheListicator listicator;
-    private final String documentationHTML;
+    private String documentationHTML;
     private Map<String, User> users = new HashMap<>();
 
     private PayloadConvertor payloadConvertor=new PayloadConvertor();
@@ -392,9 +392,14 @@ public class Api {
 
     public ApiResponse getDocumentation(SparkApiRequest sparkApiRequest, SparkApiResponse apiResponse) {
 
+
         apiResponse.setStatus(200);
         apiResponse.setHeader("Content-Type", "text/html");
         apiResponse.setBody(documentationHTML);
         return apiResponse;
+    }
+
+    public void setDocumentationDetails(Integer proxyport, String urlPrefix) {
+        this.documentationHTML = documentationHTML.replace("/localhost:4567", "/localhost:" + proxyport + urlPrefix);
     }
 }

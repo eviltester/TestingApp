@@ -181,4 +181,8 @@ public class RestServer {
         configureRestServerRouting(nestedPath);
 
     }
+
+    public void documentationDetails(Integer proxyport) {
+        api.setDocumentationDetails(proxyport, ApiEndPoint.getUrlPrefix());
+    }
 }

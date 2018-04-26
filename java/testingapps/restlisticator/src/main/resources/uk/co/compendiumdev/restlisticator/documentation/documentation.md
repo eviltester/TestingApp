@@ -10,8 +10,10 @@
 
 [download the jar](http://compendiumdev.co.uk/downloads/apps/restlisticator/v1/rest-list-system.jar)
 
+
 - run by typing:
-    - `java -jar rest-list-system.jar`
+    - `java -jar <insertnameofjarfilehere>.jar`
+    - e.g. if you downloaded `restlisticator.jar` then it would be `java -jar restlisticator.jar`
 
 If you double click it then it will be running in the background on port 4567 - you might have to use task manager to kill the Java VM that it is running on to exit.
 
@@ -24,6 +26,7 @@ Command Line Arguments:
 
 ## End Points Summary
 
+
 - `/heartbeat` - is the server alive?
 - `/lists` - manage the List entities - create, amend lists
 - `/lists/{guid}` - create, amend, delete a List
@@ -31,6 +34,11 @@ Command Line Arguments:
 - `/users/{username}/password` - amend a User's password
 - `/users/{username}/apikey` - amend a User's api key
 - `/feature-toggles` - `superadmin` can toggle app features on and off
+
+The end points may be nested in a sub path e.g. `/listicator/heartbeat`
+
+Check with your system admin to find out how the application has been configured.
+
 
 ---
 
