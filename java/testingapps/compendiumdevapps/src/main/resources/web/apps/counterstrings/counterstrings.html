@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>CounterStrings</title>
+    <script language="JavaScript" src="counterstrings.js"></script>
+</head>
+<body>
+
+<script>
+    function generateCounterString(){
+        var howlong = document.getElementById('lengthOfCounterString').innerText;
+        generateCounterString(howlong);
+    }
+    function generateCounterString(howlong){
+        var howlong = document.getElementById('lengthOfCounterString').value;
+        var separator = document.getElementById('csseparator').value;
+        document.getElementById('counterstring').innerText= new CounterString().create(howlong, separator);
+        console.log(new CounterString().create(12));
+        document.getElementById("status").innerText="Ready to Copy"
+    }
+    function copyIt() {
+        var copyText = document.getElementById("counterstring");
+        copyText.select();
+        document.execCommand("Copy");
+        //alert("Copied the text: " + copyText.value);
+        document.getElementById("status").innerText="Copied To Clipboard"
+    }
+</script>
+<form id="charsform" onsubmit="generateCounterString(); return false;">
+
+    <p>Length: <input type="text" name="length" id="lengthOfCounterString" value="12"></p>
+    <p></p>
+    <p><input type="button" name="validate" value="Generate Counterstring" onclick="generateCounterString();"></p>
+    <div><p><input type="hidden" name="separator" id="csseparator" value="*"></p></div>
+</form>
+<textarea name="counterstring" id="counterstring" form="charsform">*3*5*</textarea>
+<p><input type="button" name="copy" value="Copy" onclick="copyIt();"></p>
+<p id="status"></p>
+</body>
+</html>
