@@ -6,34 +6,85 @@
 <body>
 
 <script>
-    function generateCounterString(){
-        var howlong = document.getElementById('lengthOfCounterString').innerText;
-        generateCounterString(howlong);
-    }
+
+    var elementIdToStoreResult = 'counterstring';
+
     function generateCounterString(howlong){
-        var howlong = document.getElementById('lengthOfCounterString').value;
+        howlong = typeof howlong !== 'undefined' ? howlong : Number(document.getElementById('lengthOfCounterString').value);
         var separator = document.getElementById('csseparator').value;
-        document.getElementById('counterstring').innerText= new CounterString().create(howlong, separator);
-        console.log(new CounterString().create(12));
-        document.getElementById("status").innerText="Ready to Copy"
+        document.getElementById(elementIdToStoreResult).innerText= new CounterString().create(howlong, separator);
+        document.getElementById("status").innerText="Generated - Ready to Copy"
     }
-    function copyIt() {
+    function copySetup(){
         var copyText = document.getElementById("counterstring");
         copyText.select();
+    }
+    function copyIt() {
+        copySetup();
         document.execCommand("Copy");
         //alert("Copied the text: " + copyText.value);
         document.getElementById("status").innerText="Copied To Clipboard"
     }
-</script>
-<form id="charsform" onsubmit="generateCounterString(); return false;">
 
-    <p>Length: <input type="text" name="length" id="lengthOfCounterString" value="12"></p>
-    <p></p>
+</script>
+
+<form id="charsform" onsubmit="generateCounterString(); return false;">
+    <p>Length: <input type="text" name="length" id="lengthOfCounterString" value="6"></p>
     <p><input type="button" name="validate" value="Generate Counterstring" onclick="generateCounterString();"></p>
-    <div><p><input type="hidden" name="separator" id="csseparator" value="*"></p></div>
+    <p><input id="copybutton" type="button" name="copy" value="Copy" onclick="copyIt();"></p>
 </form>
-<textarea name="counterstring" id="counterstring" form="charsform">*3*5*</textarea>
-<p><input type="button" name="copy" value="Copy" onclick="copyIt();"></p>
+
+<!-- v1 use a text area-->
+<div id="textAreaCounterString">
+    <hr/>
+    <div><p><input type="hidden" name="separator" id="csseparator" value="*"></p></div>
+    <textarea name="counterstring" id="counterstring" form="charsform">*3*5*</textarea>
+</div>
+
+
+
+
+<div>
+    <div id="divCounterString" style="display:none">
+        <hr/>
+        <p name="v2UseParaInDiv" id="divcounterstringvalue" style="word-wrap:break-word;">*3*5*</p>
+    </div>
+</div>
+
+<hr/>
 <p id="status"></p>
+
+
+<script>
+
+    // setup app for version 2
+    if(window.location.search.includes("v=2")){
+        elementIdToStoreResult = 'divcounterstringvalue';
+        document.getElementById('textAreaCounterString').style.display="none";
+        document.getElementById('divCounterString').style.display="";
+        copySetup = function(){
+            var selection = window.getSelection();
+            selection.removeAllRanges();
+            var range = document.createRange();
+            range.selectNodeContents(document.getElementById('divcounterstringvalue'));
+            selection.addRange(range);
+        }
+    }
+    // setup app for version 3
+    if(window.location.search.includes("v=3")){
+        elementIdToStoreResult = '';
+        document.getElementById('textAreaCounterString').style.display="none";
+        document.getElementById('divCounterString').style.display="none";
+        document.getElementById('copybutton').style.display="none";
+        generateCounterString = function(){
+            var howlong = document.getElementById('lengthOfCounterString').value;
+            var separator = document.getElementById('csseparator').value;
+            console.log(new CounterString().create(howlong, separator));
+        }
+    }
+
+</script>
+
+
 </body>
 </html>

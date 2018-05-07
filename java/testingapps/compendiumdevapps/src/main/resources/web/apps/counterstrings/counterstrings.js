@@ -8,7 +8,12 @@ function StringCounterStringCreator(){
         this.string = this.string + nextPart;
     }
     this.toString = function() {
-    return this.string;
+        return this.string;
+    }
+
+    this.finished = function(){
+        // OK it is finished - just added this to complete the interface,
+        // not required for a buffered object like this - more important for a streaming object
     }
 };
 
@@ -157,8 +162,8 @@ function CounterString() {
                 while(ranger.hasAnotherValueInRange()){
                     creator.append(this.getCounterStringRepresentationOfNumber(ranger.getNextValueFromRange(), theSpacer));
                 }
-
             }
+            creator.finished();
 
         return creator;
     };
