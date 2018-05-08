@@ -69,7 +69,7 @@
       }
     }
 
-    Level = function(startsAt, gameSpeed, maxBaddySpeed, maxCanvasWidth, maxCanvasHeigh, baddysize){
+    Level = function(startsAt, gameSpeed, maxBaddySpeed, maxCanvasWidth, maxCanvasHeight, baddysize){
         // what triggers the level to start?
         this.startsAt = typeof startsAt !== 'undefined' ? startsAt : 10;
         this.gameSpeed = typeof gameSpeed !== 'undefined' ? gameSpeed : 50;
@@ -82,7 +82,7 @@
     // original levels
     var levels = [
                     new Level(0, 50, 1, 200, 200),
-                    new Level(10, 45, 1, 300, 200),
+                    new Level(10, 45, 1, 300, 300),
                     new Level(20, 40, 1, 500, 200),
                     new Level(30, 35, 1, 200, 200),
                     new Level(40, 30, 1, 200, 200),
@@ -128,6 +128,20 @@
         theGameTimer = window.setInterval(gameLoop, speed);
     }
 
+    function setPlayerPosition(player){
+
+        var c=document.getElementById("myCanvas");
+        // SET Player at middle of bottom
+        //player.
+        middle = (c.width+player.width)/2;
+        height = c.height-player.width;
+
+        player.x=middle;
+        player.y=height;
+
+    }
+
+
     function changeToLevel(level){
         setGameSpeed(level.gameSpeed);
 
@@ -135,6 +149,8 @@
 
         setCanvasSize(level.maxCanvasWidth, level.maxCanvasHeight);
         baddywidth = level.baddywidth;
+
+        setPlayerPosition(homeSquare);
     }
 
     function increaseScore(){
@@ -377,6 +393,7 @@
 
     var currentLevel = levels[0];
     var theGameTimer = window.setInterval(gameLoop, currentLevel.gameSpeed);
+
 
     </script>
 </body>
