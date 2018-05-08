@@ -1,0 +1,214 @@
+<html>
+<head>
+  <title>Protect The Square</title>
+</head>
+<body>
+    <canvas id="myCanvas" style="border:1px solid #000000;" width="200" height="200"></canvas><br/>
+
+    <script>
+
+    function drawSquare(thing, colour){
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = colour;
+      var entityX = thing.x;
+      var entityY = thing.y;
+      var entityWidth = thing.width;
+
+      ctx.fillRect(entityX,entityY,entityWidth,entityWidth);
+    }
+
+    function getCursorPosition(canvas, event) {
+        var rect = canvas.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        console.log("x: " + x + " y: " + y);
+        return {x:x,y:y};
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function addMoreBaddies(howMany){
+
+      for (i = 0; i < howMany; i++) {
+          var baddy = new Object();
+          baddy.x=getRandomInt(0,190);
+          baddy.y=0;
+          baddy.width=10;
+          baddy.living=1;
+          baddies.push(baddy);
+      }
+    }
+
+
+    function increaseScore(){
+      baddiesKilled++;
+      if(baddiesKilled==10){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 45);
+      }
+      if(baddiesKilled==20){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 40);
+      }
+      if(baddiesKilled==30){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 35);
+      }
+      if(baddiesKilled==40){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 30);
+      }
+      if(baddiesKilled==50){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 25);
+      }
+      if(baddiesKilled==60){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 20);
+      }
+      if(baddiesKilled==70){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 15);
+      }
+      if(baddiesKilled==80){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 10);
+      }
+      if(baddiesKilled==90){
+        window.clearInterval(theGameTimer);
+        theGameTimer = window.setInterval(gameLoop, 5);
+      }
+
+    }
+
+    function clicked(event){
+      var clicked = getCursorPosition(document.getElementById("myCanvas"), event);
+      console.log("clicked x: " + clicked.x + " y: " + clicked.y);
+
+      var baddies_length = baddies.length;
+
+      for (i = 0; i < baddies.length; i++) {
+        var baddySquare = baddies[i];
+        if(baddySquare.living==1){
+          if(clicked.x > baddySquare.x && clicked.x < (baddySquare.x+10)){
+            if(clicked.y > baddySquare.y && clicked.y <(baddySquare.y+10)){
+              baddySquare.living=0;
+              console.log("Hit baddy " + i);
+              increaseScore();
+
+              baddySquare.x=-10;
+              addMoreBaddies(2);
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    function clearCanvas(){
+      var canvas = document.getElementById("myCanvas");
+      var context = canvas.getContext("2d");
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function drawScreen(){
+      var ctx = document.getElementById("myCanvas").getContext("2d");
+
+
+
+      drawSquare(homeSquare, "#00ff00");
+
+      ctx.font = "30px Arial";
+      ctx.fillText("Score = " + baddiesKilled,10,50);
+
+      // show score
+
+      for (i = 0; i < baddies.length; i++) {
+          drawBaddy(i);
+      }
+
+    }
+
+    function drawBaddy(id){
+      var baddySquare = baddies[id];
+      if(baddySquare.living==1){
+        drawSquare(baddySquare, "#e63900");
+      }
+    }
+
+    function moveBaddy(id){
+      var baddySquare = baddies[id];
+
+        if(baddySquare.living==0)
+          return;
+
+        // create move strategy
+        moveStrategy=getRandomInt(0,3);
+
+        if(moveStrategy==0){
+          if(baddySquare.x>homeSquare.x){
+              baddySquare.x=baddySquare.x-1;
+          }
+        }
+
+        if(moveStrategy==1){
+          if(baddySquare.x<homeSquare.x){
+              baddySquare.x=baddySquare.x+1;
+            }
+        }
+
+        if(moveStrategy==2){
+
+          if(baddySquare.y<homeSquare.y){
+            baddySquare.y=baddySquare.y+1;
+          }
+        }
+
+        if(baddySquare.x==homeSquare.x){
+          if(baddySquare.y==homeSquare.y){
+            homeSquare.living=0;
+          }
+        }
+
+    }
+
+    function gameOver(){
+      var ctx = document.getElementById("myCanvas").getContext("2d");
+
+      ctx.font = "30px Arial";
+      ctx.fillText("GAME OVER!" + baddiesKilled,10,150);
+      window.clearInterval(theGameTimer);
+    }
+
+    function gameLoop(){
+
+        for (i = 0; i < baddies.length; i++) {
+            moveBaddy(i);
+        }
+
+        clearCanvas();
+        drawScreen();
+
+        if(homeSquare.living==0){
+          gameOver();
+        }
+    }
+
+    var baddies = [{x:190,y:0,width:10, living:1}];
+
+    var homeSquare = {x:100,y:190,width:10, living:1};
+    //var baddySquare = {x:190,y:0,width:10, living:1};
+
+    var baddiesKilled = 0;
+
+    // colour picker http://www.w3schools.com/colors/colors_picker.asp
+
+    document.getElementById("myCanvas").addEventListener('click', clicked, false);
+    var theGameTimer = window.setInterval(gameLoop, 50);
+
+    </script>
+</body>
+</html>
