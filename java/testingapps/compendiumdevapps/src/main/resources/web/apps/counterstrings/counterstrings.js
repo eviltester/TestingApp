@@ -142,6 +142,7 @@ function CounterStringRangeCreator(lengthOfCounterString, limiter) {
 
 function CounterString() {
 
+    var maxLimiter=1;
 
     this.create = function(lengthOfCounterString, limiter){
 
@@ -172,7 +173,7 @@ function CounterString() {
         // if we have been given a limiter then use the first character of it
         if(limiter!=null){
             if(limiter.length>0) {
-                return limiter.substring(0, 1);
+                return limiter.substring(0, this.maxLimiter);
             }
         }
 
