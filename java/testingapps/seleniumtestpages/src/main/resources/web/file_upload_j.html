@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload a File</title>
+</head>
+<body>
+
+<h1>Upload a File</h1>
+<!-- not really a jsp page -->
+<form action="/uploads/fileprocessor" method="post" enctype="multipart/form-data">
+    <input type="file" id="fileinput" name="filename"/>
+
+    <h2>What type is it?</h2>
+    <div>
+    <input type="radio" id="itsanimage"
+           name="filetype" value="image">
+    <label for="itsanimage">Image</label>
+
+    <input type="radio" id="itsafile"
+           name="filetype" value="text">
+        <label for="itsafile">Text File</label>
+    </div>
+
+
+    <input type="submit" name="upload" value="Upload">
+</form>
+
+</body>
+</html>

@@ -5,10 +5,13 @@ import com.seleniumsimplified.seleniumtestpages.php.*;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
+import static spark.Spark.staticFiles;
 
 public class SeleniumTestPagesForSpark {
 
     public SeleniumTestPagesForSpark(){
+
+
 
         // create backwards compatibility with selenium page on compendiumdev.co.uk
         // avoid redirects
@@ -45,8 +48,13 @@ public class SeleniumTestPagesForSpark {
         // as I just added the output of the old php to the resources and serve it up as a static html page
         //get("/find_by_playground.php", (req, res) -> {return new PhpFindByPlayground(req,res).get();});
 
+        // the upload functionality makes this insecure for external sites - do not release with this active
+        post("/uploads/fileprocessor", (req, res) -> {return new FileUploadProcessor(req,res).post();});
+        get("/upload/*", (req, res) -> {return new UploadedFile(req,res).get("upload/"+req.splat()[0]);});
+
         // everything else just redirect
         get("/selenium/*", (req, res) -> {res.redirect("/" + req.splat()[0]); return "";});
+
 
     }
 }

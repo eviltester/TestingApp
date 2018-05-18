@@ -7,6 +7,9 @@ import spark.Spark;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
 import uk.co.compendiumdev.spark.app.CompendiumDevAppsForSpark;
 
+import java.nio.file.Paths;
+
+import static spark.Spark.externalStaticFileLocation;
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
@@ -30,6 +33,9 @@ public class CompilationApps {
 
         //port(4568); //for testing in case I forget to shutdown
         staticFileLocation("/web");
+
+        // required for file upload page in selenium test pages
+        externalStaticFileLocation(Paths.get("upload").toAbsolutePath().toString());
 
         // add a shutdown url in case left running on port 4567
         get("/shutdown", (req, res) -> {System.exit(0); return "";});

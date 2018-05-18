@@ -4,6 +4,8 @@ import com.seleniumsimplified.seleniumtestpages.spark.app.SeleniumTestPagesForSp
 import spark.Spark;
 
 
+import java.nio.file.Paths;
+
 import static spark.Spark.*;
 
 /**
@@ -29,6 +31,8 @@ public class MainTestPages {
 
         //port(4568); //for testing in case I forget to shutdown
         staticFileLocation("/web");
+        externalStaticFileLocation(Paths.get("upload").toAbsolutePath().toString());
+
 
         // add a shutdown url in case left running on port 4567
         get("/shutdown", (req, res) -> {System.exit(0); return "";});
