@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>
+      HTML Form Elements
+    </title>
+  </head>
+  <body>
+    <form name="HTMLFormElements" action=
+    "form_processor.php"
+    method="post" id="HTMLFormElements">
+      <table border="1" cellpadding="5">
+        <!-- ...in a big HTML table. -->
+        <tr>
+          <td>
+            Colour:<br />
+            <input type="color" name="colour"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Date:<br />
+            <input type="date" name="date">
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            Local date time:<br />
+            <input type="datetime-local" name="datetime" value="2018-01-01T01:01"/>
+          </td>
+        </tr>
+        <tr>
+        <td>
+          Email:<br />
+          <input type="email" name="email" value="bob@mailinator.com" />
+        </td>
+      </tr>
+        <tr>
+          <td>
+            Month:<br />
+            <input type="month" name="month"/>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Number:<br />
+            <input type="number" name="number" min="1" value="42"/>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <input type="reset"/>
+						<input type="submit" name="submitbutton"
+            value="submit" />
+          </td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>
