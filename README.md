@@ -13,7 +13,7 @@ Download the current release `.jar` file or clone the repo and build it yourself
 
 Run the `.jar` file
 
-e.g.  `java -jar compendium-of-test-apps-v1-0.jar`
+e.g.  `java -jar compendium-of-test-apps-v1-1.jar`
 
 The server should start and you'll see something like:
 
@@ -30,6 +30,16 @@ Running on 4567
 You can access the apps and pages by visiting:
 
 - http://localhost:4567
+
+## Building it yourself
+
+If you want to build it yourself rather than use the release version then.
+
+In the `\java` folder where the top level `pom.xml` is, run `mvn package`
+
+I release the `.jar` file in the subdirectory `\java\testingapps\testingapp\target`
+
+I release the `*-jar-with-dependencies.jar` and I usually rename it to get rid of the `-jar-with-dependencies.jar` part to make it easier to type.
 
 ## GUI
 
