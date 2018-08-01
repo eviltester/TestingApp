@@ -7,6 +7,7 @@ import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.html.gui.FaqRenderPage;
 import com.javafortesters.pulp.html.gui.FilterTestPage;
 import com.javafortesters.pulp.html.gui.createPages.CreateAuthorPage;
+import com.javafortesters.pulp.html.gui.createPages.CreateBookPage;
 import com.javafortesters.pulp.html.gui.createPages.CreateHeroPage;
 import com.javafortesters.pulp.html.gui.createPages.CreatePublisherPage;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
@@ -105,6 +106,88 @@ public class PulpAppForSpark {
             return page.asHTMLString();
 
         });
+
+
+        get("/apps/pulp/gui/create/book", (req, res) -> {
+            return pulp.page().createBookPage().asHTMLString();
+        });
+
+        // TODO: clearly this needs validation and refactoring
+        post("/apps/pulp/gui/create/createbook", (req, res) -> {
+
+            final CreateBookPage page = pulp.page().createBookPage();
+
+            String title = req.queryParams("title");
+            if(title==null || title.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a title to add</h2>");
+                return page.asHTMLString();
+            }
+
+            String authorid = req.queryParams("authorid");
+            if(authorid==null || authorid.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find an Author to add</h2>");
+                return page.asHTMLString();
+            }
+
+            String seriesid = req.queryParams("seriesid");
+            if(seriesid==null || seriesid.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a Series to add</h2>");
+                return page.asHTMLString();
+            }
+
+            String publisherid = req.queryParams("publisherid");
+            if(publisherid==null || publisherid.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a Publisher to add</h2>");
+                return page.asHTMLString();
+            }
+
+            //seriesidentifier
+            String seriesidentifier = req.queryParams("seriesidentifier");
+            if(seriesidentifier==null || seriesidentifier.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a Series Identifier to add</h2>");
+                return page.asHTMLString();
+            }
+
+            String yearofpublication = req.queryParams("yearofpub");
+
+            if(yearofpublication==null || yearofpublication.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a Year to add</h2>");
+                return page.asHTMLString();
+            }
+
+            int year = -1;
+
+            try {
+                year = Integer.parseInt(yearofpublication);
+            }catch(Exception e){
+
+            }
+
+            if(year < 0){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a valid year to add</h2>");
+                return page.asHTMLString();
+            }
+
+            pulp.books().books().add(seriesid, authorid, authorid, title, seriesidentifier, year, publisherid);
+
+            page.setOutput(String.format("<h2>Added Book %s</h2>", title));
+            return page.asHTMLString();
+        });
+
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());

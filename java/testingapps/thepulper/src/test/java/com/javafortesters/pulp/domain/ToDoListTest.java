@@ -8,7 +8,6 @@ public class ToDoListTest {
 
     // # TODO: CREATE
 
-    // - create Book - which has drop down of authors, publishers and series
     // - add better validation and reporting on the Create functionality
     // - refactor create pages into single page with template
 
@@ -75,5 +74,8 @@ public class ToDoListTest {
     // TODO create unit tests for each of the pages and apps routings
     // TODO: Create Web Tests for the pages
 
+
+    // 20180831 Done
+    // - create Book - which has drop down of authors, publishers and series
 
 }

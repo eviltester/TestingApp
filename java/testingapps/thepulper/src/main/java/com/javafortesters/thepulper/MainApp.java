@@ -1,7 +1,6 @@
 package com.javafortesters.thepulper;
 
 import com.javafortesters.pulp.spark.app.PulpAppForSpark;
-import com.javafortesters.users.UsersAppForSpark;
 import spark.Spark;
 
 import static spark.Spark.get;
@@ -38,8 +37,6 @@ public class MainApp {
         get("", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
 
         PulpAppForSpark pulpapp = new PulpAppForSpark();
-
-        UsersAppForSpark userapp = new UsersAppForSpark();
 
         System.out.println("Running on " + proxyport);
 
