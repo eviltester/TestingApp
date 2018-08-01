@@ -6,6 +6,9 @@ import spark.QueryParamsMap;
 public class BookFilterFromQueryMap {
     public static BookFilter getBookFilter(QueryParamsMap queryParamsMap) {
         BookFilter filter = new BookFilter();
+        if(queryParamsMap.hasKeys() && queryParamsMap.value("book")!=null){
+            filter.book(queryParamsMap.value("book"));
+        }
         if(queryParamsMap.hasKeys() && queryParamsMap.value("author")!=null){
             filter.author(queryParamsMap.value("author"));
         }

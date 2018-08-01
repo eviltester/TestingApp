@@ -17,14 +17,15 @@ public class PulpSeriesCollection {
         return serieses.size();
     }
 
-    public void add(String seriesName) {
+    public PulpSeries add(String seriesName) {
 
         if(findByName(seriesName)!=PulpSeries.UNKNOWN_SERIES){
-            return;
+            return null;
         }
 
         PulpSeries series = getNextSeries(seriesName);
         serieses.add(series);
+        return series;
     }
 
     private PulpSeries getNextSeries(String seriesName) {

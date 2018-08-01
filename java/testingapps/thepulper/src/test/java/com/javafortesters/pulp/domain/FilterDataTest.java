@@ -32,6 +32,22 @@ public class FilterDataTest {
     }
 
     @Test
+    public void canCreateAFilterForBookId(){
+        PulpApp app = new PulpApp();
+        app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
+
+        PulpBook book = app.books().books().getAll().get(0);
+        BookFilter filter = new BookFilter();
+        filter.where().book(book.getId());
+
+        List<PulpBook> books = app.books().books().filteredBy(filter);
+
+        Assert.assertEquals(1, books.size());
+        Assert.assertEquals(book.getTitle(), books.get(0).getTitle());
+
+    }
+
+    @Test
     public void canCreateAFilterForPublicationYear(){
         PulpApp app = new PulpApp();
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));

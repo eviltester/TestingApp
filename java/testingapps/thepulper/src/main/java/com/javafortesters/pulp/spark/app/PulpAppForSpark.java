@@ -1,6 +1,10 @@
 package com.javafortesters.pulp.spark.app;
 
 import com.javafortesters.pulp.PulpApp;
+import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.domain.objects.PulpPublisher;
+import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.HTMLElements;
 import com.javafortesters.pulp.html.gui.AlertSearchPage;
 import com.javafortesters.pulp.html.gui.AppPages;
@@ -15,6 +19,12 @@ import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
+import com.javafortesters.pulp.reporting.reporters.BookReporter;
+import com.javafortesters.pulp.reporting.reporters.PublisherReporter;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -51,9 +61,21 @@ public class PulpAppForSpark {
                 return page.asHTMLString();
             }
 
-            pulp.books().authors().add(name);
 
-            page.setOutput(String.format("<h2>Added Author %s</h2>", name));
+            try{
+                final PulpAuthor author = pulp.books().authors().add(name);
+                if(author==null){
+                    page.setOutput(String.format("<h2>Error Adding Author %s</h2>", name));
+                }else {
+                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
+                            bookReporter().getAuthorReporter().getAuthorName(author);
+                    page.setOutput(String.format("<h2>Added Author %s</h2>", name));
+                }
+            }catch(Exception e){
+                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
+            }
+
+
             return page.asHTMLString();
         });
 
@@ -77,10 +99,22 @@ public class PulpAppForSpark {
                 return page.asHTMLString();
             }
 
-            pulp.books().series().add(name);
+            try{
 
-            page.setOutput(String.format("<h2>Added Hero/Series %s</h2>", name));
-            return page.asHTMLString();
+                final PulpSeries series = pulp.books().series().add(name);
+                if(series==null){
+                    page.setOutput(String.format("<h2>Error Adding Series %s</h2>", name));
+                }else {
+                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
+                            bookReporter().getSeriesReporter().getSeries(series);
+                    page.setOutput(String.format("<h2>Added Hero/Series %s</h2>", name));
+                }
+            }catch(Exception e){
+                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
+            }
+
+
+        return page.asHTMLString();
         });
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
@@ -100,10 +134,22 @@ public class PulpAppForSpark {
                 return page.asHTMLString();
             }
 
-            pulp.books().publishers().add(name);
+            try{
+                final PulpPublisher publisher = pulp.books().publishers().add(name);
 
-            page.setOutput(String.format("<h2>Added Publisher %s</h2>", name));
-            return page.asHTMLString();
+                if(publisher==null){
+                    page.setOutput(String.format("<h2>Error Adding Publisher %s</h2>", name));
+                }else {
+                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
+                                    bookReporter().getPublisherReporter().getPublisher(publisher);
+                    page.setOutput(String.format("<h2>Added Publisher %s</h2>", name));
+                }
+            }catch(Exception e){
+                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
+            }
+
+
+        return page.asHTMLString();
 
         });
 
@@ -182,11 +228,23 @@ public class PulpAppForSpark {
                 return page.asHTMLString();
             }
 
-            pulp.books().books().add(seriesid, authorid, authorid, title, seriesidentifier, year, publisherid);
+            try {
+                final PulpBook book = pulp.books().books().add(seriesid, authorid, authorid, title, seriesidentifier, year, publisherid);
 
-            page.setOutput(String.format("<h2>Added Book %s</h2>", title));
+                if (book == null) {
+                    page.setOutput(String.format("<h2>Error Adding Book %s</h2>", title));
+                } else {
+                    String settitle = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
+                                        bookReporter().getTitle(book);
+                    page.setOutput(String.format("<h2>Added Book %s</h2>", settitle));
+                }
+            }catch(Exception e){
+                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
+            }
+
             return page.asHTMLString();
         });
+
 
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
@@ -318,6 +376,13 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
         get("/apps/pulp/gui/reports/", (req, res) -> { return pulp.reports().getIndexPage();});
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
+    }
+
+    private String getMyStackTrace(final Exception e) {
+            Writer result = new StringWriter();
+            PrintWriter printWriter = new PrintWriter(result);
+            e.printStackTrace(printWriter);
+            return result.toString();
     }
 
 

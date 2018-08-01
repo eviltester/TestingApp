@@ -8,13 +8,15 @@ public class ReportConfig {
     private String reportPath = "/apps/pulp/gui/reports/";
     private String linksPostFix;
     private boolean includeFaqLinks=false; // by default do not do this
+    private boolean areTitlesLinks=false; // by default no
 
 
-    public ReportConfig(boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks) {
+    public ReportConfig(boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
         this.areAuthorNamesLinks = areAuthorNamesLinks;
         this.areYearsLinks = areYearsLinks;
         this.arePublisherNamesLinks = arePublisherNamesLinks;
         this.areSeriesNamesLinks = areSeriesNamesLinks;
+        this.areTitlesLinks = areTitlesLinks;
     }
 
     public ReportConfig(ReportConfig reportConfig) {
@@ -24,6 +26,7 @@ public class ReportConfig {
         this.areSeriesNamesLinks = reportConfig.areSeriesNamesLinks();
         this.reportPath = reportConfig.getReportPath();
         this.linksPostFix = reportConfig.getLinksPostFix();
+        this.areTitlesLinks = reportConfig.areTitlesLinks();
     }
 
     private String getLinksPostFix() {
@@ -32,12 +35,12 @@ public class ReportConfig {
 
     public static ReportConfig justStrings() {
 
-        return new ReportConfig(false, false, false, false);
+        return new ReportConfig(false, false, false, false, false);
     }
 
 
     public static ReportConfig allHTML(String reportPath) {
-        ReportConfig config = new ReportConfig(true, true, true, true);
+        ReportConfig config = new ReportConfig(true, true, true, true, true);
         config.reportPath = reportPath;
         return config;
     }
@@ -83,5 +86,9 @@ public class ReportConfig {
 
     public boolean includeFaqLinks() {
         return includeFaqLinks;
+    }
+
+    public boolean areTitlesLinks() {
+        return areTitlesLinks;
     }
 }

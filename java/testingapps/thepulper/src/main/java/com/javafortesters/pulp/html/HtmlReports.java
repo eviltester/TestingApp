@@ -23,13 +23,20 @@ public class HtmlReports {
         reporter.configure(reportConfig);
     }
 
+    public BookReporter bookReporter(){
+        return new BookReporter(reportConfig, data.authors(), data.publishers(), data.series() );
+    }
+
+    public ReportConfig getReportConfig(){
+        return new ReportConfig(this.reportConfig);
+    }
     public String getBooksAsHtmlList(BookFilter filter) {
-        BookReporter bReporter = new BookReporter(reportConfig, data.authors(), data.publishers(), data.series() );
+        BookReporter bReporter = bookReporter();
         return  reportCollectionAsLiPage(bReporter.getBooksAsLines(this.data.books().filteredBy(filter)), "Books", "books");
     }
 
     public String getBooksAsHtmlTable(BookFilter filter) {
-        BookReporter bReporter = new BookReporter(reportConfig, data.authors(), data.publishers(), data.series() );
+        BookReporter bReporter = bookReporter();
         return reportCollectionAsTablePage(bReporter.getBooksAsTable(this.data.books().filteredBy(filter)), "Books", "books");
     }
 

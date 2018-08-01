@@ -28,6 +28,9 @@ public class FilterRenderer {
             if(filter.isByPublisher()){
                 url.append(String.format("publisher=%s&", filter.getPublisherId()));
             }
+            if(filter.isByBookId()){
+                url.append(String.format("book=%s&", filter.getBookId()));
+            }
             if(filter.isByYear()){
                 url.append(String.format("year=%d&", filter.getYear()));
             }

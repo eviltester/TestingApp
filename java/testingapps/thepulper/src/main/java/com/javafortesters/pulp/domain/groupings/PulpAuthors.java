@@ -16,14 +16,15 @@ public class PulpAuthors {
         return authors.size();
     }
 
-    public void add(String authorName) {
+    public PulpAuthor add(String authorName) {
         // check if author exists
         if(findByName(authorName)!=PulpAuthor.UNKNOWN_AUTHOR){
-            return;
+            return null;
         }
         // add new author
         PulpAuthor author = getNextAuthor(authorName);
         authors.add(author);
+        return author;
     }
 
     private PulpAuthor getNextAuthor(String authorName) {

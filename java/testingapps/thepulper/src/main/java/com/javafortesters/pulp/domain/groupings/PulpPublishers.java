@@ -20,14 +20,15 @@ public class PulpPublishers {
         return publishers.size();
     }
 
-    public void add(String publisherName) {
+    public PulpPublisher add(String publisherName) {
 
         if(findByName(publisherName)!=PulpPublisher.UNKNOWN_PUBLISHER){
-            return;
+            return null;
         }
 
         PulpPublisher publisher = getNextPublisher(publisherName);
         publishers.add(publisher);
+        return publisher;
     }
 
     private PulpPublisher getNextPublisher(String publisherName) {

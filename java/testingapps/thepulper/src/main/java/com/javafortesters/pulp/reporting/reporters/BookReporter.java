@@ -17,6 +17,7 @@ public class BookReporter {
     private final PublisherReporter publisherReporter;
     private final YearReporter yearReporter;
     private final AuthorReporter authorReporter;
+    private final ReportConfig reportConfig;
 
     public BookReporter(ReportConfig reportConfig, PulpAuthors authors, PulpPublishers publishers, PulpSeriesCollection series) {
 
@@ -24,6 +25,7 @@ public class BookReporter {
         this.publishers = publishers;
         this.series = series;
 
+        this.reportConfig = reportConfig;
         // todoL do not need the series in reporter for item only
         this.seriesReporter = new SeriesReporter(reportConfig);
         this.publisherReporter = new PublisherReporter(reportConfig);
@@ -34,6 +36,23 @@ public class BookReporter {
     public static BookReporter getEmpty() {
         return new BookReporter(ReportConfig.justStrings(), new PulpAuthors(), new PulpPublishers(), new PulpSeriesCollection());
     }
+
+    public AuthorReporter getAuthorReporter(){
+        return this.authorReporter;
+    }
+
+    public YearReporter getYearReporter(){
+        return this.yearReporter;
+    }
+
+    public SeriesReporter getSeriesReporter(){
+        return this.seriesReporter;
+    }
+
+    public PublisherReporter getPublisherReporter(){
+        return this.publisherReporter;
+    }
+
 
     public String getAsLine(PulpBook book) {
 
@@ -91,6 +110,14 @@ public class BookReporter {
         return table.toString();
     }
 
+    public String getTitle(PulpBook book){
+            if(reportConfig!=null && reportConfig.areTitlesLinks()){
+                return String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+            }else{
+                return book.getTitle();
+            }
+    }
+
     private String getAsTr(PulpBook book) {
         StringBuilder line;
 
@@ -98,7 +125,7 @@ public class BookReporter {
 
         line.append("<tr>");
         line.append("<td>");
-        line.append(book.getTitle());
+        line.append(getTitle(book));
         line.append("</td>");
 
         line.append("<td>");

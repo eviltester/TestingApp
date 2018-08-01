@@ -1,7 +1,5 @@
 package com.javafortesters.pulp.reporting.filtering;
 
-import java.awt.print.Book;
-
 public class BookFilter {
     private String authorId;
     private Integer year;
@@ -10,6 +8,7 @@ public class BookFilter {
     private String titlePartialMatch;
     private Integer pageLimit;
     private Integer currentPage;
+    private String bookId;
 
     public BookFilter where() {
         return this;
@@ -112,5 +111,18 @@ public class BookFilter {
         }
 
         return currentPage;
+    }
+
+    public BookFilter book(final String id) {
+        this.bookId = id;
+        return this;
+    }
+
+    public boolean isByBookId() {
+        return bookId!=null;
+    }
+
+    public String getBookId() {
+        return bookId;
     }
 }

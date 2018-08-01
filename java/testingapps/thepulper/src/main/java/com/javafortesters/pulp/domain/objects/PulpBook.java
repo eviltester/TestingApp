@@ -103,6 +103,10 @@ public class PulpBook {
         return getAllAuthorIndexes().contains(authorId);
     }
 
+    public boolean isBookId(String aBookId) {
+        return this.id.contentEquals(aBookId);
+    }
+
     public boolean isPublishedBy(String publisherId) {
         return this.publisherIndexName.equalsIgnoreCase(publisherId);
     }
@@ -117,6 +121,10 @@ public class PulpBook {
 
     public boolean matches(BookFilter filter) {
         boolean ok = true;
+
+        if(filter.isByBookId() && !isBookId(filter.getBookId())){
+            ok = false;
+        }
 
         if(filter.isByAuthor() && !isAuthoredBy(filter.getAuthorId())){
             ok = false;
