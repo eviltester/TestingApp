@@ -6,6 +6,15 @@ public class ToDoListTest {
     // TODO: Basic GUI functionality
     // Can have a lot without login
 
+    // # TODO: CREATE
+
+    // - create Book - which has drop down of authors, publishers and series
+    // - add better validation and reporting on the Create functionality
+    // - refactor create pages into single page with template
+
+
+    // # TODO: READ
+
     // TODO: fix paging bug to support authors, series, publishers etc. - currently just books
     // switch between 'easy to automate' (with ids) and 'hard to automate' (without ids)
     // TODO: Create a Frames view which has side frame for list and mainframe for report and top frame for search?
@@ -32,17 +41,22 @@ public class ToDoListTest {
 
     // TODO: add sorting button on the series, authors and publishers list pages
 
+
+    // # TODO: App Versioning
+
     // TODO: Add more page templates to allow easier 'app updating via version number'
 
     // TODO: create rendering objects
     // TODO: add names, ids, classes etc. to rendered items
 
+    // # TODO: API
+    // - try and add thingifier as the backend then get a lot of this for free
     // TODO: Basic API
     // TODO: add report classes to use for JSON and XML serialisation
     // TODO: create a list of basic end points and add methods to support end point reporting
     // TODO: add a basic REST API for get requests and reporting
 
-    // TODO: API Powered GUI
+    // # TODO: GUI version which is API Powered
     // TODO: add a simple GUI that uses the REST API for reporting the books
     // TODO: add an AJAX based GUI that uses the REST API for reporting the books
 
@@ -59,6 +73,7 @@ public class ToDoListTest {
     //       20180415 bugs that slipped through because of this - hard coded paths, not reading books as unique books - i.e. every book was first in csv file
 
     // TODO create unit tests for each of the pages and apps routings
+    // TODO: Create Web Tests for the pages
 
 
 }
