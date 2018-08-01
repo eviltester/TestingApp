@@ -41,7 +41,8 @@ public class CompendiumDevAppsForSpark {
 
         // because Spark is a singleton - these just have to register their routings, they don't need to do anything else
 
-        get("/", (req, res) -> {res.redirect("/index.html"); return "";});
+        get("/", (req, res) -> {
+            res.redirect("/index.html"); return "";});
         get("", (req, res) -> {res.redirect("/index.html"); return "";});
 
         return new CompendiumDevAppsForSpark();

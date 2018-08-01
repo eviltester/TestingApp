@@ -36,6 +36,20 @@
     </dependencies>
 
     <build>
+            <resources>
+                <resource>
+                    <directory>../compendiumdevapps/src/main/resources/web</directory>
+                    <excludes>
+                        <exclude>index.html</exclude>
+                    </excludes>
+                </resource>
+                <resource>
+                    <directory>../seleniumtestpages/src/main/resources/web</directory>
+                    <excludes>
+                        <exclude>index.html</exclude>
+                    </excludes>
+                </resource>
+            </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
