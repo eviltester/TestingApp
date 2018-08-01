@@ -2,6 +2,7 @@ package com.javafortesters.pulp;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HtmlReports;
+import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
@@ -32,5 +33,10 @@ public class PulpApp {
 
     public PulpData books() {
         return books;
+    }
+
+    public AppPages page() {
+        return new AppPages(books);
+
     }
 }

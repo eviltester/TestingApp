@@ -1,9 +1,14 @@
 package com.javafortesters.pulp.spark.app;
 
 import com.javafortesters.pulp.PulpApp;
+import com.javafortesters.pulp.html.HTMLElements;
 import com.javafortesters.pulp.html.gui.AlertSearchPage;
+import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.html.gui.FaqRenderPage;
 import com.javafortesters.pulp.html.gui.FilterTestPage;
+import com.javafortesters.pulp.html.gui.createPages.CreateAuthorPage;
+import com.javafortesters.pulp.html.gui.createPages.CreateHeroPage;
+import com.javafortesters.pulp.html.gui.createPages.CreatePublisherPage;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
@@ -11,6 +16,8 @@ import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 
 import static spark.Spark.get;
+import static spark.Spark.post;
+
 
 public class PulpAppForSpark {
 
@@ -25,6 +32,79 @@ public class PulpAppForSpark {
         pulp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
 
         pulp.reports().configure(ReportConfig.allHTML("/apps/pulp/gui/reports/"));
+
+        get("/apps/pulp/gui/create/author", (req, res) -> {
+            return pulp.page().createAuthorPage().asHTMLString();
+        });
+
+        // TODO: clearly this needs validation and refactoring
+        post("/apps/pulp/gui/create/createauthor", (req, res) -> {
+
+            final CreateAuthorPage page = pulp.page().createAuthorPage();
+
+            String name = req.queryParams("name");
+            if(name==null || name.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a name to add</h2>");
+                return page.asHTMLString();
+            }
+
+            pulp.books().authors().add(name);
+
+            page.setOutput(String.format("<h2>Added Author %s</h2>", name));
+            return page.asHTMLString();
+        });
+
+        get("/apps/pulp/gui/create/hero", (req, res) -> {
+            return pulp.page().createHeroPage().asHTMLString();
+        });
+        get("/apps/pulp/gui/create/series", (req, res) -> {
+            return pulp.page().createHeroPage().asHTMLString();
+        });
+
+        // TODO: clearly this needs validation and refactoring
+        post("/apps/pulp/gui/create/createhero", (req, res) -> {
+
+            final CreateHeroPage page = pulp.page().createHeroPage();
+
+            String name = req.queryParams("heroname");
+            if(name==null || name.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a name to add</h2>");
+                return page.asHTMLString();
+            }
+
+            pulp.books().series().add(name);
+
+            page.setOutput(String.format("<h2>Added Hero/Series %s</h2>", name));
+            return page.asHTMLString();
+        });
+
+        get("/apps/pulp/gui/create/publisher", (req, res) -> {
+            return pulp.page().createPublisherPage().asHTMLString();
+        });
+
+        // TODO: clearly this needs validation and refactoring
+        post("/apps/pulp/gui/create/createpublisher", (req, res) -> {
+
+            final CreatePublisherPage page = pulp.page().createPublisherPage();
+
+            String name = req.queryParams("publishername");
+            if(name==null || name.trim().isEmpty()){
+                res.status(400);
+
+                page.setOutput("<h2>Error: Could not find a name to add</h2>");
+                return page.asHTMLString();
+            }
+
+            pulp.books().publishers().add(name);
+
+            page.setOutput(String.format("<h2>Added Publisher %s</h2>", name));
+            return page.asHTMLString();
+
+        });
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
@@ -156,4 +236,6 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports/", (req, res) -> { return pulp.reports().getIndexPage();});
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
     }
+
+
 }
