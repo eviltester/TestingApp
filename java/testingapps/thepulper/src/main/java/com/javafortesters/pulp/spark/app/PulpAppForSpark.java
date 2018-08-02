@@ -46,6 +46,13 @@ public class PulpAppForSpark {
             return new AmendFlowsHandler(pulp).authorAmend(req, res);
         });
 
+        post("/apps/pulp/gui/amend/deleteauthor", (req, res) -> {
+
+            pulp.books().deleteAuthor(req.queryParams("authorid"));
+            res.redirect("/apps/pulp/gui/reports/authors/list/navigation");
+            return "";
+        });
+
         get("/apps/pulp/gui/create/series", (req, res) -> {
             return pulp.page().createSeriesPage().asHTMLString();
         });
@@ -61,6 +68,12 @@ public class PulpAppForSpark {
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {
             return new AmendFlowsHandler(pulp).seriesAmend(req, res);
+        });
+
+        post("/apps/pulp/gui/amend/deleteseries", (req, res) -> {
+            pulp.books().deleteSeries(req.queryParams("seriesid"));
+            res.redirect("/apps/pulp/gui/reports/series/list/navigation");
+            return "";
         });
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
@@ -80,6 +93,11 @@ public class PulpAppForSpark {
             return new AmendFlowsHandler(pulp).publisherAmend(req, res);
         });
 
+        post("/apps/pulp/gui/amend/deletepublisher", (req, res) -> {
+            pulp.books().deletePublisher(req.queryParams("publisherid"));
+            res.redirect("/apps/pulp/gui/reports/publishers/list/navigation");
+            return "";
+        });
 
         get("/apps/pulp/gui/create/book", (req, res) -> {
             return pulp.page().createBookPage().asHTMLString();
@@ -96,6 +114,13 @@ public class PulpAppForSpark {
 
         post("/apps/pulp/gui/amend/book", (req, res) -> {
             return new AmendFlowsHandler(pulp).bookAmend(req, res);
+        });
+
+        post("/apps/pulp/gui/amend/deletebook", (req, res) -> {
+
+            pulp.books().deleteBook(req.queryParams("bookid"));
+            res.redirect("/apps/pulp/gui/reports/books/table/navigation");
+            return "";
         });
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {

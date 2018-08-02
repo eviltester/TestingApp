@@ -1,3 +1,12 @@
+<script type="text/javascript">
+    function areYouSureYouWantToDeleteBook(){
+        if(confirm("Are you sure you want to delete !!BOOKTITLE!!?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
 
 <h1>Amend Book</h1>
 
@@ -58,9 +67,16 @@
 
             <input id="updatebutton" type="submit" value="Update" />
         </form>
+        <hr/>
+        <form id="deleteform" action="deletebook" method="post" onsubmit="return areYouSureYouWantToDeleteBook()">
+            <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
+            <input id="deletebutton" type="submit" value="Delete" />
+        </form>
     </div>
 
 </div>
+
+<hr/>
 
 <!-- OUTPUT GOES HERE -->
 

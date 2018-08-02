@@ -15,7 +15,7 @@ public class ToDoListTest {
 
 
     // # DELETE
-    // - initially add the DELETE on the Edit screen, then incorporate into lists
+    // - incorporate into lists
 
     // # TODO: READ
 
@@ -80,10 +80,14 @@ public class ToDoListTest {
     // TODO: Create Web Tests for the pages
 
 
-    // 20180831 Done
+    // 20180731 Done
     // - create Book - which has drop down of authors, publishers and series
     // - added a link to the list of books for the created thing when created
     // - added amendment for books, authors, series, and publisher
     //  add an edit screen for each of the things e.g. edit author, edit book (allow house author amendment), edit publisher, edit series
+
+    // 20180802 DONNE
     // - allow amending authors through a multi select drop down
+    // initially add the DELETE on the Edit screen
+    // - add an are you sure? dialog on delete button press
 }

@@ -1,3 +1,12 @@
+<script type="text/javascript">
+    function areYouSureYouWantToDeletePublisher(){
+        if(confirm("Are you sure you want to delete !!PUBLISHERNAME!!?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
 
 <h1>Amend Publisher</h1>
 
@@ -13,9 +22,16 @@
             <br/>
             <input id="updatebutton" type="submit" value="Update" />
         </form>
+        <hr/>
+        <form id="deleteform" action="deletepublisher" method="post" onsubmit="return areYouSureYouWantToDeletePublisher()">
+            <input type = "hidden" name="publisherid" value="!!PUBLISHERID!!"/>
+            <input id="deletebutton" type="submit" value="Delete" />
+        </form>
     </div>
 
 </div>
+
+<hr/>
 
 <!-- OUTPUT GOES HERE -->
 

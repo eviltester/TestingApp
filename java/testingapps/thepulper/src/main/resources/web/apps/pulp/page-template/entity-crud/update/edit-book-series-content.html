@@ -1,3 +1,12 @@
+<script type="text/javascript">
+    function areYouSureYouWantToDeleteSeries(){
+        if(confirm("Are you sure you want to delete !!SERIESNAME!!?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
 
 <h1>Amend Series</h1>
 
@@ -13,10 +22,16 @@
             <br/>
             <input id="updatebutton" type="submit" value="Update" />
         </form>
+        <hr/>
+        <form id="deleteform" action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
+            <input type = "hidden" name="seriesid" value="!!SERIESID!!"/>
+            <input id="deletebutton" type="submit" value="Delete" />
+        </form>
     </div>
 
 </div>
 
+<hr/>
 <!-- OUTPUT GOES HERE -->
 
 <hr/>
