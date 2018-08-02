@@ -40,7 +40,13 @@ public class AuthorReporter {
                  faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"author/faqs", MyUrlEncoder.encode(author.getName()));
             }
 
-            return String.format("<a href='%s?author=%s'>%s</a>%s", reportConfig.getReportPath("books"), author.getId(), author.getName(),faqs);
+            String name =  String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
+
+
+            final String amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
+                    reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/author?author="), author.getId(), author.getName());
+
+            return name + " "  + faqs + " " + amend;
 
         }else{
             return author.getName();

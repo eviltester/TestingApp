@@ -2,12 +2,14 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateAuthorPage;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateSeriesPage;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreatePublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendAuthorPage;
+import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendPublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
 
 public class AppPages {
@@ -56,6 +58,16 @@ public class AppPages {
         final AmendSeriesPage page = new AmendSeriesPage(series);
         if(series == PulpSeries.UNKNOWN_SERIES){
             page.setOutput("<h2>ERROR: Series not found</h2>");
+        }
+
+        return page;
+    }
+
+    public AmendPublisherPage amendPublisherPage(final String id) {
+        final PulpPublisher publisher = this.books.publishers().get(id);
+        final AmendPublisherPage page = new AmendPublisherPage(publisher);
+        if(publisher == PulpPublisher.UNKNOWN_PUBLISHER){
+            page.setOutput("<h2>ERROR: Publisher not found</h2>");
         }
 
         return page;

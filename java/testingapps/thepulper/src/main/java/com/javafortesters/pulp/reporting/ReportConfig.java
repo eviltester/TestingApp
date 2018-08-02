@@ -1,5 +1,6 @@
 package com.javafortesters.pulp.reporting;
 
+
 public class ReportConfig {
     private boolean areAuthorNamesLinks;
     private boolean areYearsLinks;
@@ -90,5 +91,16 @@ public class ReportConfig {
 
     public boolean areTitlesLinks() {
         return areTitlesLinks;
+    }
+
+    public ReportConfig withoutPostLink() {
+        return new ReportConfig(this).setPostFixPath("");
+    }
+
+    // TODO - this seems like a complete hack we are missing a way to get a base app path from this or somewhere else
+    public ReportConfig withoutReportInPath() {
+        final ReportConfig config = new ReportConfig(this);
+        config.reportPath = config.reportPath.replace("reports/", "");
+        return config;
     }
 }

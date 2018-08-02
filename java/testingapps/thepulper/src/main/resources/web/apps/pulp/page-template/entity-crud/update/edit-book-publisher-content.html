@@ -1,0 +1,24 @@
+
+<h1>Amend Publisher</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form id="amendform" action="publisher" method="post">
+
+            <input type = "hidden" name="publisherid" value="!!PUBLISHERID!!"/>
+            <label for="publishername">Name of publisher</label>
+            <input type="text" id="publishername" name="name" value="!!PUBLISHERNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="create" type="submit" value="Update" />
+        </form>
+    </div>
+
+</div>
+
+<!-- OUTPUT GOES HERE -->
+
+<hr/>
+
+<!-- FOOTER GOES HERE -->

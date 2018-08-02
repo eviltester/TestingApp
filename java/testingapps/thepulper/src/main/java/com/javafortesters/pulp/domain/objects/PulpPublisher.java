@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class PulpPublisher {
     public static final PulpPublisher UNKNOWN_PUBLISHER = new PulpPublisher("unknonwn", "unknown publisher");
-    private final String name;
+    private String name;
     private final String id;
 
     public PulpPublisher(String name) {
@@ -49,5 +49,19 @@ public class PulpPublisher {
                 return field2.compareTo(field1);
             }
         };
+    }
+
+    public PulpPublisher amendName(final String newName) {
+
+            if(newName == null){
+                return this;
+            }
+
+            if(newName.trim().isEmpty()){
+                return this;
+            }
+
+            this.name = newName;
+            return this;
     }
 }

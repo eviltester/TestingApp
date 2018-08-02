@@ -1,28 +1,15 @@
 package com.javafortesters.pulp.spark.app;
 
 import com.javafortesters.pulp.PulpApp;
-import com.javafortesters.pulp.domain.objects.PulpAuthor;
-import com.javafortesters.pulp.domain.objects.PulpBook;
-import com.javafortesters.pulp.domain.objects.PulpPublisher;
-import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.AlertSearchPage;
 import com.javafortesters.pulp.html.gui.FaqRenderPage;
 import com.javafortesters.pulp.html.gui.FilterTestPage;
-import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateAuthorPage;
-import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateBookPage;
-import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateSeriesPage;
-import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreatePublisherPage;
-import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendAuthorPage;
-import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
@@ -46,11 +33,8 @@ public class PulpAppForSpark {
             return pulp.page().createAuthorPage().asHTMLString();
         });
 
-        // TODO: clearly this needs validation and refactoring
         post("/apps/pulp/gui/create/author", (req, res) -> {
-
             return new CreateFlowsHandler(pulp).authorCreate(req, res);
-
         });
 
         ///apps/pulp/gui/amend/author?author=id
@@ -59,7 +43,6 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/author", (req, res) -> {
-
             return new AmendFlowsHandler(pulp).authorAmend(req, res);
         });
 
@@ -77,9 +60,8 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {
-            return new AmendFlowsHandler(pulp).authorSeries(req, res);
+            return new AmendFlowsHandler(pulp).seriesAmend(req, res);
         });
-
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
             return pulp.page().createPublisherPage().asHTMLString();
@@ -87,6 +69,15 @@ public class PulpAppForSpark {
 
         post("/apps/pulp/gui/create/publisher", (req, res) -> {
             return new CreateFlowsHandler(pulp).publisherCreate(req, res);
+        });
+
+        ///apps/pulp/gui/amend/publisher?publisher=id
+        get("/apps/pulp/gui/amend/publisher", (req, res) -> {
+            return pulp.page().amendPublisherPage(req.queryParams("publisher")).asHTMLString();
+        });
+
+        post("/apps/pulp/gui/amend/publisher", (req, res) -> {
+            return new AmendFlowsHandler(pulp).publisherAmend(req, res);
         });
 
 

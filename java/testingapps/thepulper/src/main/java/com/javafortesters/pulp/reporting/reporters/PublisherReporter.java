@@ -26,7 +26,13 @@ public class PublisherReporter {
 
     public String getPublisher(PulpPublisher item) {
         if(reportConfig!=null && reportConfig.arePublishersLinks()){
-            return String.format("<a href='%s?publisher=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
+            final String name = String.format("<a href='%s?publisher=%s'>%s</a>",
+                    reportConfig.getReportPath("books"), item.getId(), item.getName());
+            final String amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
+                    reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
+//            final String delete = String.format("[<a href='%s%s' alt='Delete'>x</a>]",
+//                                reportConfig.withoutPostLink().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
+            return name + " " + amend;
         }else{
             return item.getName();
         }
