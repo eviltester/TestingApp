@@ -4,6 +4,8 @@ public class ToDoListTest {
 
     // NEXT:
     //      help page
+    //      move all templates under v001/page-template to allow changing versions later
+    //      At this point test and release a new version of the pulper and Testing Apps Compendium
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
     //      move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
 
@@ -25,7 +27,7 @@ public class ToDoListTest {
 
     // Create an entity Read Page which will link to Amend
     // Entity Read page could show a filtered list of books published by, written by, in series, by date etc.
-    // Book Read page chould have a list of the authors, publishers, series, dates etc. with links
+    // Book Read page should have a list of the authors, publishers, series, dates etc. with links
 
     // TODO: fix paging bug to support authors, series, publishers etc. - currently just books
     // switch between 'easy to automate' (with ids) and 'hard to automate' (without ids)
@@ -40,7 +42,7 @@ public class ToDoListTest {
 //    * e.g. Author, Publisher, data range etc.
 
 
-    // TODO: allow user configuration of the search engines: google, bing, duckduckgo etc.
+    // TODO: allow user configuration of the search engines: google, bing, duckduckgo etc. - in admin
     // TODO: for test filter page add [author], [series], [year], [publisher] as drop downs
     // TODO: CSS for styling - swap in/out for different versions
 
