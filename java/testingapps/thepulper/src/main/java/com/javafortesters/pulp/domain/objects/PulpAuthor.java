@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class PulpAuthor {
     public static final PulpAuthor UNKNOWN_AUTHOR = new PulpAuthor("unknown", "unknown author");
-    private final String name;
+    private String name;
     private final String id;
 
     public PulpAuthor(String name) {
@@ -60,6 +60,20 @@ public class PulpAuthor {
 
     public String getName() {
         return name;
+    }
+
+    public PulpAuthor amendName(String newName){
+
+        if(newName == null){
+            return this;
+        }
+
+        if(newName.trim().isEmpty()){
+            return this;
+        }
+
+        this.name = newName;
+        return this;
     }
 
     public String getId() {

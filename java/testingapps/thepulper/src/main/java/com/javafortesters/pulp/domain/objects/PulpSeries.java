@@ -4,7 +4,7 @@ import java.util.Comparator;
 
 public class PulpSeries {
     public static final PulpSeries UNKNOWN_SERIES = new PulpSeries("unknown", "unknown series");
-    private final String name;
+    private String name;
     private final String id;
 
     public PulpSeries(String name) {
@@ -51,5 +51,19 @@ public class PulpSeries {
                 return field2.compareTo(field1);
             }
         };
+    }
+
+    public PulpSeries amendName(final String newName) {
+
+            if(newName == null){
+                return this;
+            }
+
+            if(newName.trim().isEmpty()){
+                return this;
+            }
+
+            this.name = newName;
+            return this;
     }
 }

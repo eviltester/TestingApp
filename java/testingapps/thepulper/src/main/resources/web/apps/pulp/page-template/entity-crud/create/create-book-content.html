@@ -4,15 +4,15 @@
 <div id="createobjectsection">
 
     <div>
-        <form id="createform" action="createbook" method="post">
+        <form id="createform" action="book" method="post">
 
             <label for="booktitle">Enter title of book to create</label>
-            <input type="text" id="booktitle" name="title" value="">
+            <input type="text" id="booktitle" name="title" value="" required="required" pattern=".{1,}">
 
             <br/>
 
             <label for="authoridselect">Author</label>
-            <select id="authoridselect" name="authorid">
+            <select id="authoridselect" name="authorid" required="required">
                 <!-- AUTHOR-ID-OPTIONS -->
                 <option value="unknown">Author</option>
                 <!-- AUTHOR-ID-OPTIONS -->
@@ -20,7 +20,7 @@
             <br/>
 
             <label for="publisheridselect">Publisher</label>
-            <select id="publisheridselect" name="publisherid">
+            <select id="publisheridselect" name="publisherid" required="required">
                 <!-- PUBLISHER-ID-OPTIONS -->
                 <option value="unknown">Publisher</option>
                 <!-- PUBLISHER-ID-OPTIONS -->
@@ -28,7 +28,7 @@
             <br/>
 
             <label for="seriesidselect">Series</label>
-            <select id="seriesidselect" name="seriesid">
+            <select id="seriesidselect" name="seriesid" required="required">
                 <!-- SERIES-ID-OPTIONS -->
                 <option value="unknown">Series</option>
                 <!-- SERIES-ID-OPTIONS -->
@@ -36,11 +36,11 @@
             <br/>
 
             <label for="seriesidentifierid">Series Identifier e.g. "March, 1933"</label>
-            <input type="text" id="seriesidentifierid" name="seriesidentifier" value="">
+            <input type="text" id="seriesidentifierid" name="seriesidentifier" value="" required="required" pattern=".{1,}">
             <br/>
 
             <label for="yearofPub">Year of publication e.g. 1933</label>
-            <input type="number" id="yearofPub" name="yearofpub" value="">
+            <input type="number" id="yearofPub" name="yearofpub" value="" required="required" pattern=".{1,}">
             <br/>
 
 

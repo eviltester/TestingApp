@@ -32,6 +32,11 @@ public class PulpAuthors {
     }
 
     public PulpAuthor get(String key) {
+
+        if(key==null){
+            return PulpAuthor.UNKNOWN_AUTHOR;
+        }
+
         for(PulpAuthor author : authors){
             if(author.getId().contentEquals(key)){
                 return author;

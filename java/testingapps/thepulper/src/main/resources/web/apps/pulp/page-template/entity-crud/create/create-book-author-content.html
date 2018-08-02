@@ -4,9 +4,9 @@
 <div id="createobjectsection">
 
     <div>
-        <form id="createform" action="createauthor" method="post">
+        <form id="createform" action="author" method="post">
             <!-- value="!!searchterm!!" to have a default search term -->
-            <input type="text" id="authorname" name="name" value="">
+            <input type="text" id="authorname" name="name" value="" required="required" pattern=".{1,}">
             <label for="authorname">Enter name of author to create</label>
             <br/>
             <input id="create" type="submit" value="Create" />

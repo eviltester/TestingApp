@@ -33,6 +33,11 @@ public class PulpSeriesCollection {
     }
 
     public PulpSeries get(String key) {
+
+        if(key==null){
+            return PulpSeries.UNKNOWN_SERIES;
+        }
+
         for(PulpSeries aSeries : serieses){
             if(aSeries.getId().contentEquals(key)){
                 return aSeries;

@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.domain.groupings;
 
 import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.filtering.BooksFilter;
 import com.javafortesters.pulp.reporting.filtering.PaginationDetails;
@@ -34,6 +35,11 @@ public class PulpBooks {
     }
 
     public PulpBook get(String key) {
+
+        if(key==null){
+            return PulpBook.UNKNOWN_BOOK;
+        }
+
         for(PulpBook book : books){
             if(book.getId().contentEquals(key)){
                 return book;
@@ -44,6 +50,11 @@ public class PulpBooks {
     }
 
     public PulpBook findByName(String title) {
+
+        if(title==null){
+            return PulpBook.UNKNOWN_BOOK;
+        }
+
         for(PulpBook book : books){
             if(book.getTitle().equalsIgnoreCase(title)){
                 return book;
@@ -67,7 +78,13 @@ public class PulpBooks {
 
     public List<PulpBook> findByAuthorId(String authorId) {
 
+
+
         List<PulpBook> authored = new ArrayList<>();
+
+        if(authorId==null){
+            return authored;
+        }
 
         for(PulpBook book : books){
             if(book.getAllAuthorIndexes().contains(authorId)){

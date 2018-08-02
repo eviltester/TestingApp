@@ -1,0 +1,24 @@
+
+<h1>Amend Author</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form id="amendform" action="author" method="post">
+
+            <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
+            <label for="authorname">Name of author</label>
+            <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="create" type="submit" value="Update" />
+        </form>
+    </div>
+
+</div>
+
+<!-- OUTPUT GOES HERE -->
+
+<hr/>
+
+<!-- FOOTER GOES HERE -->

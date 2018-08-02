@@ -5,22 +5,20 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
-import com.javafortesters.pulp.html.HTMLElements;
 import com.javafortesters.pulp.html.gui.AlertSearchPage;
-import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.html.gui.FaqRenderPage;
 import com.javafortesters.pulp.html.gui.FilterTestPage;
-import com.javafortesters.pulp.html.gui.createPages.CreateAuthorPage;
-import com.javafortesters.pulp.html.gui.createPages.CreateBookPage;
-import com.javafortesters.pulp.html.gui.createPages.CreateHeroPage;
-import com.javafortesters.pulp.html.gui.createPages.CreatePublisherPage;
+import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateAuthorPage;
+import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateBookPage;
+import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateSeriesPage;
+import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreatePublisherPage;
+import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendAuthorPage;
+import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
-import com.javafortesters.pulp.reporting.reporters.BookReporter;
-import com.javafortesters.pulp.reporting.reporters.PublisherReporter;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -49,7 +47,7 @@ public class PulpAppForSpark {
         });
 
         // TODO: clearly this needs validation and refactoring
-        post("/apps/pulp/gui/create/createauthor", (req, res) -> {
+        post("/apps/pulp/gui/create/author", (req, res) -> {
 
             final CreateAuthorPage page = pulp.page().createAuthorPage();
 
@@ -79,19 +77,52 @@ public class PulpAppForSpark {
             return page.asHTMLString();
         });
 
-        get("/apps/pulp/gui/create/hero", (req, res) -> {
-            return pulp.page().createHeroPage().asHTMLString();
+        ///apps/pulp/gui/amend/author?author=id
+        get("/apps/pulp/gui/amend/author", (req, res) -> {
+            return pulp.page().amendAuthorPage(req.queryParams("author")).asHTMLString();
         });
+
+        post("/apps/pulp/gui/amend/author", (req, res) -> {
+
+            // TODO move this out of the spark page processing
+            final PulpAuthor author = pulp.books().authors().get(req.queryParams("authorid"));
+
+            String errorMessage="";
+
+            if(author != PulpAuthor.UNKNOWN_AUTHOR){
+
+                String newName = req.queryParams("name");
+                author.amendName(newName);
+                if(newName == null || !author.getName().contentEquals(newName)){
+                    errorMessage = "<h2>Could not amend author details to " + newName + "</h2>";
+                }
+            }else{
+                res.status(404);
+                errorMessage = "<h2>Cannot amend an unknown author</h2>";
+            }
+
+
+            final AmendAuthorPage page = pulp.page().amendAuthorPage(author.getId());
+            if(!errorMessage.isEmpty()){
+                res.status(400);
+                page.setOutput(errorMessage);
+            }else{
+                page.setOutput("<h2>Author name amended</h2>");
+            }
+
+            return page.asHTMLString();
+        });
+
         get("/apps/pulp/gui/create/series", (req, res) -> {
-            return pulp.page().createHeroPage().asHTMLString();
+            return pulp.page().createSeriesPage().asHTMLString();
         });
 
         // TODO: clearly this needs validation and refactoring
-        post("/apps/pulp/gui/create/createhero", (req, res) -> {
+        post("/apps/pulp/gui/create/series", (req, res) -> {
 
-            final CreateHeroPage page = pulp.page().createHeroPage();
+            final CreateSeriesPage page = pulp.page().createSeriesPage();
 
-            String name = req.queryParams("heroname");
+            String name = req.queryParams("seriesname");
             if(name==null || name.trim().isEmpty()){
                 res.status(400);
 
@@ -107,7 +138,7 @@ public class PulpAppForSpark {
                 }else {
                     name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
                             bookReporter().getSeriesReporter().getSeries(series);
-                    page.setOutput(String.format("<h2>Added Hero/Series %s</h2>", name));
+                    page.setOutput(String.format("<h2>Added Series %s</h2>", name));
                 }
             }catch(Exception e){
                 page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
@@ -117,12 +148,50 @@ public class PulpAppForSpark {
         return page.asHTMLString();
         });
 
+        ///apps/pulp/gui/amend/author?author=id
+        get("/apps/pulp/gui/amend/series", (req, res) -> {
+            return pulp.page().amendSeriesPage(req.queryParams("series")).asHTMLString();
+        });
+
+        post("/apps/pulp/gui/amend/series", (req, res) -> {
+
+            // TODO move this out of the spark page processing
+            final PulpSeries series = pulp.books().series().get(req.queryParams("seriesid"));
+
+            String errorMessage="";
+
+            if(series != PulpSeries.UNKNOWN_SERIES){
+
+                String newName = req.queryParams("seriesname");
+                series.amendName(newName);
+                if(newName==null || !series.getName().contentEquals(newName)){
+                    errorMessage = "<h2>Could not amend series details to " + newName + "</h2>";
+                }
+            }else{
+                res.status(404);
+                errorMessage = "<h2>Cannot amend an unknown series</h2>";
+            }
+
+
+            final AmendSeriesPage page = pulp.page().amendSeriesPage(series.getId());
+            if(!errorMessage.isEmpty()){
+                res.status(400);
+                page.setOutput(errorMessage);
+            }else{
+                page.setOutput("<h2>Series name amended</h2>");
+            }
+
+            return page.asHTMLString();
+        });
+
+
+
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
             return pulp.page().createPublisherPage().asHTMLString();
         });
 
         // TODO: clearly this needs validation and refactoring
-        post("/apps/pulp/gui/create/createpublisher", (req, res) -> {
+        post("/apps/pulp/gui/create/publisher", (req, res) -> {
 
             final CreatePublisherPage page = pulp.page().createPublisherPage();
 
@@ -159,7 +228,7 @@ public class PulpAppForSpark {
         });
 
         // TODO: clearly this needs validation and refactoring
-        post("/apps/pulp/gui/create/createbook", (req, res) -> {
+        post("/apps/pulp/gui/create/book", (req, res) -> {
 
             final CreateBookPage page = pulp.page().createBookPage();
 

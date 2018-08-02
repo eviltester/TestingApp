@@ -1,4 +1,4 @@
-package com.javafortesters.pulp.html.gui.createPages;
+package com.javafortesters.pulp.html.gui.entitycrud.createPages;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
@@ -22,7 +22,7 @@ public class CreateBookPage {
     }
 
     public String asHTMLString() {
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/create-book-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/entity-crud/create/create-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

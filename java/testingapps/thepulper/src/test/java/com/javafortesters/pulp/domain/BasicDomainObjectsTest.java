@@ -7,15 +7,6 @@ import org.junit.Test;
 
 public class BasicDomainObjectsTest {
 
-    @Test
-    public void canCreateACharacter(){
-        PulpHero doc = new PulpHero("Doc Savage");
-        Assert.assertEquals("Doc Savage", doc.getName());
-        Assert.assertEquals("unknown", doc.getId());
-
-        // TODO: create character with an index
-    }
-
 
     @Test
     public void canCreateASeries(){

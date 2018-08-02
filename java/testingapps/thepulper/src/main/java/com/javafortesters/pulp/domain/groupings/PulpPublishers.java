@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.domain.groupings;
 
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
+import com.javafortesters.pulp.domain.objects.PulpSeries;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +37,11 @@ public class PulpPublishers {
     }
 
     public PulpPublisher get(String key) {
+
+        if(key==null){
+            return PulpPublisher.UNKNOWN_PUBLISHER;
+        }
+
             for(PulpPublisher publisher : publishers){
                 if(publisher.getId().contentEquals(key)){
                     return publisher;
