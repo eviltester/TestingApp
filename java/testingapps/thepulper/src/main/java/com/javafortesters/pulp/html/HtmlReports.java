@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.html;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
 import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
@@ -67,9 +68,14 @@ public class HtmlReports {
 
         StringBuilder report = new StringBuilder();
 
-        addHeader(String.format("List of %s", listOfWhat), report);
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-header.html");
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("<!-- TITLE -->", String.format("List of %s", listOfWhat));
+        report.append(template.toString());
 
-        startBody(report);
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/dropdownmenu.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
 
         report.append(String.format("<h1>List of %s</h1>%n", listOfWhat));
 
@@ -81,7 +87,11 @@ public class HtmlReports {
 
         addReportList(report);
 
-        endBodyAndPage(report);
+
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-footer.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
+
 
         return report.toString();
 
@@ -90,9 +100,14 @@ public class HtmlReports {
     private String reportCollectionAsTablePage(String thingsAsTable, String things, String urlArg) {
         StringBuilder report = new StringBuilder();
 
-        addHeader(String.format("Table of %s", things), report);
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-header.html");
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("<!-- TITLE -->", String.format("Table of %s", things));
+        report.append(template.toString());
 
-        startBody(report);
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/dropdownmenu.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
 
         report.append(String.format("<h1>Table of %s</h1>%n", things));
 
@@ -101,30 +116,57 @@ public class HtmlReports {
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
         report.append(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/table/%s",reportConfig.getReportPath() , urlArg, style)));
 
-        addReportList(report);
 
-        endBodyAndPage(report);
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-footer.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
 
         return report.toString();
     }
 
-    private void endBodyAndPage(StringBuilder report) {
-        report.append(HTMLElements.endBody() + HTMLElements.endHTML());
-    }
-
-    private void startBody(StringBuilder report) {
-        report.append(HTMLElements.startBody());
-    }
 
     public String getIndexPage(){
 
+        return getSnippetPage("Pulp App Main Menu",
+                "menu-screen-books-reports-list.html",
+                            "menu-screen-authors-reports-list.html",
+                            "menu-screen-series-publisher-etc-list.html",
+                            "menu-screen-search.html",
+                            "menu-screen-create.html",
+                            "menu-screen-static-reports.html",
+                            "menu-screen-admin.html"
+                );
+    }
+
+    public String getSnippetPage(String title, String ... snippets){
+
         StringBuilder report = new StringBuilder();
-        addHeader("Pulp App Menu", report);
-        startBody(report);
 
-        addReportList(report);
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-header.html");
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("<!-- TITLE -->", title);
+        report.append(template.toString());
 
-        endBodyAndPage(report);
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/dropdownmenu.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
+
+        report.append(String.format("<h1>%s</h1>%n", title));
+
+        for(String snippet : snippets) {
+            try {
+                pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/" + snippet);
+                template = new MyTemplate(pageToRender);
+                report.append(template.toString());
+            }catch(Exception e){
+                System.out.println("SNIPPET: " + snippet);
+                System.out.println(e.getMessage());
+            }
+        }
+
+        pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-footer.html");
+        template = new MyTemplate(pageToRender);
+        report.append(template.toString());
 
         return report.toString();
     }
@@ -133,11 +175,6 @@ public class HtmlReports {
 
         report.append(new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
-    }
-
-
-    private void addHeader(String title, StringBuilder report) {
-        report.append(HTMLElements.htmlHeadWithTitle(title));
     }
 
 

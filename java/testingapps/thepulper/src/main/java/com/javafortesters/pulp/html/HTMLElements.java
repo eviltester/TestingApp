@@ -1,7 +1,5 @@
 package com.javafortesters.pulp.html;
 
-import javax.print.DocFlavor;
-
 public class HTMLElements {
     public static String getLink(String text, String href) {
         return String.format("<a href='%s'>%s</a>", href, text);
