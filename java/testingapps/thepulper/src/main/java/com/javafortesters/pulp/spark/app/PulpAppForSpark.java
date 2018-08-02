@@ -49,32 +49,8 @@ public class PulpAppForSpark {
         // TODO: clearly this needs validation and refactoring
         post("/apps/pulp/gui/create/author", (req, res) -> {
 
-            final CreateAuthorPage page = pulp.page().createAuthorPage();
+            return new CreateFlowsHandler(pulp).authorCreate(req, res);
 
-            String name = req.queryParams("name");
-            if(name==null || name.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a name to add</h2>");
-                return page.asHTMLString();
-            }
-
-
-            try{
-                final PulpAuthor author = pulp.books().authors().add(name);
-                if(author==null){
-                    page.setOutput(String.format("<h2>Error Adding Author %s</h2>", name));
-                }else {
-                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
-                            bookReporter().getAuthorReporter().getAuthorName(author);
-                    page.setOutput(String.format("<h2>Added Author %s</h2>", name));
-                }
-            }catch(Exception e){
-                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
-            }
-
-
-            return page.asHTMLString();
         });
 
         ///apps/pulp/gui/amend/author?author=id
@@ -84,68 +60,15 @@ public class PulpAppForSpark {
 
         post("/apps/pulp/gui/amend/author", (req, res) -> {
 
-            // TODO move this out of the spark page processing
-            final PulpAuthor author = pulp.books().authors().get(req.queryParams("authorid"));
-
-            String errorMessage="";
-
-            if(author != PulpAuthor.UNKNOWN_AUTHOR){
-
-                String newName = req.queryParams("name");
-                author.amendName(newName);
-                if(newName == null || !author.getName().contentEquals(newName)){
-                    errorMessage = "<h2>Could not amend author details to " + newName + "</h2>";
-                }
-            }else{
-                res.status(404);
-                errorMessage = "<h2>Cannot amend an unknown author</h2>";
-            }
-
-
-            final AmendAuthorPage page = pulp.page().amendAuthorPage(author.getId());
-            if(!errorMessage.isEmpty()){
-                res.status(400);
-                page.setOutput(errorMessage);
-            }else{
-                page.setOutput("<h2>Author name amended</h2>");
-            }
-
-            return page.asHTMLString();
+            return new AmendFlowsHandler(pulp).authorAmend(req, res);
         });
 
         get("/apps/pulp/gui/create/series", (req, res) -> {
             return pulp.page().createSeriesPage().asHTMLString();
         });
 
-        // TODO: clearly this needs validation and refactoring
         post("/apps/pulp/gui/create/series", (req, res) -> {
-
-            final CreateSeriesPage page = pulp.page().createSeriesPage();
-
-            String name = req.queryParams("seriesname");
-            if(name==null || name.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a name to add</h2>");
-                return page.asHTMLString();
-            }
-
-            try{
-
-                final PulpSeries series = pulp.books().series().add(name);
-                if(series==null){
-                    page.setOutput(String.format("<h2>Error Adding Series %s</h2>", name));
-                }else {
-                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
-                            bookReporter().getSeriesReporter().getSeries(series);
-                    page.setOutput(String.format("<h2>Added Series %s</h2>", name));
-                }
-            }catch(Exception e){
-                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
-            }
-
-
-        return page.asHTMLString();
+            return new CreateFlowsHandler(pulp).seriesCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/author?author=id
@@ -154,72 +77,16 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {
-
-            // TODO move this out of the spark page processing
-            final PulpSeries series = pulp.books().series().get(req.queryParams("seriesid"));
-
-            String errorMessage="";
-
-            if(series != PulpSeries.UNKNOWN_SERIES){
-
-                String newName = req.queryParams("seriesname");
-                series.amendName(newName);
-                if(newName==null || !series.getName().contentEquals(newName)){
-                    errorMessage = "<h2>Could not amend series details to " + newName + "</h2>";
-                }
-            }else{
-                res.status(404);
-                errorMessage = "<h2>Cannot amend an unknown series</h2>";
-            }
-
-
-            final AmendSeriesPage page = pulp.page().amendSeriesPage(series.getId());
-            if(!errorMessage.isEmpty()){
-                res.status(400);
-                page.setOutput(errorMessage);
-            }else{
-                page.setOutput("<h2>Series name amended</h2>");
-            }
-
-            return page.asHTMLString();
+            return new AmendFlowsHandler(pulp).authorSeries(req, res);
         });
-
 
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
             return pulp.page().createPublisherPage().asHTMLString();
         });
 
-        // TODO: clearly this needs validation and refactoring
         post("/apps/pulp/gui/create/publisher", (req, res) -> {
-
-            final CreatePublisherPage page = pulp.page().createPublisherPage();
-
-            String name = req.queryParams("publishername");
-            if(name==null || name.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a name to add</h2>");
-                return page.asHTMLString();
-            }
-
-            try{
-                final PulpPublisher publisher = pulp.books().publishers().add(name);
-
-                if(publisher==null){
-                    page.setOutput(String.format("<h2>Error Adding Publisher %s</h2>", name));
-                }else {
-                    name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
-                                    bookReporter().getPublisherReporter().getPublisher(publisher);
-                    page.setOutput(String.format("<h2>Added Publisher %s</h2>", name));
-                }
-            }catch(Exception e){
-                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
-            }
-
-
-        return page.asHTMLString();
-
+            return new CreateFlowsHandler(pulp).publisherCreate(req, res);
         });
 
 
@@ -227,91 +94,8 @@ public class PulpAppForSpark {
             return pulp.page().createBookPage().asHTMLString();
         });
 
-        // TODO: clearly this needs validation and refactoring
         post("/apps/pulp/gui/create/book", (req, res) -> {
-
-            final CreateBookPage page = pulp.page().createBookPage();
-
-            String title = req.queryParams("title");
-            if(title==null || title.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a title to add</h2>");
-                return page.asHTMLString();
-            }
-
-            String authorid = req.queryParams("authorid");
-            if(authorid==null || authorid.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find an Author to add</h2>");
-                return page.asHTMLString();
-            }
-
-            String seriesid = req.queryParams("seriesid");
-            if(seriesid==null || seriesid.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a Series to add</h2>");
-                return page.asHTMLString();
-            }
-
-            String publisherid = req.queryParams("publisherid");
-            if(publisherid==null || publisherid.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a Publisher to add</h2>");
-                return page.asHTMLString();
-            }
-
-            //seriesidentifier
-            String seriesidentifier = req.queryParams("seriesidentifier");
-            if(seriesidentifier==null || seriesidentifier.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a Series Identifier to add</h2>");
-                return page.asHTMLString();
-            }
-
-            String yearofpublication = req.queryParams("yearofpub");
-
-            if(yearofpublication==null || yearofpublication.trim().isEmpty()){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a Year to add</h2>");
-                return page.asHTMLString();
-            }
-
-            int year = -1;
-
-            try {
-                year = Integer.parseInt(yearofpublication);
-            }catch(Exception e){
-
-            }
-
-            if(year < 0){
-                res.status(400);
-
-                page.setOutput("<h2>Error: Could not find a valid year to add</h2>");
-                return page.asHTMLString();
-            }
-
-            try {
-                final PulpBook book = pulp.books().books().add(seriesid, authorid, authorid, title, seriesidentifier, year, publisherid);
-
-                if (book == null) {
-                    page.setOutput(String.format("<h2>Error Adding Book %s</h2>", title));
-                } else {
-                    String settitle = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
-                                        bookReporter().getTitle(book);
-                    page.setOutput(String.format("<h2>Added Book %s</h2>", settitle));
-                }
-            }catch(Exception e){
-                page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), getMyStackTrace(e)));
-            }
-
-            return page.asHTMLString();
+            return new CreateFlowsHandler(pulp).bookCreate(req, res);
         });
 
 
@@ -447,12 +231,7 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
     }
 
-    private String getMyStackTrace(final Exception e) {
-            Writer result = new StringWriter();
-            PrintWriter printWriter = new PrintWriter(result);
-            e.printStackTrace(printWriter);
-            return result.toString();
-    }
+
 
 
 }
