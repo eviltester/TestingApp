@@ -21,8 +21,7 @@ public class ToDoListTest {
 
     // # TODO: READ
 
-    // Format footer to be a little nicer - possibly add a page header
-    // put the filter tester behind an /admin url
+
 
     // Create an entity Read Page which will link to Amend
     // Entity Read page could show a filtered list of books published by, written by, in series, by date etc.
@@ -108,4 +107,6 @@ public class ToDoListTest {
     //      index page
     //      Menu: Books | Authors > List, FAQ | Publishers | Series | Years | Search | Create > Author, Series, Publisher, Book | Reports > Books, Authors, Publishers, Series, Years | Admin > Filter
     //      Footer: copyright, links to sites, contact
+    // Format footer to be a little nicer - possibly add a page header
+    // put the filter tester behind an /admin url
 }

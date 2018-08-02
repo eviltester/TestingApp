@@ -204,7 +204,7 @@ public class PulpAppForSpark {
 
         });
 
-        get("/apps/pulp/gui/reports/filtertest", (req, res) -> {
+        get("/apps/pulp/gui/admin/filtertest", (req, res) -> {
 
             String listOrTable="list";
             String navigationOrStatic="navigation";
