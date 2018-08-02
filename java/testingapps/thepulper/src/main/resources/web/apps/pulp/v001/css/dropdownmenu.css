@@ -73,5 +73,6 @@
 
 #primary_nav_wrap ul li:hover > ul
 {
-    display:block
+    display:block;
+    z-index:100;
 }
