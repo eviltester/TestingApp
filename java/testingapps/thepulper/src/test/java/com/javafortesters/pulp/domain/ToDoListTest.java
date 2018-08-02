@@ -2,6 +2,16 @@ package com.javafortesters.pulp.domain;
 
 public class ToDoListTest {
 
+    // NEXT:
+    //     make it look like a simple app - this will probably require new templates and 'refactoring' of existing old code
+    //      common header and footer
+    //      css styling
+    //      index page
+    //      help page
+    //      Menu: Books | Authors > List, FAQ | Publishers | Series | Years | Search | Create > Author, Series, Publisher, Book | Reports > Books, Authors, Publishers, Series, Years | Admin > Filter
+    //      Footer: copyright, links to sites, contact
+    //      ids in the dom to make automating less challenging - the aim is to support not challenge
+    //      move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
