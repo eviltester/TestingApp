@@ -12,6 +12,10 @@ import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class AmendFlowsHandler {
     private final PulpApp pulp;
 
@@ -126,6 +130,7 @@ public class AmendFlowsHandler {
 
             // TODO: handle multiple authors with a multi select
             //String newAuthorID = req.queryParams("authorid");
+            String[] authorIds = req.queryParamsValues("authorid");
 
             String newSeriesIdentifier = req.queryParams("seriesidentifier");
             String yearOfPublication = req.queryParams("yearofpub");
@@ -138,6 +143,35 @@ public class AmendFlowsHandler {
                 res.status(400);
                 errorMessage.append("<h2>Could not amend title to " + newTitle + "</h2>");
             }
+
+
+            List<String> givenAuthors = Arrays.asList(authorIds);
+            if(givenAuthors.size()==0) {
+                res.status(400);
+                errorMessage.append("<h2>A book must have at least one author</h2>");
+            }else {
+
+                // check that each author exists
+                List<String> foundAuthors = new ArrayList();
+
+                for (PulpAuthor author : pulp.books().authors().getAllOrderedByName()) {
+                    if (givenAuthors.contains(author.getId())) {
+                        foundAuthors.add(author.getId());
+                    }
+                }
+                if (foundAuthors.size() != givenAuthors.size()) {
+                    res.status(404);
+                    errorMessage.append("<h2>Could not find all authors</h2>");
+                } else {
+
+                    if (!book.amendAuthors(foundAuthors)) {
+                        res.status(400);
+                        errorMessage.append("<h2>Could not amend authors</h2>");
+                    }
+                }
+            }
+
+
             book.amendSeriesIdentifier(newSeriesIdentifier);
             if(newTitle==null || !book.getSeriesId().contentEquals(newSeriesIdentifier)){
                 res.status(400);

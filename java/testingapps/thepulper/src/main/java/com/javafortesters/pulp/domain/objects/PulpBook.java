@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PulpBook {
     public static final PulpBook UNKNOWN_BOOK = new PulpBook("unknown", "unknown", "unknown", "unknown", "Unknown Title", "unknown", 0, "unknown");
-    private final List<String> authorIndexNames;
+    private List<String> authorIndexNames;
 
     /**
      * The id of the series
@@ -241,5 +241,20 @@ public class PulpBook {
         this.houseAuthorIndexName = newValue;
 
         return this;
+    }
+
+    public boolean amendAuthors(final List<String> authorIds) {
+
+        if(authorIds==null){
+            return false;
+        }
+
+        if(authorIds.size()==0){
+            return false;
+        }
+
+        authorIndexNames.clear();
+        authorIndexNames.addAll(authorIds);
+        return true;
     }
 }

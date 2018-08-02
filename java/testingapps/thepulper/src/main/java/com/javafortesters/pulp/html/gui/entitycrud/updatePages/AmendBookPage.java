@@ -8,6 +8,9 @@ import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
+import java.util.Collection;
+import java.util.List;
+
 public class AmendBookPage {
     private final PulpBook book;
     private final PulpData books;
@@ -38,18 +41,19 @@ public class AmendBookPage {
         StringBuilder options = new StringBuilder();
 
         //<!-- AUTHOR-ID-OPTIONS -->
-        // TODO this should be a select for each author and allow more authors to be added
         Boolean selected = false;
+        final Collection<String> bookAuthorIds = book.getAllAuthorIndexes();
+
         for(PulpAuthor author : books.authors().getAllOrderedByName()){
             selected = false;
-            if(author.getId() == book.getAuthorIndexes().get(0)) {
+            if(bookAuthorIds.contains(author.getId())) {
                 selected = true;
             }
 
             options.append(option(author.getId(), author.getName(), selected));
         }
         // Ignore for the moment - make a multi select
-        //template.replaceSection("<!-- AUTHOR-ID-OPTIONS -->", options.toString());
+        template.replaceSection("<!-- AUTHOR-ID-OPTIONS -->", options.toString());
 
 
         //<!-- PUBLISHER-ID-OPTIONS -->
