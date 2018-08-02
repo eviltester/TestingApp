@@ -3,13 +3,7 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //     make it look like a simple app - this will probably require new templates and 'refactoring' of existing old code
-    //      common header and footer
-    //      css styling
-    //      index page
     //      help page
-    //      Menu: Books | Authors > List, FAQ | Publishers | Series | Years | Search | Create > Author, Series, Publisher, Book | Reports > Books, Authors, Publishers, Series, Years | Admin > Filter
-    //      Footer: copyright, links to sites, contact
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
     //      move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
 
@@ -101,9 +95,17 @@ public class ToDoListTest {
     // - added amendment for books, authors, series, and publisher
     //  add an edit screen for each of the things e.g. edit author, edit book (allow house author amendment), edit publisher, edit series
 
-    // 20180802 DONNE
+    // 20180802 DONE
     // - allow amending authors through a multi select drop down
     // initially add the DELETE on the Edit screen
     // - add an are you sure? dialog on delete button press
     // Search should have links
+
+    //20180803 DONE
+    //     make it look like a simple app - this will probably require new templates and 'refactoring' of existing old code
+    //      common header and footer
+    //      css styling
+    //      index page
+    //      Menu: Books | Authors > List, FAQ | Publishers | Series | Years | Search | Create > Author, Series, Publisher, Book | Reports > Books, Authors, Publishers, Series, Years | Admin > Filter
+    //      Footer: copyright, links to sites, contact
 }

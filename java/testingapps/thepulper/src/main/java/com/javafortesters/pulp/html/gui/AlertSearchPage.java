@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HTMLElements;
+import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
@@ -21,14 +22,22 @@ public class AlertSearchPage {
     private PulpData data;
 
     public String asHTMLString(ReportConfig config) {
+
+        StringBuilder pageOutput = new StringBuilder();
+
+        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
+        pageOutput.append(new PageSnippets().getDropDownMenu());
+
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/alert-search-page-body-content.html");
+
+        StringBuilder dataOutput = new StringBuilder();
 
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("!!searchterm!!", searchTerm);
         String checked = confirmSearch ? "checked" : "notchecked";
         template.replace("!!checked!!", checked);
 
-        StringBuilder dataOutput = new StringBuilder();
+
 
         if(data!=null && searchWhat.length()>0 && searchHow.length()>0){
 
@@ -59,9 +68,12 @@ public class AlertSearchPage {
 
 
         template.replace("<!-- OUTPUT GOES HERE -->", dataOutput.toString());
-        template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
+        //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
-        return template.toString();
+        pageOutput.append(template.toString());
+        pageOutput.append(new PageSnippets().getPageFooter());
+
+        return pageOutput.toString();
 
     }
 

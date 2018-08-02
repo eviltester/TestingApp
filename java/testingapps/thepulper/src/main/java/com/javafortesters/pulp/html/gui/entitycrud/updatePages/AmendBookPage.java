@@ -5,6 +5,7 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
+import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
@@ -27,6 +28,12 @@ public class AmendBookPage {
     }
 
     public String asHTMLString() {
+
+        StringBuilder pageOutput = new StringBuilder();
+
+        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
+        pageOutput.append(new PageSnippets().getDropDownMenu());
+
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/entity-crud/update/edit-book-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
@@ -92,9 +99,11 @@ public class AmendBookPage {
         template.replaceSection("<!-- HOUSE-AUTHOR-ID-OPTIONS -->", options.toString());
 
         template.replace("<!-- OUTPUT GOES HERE -->", output);
-        template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
+        //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
-        return template.toString();
+        pageOutput.append(template.toString());
+        pageOutput.append(new PageSnippets().getPageFooter());
+        return pageOutput.toString();
 
     }
 

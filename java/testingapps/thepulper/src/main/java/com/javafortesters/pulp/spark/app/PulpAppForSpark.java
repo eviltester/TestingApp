@@ -264,10 +264,10 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui", (req, res) -> { res.redirect("/apps/pulp/gui/"); return "";});
         get("/apps/pulp/gui/", (req, res) -> { return pulp.reports().getIndexPage();});
         get("/apps/pulp/gui/menu/books", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-books-reports-list.html");});
-        get("/apps/pulp/gui/menu/authors", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-authors-reports-list.html");});
-        get("/apps/pulp/gui/menu/create", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-create.html");});
-        get("/apps/pulp/gui/menu/reports", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-static-reports.html");});
-        get("/apps/pulp/gui/menu/admin", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-admin.html");});
+        get("/apps/pulp/gui/menu/authors", (req, res) -> { return pulp.reports().getSnippetPage("Authors Menu", "menu-screen-authors-reports-list.html");});
+        get("/apps/pulp/gui/menu/create", (req, res) -> { return pulp.reports().getSnippetPage("Create Menu", "menu-screen-create.html");});
+        get("/apps/pulp/gui/menu/reports", (req, res) -> { return pulp.reports().getSnippetPage("Reports Menu", "menu-screen-static-reports.html");});
+        get("/apps/pulp/gui/menu/admin", (req, res) -> { return pulp.reports().getSnippetPage("Admin Menu", "menu-screen-admin.html");});
 
 
         get("/apps/pulp/gui/reports", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});

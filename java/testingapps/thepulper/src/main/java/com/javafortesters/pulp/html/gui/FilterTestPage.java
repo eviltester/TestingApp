@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HTMLReporter;
+import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
 import com.javafortesters.pulp.reader.ResourceReader;
@@ -37,6 +38,12 @@ public class FilterTestPage {
     }
 
     public String asHTMLString() {
+
+        StringBuilder pageOutput = new StringBuilder();
+
+        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
+        pageOutput.append(new PageSnippets().getDropDownMenu());
+
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
@@ -116,12 +123,14 @@ public class FilterTestPage {
             if(showFooter){
                 template.replace("<option value='footer'>", "<option value='footer' selected>");
 
-                template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
+                //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
             }
         }
 
+        pageOutput.append(template.toString());
+        pageOutput.append(new PageSnippets().getPageFooter());
+        return pageOutput.toString();
 
-        return template.toString();
     }
 
     private String getPageNumberOptions(int checkedVal) {

@@ -3,6 +3,7 @@ package com.javafortesters.pulp.html.gui;
 import com.javafortesters.pulp.domain.faq.Faqs;
 import com.javafortesters.pulp.domain.faq.SearchEngine;
 import com.javafortesters.pulp.html.HTMLReporter;
+import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reader.ResourceReader;
@@ -27,6 +28,12 @@ public class FaqRenderPage {
 
     public String asHTMLString() {
 
+        StringBuilder pageOutput = new StringBuilder();
+
+        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
+        pageOutput.append(new PageSnippets().getDropDownMenu());
+
+
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/faqs-page-body-content.html");
         String iframeSection = new ResourceReader().asString("/web/apps/pulp/page-template/query-iframe.html");
 
@@ -43,9 +50,11 @@ public class FaqRenderPage {
             pageTemplate.replace("<!-- IFRAME DATA GOES HERE -->", iframeTemplate.toString());
         }
 
-        pageTemplate.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
+        //pageTemplate.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
-        return pageTemplate.toString();
+        pageOutput.append(pageTemplate.toString());
+        pageOutput.append(new PageSnippets().getPageFooter());
+        return pageOutput.toString();
 
     }
 
