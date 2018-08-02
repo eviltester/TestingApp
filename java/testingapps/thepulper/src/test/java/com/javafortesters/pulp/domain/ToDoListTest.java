@@ -7,8 +7,6 @@ public class ToDoListTest {
     // Can have a lot without login
 
     // # TODO: CREATE
-
-    // - add better validation and reporting on the Create functionality
     // - refactor create pages into single page with template
 
     // # AMEND
@@ -18,6 +16,13 @@ public class ToDoListTest {
     // - incorporate into lists
 
     // # TODO: READ
+
+    // Format footer to be a little nicer - possibly add a page header
+    // put the filter tester behind an /admin url
+
+    // Create an entity Read Page which will link to Amend
+    // Entity Read page could show a filtered list of books published by, written by, in series, by date etc.
+    // Book Read page chould have a list of the authors, publishers, series, dates etc. with links
 
     // TODO: fix paging bug to support authors, series, publishers etc. - currently just books
     // switch between 'easy to automate' (with ids) and 'hard to automate' (without ids)
