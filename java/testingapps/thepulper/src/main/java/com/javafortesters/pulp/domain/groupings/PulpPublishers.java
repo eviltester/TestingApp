@@ -80,4 +80,16 @@ public class PulpPublishers {
         Collections.sort(sorted, PulpPublisher.SortNameComparatorAscending());
         return sorted;
     }
+
+    public void delete(final String id) {
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        publishers.remove(get(id));
+    }
 }

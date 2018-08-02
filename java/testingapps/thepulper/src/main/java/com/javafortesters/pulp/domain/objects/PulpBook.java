@@ -112,6 +112,7 @@ public class PulpBook {
 
     }
 
+
     public boolean isAuthoredBy(String authorId) {
         return getAllAuthorIndexes().contains(authorId);
     }
@@ -256,5 +257,21 @@ public class PulpBook {
         authorIndexNames.clear();
         authorIndexNames.addAll(authorIds);
         return true;
+    }
+
+    public void removeAuthor(final String id) {
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        authorIndexNames.remove(id);
+        if(houseAuthorIndexName.contentEquals(id)){
+            houseAuthorIndexName=null;
+        }
+
     }
 }

@@ -50,6 +50,9 @@ public class DataPopulationTest {
 
     }
 
+
+
+
     @Test
     public void canHaveAStaticDataPopulatorFromTheSpider(){
 

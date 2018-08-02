@@ -118,4 +118,91 @@ public class PulpBooks {
 
         return years;
     }
+
+    public void delete(final String id) {
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        books.remove(get(id));
+    }
+
+    public void deletePublishedBy(final String id) {
+
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        List<PulpBook> removeThese = new ArrayList<>();
+        for(PulpBook aBook : books){
+            if(aBook.getPublisherIndex().contentEquals(id)){
+                removeThese.add(aBook);
+            }
+        }
+
+        for(PulpBook aBook : removeThese){
+            books.remove(aBook);
+        }
+    }
+
+    public void deleteAuthoredBy(final String id) {
+
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        // remove this author from any books authored list
+        List<PulpBook> removeThese = new ArrayList<>();
+        for(PulpBook aBook : books){
+            if(aBook.isAuthoredBy(id)){
+                aBook.removeAuthor(id);
+                if(aBook.getHouseAuthorIndex()==null) {
+                    removeThese.add(aBook);
+                }else{
+                    if(aBook.getAuthorIndexes().size()==0){
+                        removeThese.add(aBook);
+                    }
+                }
+            }
+        }
+
+
+        // if book has no authors afterwards then delete the book
+        for(PulpBook aBook : removeThese){
+            books.remove(aBook);
+        }
+    }
+
+    public void deleteAnyInSeries(final String id) {
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        List<PulpBook> removeThese = new ArrayList<>();
+        for(PulpBook aBook : books){
+            if(aBook.getSeriesIndex().contentEquals(id)){
+                removeThese.add(aBook);
+            }
+        }
+
+        for(PulpBook aBook : removeThese){
+            books.remove(aBook);
+        }
+    }
 }

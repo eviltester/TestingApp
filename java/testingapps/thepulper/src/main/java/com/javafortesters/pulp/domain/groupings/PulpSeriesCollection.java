@@ -76,4 +76,16 @@ public class PulpSeriesCollection {
         Collections.sort(sorted, PulpSeries.SortNameComparatorAscending());
         return sorted;
     }
+
+    public void delete(final String id) {
+        if(id==null){
+            return;
+        }
+
+        if(id.isEmpty()){
+            return;
+        }
+
+        serieses.remove(get(id));
+    }
 }
