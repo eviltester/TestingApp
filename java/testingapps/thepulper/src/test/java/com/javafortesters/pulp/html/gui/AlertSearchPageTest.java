@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.PulpApp;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
+import com.javafortesters.pulp.reporting.ReportConfig;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class AlertSearchPageTest {
 
         //System.out.println(page.asHTMLString());
 
-        Assert.assertNotEquals("",page.asHTMLString());
+        Assert.assertNotEquals("",page.asHTMLString(ReportConfig.allHTML("/app")));
     }
 
     @Test
@@ -28,7 +29,7 @@ public class AlertSearchPageTest {
         page.setConfirmSearch(true);
         page.setDataFrom(app.books());
 
-        String pageToRender = page.asHTMLString();
+        String pageToRender = page.asHTMLString(ReportConfig.allHTML("/app"));
         System.out.println(pageToRender);
 
         Assert.assertNotEquals("",pageToRender);

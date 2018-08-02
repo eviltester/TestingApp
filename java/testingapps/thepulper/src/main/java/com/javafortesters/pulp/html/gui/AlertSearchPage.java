@@ -20,7 +20,7 @@ public class AlertSearchPage {
     private boolean confirmSearch=true;
     private PulpData data;
 
-    public String asHTMLString() {
+    public String asHTMLString(ReportConfig config) {
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/alert-search-page-body-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
@@ -32,7 +32,7 @@ public class AlertSearchPage {
 
         if(data!=null && searchWhat.length()>0 && searchHow.length()>0){
 
-            BookReporter reporter = new BookReporter(ReportConfig.justStrings(), data.authors(), data.publishers(), data.series());
+            BookReporter reporter = new BookReporter(config, data.authors(), data.publishers(), data.series());
 
             BookFilter filter = new BookFilter();
 

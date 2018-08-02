@@ -191,10 +191,16 @@ public class PulpAppForSpark {
                 confirmSearch=true;
             }
 
+            ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.setPostFixPath("/list/navigation");
+            config.showAmendLinks(false);
+
+            // TODO should be able to configure links to author, series, publisher to the Amend screen rather than a list filter
+
             return new AlertSearchPage().setConfirmSearch(confirmSearch)
                     .setSearchTerms(what, how, forTerm)
                     .setDataFrom(pulp.books())
-                    .asHTMLString();
+                    .asHTMLString(config);
 
         });
 
