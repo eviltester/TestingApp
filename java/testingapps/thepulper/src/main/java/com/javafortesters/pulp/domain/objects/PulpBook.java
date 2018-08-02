@@ -10,11 +10,18 @@ import java.util.List;
 public class PulpBook {
     public static final PulpBook UNKNOWN_BOOK = new PulpBook("unknown", "unknown", "unknown", "unknown", "Unknown Title", "unknown", 0, "unknown");
     private final List<String> authorIndexNames;
-    private final String seriesIndexName;
-    private final String title;
-    private final String seriesId;
-    private final int publicationYear;
-    private final String publisherIndexName;
+
+    /**
+     * The id of the series
+     */
+    private String seriesIndexName;
+    private String title;
+    /**
+     * The human readable index name i.e. the issue number etc.
+     */
+    private String seriesId;
+    private int publicationYear;
+    private String publisherIndexName;
     private String houseAuthorIndexName;
     private String id;
 
@@ -33,6 +40,9 @@ public class PulpBook {
         this.publisherIndexName = publisherIndexName;
     }
 
+    /**
+     * The id of the series
+     */
     public String getSeriesIndex() {
         return this.seriesIndexName;
     }
@@ -47,6 +57,9 @@ public class PulpBook {
         return title;
     }
 
+    /**
+     * The human readable index name i.e. the issue number etc.
+     */
     public String getSeriesId() {
         return seriesId;
     }
@@ -149,4 +162,84 @@ public class PulpBook {
         return ok;
     }
 
+    public PulpBook amendTitle(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+        this.title = newValue;
+
+        return this;
+    }
+
+    private boolean hasContent(final String newValue) {
+        if(newValue == null){
+            return false;
+        }
+
+        if(newValue.trim().isEmpty()){
+            return false;
+        }
+
+        return true;
+    }
+
+    public PulpBook amendSeriesIdentifier(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+        this.seriesId = newValue;
+
+        return this;
+    }
+
+    public PulpBook amendPublicationYear(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+        int newyear = 0;
+        try{
+            newyear = Integer.parseInt(newValue);
+        }catch(Exception e){
+            return this;
+        }
+
+        this.publicationYear = newyear;
+
+        return this;
+    }
+
+    public PulpBook amendPublisher(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+
+        this.publisherIndexName = newValue;
+
+        return this;
+    }
+
+    public PulpBook amendSeries(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+
+        this.seriesIndexName = newValue;
+
+        return this;
+    }
+
+    public PulpBook amendHouseAuthor(final String newValue) {
+        if(!hasContent(newValue)){
+            return this;
+        }
+
+        this.houseAuthorIndexName = newValue;
+
+        return this;
+    }
 }

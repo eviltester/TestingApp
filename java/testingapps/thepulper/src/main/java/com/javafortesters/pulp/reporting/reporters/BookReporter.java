@@ -60,7 +60,7 @@ public class BookReporter {
 
         line = new StringBuilder();
 
-        line.append(book.getTitle());
+        line.append(getTitle(book));
         line.append(" | ");
 
         line.append(authorReporter.getConcatenated(authors.getAll(book.getAllAuthorIndexes()), ", "));
@@ -112,7 +112,15 @@ public class BookReporter {
 
     public String getTitle(PulpBook book){
             if(reportConfig!=null && reportConfig.areTitlesLinks()){
-                return String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+                final String title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+                String amend = "";
+
+                if(reportConfig.areBookAmendLinksShown()) {
+                    amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
+                            reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/book?book="), book.getId());
+                }
+
+                return title + " " + amend;
             }else{
                 return book.getTitle();
             }

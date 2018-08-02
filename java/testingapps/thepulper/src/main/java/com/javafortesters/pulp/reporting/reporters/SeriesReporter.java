@@ -28,8 +28,11 @@ public class SeriesReporter {
         if(reportConfig!=null && reportConfig.areSeriesNamesLinks()){
             String name =  String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(),item.getName());
 
-            final String amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
-                    reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/series?series="), item.getId(), item.getName());
+            String amend="";
+            if(reportConfig.areSeriesAmendLinksShown()) {
+                amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
+                        reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/series?series="), item.getId(), item.getName());
+            }
 
             return name + " " + amend;
         }else{

@@ -89,11 +89,22 @@ public class PulpAppForSpark {
             return new CreateFlowsHandler(pulp).bookCreate(req, res);
         });
 
+        ///apps/pulp/gui/amend/book?book=id
+        get("/apps/pulp/gui/amend/book", (req, res) -> {
+            return pulp.page().amendBookPage(req.queryParams("book")).asHTMLString();
+        });
 
+        post("/apps/pulp/gui/amend/book", (req, res) -> {
+            return new AmendFlowsHandler(pulp).bookAmend(req, res);
+        });
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return pulp.reports().configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(false);
+            config.showBookAmendLink(true);
+            config.setTitlesAreLinks(true); // TODO if I switch this off then I don't see amend, I would like to switch this off and see amend
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
         get("/apps/pulp/gui/reports/books/list/static", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
@@ -101,7 +112,11 @@ public class PulpAppForSpark {
         });
         get("/apps/pulp/gui/reports/books/table/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return pulp.reports().configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(false);
+            config.showBookAmendLink(true);
+            config.setTitlesAreLinks(true);
+            return pulp.reports(config).configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
         });
         get("/apps/pulp/gui/reports/books/table/static", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());

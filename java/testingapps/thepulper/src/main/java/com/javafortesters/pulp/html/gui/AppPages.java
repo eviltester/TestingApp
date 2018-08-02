@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateAuthorPage;
@@ -9,6 +10,7 @@ import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreateSeriesPage;
 import com.javafortesters.pulp.html.gui.entitycrud.createPages.CreatePublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendAuthorPage;
+import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendPublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
 
@@ -68,6 +70,16 @@ public class AppPages {
         final AmendPublisherPage page = new AmendPublisherPage(publisher);
         if(publisher == PulpPublisher.UNKNOWN_PUBLISHER){
             page.setOutput("<h2>ERROR: Publisher not found</h2>");
+        }
+
+        return page;
+    }
+
+    public AmendBookPage amendBookPage(final String id) {
+        final PulpBook book = this.books.books().get(id);
+        final AmendBookPage page = new AmendBookPage(books, book);
+        if(book == PulpBook.UNKNOWN_BOOK){
+            page.setOutput("<h2>ERROR: Book not found</h2>");
         }
 
         return page;

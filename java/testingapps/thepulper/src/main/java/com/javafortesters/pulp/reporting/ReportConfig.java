@@ -11,7 +11,13 @@ public class ReportConfig {
     private boolean includeFaqLinks=false; // by default do not do this
     private boolean areTitlesLinks=false; // by default no
 
+    private boolean authorAmendLink = true;
+    private boolean publisherAmendLink=true;
+    private boolean bookAmendLink=false;
+    private boolean seriesAmendLink=true;
 
+
+    // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
     public ReportConfig(boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
         this.areAuthorNamesLinks = areAuthorNamesLinks;
         this.areYearsLinks = areYearsLinks;
@@ -28,6 +34,10 @@ public class ReportConfig {
         this.reportPath = reportConfig.getReportPath();
         this.linksPostFix = reportConfig.getLinksPostFix();
         this.areTitlesLinks = reportConfig.areTitlesLinks();
+        this.authorAmendLink = reportConfig.areAuthorAmendLinksShown();
+        this.publisherAmendLink = reportConfig.arePublisherAmendLinksShown();
+        this.bookAmendLink = reportConfig.areBookAmendLinksShown();
+        this.seriesAmendLink = reportConfig.areSeriesAmendLinksShown();
     }
 
     private String getLinksPostFix() {
@@ -103,4 +113,55 @@ public class ReportConfig {
         config.reportPath = config.reportPath.replace("reports/", "");
         return config;
     }
+
+    public ReportConfig setTitlesAreLinks(final boolean theyAre) {
+        areTitlesLinks = theyAre;
+        return this;
+    }
+
+    public ReportConfig showAuthorAmendLink(final boolean showIt) {
+        authorAmendLink = showIt;
+        return this;
+    }
+
+    public ReportConfig showPublisherAmendink(final boolean showIt) {
+        publisherAmendLink = showIt;
+        return this;
+    }
+
+
+    public ReportConfig showSeriesAmendLink(final boolean showIt) {
+        seriesAmendLink = showIt;
+        return this;
+    }
+
+    public ReportConfig showBookAmendLink(final boolean showIt) {
+        bookAmendLink = showIt;
+        return this;
+    }
+
+    public ReportConfig showAmendLinks(final boolean showIt){
+        showAuthorAmendLink(showIt);
+        showBookAmendLink(showIt);
+        showPublisherAmendink(showIt);
+        showSeriesAmendLink(showIt);
+        return this;
+    }
+
+    public boolean areBookAmendLinksShown() {
+        return bookAmendLink;
+    }
+
+    public boolean areAuthorAmendLinksShown() {
+        return authorAmendLink;
+    }
+
+    public boolean areSeriesAmendLinksShown() {
+        return seriesAmendLink;
+    }
+
+    public boolean arePublisherAmendLinksShown() {
+        return publisherAmendLink;
+    }
+
 }

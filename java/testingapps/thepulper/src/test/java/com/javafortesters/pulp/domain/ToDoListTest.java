@@ -12,7 +12,7 @@ public class ToDoListTest {
     // - refactor create pages into single page with template
 
     // # AMEND
-    // - add an edit screen for each of the things e.g. edit author, edit book (allow house author amendment), edit publisher, edit series
+    // - allow amending authors through a multi select drop down
 
     // # DELETE
     // - initially add the DELETE on the Edit screen, then incorporate into lists
@@ -83,5 +83,7 @@ public class ToDoListTest {
     // 20180831 Done
     // - create Book - which has drop down of authors, publishers and series
     // - added a link to the list of books for the created thing when created
+    // - added amendment for books, authors, series, and publisher
+    //  add an edit screen for each of the things e.g. edit author, edit book (allow house author amendment), edit publisher, edit series
 
 }
