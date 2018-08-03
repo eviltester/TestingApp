@@ -11,7 +11,6 @@ import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
 
 
-import javax.naming.NamingException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -44,7 +43,7 @@ public class FilterTestPage {
         pageOutput.append(new PageSnippets().getPageHead("Book Search"));
         pageOutput.append(new PageSnippets().getDropDownMenu());
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/filter-test-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
 
@@ -122,8 +121,6 @@ public class FilterTestPage {
             }
             if(showFooter){
                 template.replace("<option value='footer'>", "<option value='footer' selected>");
-
-                //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
             }
         }
 

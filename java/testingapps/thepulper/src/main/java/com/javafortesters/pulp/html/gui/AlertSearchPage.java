@@ -28,7 +28,7 @@ public class AlertSearchPage {
         pageOutput.append(new PageSnippets().getPageHead("Book Search"));
         pageOutput.append(new PageSnippets().getDropDownMenu());
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/alert-search-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/alert-search-page-body-content.html");
 
         StringBuilder dataOutput = new StringBuilder();
 
@@ -68,7 +68,6 @@ public class AlertSearchPage {
 
 
         template.replace("<!-- OUTPUT GOES HERE -->", dataOutput.toString());
-        //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
         pageOutput.append(template.toString());
         pageOutput.append(new PageSnippets().getPageFooter());

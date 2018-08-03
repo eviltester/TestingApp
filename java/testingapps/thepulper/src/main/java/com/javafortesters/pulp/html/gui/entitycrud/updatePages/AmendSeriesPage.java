@@ -25,7 +25,7 @@ public class AmendSeriesPage {
         pageOutput.append(new PageSnippets().getPageHead("Book Search"));
         pageOutput.append(new PageSnippets().getDropDownMenu());
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/page-template/entity-crud/update/edit-book-series-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/update/edit-book-series-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 
@@ -33,7 +33,6 @@ public class AmendSeriesPage {
         template.replace("!!SERIESNAME!!", series.getName());
 
         template.replace("<!-- OUTPUT GOES HERE -->", output);
-        //template.replace("<!-- FOOTER GOES HERE -->", new ResourceReader().asString("/web/apps/pulp/page-template/reports-list-widget.html"));
 
         pageOutput.append(template.toString());
         pageOutput.append(new PageSnippets().getPageFooter());
