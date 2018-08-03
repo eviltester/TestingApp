@@ -15,13 +15,7 @@
     <groupId>uk.co.compendiumdev</groupId>
     <artifactId>rest-list-system</artifactId>
     <packaging>jar</packaging>
-    <version>1.2-SNAPSHOT</version>
-
-    <!--
-        1.1 the original test app
-        1.2 the version added to the testing-apps project
-    -->
-
+    <version>${restlisticator.version}</version>
 
     <dependencies>
         <dependency>
@@ -42,7 +36,7 @@
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.10</version>
+            <version>${xstream.version}</version>
         </dependency>
 
         <!-- lightweight xml to json conversion -->
@@ -50,7 +44,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20160212</version>
+            <version>${org.json.version}</version>
         </dependency>
 
         <dependency>
@@ -62,7 +56,7 @@
         <dependency>
             <groupId>uk.co.compendiumdev.testing.spark</groupId>
             <artifactId>sparktesting</artifactId>
-            <version>1.0.0</version>
+            <version>${sparktesting.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -72,13 +66,13 @@
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
-            <version>0.26.4</version>
+            <version>${flexmark-all.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>uk.co.compendiumdev.testing.http</groupId>
             <artifactId>httpabstraction</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${httpabstractions.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -101,10 +95,10 @@
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
+        <version>${mavencompiler.version}</version>
         <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
+            <source>${javasource.version}</source>
+            <target>${javatarget.version}</target>
         </configuration>
     </plugin>
         <plugin>
@@ -132,9 +126,9 @@
         <plugin>
             <groupId>com.heroku.sdk</groupId>
             <artifactId>heroku-maven-plugin</artifactId>
-            <version>1.2.0</version>
+            <version>${herokumaven.version}</version>
             <configuration>
-                <jdkVersion>1.8</jdkVersion>
+                <jdkVersion>${herokujdk.version}</jdkVersion>
                 <!-- Use your own application name -->
                 <appName>rest-list-system</appName>
                 <processTypes>

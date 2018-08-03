@@ -5,7 +5,7 @@
    <parent>
         <groupId>uk.co.compendiumdev.testing</groupId>
         <artifactId>testapp</artifactId>
-        <version>1.4.0-SNAPSHOT</version>
+        <version>1-4-0</version>
     </parent>
 
     <groupId>uk.co.compendiumdev.testing</groupId>
@@ -21,10 +21,11 @@
 
         <!-- the following apps all use spark -->
         <module>seleniumtestpages</module>
-
         <module>compendiumdevapps</module>
         <module>restlisticator</module>
         <module>thepulper</module>
+
+        <!-- one app to rule them all -->
         <module>testingapp</module>
 
     </modules>
