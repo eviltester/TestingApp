@@ -35,6 +35,14 @@
             <version>1.2-SNAPSHOT</version>
         </dependency>
 
+        <!-- try to make sure the main app has a different index file -->
+        <dependency>
+            <groupId>uk.co.compendiumdev.testing</groupId>
+            <artifactId>testingappsindexpage</artifactId>
+            <version>1-0</version>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.seleniumsimplified.java</groupId>
             <artifactId>seleniumtestpages</artifactId>
@@ -55,6 +63,9 @@
     </dependencies>
 
     <build>
+        <!-- if I add the excludes then it will use the index.html from the testingappsindex project-->
+        <!-- if I remove the excludes then it seems to use the index.html from this project, which is good, I'm just not sure why it wasn't always doing that before -->
+        <!--
         <resources>
             <resource>
                 <directory>../compendiumdevapps/src/main/resources/web</directory>
@@ -69,6 +80,7 @@
                 </excludes>
             </resource>
         </resources>
+        -->
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -46,9 +46,9 @@ public class CompilationApps {
 
 
         get("/", (req, res) -> {
-            res.redirect("/index.html"); return "";});
+            res.redirect("/default.html"); return "";});
         get("", (req, res) -> {
-            res.redirect("/index.html"); return "";});
+            res.redirect("/default.html"); return "";});
 
         // All the apps compiled in one place
         CompendiumDevAppsForSpark appPages = new CompendiumDevAppsForSpark();
