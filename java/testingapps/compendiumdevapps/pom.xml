@@ -17,39 +17,26 @@
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.7.2</version>
+            <version>${spark.version}</version>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>uk.co.compendiumdev.testing.spark</groupId>
             <artifactId>sparktesting</artifactId>
-            <version>1.0.0</version>
+            <version>${sparktesting.version}</version>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
 
     <build>
-            <resources>
-                <resource>
-                    <directory>../compendiumdevapps/src/main/resources/web</directory>
-                    <excludes>
-                        <exclude>index.html</exclude>
-                    </excludes>
-                </resource>
-                <resource>
-                    <directory>../seleniumtestpages/src/main/resources/web</directory>
-                    <excludes>
-                        <exclude>index.html</exclude>
-                    </excludes>
-                </resource>
-            </resources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -60,6 +47,9 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
+
+
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>

@@ -14,12 +14,16 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>testingapp</module>
         <module>sparktesting</module>
         <module>httpabstraction</module>
-        <module>compendiumdevapps</module>
+
+        <!-- the following apps all use spark -->
         <module>seleniumtestpages</module>
+
+        <module>compendiumdevapps</module>
         <module>restlisticator</module>
         <module>thepulper</module>
+
+        <module>testingapp</module>
     </modules>
 </project>

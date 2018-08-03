@@ -1,6 +1,7 @@
 package integration.sparkprocess.server;
 
 import uk.co.compendiumdev.MainTestPages;
+import uk.co.compendiumdev.spark.app.CompendiumDevAppsForSpark;
 import uk.co.compendiumdev.sparktesting.SparkStarter;
 
 import java.net.HttpURLConnection;
@@ -44,7 +45,7 @@ public class CompendiumAppsAndGamesSparkStarter extends SparkStarter {
         // it is harder to start and stop reliably
         String[] args = {};
         MainTestPages.main(args);
-        //server = CompendiumDevAppsForSpark.runLocally(expectedPort);
+        //final CompendiumDevAppsForSpark server = CompendiumDevAppsForSpark.runLocally(4567);
     }
 
 

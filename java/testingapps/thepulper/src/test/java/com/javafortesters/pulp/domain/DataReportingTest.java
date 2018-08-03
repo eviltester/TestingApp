@@ -67,7 +67,8 @@ public class DataReportingTest {
         Assert.assertTrue("Should have title", report.contains("<title>List of Authors</title>"));
         Assert.assertTrue("Should have well formed head", report.contains("</head>"));
         Assert.assertTrue("Should have body", report.contains("<body>"));
-        Assert.assertTrue("HTML should end well", report.contains("</body></html>"));
+        Assert.assertTrue("HTML should end well", report.contains("</body>"));
+        Assert.assertTrue("HTML should end well", report.contains("</html>"));
     }
 
     @Test

@@ -25,27 +25,16 @@
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.7.2</version>
+            <version>${spark.version}</version>
         </dependency>
-        <dependency>
-            <groupId>uk.co.compendiumdev.testing.spark</groupId>
-            <artifactId>sparktesting</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.1</version>
+            <version>${gson.version}</version>
         </dependency>
 
 
@@ -56,39 +45,25 @@
             <version>1.4.10</version>
         </dependency>
 
-        <!-- java 1.9 compatability -->
-        <!--
-        https://stackoverflow.com/questions/43574426/how-to-resolve-java-lang-noclassdeffounderror-javax-xml-bind-jaxbexception-in-j
-        -->
-        <!--
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        -->
-
         <!-- lightweight xml to json conversion -->
         <!-- https://github.com/stleary/JSON-java -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20160212</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>uk.co.compendiumdev.testing.spark</groupId>
+            <artifactId>sparktesting</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
         </dependency>
 
 
@@ -106,12 +81,7 @@
             <version>1.0.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>uk.co.compendiumdev.testing.http</groupId>
-            <artifactId>httpabstraction</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <!-- thought I would need the proxy to capture raw request but found a way to use reflection in the http connection to get details sent -->
         <!--
