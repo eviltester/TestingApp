@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.html.gui.entitycrud.updatePages;
 
 import com.javafortesters.pulp.domain.objects.PulpSeries;
+import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
@@ -20,10 +21,7 @@ public class AmendSeriesPage {
 
     public String asHTMLString() {
 
-        StringBuilder pageOutput = new StringBuilder();
-
-        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
-        pageOutput.append(new PageSnippets().getDropDownMenu());
+        AppPageBuilder page = new AppPageBuilder("Amend Series");
 
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/update/edit-book-series-content.html");
 
@@ -34,9 +32,7 @@ public class AmendSeriesPage {
 
         template.replace("<!-- OUTPUT GOES HERE -->", output);
 
-        pageOutput.append(template.toString());
-        pageOutput.append(new PageSnippets().getPageFooter());
-        return pageOutput.toString();
-
+        page.appendToBody(template.toString());
+        return page.toString();
     }
 }

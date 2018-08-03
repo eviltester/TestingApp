@@ -1,8 +1,8 @@
 package com.javafortesters.pulp.html;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
-import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
 import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
@@ -68,46 +68,31 @@ public class HtmlReports {
 
     private String reportCollectionAsLiPage(Collection<String> simpleReport, String listOfWhat, String urlArg){
 
-        StringBuilder report = new StringBuilder();
+        AppPageBuilder page = new AppPageBuilder(String.format(String.format("List of %s", listOfWhat)));
 
-        report.append(new PageSnippets().getPageHead(String.format("List of %s", listOfWhat)));
-
-        report.append(new PageSnippets().getDropDownMenu());
-
-        report.append(String.format("<h1>List of %s</h1>%n", listOfWhat));
-
-        report.append(new HTMLReporter().getAsUl(simpleReport));
+        page.appendToBody(String.format("<h1>List of %s</h1>%n", listOfWhat));
+        page.appendToBody(new HTMLReporter().getAsUl(simpleReport));
 
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
 
-        report.append(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/list/%s",reportConfig.getReportPath(), urlArg, style)));
+        page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/list/%s",reportConfig.getReportPath(), urlArg, style)));
 
-        report.append(new PageSnippets().getPageFooter());
-
-
-        return report.toString();
+        return page.toString();
 
     }
 
     private String reportCollectionAsTablePage(String thingsAsTable, String things, String urlArg) {
-        StringBuilder report = new StringBuilder();
 
-        report.append(new PageSnippets().getPageHead(String.format("Table of %s", things)));
+        AppPageBuilder page = new AppPageBuilder(String.format("Table of %s", things));
 
-        report.append(new PageSnippets().getDropDownMenu());
+        page.appendToBody(String.format("<h1>Table of %s</h1>%n", things));
 
-
-        report.append(String.format("<h1>Table of %s</h1>%n", things));
-
-        report.append(thingsAsTable);
+        page.appendToBody(thingsAsTable);
 
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
-        report.append(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/table/%s",reportConfig.getReportPath() , urlArg, style)));
+        page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/table/%s",reportConfig.getReportPath() , urlArg, style)));
 
-
-        report.append(new PageSnippets().getPageFooter());
-
-        return report.toString();
+        return page.toString();
     }
 
 
@@ -126,26 +111,21 @@ public class HtmlReports {
 
     public String getSnippetPage(String title, String ... snippets){
 
-        StringBuilder report = new StringBuilder();
+        AppPageBuilder page = new AppPageBuilder(title);
 
-        report.append(new PageSnippets().getPageHead(String.format("Table of %s", title)));
+        page.appendToBody(String.format("<h1>%s</h1>%n", title));
 
-        report.append(new PageSnippets().getDropDownMenu());
-
-        report.append(String.format("<h1>%s</h1>%n", title));
 
         for(String snippet : snippets) {
             try {
-                report.append(new PageSnippets().getSnippet(snippet));
+                page.appendToBody(new PageSnippets().getSnippet(snippet));
             }catch(Exception e){
                 System.out.println("SNIPPET: " + snippet);
                 System.out.println(e.getMessage());
             }
         }
 
-        report.append(new PageSnippets().getPageFooter());
-
-        return report.toString();
+        return page.toString();
     }
 
 
@@ -164,15 +144,14 @@ public class HtmlReports {
 
 
     public String getHelpPage() {
-        StringBuilder report = new StringBuilder();
-        report.append(new PageSnippets().getPageHead(String.format("Help%n")));
-        report.append(new PageSnippets().getDropDownMenu());
+
+        AppPageBuilder page = new AppPageBuilder("Help");
 
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/content/help.html");
-        report.append(pageToRender);
 
-        report.append(new PageSnippets().getPageFooter());
+        page.appendToBody(pageToRender);
+        return page.toString();
 
-        return report.toString();
+
     }
 }

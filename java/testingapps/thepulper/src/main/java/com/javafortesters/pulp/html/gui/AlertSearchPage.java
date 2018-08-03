@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HTMLElements;
+import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
@@ -23,10 +24,7 @@ public class AlertSearchPage {
 
     public String asHTMLString(ReportConfig config) {
 
-        StringBuilder pageOutput = new StringBuilder();
-
-        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
-        pageOutput.append(new PageSnippets().getDropDownMenu());
+        AppPageBuilder page = new AppPageBuilder("Search Page");
 
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/alert-search-page-body-content.html");
 
@@ -69,10 +67,8 @@ public class AlertSearchPage {
 
         template.replace("<!-- OUTPUT GOES HERE -->", dataOutput.toString());
 
-        pageOutput.append(template.toString());
-        pageOutput.append(new PageSnippets().getPageFooter());
-
-        return pageOutput.toString();
+        page.appendToBody(template.toString());
+        return page.toString();
 
     }
 

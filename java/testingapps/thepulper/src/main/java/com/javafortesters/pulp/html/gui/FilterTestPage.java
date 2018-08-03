@@ -2,6 +2,7 @@ package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HTMLReporter;
+import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
@@ -38,10 +39,7 @@ public class FilterTestPage {
 
     public String asHTMLString() {
 
-        StringBuilder pageOutput = new StringBuilder();
-
-        pageOutput.append(new PageSnippets().getPageHead("Book Search"));
-        pageOutput.append(new PageSnippets().getDropDownMenu());
+        AppPageBuilder page = new AppPageBuilder("Filter Test Page");
 
         String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
@@ -124,9 +122,8 @@ public class FilterTestPage {
             }
         }
 
-        pageOutput.append(template.toString());
-        pageOutput.append(new PageSnippets().getPageFooter());
-        return pageOutput.toString();
+        page.appendToBody(template.toString());
+        return page.toString();
 
     }
 
