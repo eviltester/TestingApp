@@ -2,7 +2,9 @@ package com.javafortesters.pulp.html;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
+import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
+import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
@@ -161,4 +163,16 @@ public class HtmlReports {
     }
 
 
+    public String getHelpPage() {
+        StringBuilder report = new StringBuilder();
+        report.append(new PageSnippets().getPageHead(String.format("Help%n")));
+        report.append(new PageSnippets().getDropDownMenu());
+
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/content/help.html");
+        report.append(pageToRender);
+
+        report.append(new PageSnippets().getPageFooter());
+
+        return report.toString();
+    }
 }

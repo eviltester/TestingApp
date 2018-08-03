@@ -10,7 +10,7 @@ import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
 import java.util.Collection;
-import java.util.List;
+
 
 public class AmendBookPage {
     private final PulpBook book;

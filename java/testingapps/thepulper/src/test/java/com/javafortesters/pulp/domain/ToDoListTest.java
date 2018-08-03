@@ -3,7 +3,6 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      help page
     //      move all templates under v001/page-template to allow changing versions later
     //      At this point test and release a new version of the pulper and Testing Apps Compendium
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
@@ -111,4 +110,5 @@ public class ToDoListTest {
     //      Footer: copyright, links to sites, contact
     // Format footer to be a little nicer - possibly add a page header
     // put the filter tester behind an /admin url
+    // help page and shutdown menu item with alert
 }
