@@ -33,7 +33,12 @@ v1.4 - split into multiple pom.xnl
         <restlisticator.version>1-2-0</restlisticator.version>
         <seleniumtestpages.version>1-3-0</seleniumtestpages.version>
         <testingappsroot.version>1-1-0</testingappsroot.version>
+        <!-- Last release was...
         <thepulper.version>1-1-0</thepulper.version>
+        moved to 1.2 snapshot to work on a v1 to v2 toggle where v2 has ids, classes etc for automating
+        -->
+
+        <thepulper.version>1-2-0-SNAPSHOT</thepulper.version>
         <!-- 1-2-0 has the pulper with CRUD and formatting-->
         <collectedapp.version>1-2-0</collectedapp.version>
 

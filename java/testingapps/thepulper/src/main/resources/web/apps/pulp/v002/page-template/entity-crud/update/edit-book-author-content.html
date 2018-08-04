@@ -1,0 +1,39 @@
+<script type="text/javascript">
+function areYouSureYouWantToDeleteAuthor(){
+    if(confirm("Are you sure you want to delete !!AUTHORNAME!!?")){
+        return true;
+    }else{
+        return false;
+    }
+}
+</script>
+
+<h2>Amend Author</h2>
+
+<div id="amendauthorsection">
+
+    <div>
+        <form id="amendauthorform" action="author" method="post">
+
+            <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
+            <label for="authorname">Name of author</label>
+            <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="updateauthorbutton" type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
+            <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
+            <input id="deleteauthorbutton" type="submit" value="Delete"  />
+        </form>
+    </div>
+
+</div>
+
+<hr/>
+<!-- OUTPUT GOES HERE -->
+
+<hr/>
+
+<!-- FOOTER GOES HERE -->
