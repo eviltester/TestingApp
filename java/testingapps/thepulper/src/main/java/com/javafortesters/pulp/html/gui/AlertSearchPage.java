@@ -16,17 +16,22 @@ import java.util.Collection;
 public class AlertSearchPage {
 
 
+    private final String appversion;
     private String searchWhat="";
     private String searchHow="";
     private String searchTerm="";
     private boolean confirmSearch=true;
     private PulpData data;
 
+    public AlertSearchPage(String appversion){
+        this.appversion = appversion;
+    }
+
     public String asHTMLString(ReportConfig config) {
 
-        AppPageBuilder page = new AppPageBuilder("Search Page");
+        AppPageBuilder page = new AppPageBuilder("Search Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/alert-search-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/alert-search-page-body-content.html");
 
         StringBuilder dataOutput = new StringBuilder();
 

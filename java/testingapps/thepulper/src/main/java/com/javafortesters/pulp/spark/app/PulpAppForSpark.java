@@ -160,7 +160,9 @@ public class PulpAppForSpark {
             if(req.queryMap().hasKeys() && req.queryMap().value("iframe")!=null){
                 showiframe=true;
             }
-            return new FaqRenderPage(typeOfFaq, forTerm, showiframe).asHTMLString();
+
+            return pulp.page().getFaqRenderPage(typeOfFaq, forTerm, showiframe).asHTMLString();
+
         });
 
 
@@ -197,9 +199,8 @@ public class PulpAppForSpark {
 
             // TODO should be able to configure links to author, series, publisher to the Amend screen rather than a list filter
 
-            return new AlertSearchPage().setConfirmSearch(confirmSearch)
+            return pulp.page().getAlertSearchPage().setConfirmSearch(confirmSearch)
                     .setSearchTerms(what, how, forTerm)
-                    .setDataFrom(pulp.books())
                     .asHTMLString(config);
 
         });
@@ -234,11 +235,26 @@ public class PulpAppForSpark {
             boolean navigation = navigationOrStatic.equalsIgnoreCase("navigation");
 
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return new FilterTestPage(isList, navigation, canSearch, isPaginated).
-                    setFilter(filter).setData(pulp.books()).
-                    setShowData(req.queryMap().hasKeys()).
+            return pulp.page().getFilterTestPage(isList, navigation, canSearch, isPaginated).setFilter(filter).setShowData(req.queryMap().hasKeys()).
                     setShowThese(templateElements).
                     asHTMLString();
+        });
+
+        get("/apps/pulp/gui/admin/version/*", (req, res) -> {
+
+            //request.splat()[0] is version
+            try {
+                int version = Integer.parseInt(req.splat()[0]);
+                pulp.setAppVersion(version);
+            }catch(Exception e){
+                res.status(400);
+                // todo need an error page, handle 404, exceptions etc.
+                return "<h1>What version was that?</h1>";
+            }
+
+            res.redirect("/apps/pulp/gui");
+            return "";
+
         });
 
         get("/apps/pulp/gui/reports/authors/list/navigation", (req, res) -> {

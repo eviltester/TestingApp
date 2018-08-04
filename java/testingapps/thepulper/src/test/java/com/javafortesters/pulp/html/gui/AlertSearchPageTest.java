@@ -13,7 +13,7 @@ public class AlertSearchPageTest {
         PulpApp app = new PulpApp();
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
 
-        AlertSearchPage page = new AlertSearchPage();
+        AlertSearchPage page = new AlertSearchPage("v001");
 
         //System.out.println(page.asHTMLString());
 
@@ -25,7 +25,7 @@ public class AlertSearchPageTest {
         PulpApp app = new PulpApp();
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
 
-        AlertSearchPage page = new AlertSearchPage().setSearchTerms("title", "contains", "The");
+        AlertSearchPage page = new AlertSearchPage("v001").setSearchTerms("title", "contains", "The");
         page.setConfirmSearch(true);
         page.setDataFrom(app.books());
 

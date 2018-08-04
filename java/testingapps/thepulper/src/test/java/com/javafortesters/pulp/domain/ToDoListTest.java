@@ -3,9 +3,9 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      At this point test and release a new version of the pulper and Testing Apps Compendium
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
     //      move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
+    //      have template field !!Version!! in the help file
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
@@ -111,4 +111,9 @@ public class ToDoListTest {
     // put the filter tester behind an /admin url
     // help page and shutdown menu item with alert
     // moved all templates under v001/page-template to allow changing versions later
+
+    //20180804 DONE
+    //      create mechanism to choose v1.1 or v1.2 from the admin drop down
+    //      have version toggle internally
+
 }

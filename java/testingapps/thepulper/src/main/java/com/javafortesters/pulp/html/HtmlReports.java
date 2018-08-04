@@ -16,13 +16,15 @@ import java.util.Collection;
 public class HtmlReports {
     private final PulpReporter reporter;
     private final PulpData data;
+    private final String appversion;
     private ReportConfig reportConfig;
 
-    public HtmlReports(PulpData books) {
+    public HtmlReports(PulpData books, String appversion) {
         this.data = books;
         reporter = new PulpReporter(books);
         reportConfig = ReportConfig.justStrings();
         reporter.configure(reportConfig);
+        this.appversion = appversion;
     }
 
     public BookReporter bookReporter(){
@@ -68,7 +70,7 @@ public class HtmlReports {
 
     private String reportCollectionAsLiPage(Collection<String> simpleReport, String listOfWhat, String urlArg){
 
-        AppPageBuilder page = new AppPageBuilder(String.format(String.format("List of %s", listOfWhat)));
+        AppPageBuilder page = new AppPageBuilder(String.format(String.format("List of %s", listOfWhat)), appversion);
 
         page.appendToBody(String.format("<h1>List of %s</h1>%n", listOfWhat));
         page.appendToBody(new HTMLReporter().getAsUl(simpleReport));
@@ -83,7 +85,7 @@ public class HtmlReports {
 
     private String reportCollectionAsTablePage(String thingsAsTable, String things, String urlArg) {
 
-        AppPageBuilder page = new AppPageBuilder(String.format("Table of %s", things));
+        AppPageBuilder page = new AppPageBuilder(String.format("Table of %s", things), appversion);
 
         page.appendToBody(String.format("<h1>Table of %s</h1>%n", things));
 
@@ -111,14 +113,14 @@ public class HtmlReports {
 
     public String getSnippetPage(String title, String ... snippets){
 
-        AppPageBuilder page = new AppPageBuilder(title);
+        AppPageBuilder page = new AppPageBuilder(title, appversion);
 
         page.appendToBody(String.format("<h1>%s</h1>%n", title));
 
 
         for(String snippet : snippets) {
             try {
-                page.appendToBody(new PageSnippets().getSnippet(snippet));
+                page.appendToBody(new PageSnippets(appversion).getSnippet(snippet));
             }catch(Exception e){
                 System.out.println("SNIPPET: " + snippet);
                 System.out.println(e.getMessage());
@@ -145,9 +147,9 @@ public class HtmlReports {
 
     public String getHelpPage() {
 
-        AppPageBuilder page = new AppPageBuilder("Help");
+        AppPageBuilder page = new AppPageBuilder("Help", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/content/help.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/content/help.html");
 
         page.appendToBody(pageToRender);
         return page.toString();

@@ -16,10 +16,12 @@ import java.util.Collection;
 public class AmendBookPage {
     private final PulpBook book;
     private final PulpData books;
+    private final String appversion;
 
-    public AmendBookPage(final PulpData theBooks, final PulpBook abook) {
+    public AmendBookPage(final PulpData theBooks, final PulpBook abook, final String appversion) {
         this.books = theBooks;
         this.book = abook;
+        this.appversion = appversion;
     }
 
     private String output="";
@@ -30,9 +32,9 @@ public class AmendBookPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Amend Book");
+        AppPageBuilder page = new AppPageBuilder("Amend Book", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/update/edit-book-book-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/update/edit-book-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

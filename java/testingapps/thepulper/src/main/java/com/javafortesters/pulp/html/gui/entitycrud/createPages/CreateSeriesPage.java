@@ -7,7 +7,12 @@ import com.javafortesters.pulp.reader.ResourceReader;
 
 public class CreateSeriesPage {
 
+    private final String appversion;
     private String output="";
+
+    public CreateSeriesPage(final String appversion) {
+        this.appversion = appversion;
+    }
 
     public void setOutput(final String output) {
         this.output=output;
@@ -15,9 +20,9 @@ public class CreateSeriesPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Create Series");
+        AppPageBuilder page = new AppPageBuilder("Create Series", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/create/create-book-series-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/create/create-book-series-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- OUTPUT GOES HERE -->", output);
 

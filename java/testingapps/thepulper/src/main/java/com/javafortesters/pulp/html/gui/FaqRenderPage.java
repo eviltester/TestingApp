@@ -16,23 +16,25 @@ import java.util.List;
 public class FaqRenderPage {
 
     private final boolean showiframe;
+    private final String appversion;
     String searchFaqTerm = "Doc Savage";
     SearchEngine searchEngine = SearchEngine.getDefault();
     String faqsFor = "author";
 
-    public FaqRenderPage(String typeOfFaq, String forTerm, boolean showiframe) {
+    public FaqRenderPage(String typeOfFaq, String forTerm, boolean showiframe, String appversion) {
         this.searchFaqTerm=forTerm;
         faqsFor=typeOfFaq;
         this.showiframe = showiframe;
+        this.appversion = appversion;
     }
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Authors with FAQs");
+        AppPageBuilder page = new AppPageBuilder("Authors with FAQs", appversion);
 
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/faqs-page-body-content.html");
-        String iframeSection = new ResourceReader().asString("/web/apps/pulp/v001/page-template/query-iframe.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/faqs-page-body-content.html");
+        String iframeSection = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/query-iframe.html");
 
         MyTemplate pageTemplate = new MyTemplate(pageToRender);
         pageTemplate.replace("<!-- TITLE GOES HERE -->", String.format("<h1>List of FAQs for %s: %s</h1>", faqsFor, searchFaqTerm));

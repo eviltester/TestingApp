@@ -12,9 +12,11 @@ import com.javafortesters.pulp.reader.ResourceReader;
 public class CreateBookPage {
 
     private final PulpData books;
+    private final String appversion;
 
-    public CreateBookPage(final PulpData theBooks){
+    public CreateBookPage(final PulpData theBooks, final String appversion){
         this.books = theBooks;
+        this.appversion = appversion;
     }
 
     private String output="";
@@ -25,10 +27,10 @@ public class CreateBookPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Create Book");
+        AppPageBuilder page = new AppPageBuilder("Create Book", appversion);
 
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/create/create-book-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/create/create-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

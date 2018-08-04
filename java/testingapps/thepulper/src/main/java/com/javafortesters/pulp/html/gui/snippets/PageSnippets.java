@@ -5,10 +5,20 @@ import com.javafortesters.pulp.reader.ResourceReader;
 
 public class PageSnippets {
 
+
+    // e.g. v001
+    private final String appversion;
+    private final String snippetsPathPrefix;
+
+    public PageSnippets(final String appversion_template_path) {
+        this.appversion = appversion_template_path;
+        snippetsPathPrefix = String.format("/web/apps/pulp/%s/page-template/snippets/", this.appversion);
+    }
+
     public String getPageHead(String title){
         StringBuilder report = new StringBuilder();
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/page-header.html");
+        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-header.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- TITLE -->", title);
         report.append(template.toString());
@@ -26,7 +36,7 @@ public class PageSnippets {
     public String getSnippet(final String snippet) {
 
         try {
-            final String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/snippets/" + snippet);
+            final String pageToRender = new ResourceReader().asString( snippetsPathPrefix + snippet);
             final MyTemplate template = new MyTemplate(pageToRender);
             return template.toString();
         }catch(Exception e){

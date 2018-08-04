@@ -9,21 +9,23 @@ import com.javafortesters.pulp.reader.ResourceReader;
 public class AmendSeriesPage {
 
     private final PulpSeries series;
+    private final String appversion;
     private String output="";
 
     public void setOutput(final String output) {
         this.output=output;
     }
 
-    public AmendSeriesPage(PulpSeries aSeries){
+    public AmendSeriesPage(PulpSeries aSeries, final String appversion){
         this.series = aSeries;
+        this.appversion = appversion;
     }
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Amend Series");
+        AppPageBuilder page = new AppPageBuilder("Amend Series", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/update/edit-book-series-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/update/edit-book-series-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

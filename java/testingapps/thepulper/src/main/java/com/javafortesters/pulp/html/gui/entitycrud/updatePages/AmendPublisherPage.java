@@ -8,9 +8,11 @@ import com.javafortesters.pulp.reader.ResourceReader;
 
 public class AmendPublisherPage {
     private final PulpPublisher publisher;
+    private final String appversion;
 
-    public AmendPublisherPage(final PulpPublisher aPublisher) {
+    public AmendPublisherPage(final PulpPublisher aPublisher, final String appversion) {
         this.publisher = aPublisher;
+        this.appversion = appversion;
     }
 
     private String output="";
@@ -21,9 +23,9 @@ public class AmendPublisherPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Amend Publisher");
+        AppPageBuilder page = new AppPageBuilder("Amend Publisher", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/entity-crud/update/edit-book-publisher-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/update/edit-book-publisher-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
         template.replace("!!PUBLISHERID!!", publisher.getId());

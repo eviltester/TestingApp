@@ -21,6 +21,7 @@ public class FilterTestPage {
     private final boolean fieldsAreNavigable;
     private final boolean isSearch;
     private final boolean isPaginated;
+    private final String appversion;
     private BookFilter filter;
     private PulpData data;
     private boolean doReport;
@@ -29,19 +30,20 @@ public class FilterTestPage {
     private boolean showPaging;
     private boolean showFooter;
 
-    public FilterTestPage(boolean isList, boolean navigation, boolean isSearch, boolean isPaginated) {
+    public FilterTestPage(boolean isList, boolean navigation, boolean isSearch, boolean isPaginated, String appversion) {
         filter = new BookFilter();
         this.showAsList = isList;
         this.fieldsAreNavigable = navigation;
         this.isSearch = isSearch;
         this.isPaginated = isPaginated;
+        this.appversion= appversion;
     }
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Filter Test Page");
+        AppPageBuilder page = new AppPageBuilder("Filter Test Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/v001/page-template/filter-test-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
 
