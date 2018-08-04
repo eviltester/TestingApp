@@ -4,8 +4,8 @@ import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
+import com.javafortesters.pulp.html.templates.HtmlTemplates;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
-import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
@@ -75,7 +75,15 @@ public class CreateBookPage {
      * @return
      */
     private String option(final String id, final String name) {
-        return String.format("<option value='%s'>%s</option>%n", id, name);
+        MyTemplate template = new HtmlTemplates(appversion).getSelectOption();
+
+        template.replace("!!VALUE!!", id);
+        template.replace("!!TEXT!!", name);
+
+        //added in v002
+        template.replace("!!ID!!", "authorid"+id);
+
+        return template.toString();
     }
 
 }

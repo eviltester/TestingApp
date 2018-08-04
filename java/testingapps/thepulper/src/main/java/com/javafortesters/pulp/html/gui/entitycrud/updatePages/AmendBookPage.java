@@ -5,8 +5,8 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
+import com.javafortesters.pulp.html.templates.HtmlTemplates;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
-import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
@@ -57,7 +57,7 @@ public class AmendBookPage {
                 selected = true;
             }
 
-            options.append(option(author.getId(), author.getName(), selected));
+            options.append(option(author.getId(), author.getName(), "AUTHRO", selected));
         }
         // Ignore for the moment - make a multi select
         template.replaceSection("<!-- AUTHOR-ID-OPTIONS -->", options.toString());
@@ -70,7 +70,7 @@ public class AmendBookPage {
             if(book.getPublisherIndex().contentEquals(publisher.getId())){
                 selected = true;
             }
-            options.append(option(publisher.getId(), publisher.getName(), selected));
+            options.append(option(publisher.getId(), publisher.getName(), "PUBLISHER", selected));
         }
         template.replaceSection("<!-- PUBLISHER-ID-OPTIONS -->", options.toString());
 
@@ -83,7 +83,7 @@ public class AmendBookPage {
             if(book.getSeriesIndex().contentEquals(series.getId())){
                 selected = true;
             }
-            options.append(option(series.getId(), series.getName(), selected));
+            options.append(option(series.getId(), series.getName(), "SERIES",  selected));
         }
         template.replaceSection("<!-- SERIES-ID-OPTIONS -->", options.toString());
 
@@ -94,7 +94,7 @@ public class AmendBookPage {
             if(author.getId() == book.getHouseAuthorIndex()) {
                 selected = true;
             }
-            options.append(option(author.getId(), author.getName(), selected));
+            options.append(option(author.getId(), author.getName(), "HOUSEAUTHOR", selected));
         }
         template.replaceSection("<!-- HOUSE-AUTHOR-ID-OPTIONS -->", options.toString());
 
@@ -114,13 +114,22 @@ public class AmendBookPage {
         return String.format("<option value='%s'>%s</option>%n", id, name);
     }
 
-    private String option(final String id, final String name, boolean selected) {
+    private String option(final String id, final String name, String type, boolean selected) {
+
+        final HtmlTemplates templates = new HtmlTemplates(appversion);
+        MyTemplate template = new HtmlTemplates(appversion).getSelectOption();
         if(selected){
-            return String.format("<option value='%s' selected='selected\'>%s</option>%n", id, name);
-        }else{
-            return option(id, name);
+            template = new HtmlTemplates(appversion).getSelectOptionSelected();
         }
 
+        template.replace("!!VALUE!!", id);
+        template.replace("!!TEXT!!", name);
+
+        //added in v002
+        template.replace("!!ID!!", type + "id"+id);
+
+
+        return template.toString();
     }
 
 }

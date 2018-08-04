@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.reporting.reporters;
 
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
@@ -10,7 +11,6 @@ import java.util.List;
 
 public class AuthorReporter {
     private final ReportConfig reportConfig;
-    private boolean includeFaqs;
 
     public AuthorReporter(ReportConfig reportConfig) {
         this.reportConfig = new ReportConfig(reportConfig);

@@ -30,6 +30,12 @@ public class FilterTestPage {
     private boolean showPaging;
     private boolean showFooter;
 
+    /*
+
+    NOTE -
+        I haven't templated this for different app versions because this is
+        designed for exploratory testing
+     */
     public FilterTestPage(boolean isList, boolean navigation, boolean isSearch, boolean isPaginated, String appversion) {
         filter = new BookFilter();
         this.showAsList = isList;

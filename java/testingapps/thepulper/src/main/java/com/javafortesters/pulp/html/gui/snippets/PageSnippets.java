@@ -30,7 +30,14 @@ public class PageSnippets {
     }
 
     public String getPageFooter() {
-        return getSnippet("page-footer.html");
+
+        StringBuilder report = new StringBuilder();
+
+        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-footer.html");
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("<!-- VERSION -->", appversion);
+        report.append(template.toString());
+        return report.toString();
     }
 
     public String getSnippet(final String snippet) {

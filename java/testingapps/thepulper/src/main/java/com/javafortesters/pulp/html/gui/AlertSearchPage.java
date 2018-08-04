@@ -1,9 +1,8 @@
 package com.javafortesters.pulp.html.gui;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
-import com.javafortesters.pulp.html.HTMLElements;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
-import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
@@ -52,21 +51,27 @@ public class AlertSearchPage {
                 filter.titleContains(searchTerm);
             }
 
-            dataOutput.append("<div id='dataoutput'>");
 
             Collection<String> outputList = reporter.getBooksAsLines(data.books().filteredBy(filter));
 
             if(outputList.size()==0){
-                dataOutput.append("<p>No Books found Matching Search Criteria</p>");
+
+
+                dataOutput.append(new FilledHTMLTemplate(appversion).
+                                    searchResultMessage(
+                                            "No Books found Matching Search Criteria"));
+
             }else {
-                dataOutput.append(HTMLElements.startUl());
+
+                dataOutput.append("<ul>\n");
+                int line=0;
                 for (String output : outputList) {
-                    dataOutput.append(HTMLElements.getLi(output));
+                    dataOutput.append(new FilledHTMLTemplate(appversion).li(output, "bookline" + line, "booklistitem"));
+                    line++;
                 }
-                dataOutput.append(HTMLElements.endUl());
+                dataOutput.append("</ul>");
             }
 
-            dataOutput.append("</div>");
         }
 
 

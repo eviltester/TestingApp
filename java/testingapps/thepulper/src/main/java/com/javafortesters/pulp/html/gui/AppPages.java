@@ -13,6 +13,7 @@ import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendAuthorPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendPublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.updatePages.AmendSeriesPage;
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 
 public class AppPages {
     private final PulpData books;
@@ -51,7 +52,7 @@ public class AppPages {
         final PulpAuthor author = this.books.authors().get(authorId);
         final AmendAuthorPage page = new AmendAuthorPage(author, appversion);
         if(author == PulpAuthor.UNKNOWN_AUTHOR){
-            page.setOutput("<h2>ERROR: Author not found</h2>");
+            page.setOutput(new FilledHTMLTemplate(appversion).error("ERROR: Author not found"));
         }
 
         return page;
@@ -61,7 +62,7 @@ public class AppPages {
         final PulpSeries series = this.books.series().get(id);
         final AmendSeriesPage page = new AmendSeriesPage(series, appversion);
         if(series == PulpSeries.UNKNOWN_SERIES){
-            page.setOutput("<h2>ERROR: Series not found</h2>");
+            page.setOutput(new FilledHTMLTemplate(appversion).error("ERROR: Series not found"));
         }
 
         return page;
@@ -71,7 +72,7 @@ public class AppPages {
         final PulpPublisher publisher = this.books.publishers().get(id);
         final AmendPublisherPage page = new AmendPublisherPage(publisher, appversion);
         if(publisher == PulpPublisher.UNKNOWN_PUBLISHER){
-            page.setOutput("<h2>ERROR: Publisher not found</h2>");
+            page.setOutput(new FilledHTMLTemplate(appversion).error("ERROR: Publisher not found"));
         }
 
         return page;
@@ -81,7 +82,7 @@ public class AppPages {
         final PulpBook book = this.books.books().get(id);
         final AmendBookPage page = new AmendBookPage(books, book, appversion);
         if(book == PulpBook.UNKNOWN_BOOK){
-            page.setOutput("<h2>ERROR: Book not found</h2>");
+            page.setOutput(new FilledHTMLTemplate(appversion).error("ERROR: Book not found"));
         }
 
         return page;
