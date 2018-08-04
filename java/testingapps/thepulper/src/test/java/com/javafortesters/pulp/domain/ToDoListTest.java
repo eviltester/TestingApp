@@ -4,7 +4,7 @@ public class ToDoListTest {
 
     // NEXT:
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
-    //      move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
+    //      target internal HTML generation next - move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
     //      have template field !!Version!! in the help file
 
     // TODO: Basic GUI functionality

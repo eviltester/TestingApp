@@ -55,7 +55,7 @@
     <div>
         <form id="searchform" action="search" onsubmit="return areYouSureYouWantToSearch();" method="get">
             <!-- value="!!searchterm!!" to have a default search term -->
-            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!">
+            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!" required="required">
             <input type="hidden" name="what" value="title"/>
             <input type="hidden" name="how" value="contains"/>
             <input type="hidden" name="mode" value="form"/>
@@ -71,5 +71,8 @@
 
 </div>
 
-<!-- OUTPUT GOES HERE -->
+<div id='searchdataoutput'>
+    <!-- OUTPUT GOES HERE -->
+</div>
+
 <!-- FOOTER GOES HERE -->
