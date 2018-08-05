@@ -3,9 +3,11 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      ids in the dom to make automating less challenging - the aim is to support not challenge
-    //      target internal HTML generation next - move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
-    //      have template field !!Version!! in the help file
+    //      re-instate todo for all entities
+    //      add an [i] info screen where we can 'read' the information for the thing
+    //      with links to the related things eg. books published by, faq etc.
+    //      have an [i] link in the tables - configurable along with [amend]
+    //      have an admin option to configure which search engine is used for the faqs
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
@@ -115,5 +117,10 @@ public class ToDoListTest {
     //20180804 DONE
     //      create mechanism to choose v1.1 or v1.2 from the admin drop down
     //      have version toggle internally
+
+    //20180805 DONE
+    //      ids in the dom to make automating less challenging - the aim is to support not challenge
+    //      target internal HTML generation next - move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
+    //      have template field !!Version!! in the help file
 
 }
