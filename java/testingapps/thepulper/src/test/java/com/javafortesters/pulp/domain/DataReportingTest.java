@@ -49,7 +49,7 @@ public class DataReportingTest {
     public void haveBasicAppWrapperForAuthors(){
         PulpApp app = new PulpApp();
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
-        String report = app.reports().getAuthorsAsHtmlList(false);
+        String report = app.reports().getAuthorsAsHtmlList();
         System.out.println(report);
         Assert.assertTrue(report.contains("<li>Lester Dent</li>"));
     }
@@ -59,7 +59,7 @@ public class DataReportingTest {
         PulpApp app = new PulpApp();
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
         app.reports().configure(ReportConfig.justStrings("v001"));
-        String report = app.reports().getAuthorsAsHtmlList(false);
+        String report = app.reports().getAuthorsAsHtmlList();
         System.out.println(report);
 
         Assert.assertTrue("Should start as basic html",report.contains("<html>"));

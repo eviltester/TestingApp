@@ -12,10 +12,10 @@ public class ReportConfig {
     private boolean includeFaqLinks=false; // by default do not do this
     private boolean areTitlesLinks=false; // by default no
 
-    private boolean authorAmendLink = true;
-    private boolean publisherAmendLink=true;
+    private boolean authorAmendLink = false;
+    private boolean publisherAmendLink=false;
     private boolean bookAmendLink=false;
-    private boolean seriesAmendLink=true;
+    private boolean seriesAmendLink=false;
 
 
     // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
@@ -41,6 +41,7 @@ public class ReportConfig {
         this.publisherAmendLink = reportConfig.arePublisherAmendLinksShown();
         this.bookAmendLink = reportConfig.areBookAmendLinksShown();
         this.seriesAmendLink = reportConfig.areSeriesAmendLinksShown();
+        this.includeFaqLinks = reportConfig.includeFaqLinks();
     }
 
     public String getAppVersion() {

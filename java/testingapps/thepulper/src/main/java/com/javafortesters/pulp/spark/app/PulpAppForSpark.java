@@ -127,12 +127,30 @@ public class PulpAppForSpark {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
 
+            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
+                config.setIncludeFaqLinks(true);
+            }else{
+                config.setIncludeFaqLinks(false);
+            }
+
             config.showAmendLinks(false);
             config.showBookAmendLink(true);
 
             // TODO if filtered at all then show authors, publishers, series and years as links
 
-            config.setTitlesAreLinks(true); // TODO if I switch this off then I don't see amend, I would like to switch this off and see amend
+            config.setTitlesAreLinks(true);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
+        });
+
+        get("/apps/pulp/gui/reports/books/list/navigation/faqs", (req, res) -> {
+
+            BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            config.setIncludeFaqLinks(true);
+            config.showAmendLinks(false);
+            config.setTitlesAreLinks(false);
+
             return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
 
@@ -270,35 +288,111 @@ public class PulpAppForSpark {
         });
 
         get("/apps/pulp/gui/reports/authors/list/navigation", (req, res) -> {
-            boolean includeFaqs = false;
-            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
-                includeFaqs=true;
-            }
+
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
+                config.setIncludeFaqLinks(true);
+            }else{
+                config.setIncludeFaqLinks(false);
+            }
+
             config.showAmendLinks(true);
             config.setAuthorNamesLinks(true);
-            return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList(includeFaqs);
+
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
+        });
+
+        get("/apps/pulp/gui/reports/authors/list/navigation/faqs", (req, res) -> {
+
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            config.setIncludeFaqLinks(true);
+            config.showAmendLinks(false);
+            config.setTitlesAreLinks(false);
+
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/publishers/list/navigation", (req, res) -> {
+
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
+                config.setIncludeFaqLinks(true);
+            }else{
+                config.setIncludeFaqLinks(false);
+            }
+
             config.showAmendLinks(true);
             config.setPublisherNamesLinks(true);
-            return pulp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();});
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
+        });
+
+        get("/apps/pulp/gui/reports/publishers/list/navigation/faqs", (req, res) -> {
+
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            config.setIncludeFaqLinks(true);
+            config.showAmendLinks(false);
+            config.setTitlesAreLinks(false);
+
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
+        });
 
         get("/apps/pulp/gui/reports/years/list/navigation", (req, res) -> {
+
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
+                config.setIncludeFaqLinks(true);
+            }else{
+                config.setIncludeFaqLinks(false);
+            }
+
             config.showAmendLinks(false);
             config.setYearsAsLinks(true);
-            return pulp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();});
+
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
+        });
+
+        get("/apps/pulp/gui/reports/years/list/navigation/faqs", (req, res) -> {
+
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            config.setIncludeFaqLinks(true);
+            config.showAmendLinks(false);
+            config.setTitlesAreLinks(false);
+
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
+        });
 
         get("/apps/pulp/gui/reports/series/list/navigation", (req, res) -> {
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
+                config.setIncludeFaqLinks(true);
+            }else{
+                config.setIncludeFaqLinks(false);
+            }
+
             config.showAmendLinks(true);
             config.setSeriesNamesLinks(true);
-            return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();});
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
+        });
 
-        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> { return pulp.stringReports().getAuthorsAsHtmlList(false);});
+        get("/apps/pulp/gui/reports/series/list/navigation/faqs", (req, res) -> {
+
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
+            config.setIncludeFaqLinks(true);
+            config.showAmendLinks(false);
+
+            config.setTitlesAreLinks(false);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
+        });
+
+        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> { return pulp.stringReports().getAuthorsAsHtmlList();});
         get("/apps/pulp/gui/reports/publishers/list/static", (req, res) -> { return pulp.stringReports().getPublishersAsHtmlList();});
         get("/apps/pulp/gui/reports/years/list/static", (req, res) -> { return pulp.stringReports().getYearsAsHtmlList();});
         get("/apps/pulp/gui/reports/series/list/static", (req, res) -> { return pulp.stringReports().getSeriesNamesAsHtmlList();});
@@ -311,6 +405,9 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/help", (req, res) -> { return pulp.reports().getHelpPage();});
         get("/apps/pulp/gui/menu/books", (req, res) -> { return pulp.reports().getSnippetPage("Books Menu", "menu-screen-books-reports-list.html");});
         get("/apps/pulp/gui/menu/authors", (req, res) -> { return pulp.reports().getSnippetPage("Authors Menu", "menu-screen-authors-reports-list.html");});
+        get("/apps/pulp/gui/menu/publishers", (req, res) -> { return pulp.reports().getSnippetPage("Publishers Menu", "menu-screen-publishers-reports-list.html");});
+        get("/apps/pulp/gui/menu/series", (req, res) -> { return pulp.reports().getSnippetPage("Series Menu", "menu-screen-series-reports-list.html");});
+        get("/apps/pulp/gui/menu/years", (req, res) -> { return pulp.reports().getSnippetPage("Years Menu", "menu-screen-years-reports-list.html");});
         get("/apps/pulp/gui/menu/create", (req, res) -> { return pulp.reports().getSnippetPage("Create Menu", "menu-screen-create.html");});
         get("/apps/pulp/gui/menu/reports", (req, res) -> { return pulp.reports().getSnippetPage("Reports Menu", "menu-screen-static-reports.html");});
         get("/apps/pulp/gui/menu/admin", (req, res) -> { return pulp.reports().getSnippetPage("Admin Menu", "menu-screen-admin.html");});

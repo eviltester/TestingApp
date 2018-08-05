@@ -2,6 +2,7 @@ package com.javafortesters.pulp.reporting.reporters;
 
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.ArrayList;
@@ -26,10 +27,22 @@ public class PublisherReporter {
     }
 
     public String getPublisher(PulpPublisher item) {
-        if(reportConfig!=null && reportConfig.arePublishersLinks()){
-            String name = String.format("<a href='%s?publisher=%s'>%s</a>",
-                    reportConfig.getReportPath("books"), item.getId(), item.getName());
-            name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
+
+        final String defaultNameOutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-name-%s", item.getId()), item.getName());
+
+        if(reportConfig!=null){
+            String faqs="";
+            if(reportConfig.includeFaqLinks()) {
+                faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"publisher/faqs", MyUrlEncoder.encode(item.getName()));
+                faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-faqs-%s", item.getId()), faqs);
+            }
+
+            String name = defaultNameOutput;
+            if(reportConfig.arePublishersLinks()){
+                name = String.format("<a href='%s?publisher=%s'>%s</a>",
+                        reportConfig.getReportPath("books"), item.getId(), item.getName());
+                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
+            }
 
             String amend="";
             if(reportConfig.arePublisherAmendLinksShown()) {
@@ -37,11 +50,12 @@ public class PublisherReporter {
                         reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-amend-%s", item.getId()), amend);
             }
+
 //            final String delete = String.format("[<a href='%s%s' alt='Delete'>x</a>]",
 //                                reportConfig.withoutPostLink().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
-            return name + " " + amend;
+            return name + " " + faqs + " " + amend;
         }else{
-            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-name-%s", item.getId()), item.getName());
+            return defaultNameOutput;
         }
     }
 }

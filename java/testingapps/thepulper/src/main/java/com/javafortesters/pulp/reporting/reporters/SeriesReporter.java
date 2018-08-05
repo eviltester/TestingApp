@@ -2,6 +2,7 @@ package com.javafortesters.pulp.reporting.reporters;
 
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.*;
@@ -26,9 +27,23 @@ public class SeriesReporter {
     }
 
     public String getSeries(PulpSeries item) {
-        if(reportConfig!=null && reportConfig.areSeriesNamesLinks()){
-            String name =  String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(),item.getName());
-            name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);
+
+        final String defaultSeriesOutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-name-%s", item.getId()), item.getName());
+
+        if(reportConfig!=null){
+
+            String faqs="";
+            if(reportConfig.includeFaqLinks()) {
+                faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"series/faqs", MyUrlEncoder.encode(item.getName()));
+                faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-faqs-%s", item.getId()), faqs);
+            }
+
+
+            String name = defaultSeriesOutput;
+            if(reportConfig.areSeriesNamesLinks()) {
+                name = String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
+                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);
+            }
 
             String amend="";
             if(reportConfig.areSeriesAmendLinksShown()) {
@@ -37,9 +52,9 @@ public class SeriesReporter {
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-amend-%s", item.getId()), amend);
             }
 
-            return name + " " + amend;
+            return name + " " + faqs + " " + amend;
         }else{
-            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-name-%s", item.getId()), item.getName());
+            return defaultSeriesOutput;
         }
     }
 }

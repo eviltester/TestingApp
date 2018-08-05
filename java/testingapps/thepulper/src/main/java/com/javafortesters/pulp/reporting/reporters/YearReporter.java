@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.reporting.reporters;
 
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.ArrayList;
@@ -15,11 +16,27 @@ public class YearReporter {
     }
 
     public String getYear(int publicationYear) {
-        if(reportConfig!=null && reportConfig.areYearsLinks()){
-            String yearlink = String.format("<a href='%s?year=%d'>%d</a>", reportConfig.getReportPath("books"), publicationYear, publicationYear);
-            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-link-%d", publicationYear), yearlink);
+
+        final String defaultYearOutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-%d", publicationYear), String.valueOf(publicationYear));
+
+        if(reportConfig!=null){
+
+            String faqs="";
+            if(reportConfig.includeFaqLinks()) {
+                faqs = String.format(" [<a href='%s%s?searchterm=%d'>faqs</a>]", reportConfig.getReportPath(),"year/faqs", publicationYear);
+                faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-faqs-%d", publicationYear), faqs);
+            }
+
+            String yearlink = defaultYearOutput;
+            if(reportConfig.areYearsLinks()) {
+                yearlink = String.format("<a href='%s?year=%d'>%d</a>", reportConfig.getReportPath("books"), publicationYear, publicationYear);
+                yearlink = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-link-%d", publicationYear), yearlink);
+            }
+
+            return yearlink + " " + faqs;
+
         }else{
-            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-%d", publicationYear), String.valueOf(publicationYear));
+            return defaultYearOutput;
         }
     }
 

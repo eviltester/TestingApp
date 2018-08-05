@@ -13,13 +13,10 @@ public class AuthorReporter {
     private final ReportConfig reportConfig;
 
     public AuthorReporter(ReportConfig reportConfig) {
+        // TODO:this is a slightly different setup than other reports - they assign the reportConfig , rather than a copy - I kind of prefer copy, but which should we decide on?
         this.reportConfig = new ReportConfig(reportConfig);
     }
 
-    public AuthorReporter(ReportConfig reportConfig, boolean includeFaqLinks) {
-        this.reportConfig = new ReportConfig(reportConfig);
-        this.reportConfig.setIncludeFaqLinks(includeFaqLinks);
-    }
 
     public Collection<String> getAsStrings(Collection<PulpAuthor> authors) {
         List<String> report = new ArrayList<>();
@@ -34,16 +31,21 @@ public class AuthorReporter {
 
     public String getAuthorName(PulpAuthor author) {
 
-        if(reportConfig!=null && reportConfig.areAuthorNamesLinks()){
+        final String defaultNameOutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-name-%s", author.getId()), author.getName());
+
+        if(reportConfig!=null){
+
             String faqs="";
             if(reportConfig.includeFaqLinks()) {
                  faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"author/faqs", MyUrlEncoder.encode(author.getName()));
                  faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-faqs-%s", author.getId()), faqs);
             }
 
-
-            String name =  String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
-            name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
+            String name = defaultNameOutput;
+            if(reportConfig.areAuthorNamesLinks()) {
+                name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
+                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
+            }
 
             String amend="";
             if(reportConfig.areAuthorAmendLinksShown()) {
@@ -55,7 +57,7 @@ public class AuthorReporter {
             return name + " "  + faqs + " " + amend;
 
         }else{
-            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-name-%s", author.getId()), author.getName());
+            return defaultNameOutput;
         }
 
     }

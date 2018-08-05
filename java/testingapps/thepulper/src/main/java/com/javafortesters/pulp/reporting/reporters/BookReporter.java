@@ -5,6 +5,7 @@ import com.javafortesters.pulp.domain.groupings.PulpPublishers;
 import com.javafortesters.pulp.domain.groupings.PulpSeriesCollection;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.*;
@@ -112,11 +113,24 @@ public class BookReporter {
     }
 
     public String getTitle(PulpBook book){
-            if(reportConfig!=null && reportConfig.areTitlesLinks()){
 
-                final String title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+        String defaultTitle = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), book.getTitle());
 
-                String titleoutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);
+            if(reportConfig!=null){
+
+                String faqs="";
+                if(reportConfig.includeFaqLinks()) {
+                    faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"book/faqs", MyUrlEncoder.encode(book.getTitle()));
+                    faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book-faqs-%s", book.getId()), faqs);
+                }
+
+                String title = "";
+                if(reportConfig.areTitlesLinks()){
+                    title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+                    title = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);
+                }else{
+                    title = defaultTitle;
+                }
 
                 String amend = "";
 
@@ -129,10 +143,10 @@ public class BookReporter {
                 }
 
 
+                return title + " " + faqs + " " + amend;
 
-                return titleoutput + " " + amend;
             }else{
-                return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), book.getTitle());
+                return defaultTitle;
 
             }
     }

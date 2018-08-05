@@ -52,8 +52,8 @@ public class HtmlReports {
     }
 
     // TODO: this is all getting very hacky - refactor this into the reporter config and allow local adjustments from urls
-    public String getAuthorsAsHtmlList(boolean includeFaqs) {
-        return reportCollectionAsLiPage(reporter.getAuthorsAsStrings(includeFaqs), "Authors", "authors");
+    public String getAuthorsAsHtmlList() {
+        return reportCollectionAsLiPage(reporter.getAuthorsAsStrings(), "Authors", "authors");
     }
 
     public String getPublishersAsHtmlList() {
@@ -107,9 +107,7 @@ public class HtmlReports {
                             "menu-screen-authors-reports-list.html",
                             "menu-screen-series-publisher-etc-list.html",
                             "menu-screen-search.html",
-                            "menu-screen-create.html",
-                            "menu-screen-static-reports.html",
-                            "menu-screen-admin.html"
+                            "menu-screen-create.html"
                 );
     }
 

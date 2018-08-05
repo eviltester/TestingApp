@@ -24,8 +24,8 @@ public class PulpReporter {
         return reporter.getBooksAsLines(data.books().getAll());
     }
 
-    public Collection<String> getAuthorsAsStrings(boolean includeFaqs) {
-        AuthorReporter aReporter = new AuthorReporter(reportConfig, includeFaqs);
+    public Collection<String> getAuthorsAsStrings() {
+        AuthorReporter aReporter = new AuthorReporter(reportConfig);
         return aReporter.getAsStrings(data.authors().getAllOrderedByName());
     }
 

@@ -3,11 +3,12 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      re-instate todo for all entities
     //      add an [i] info screen where we can 'read' the information for the thing
     //      with links to the related things eg. books published by, faq etc.
     //      have an [i] link in the tables - configurable along with [amend]
     //      have an admin option to configure which search engine is used for the faqs
+    //      incorporate DELETE into lists for version 002
+
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
@@ -19,7 +20,6 @@ public class ToDoListTest {
 
 
     // # DELETE
-    // - incorporate into lists
 
     // # TODO: READ
 
@@ -122,5 +122,7 @@ public class ToDoListTest {
     //      ids in the dom to make automating less challenging - the aim is to support not challenge
     //      target internal HTML generation next - move as much out into templates as possible so that they can be versioned and have different looking apps with a version toggle
     //      have template field !!Version!! in the help file
+    //      re-instated faq for all entities and made list rendering a little more configurable, added some year FAQs and some more FAQs
+
 
 }
