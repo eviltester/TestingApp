@@ -4,6 +4,7 @@ import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpPublishers;
 import com.javafortesters.pulp.domain.groupings.PulpSeriesCollection;
 import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.*;
@@ -33,8 +34,8 @@ public class BookReporter {
         this.authorReporter = new AuthorReporter(reportConfig);
     }
 
-    public static BookReporter getEmpty() {
-        return new BookReporter(ReportConfig.justStrings(), new PulpAuthors(), new PulpPublishers(), new PulpSeriesCollection());
+    public static BookReporter getEmpty(String appversion) {
+        return new BookReporter(ReportConfig.justStrings(appversion), new PulpAuthors(), new PulpPublishers(), new PulpSeriesCollection());
     }
 
     public AuthorReporter getAuthorReporter(){
@@ -92,7 +93,7 @@ public class BookReporter {
     public String getBooksAsTable(List<PulpBook> books) {
         StringBuilder table=new StringBuilder();
 
-        table.append("<table>");
+        table.append(new FilledHTMLTemplate(reportConfig.getAppVersion()).table("bookslisttable"));
 
         table.append("<tr>");
         table.append("<th>Title</th>");
@@ -112,17 +113,27 @@ public class BookReporter {
 
     public String getTitle(PulpBook book){
             if(reportConfig!=null && reportConfig.areTitlesLinks()){
+
                 final String title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+
+                String titleoutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);
+
                 String amend = "";
 
                 if(reportConfig.areBookAmendLinksShown()) {
+
                     amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
                             reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/book?book="), book.getId());
+
+                    amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span("amendbook" + book.getId(), amend );
                 }
 
-                return title + " " + amend;
+
+
+                return titleoutput + " " + amend;
             }else{
-                return book.getTitle();
+                return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), book.getTitle());
+
             }
     }
 

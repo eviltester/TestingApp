@@ -23,7 +23,7 @@ public class DataReportingTest {
         populator.populateFrom(reader);
 
 
-        PulpReporter reporter = new PulpReporter(books);
+        PulpReporter reporter = new PulpReporter(books, "v001");
 
         Collection<String> simpleReport = reporter.getBooksAsStrings();
 
@@ -58,7 +58,7 @@ public class DataReportingTest {
     public void simpleReportHasBasicHtmlStructure(){
         PulpApp app = new PulpApp();
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
-        app.reports().configure(ReportConfig.justStrings());
+        app.reports().configure(ReportConfig.justStrings("v001"));
         String report = app.reports().getAuthorsAsHtmlList(false);
         System.out.println(report);
 

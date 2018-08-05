@@ -2,6 +2,7 @@ package com.javafortesters.pulp.reporting;
 
 
 public class ReportConfig {
+    private String appversion;
     private boolean areAuthorNamesLinks;
     private boolean areYearsLinks;
     private boolean arePublisherNamesLinks;
@@ -18,7 +19,8 @@ public class ReportConfig {
 
 
     // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
-    public ReportConfig(boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
+    public ReportConfig(String appversion, boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
+        this.appversion = appversion;
         this.areAuthorNamesLinks = areAuthorNamesLinks;
         this.areYearsLinks = areYearsLinks;
         this.arePublisherNamesLinks = arePublisherNamesLinks;
@@ -27,6 +29,7 @@ public class ReportConfig {
     }
 
     public ReportConfig(ReportConfig reportConfig) {
+        this.appversion = reportConfig.getAppVersion();
         this.areAuthorNamesLinks = reportConfig.areAuthorNamesLinks();
         this. areYearsLinks = reportConfig.areYearsLinks();
         this. arePublisherNamesLinks = reportConfig.arePublishersLinks();
@@ -40,21 +43,23 @@ public class ReportConfig {
         this.seriesAmendLink = reportConfig.areSeriesAmendLinksShown();
     }
 
+    public String getAppVersion() {
+        return appversion;
+    }
+
     private String getLinksPostFix() {
         return linksPostFix;
     }
 
-    public static ReportConfig justStrings() {
+    public static ReportConfig justStrings(String appversion) {
 
-        return new ReportConfig(false, false, false, false, false);
+        return new ReportConfig(appversion, false, false, false, false, false);
     }
 
-
-    public static ReportConfig allHTML(String reportPath) {
-        ReportConfig config = new ReportConfig(true, true, true, true, true);
-        config.reportPath = reportPath;
-        return config;
+    public void setReportPath(String reportPath){
+        this.reportPath = reportPath;
     }
+
 
     public boolean areAuthorNamesLinks() {
         return areAuthorNamesLinks;
@@ -164,4 +169,16 @@ public class ReportConfig {
         return publisherAmendLink;
     }
 
+    public void setAuthorNamesLinks(final boolean arelinks) {
+        areAuthorNamesLinks = arelinks;
+    }
+    public void setPublisherNamesLinks(final boolean arelinks) {
+        arePublisherNamesLinks = arelinks;
+    }
+    public void setYearsAsLinks(final boolean arelinks) {
+        areYearsLinks = arelinks;
+    }
+    public void setSeriesNamesLinks(final boolean arelinks) {
+        areSeriesNamesLinks = arelinks;
+    }
 }

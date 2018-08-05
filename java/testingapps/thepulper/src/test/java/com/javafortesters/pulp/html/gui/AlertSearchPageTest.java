@@ -17,7 +17,7 @@ public class AlertSearchPageTest {
 
         //System.out.println(page.asHTMLString());
 
-        Assert.assertNotEquals("",page.asHTMLString(ReportConfig.allHTML("/app")));
+        Assert.assertNotEquals("",page.asHTMLString(ReportConfig.justStrings("v001")));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class AlertSearchPageTest {
         page.setConfirmSearch(true);
         page.setDataFrom(app.books());
 
-        String pageToRender = page.asHTMLString(ReportConfig.allHTML("/app"));
+        String pageToRender = page.asHTMLString(ReportConfig.justStrings("v001"));
         System.out.println(pageToRender);
 
         Assert.assertNotEquals("",pageToRender);

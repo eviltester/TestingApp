@@ -89,16 +89,16 @@ public class FilterTestPage {
         Collection<String> books = new ArrayList<>();
 
         if(data!=null){
-            ReportConfig config = ReportConfig.justStrings();
+            ReportConfig config = ReportConfig.justStrings(appversion);
 
             if(fieldsAreNavigable){
-                config = ReportConfig.allHTML( "/apps/pulp/gui/reports/");
+                config = new ReportConfig(appversion, true, true, true, true, true);
             }
 
             BookReporter reporter = new BookReporter(config, data.authors(), data.publishers(), data.series());
             books = reporter.getBooksAsLines(data.books().filteredBy(filter));
             if(showAsList){
-                booksOutput = new HTMLReporter().getAsUl(books);
+                booksOutput = new HTMLReporter(appversion).getAsUl(books, "filtered-bookslist");
             }else{
                 booksOutput = reporter.getBooksAsTable(data.books().filteredBy(filter));
             }

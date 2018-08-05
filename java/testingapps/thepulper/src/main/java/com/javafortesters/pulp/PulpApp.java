@@ -50,4 +50,12 @@ public class PulpApp {
         return new AppPages(books, appversion);
 
     }
+
+    public String getAppVersion() {
+        return appversion;
+    }
+
+    public HtmlReports stringReports() {
+        return reports(ReportConfig.justStrings(appversion));
+    }
 }

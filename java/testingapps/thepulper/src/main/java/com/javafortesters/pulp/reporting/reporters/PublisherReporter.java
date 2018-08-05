@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.reporting.reporters;
 
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.ArrayList;
@@ -26,19 +27,21 @@ public class PublisherReporter {
 
     public String getPublisher(PulpPublisher item) {
         if(reportConfig!=null && reportConfig.arePublishersLinks()){
-            final String name = String.format("<a href='%s?publisher=%s'>%s</a>",
+            String name = String.format("<a href='%s?publisher=%s'>%s</a>",
                     reportConfig.getReportPath("books"), item.getId(), item.getName());
+            name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
 
             String amend="";
             if(reportConfig.arePublisherAmendLinksShown()) {
                 amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
                         reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
+                amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-amend-%s", item.getId()), amend);
             }
 //            final String delete = String.format("[<a href='%s%s' alt='Delete'>x</a>]",
 //                                reportConfig.withoutPostLink().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
             return name + " " + amend;
         }else{
-            return item.getName();
+            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-name-%s", item.getId()), item.getName());
         }
     }
 }

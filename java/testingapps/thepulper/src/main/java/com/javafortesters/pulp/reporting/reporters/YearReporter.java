@@ -1,5 +1,6 @@
 package com.javafortesters.pulp.reporting.reporters;
 
+import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.reporting.ReportConfig;
 
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ public class YearReporter {
 
     public String getYear(int publicationYear) {
         if(reportConfig!=null && reportConfig.areYearsLinks()){
-            return String.format("<a href='%s?year=%d'>%d</a>", reportConfig.getReportPath("books"), publicationYear, publicationYear);
+            String yearlink = String.format("<a href='%s?year=%d'>%d</a>", reportConfig.getReportPath("books"), publicationYear, publicationYear);
+            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-link-%d", publicationYear), yearlink);
         }else{
-            return String.valueOf(publicationYear);
+            return new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-%d", publicationYear), String.valueOf(publicationYear));
         }
     }
 

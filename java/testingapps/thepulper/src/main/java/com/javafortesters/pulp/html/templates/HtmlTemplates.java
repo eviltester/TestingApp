@@ -65,11 +65,41 @@ public class HtmlTemplates {
     }
 
     public MyTemplate getNamedNewTabLink() {
-        String templateString ="<a target='_blank' href='≈!!HREF!!'>!!LINKTEXT!!</a>";
+        String templateString ="<a target='_blank' href='!!HREF!!'>!!LINKTEXT!!</a>";
 
 
         if(appversion.contentEquals("v002")){
-            templateString="<a name='!!NAME!!' target='_blank' rel='noreferrer' href='≈!!HREF!!'>!!LINKTEXT!!</a>";
+            templateString="<a name='!!NAME!!' target='_blank' rel='noreferrer' href='!!HREF!!'>!!LINKTEXT!!</a>";
+        }
+
+        return new MyTemplate(templateString);
+    }
+
+    public MyTemplate getTableTag() {
+        String templateString = "<table>";
+
+        if(appversion.contentEquals("v002")){
+            templateString = "<table id='!!ID!!' name='!!NAME!!'>";
+        }
+
+        return new MyTemplate(templateString);
+    }
+
+    public MyTemplate getSpanTag() {
+        String templateString = "!!TEXT!!";  // don't actually output the span
+
+        if(appversion.contentEquals("v002")){
+            templateString = "<span id='!!ID!!'>!!TEXT!!</span>";
+        }
+
+        return new MyTemplate(templateString);
+    }
+
+    public MyTemplate getUlTag() {
+        String templateString = "<ul>";  // don't actually output the span
+
+        if(appversion.contentEquals("v002")){
+            templateString = "<ul id='!!ID!!'>";
         }
 
         return new MyTemplate(templateString);

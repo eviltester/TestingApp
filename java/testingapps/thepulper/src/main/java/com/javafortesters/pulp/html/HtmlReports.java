@@ -21,10 +21,12 @@ public class HtmlReports {
 
     public HtmlReports(PulpData books, String appversion) {
         this.data = books;
-        reporter = new PulpReporter(books);
-        reportConfig = ReportConfig.justStrings();
-        reporter.configure(reportConfig);
         this.appversion = appversion;
+        reporter = new PulpReporter(books, appversion);
+
+        reportConfig = ReportConfig.justStrings(appversion);
+        reporter.configure(reportConfig);
+
     }
 
     public BookReporter bookReporter(){
@@ -73,7 +75,7 @@ public class HtmlReports {
         AppPageBuilder page = new AppPageBuilder(String.format(String.format("List of %s", listOfWhat)), appversion);
 
         page.appendToBody(String.format("<h1>List of %s</h1>%n", listOfWhat));
-        page.appendToBody(new HTMLReporter().getAsUl(simpleReport));
+        page.appendToBody(new HTMLReporter(appversion).getAsUl(simpleReport, listOfWhat));
 
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
 

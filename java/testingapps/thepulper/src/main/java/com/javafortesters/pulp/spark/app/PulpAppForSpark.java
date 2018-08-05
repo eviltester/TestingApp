@@ -27,7 +27,6 @@ public class PulpAppForSpark {
         pulp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
         pulp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
 
-        pulp.reports().configure(ReportConfig.allHTML("/apps/pulp/gui/reports/"));
 
         get("/apps/pulp/gui/create/author", (req, res) -> {
             return pulp.page().createAuthorPage().asHTMLString();
@@ -124,17 +123,24 @@ public class PulpAppForSpark {
         });
 
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
+
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
             config.showAmendLinks(false);
             config.showBookAmendLink(true);
+
+            // TODO if filtered at all then show authors, publishers, series and years as links
+
             config.setTitlesAreLinks(true); // TODO if I switch this off then I don't see amend, I would like to switch this off and see amend
             return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
+
         get("/apps/pulp/gui/reports/books/list/static", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return pulp.reports(ReportConfig.justStrings()).getBooksAsHtmlList(filter);
+            return pulp.stringReports().getBooksAsHtmlList(filter);
         });
+
         get("/apps/pulp/gui/reports/books/table/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
@@ -143,9 +149,10 @@ public class PulpAppForSpark {
             config.setTitlesAreLinks(true);
             return pulp.reports(config).configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
         });
+
         get("/apps/pulp/gui/reports/books/table/static", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return pulp.reports(ReportConfig.justStrings()).getBooksAsHtmlTable(filter);
+            return pulp.stringReports().getBooksAsHtmlTable(filter);
         });
 
         get("/apps/pulp/gui/reports/:type/faqs", (req, res) -> {
@@ -196,6 +203,11 @@ public class PulpAppForSpark {
             ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
             config.setPostFixPath("/list/navigation");
             config.showAmendLinks(false);
+            config.setTitlesAreLinks(true);
+            config.setYearsAsLinks(true);
+            config.setSeriesNamesLinks(true);
+            config.setPublisherNamesLinks(true);
+            config.setAuthorNamesLinks(true);
 
             // TODO should be able to configure links to author, series, publisher to the Amend screen rather than a list filter
 
@@ -262,17 +274,34 @@ public class PulpAppForSpark {
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 includeFaqs=true;
             }
-            return pulp.reports().configurePostFixPath("/list/navigation").getAuthorsAsHtmlList(includeFaqs);
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(true);
+            config.setAuthorNamesLinks(true);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList(includeFaqs);
         });
 
-        get("/apps/pulp/gui/reports/publishers/list/navigation", (req, res) -> { return pulp.reports().configurePostFixPath("/list/navigation").getPublishersAsHtmlList();});
-        get("/apps/pulp/gui/reports/years/list/navigation", (req, res) -> { return pulp.reports().configurePostFixPath("/list/navigation").getYearsAsHtmlList();});
-        get("/apps/pulp/gui/reports/series/list/navigation", (req, res) -> { return pulp.reports().configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();});
+        get("/apps/pulp/gui/reports/publishers/list/navigation", (req, res) -> {
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(true);
+            config.setPublisherNamesLinks(true);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();});
 
-        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> { return pulp.reports(ReportConfig.justStrings()).getAuthorsAsHtmlList(false);});
-        get("/apps/pulp/gui/reports/publishers/list/static", (req, res) -> { return pulp.reports(ReportConfig.justStrings()).getPublishersAsHtmlList();});
-        get("/apps/pulp/gui/reports/years/list/static", (req, res) -> { return pulp.reports(ReportConfig.justStrings()).getYearsAsHtmlList();});
-        get("/apps/pulp/gui/reports/series/list/static", (req, res) -> { return pulp.reports(ReportConfig.justStrings()).getSeriesNamesAsHtmlList();});
+        get("/apps/pulp/gui/reports/years/list/navigation", (req, res) -> {
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(false);
+            config.setYearsAsLinks(true);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();});
+
+        get("/apps/pulp/gui/reports/series/list/navigation", (req, res) -> {
+            final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+            config.showAmendLinks(true);
+            config.setSeriesNamesLinks(true);
+            return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();});
+
+        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> { return pulp.stringReports().getAuthorsAsHtmlList(false);});
+        get("/apps/pulp/gui/reports/publishers/list/static", (req, res) -> { return pulp.stringReports().getPublishersAsHtmlList();});
+        get("/apps/pulp/gui/reports/years/list/static", (req, res) -> { return pulp.stringReports().getYearsAsHtmlList();});
+        get("/apps/pulp/gui/reports/series/list/static", (req, res) -> { return pulp.stringReports().getSeriesNamesAsHtmlList();});
 
 
         get("/apps/pulp/", (req, res) -> { return pulp.reports().getIndexPage();});

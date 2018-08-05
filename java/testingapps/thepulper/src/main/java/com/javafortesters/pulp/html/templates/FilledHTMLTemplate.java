@@ -38,4 +38,25 @@ public class FilledHTMLTemplate {
         return template.toString();
 
     }
+
+    public String table(final String bookslisttable) {
+        MyTemplate template = new HtmlTemplates(appversion).getTableTag();
+        template.replace("!!ID!!", bookslisttable);
+        template.replace("!!NAME!!", bookslisttable);
+        return template.toString();
+
+    }
+
+    public String span(final String id, final String text) {
+        MyTemplate template = new HtmlTemplates(appversion).getSpanTag();
+        template.replace("!!ID!!", id);
+        template.replace("!!TEXT!!", text);
+        return template.toString();
+    }
+
+    public String ul(final String id) {
+        MyTemplate template = new HtmlTemplates(appversion).getUlTag();
+        template.replace("!!ID!!", id);
+        return template.toString();
+    }
 }

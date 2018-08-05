@@ -10,9 +10,9 @@ public class PulpReporter {
     BookReporter reporter;
     private ReportConfig reportConfig;
 
-    public PulpReporter(PulpData books) {
+    public PulpReporter(PulpData books, String appversion) {
         this.data = books;
-        configure(ReportConfig.justStrings());
+        configure(ReportConfig.justStrings(appversion));
     }
 
     public PulpData data() {
