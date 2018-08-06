@@ -6,9 +6,11 @@ public class ToDoListTest {
     //      add an [i] info screen where we can 'read' the information for the thing
     //      with links to the related things eg. books published by, faq etc.
     //      have an [i] link in the tables - configurable along with [amend]
+    //      add pagination to lists
+
+    //  v3
     //      have an admin option to configure which search engine is used for the faqs
-
-
+    //      admin option to configure pagination settings
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
@@ -18,19 +20,15 @@ public class ToDoListTest {
 
     // # AMEND
 
-
     // # DELETE
 
     // # TODO: READ
-
-
 
     // Create an entity Read Page which will link to Amend
     // Entity Read page could show a filtered list of books published by, written by, in series, by date etc.
     // Book Read page should have a list of the authors, publishers, series, dates etc. with links
 
     // TODO: fix paging bug to support authors, series, publishers etc. - currently just books
-    // switch between 'easy to automate' (with ids) and 'hard to automate' (without ids)
     // TODO: Create a Frames view which has side frame for list and mainframe for report and top frame for search?
 
     // AJAX
@@ -55,10 +53,6 @@ public class ToDoListTest {
 
     // TODO: add sorting button on the series, authors and publishers list pages
 
-
-    // # TODO: App Versioning
-
-    // TODO: Add more page templates to allow easier 'app updating via version number'
 
     // TODO: create rendering objects
     // TODO: add names, ids, classes etc. to rendered items
