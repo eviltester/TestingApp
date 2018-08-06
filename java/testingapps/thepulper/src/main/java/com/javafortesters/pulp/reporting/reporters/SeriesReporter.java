@@ -52,7 +52,7 @@ public class SeriesReporter {
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-amend-%s", item.getId()), amend);
             }
 
-            return name + " " + faqs + " " + amend;
+            return (name + " " + faqs + " " + amend).trim();
         }else{
             return defaultSeriesOutput;
         }

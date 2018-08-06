@@ -33,7 +33,7 @@ public class YearReporter {
                 yearlink = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("year-link-%d", publicationYear), yearlink);
             }
 
-            return yearlink + " " + faqs;
+            return (yearlink + " " + faqs).trim();
 
         }else{
             return defaultYearOutput;

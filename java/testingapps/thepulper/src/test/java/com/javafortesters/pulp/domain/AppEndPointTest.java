@@ -38,6 +38,7 @@ public class AppEndPointTest {
     @Test
     public void haveBasicAppWrapperForBooksByAuthor(){
         PulpApp app = new PulpApp();
+        app.setAppVersion(1);
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
 
         PulpAuthor will = app.books().authors().findByName("Will Murray");
@@ -60,6 +61,7 @@ public class AppEndPointTest {
     @Test
     public void haveBasicAppWrapperForBooksByPublisher(){
         PulpApp app = new PulpApp();
+        app.setAppVersion(1);
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
 
         PulpPublisher pub = app.books().publishers().findByName("Street And Smith");
@@ -74,6 +76,7 @@ public class AppEndPointTest {
     @Test
     public void haveBasicAppWrapperForBooksBySeries(){
         PulpApp app = new PulpApp();
+        app.setAppVersion(1);
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
 
         PulpSeries series = app.books().series().findByName("Doc Savage");

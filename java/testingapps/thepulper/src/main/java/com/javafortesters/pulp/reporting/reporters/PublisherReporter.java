@@ -53,7 +53,7 @@ public class PublisherReporter {
 
 //            final String delete = String.format("[<a href='%s%s' alt='Delete'>x</a>]",
 //                                reportConfig.withoutPostLink().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
-            return name + " " + faqs + " " + amend;
+            return (name + " " + faqs + " " + amend).trim();
         }else{
             return defaultNameOutput;
         }

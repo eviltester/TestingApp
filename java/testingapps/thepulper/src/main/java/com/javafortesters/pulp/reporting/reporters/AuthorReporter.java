@@ -54,7 +54,7 @@ public class AuthorReporter {
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-amend-%s", author.getId()), amend);
             }
 
-            return name + " "  + faqs + " " + amend;
+            return (name + " "  + faqs + " " + amend).trim();
 
         }else{
             return defaultNameOutput;

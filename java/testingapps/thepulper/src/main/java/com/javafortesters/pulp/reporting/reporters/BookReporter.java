@@ -143,7 +143,7 @@ public class BookReporter {
                 }
 
 
-                return title + " " + faqs + " " + amend;
+                return (title + " " + faqs + " " + amend).trim();
 
             }else{
                 return defaultTitle;
