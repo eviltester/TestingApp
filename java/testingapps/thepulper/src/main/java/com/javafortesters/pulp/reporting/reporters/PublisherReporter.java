@@ -51,9 +51,12 @@ public class PublisherReporter {
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-amend-%s", item.getId()), amend);
             }
 
-//            final String delete = String.format("[<a href='%s%s' alt='Delete'>x</a>]",
-//                                reportConfig.withoutPostLink().getReportPath("amend/publisher?publisher="), item.getId(), item.getName());
-            return (name + " " + faqs + " " + amend).trim();
+            String delete = "";
+            if (reportConfig.allowDeletePublisher()){
+                delete = new FilledHTMLTemplate(reportConfig.getAppVersion()).deletePublisherButton(item.getId(), "[x]", item.getName());
+            }
+
+            return (name + " " + faqs + " " + amend + " " + delete).trim();
         }else{
             return defaultNameOutput;
         }

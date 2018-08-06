@@ -7,7 +7,7 @@ public class ToDoListTest {
     //      with links to the related things eg. books published by, faq etc.
     //      have an [i] link in the tables - configurable along with [amend]
     //      have an admin option to configure which search engine is used for the faqs
-    //      incorporate DELETE into lists for version 002
+
 
 
     // TODO: Basic GUI functionality
@@ -124,5 +124,6 @@ public class ToDoListTest {
     //      have template field !!Version!! in the help file
     //      re-instated faq for all entities and made list rendering a little more configurable, added some year FAQs and some more FAQs
 
-
+    //20180806 DONE
+    // incorporate DELETE into lists for version 002
 }

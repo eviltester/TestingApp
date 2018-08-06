@@ -52,7 +52,12 @@ public class SeriesReporter {
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-amend-%s", item.getId()), amend);
             }
 
-            return (name + " " + faqs + " " + amend).trim();
+            String delete = "";
+            if (reportConfig.allowDeleteSeries()){
+                delete = new FilledHTMLTemplate(reportConfig.getAppVersion()).deleteSeriesButton(item.getId(), "[x]", item.getName());
+            }
+
+            return (name + " " + faqs + " " + amend + " " + delete).trim();
         }else{
             return defaultSeriesOutput;
         }

@@ -11,6 +11,7 @@ public class PulpApp {
     private static final int MAX_VERSION = 2;
     private final PulpData books;
     private String appversion;
+    private int raqAppVersion;
 
     HtmlReports reports;
 
@@ -22,6 +23,9 @@ public class PulpApp {
     }
 
     public void setAppVersion(int version){
+
+        raqAppVersion = version;
+
         if(version > MAX_VERSION){
             return;
         }
@@ -57,5 +61,9 @@ public class PulpApp {
 
     public HtmlReports stringReports() {
         return reports(ReportConfig.justStrings(appversion));
+    }
+
+    public int getAppVersionInt() {
+        return raqAppVersion;
     }
 }

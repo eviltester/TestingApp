@@ -1,5 +1,7 @@
 package com.javafortesters.pulp.html.templates;
 
+import com.javafortesters.pulp.reader.ResourceReader;
+
 public class FilledHTMLTemplate {
     private final String appversion;
 
@@ -59,4 +61,38 @@ public class FilledHTMLTemplate {
         template.replace("!!ID!!", id);
         return template.toString();
     }
+
+    public String deleteAuthorButton(String authorId, String deleteButtonText, String authorName) {
+        return deleteButton("delete-author.html", authorId, deleteButtonText, authorName);
+    }
+
+    public String deleteBookButton(final String id, final String buttonText, final String title) {
+        return deleteButton("delete-book.html", id, buttonText, title);
+    }
+
+    public String deleteSeriesButton(final String id, final String buttonText, final String seriesTitle) {
+        return deleteButton("delete-series.html", id, buttonText, seriesTitle);
+    }
+
+    public String deletePublisherButton(final String id, final String buttonText, final String publisherName) {
+        return deleteButton("delete-publisher.html", id, buttonText, publisherName);
+    }
+
+    public String deleteButton(final String template_name, final String id, final String buttonText, final String title) {
+
+        if(appversion.contentEquals("v001")){
+            return "";
+            // List button delete only appeared in version 2
+        }
+
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/snippets/delete/" + template_name);
+
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("!!ID!!", id);
+        template.replace("!!DELETEBUTTONTEXT!!", buttonText);
+        template.replace("!!TEXT!!", title);
+
+        return template.toString();
+    }
+
 }

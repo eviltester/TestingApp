@@ -150,6 +150,7 @@ public class PulpAppForSpark {
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
             config.setTitlesAreLinks(false);
+            config.allowDelete(false);
 
             return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
@@ -161,10 +162,19 @@ public class PulpAppForSpark {
 
         get("/apps/pulp/gui/reports/books/table/navigation", (req, res) -> {
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
+
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
+
             config.showAmendLinks(false);
             config.showBookAmendLink(true);
             config.setTitlesAreLinks(true);
+            config.allowDelete(false);
+
+            if(pulp.getAppVersionInt()>=2){
+                // table has enough space to allow delete button rendering
+                config.setAllowDeleteBook(true);
+            }
+
             return pulp.reports(config).configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
         });
 
@@ -221,6 +231,7 @@ public class PulpAppForSpark {
             ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
             config.setPostFixPath("/list/navigation");
             config.showAmendLinks(false);
+            config.allowDelete(false);
             config.setTitlesAreLinks(true);
             config.setYearsAsLinks(true);
             config.setSeriesNamesLinks(true);
@@ -297,8 +308,14 @@ public class PulpAppForSpark {
                 config.setIncludeFaqLinks(false);
             }
 
+
             config.showAmendLinks(true);
             config.setAuthorNamesLinks(true);
+            config.allowDelete(false);
+
+            if(pulp.getAppVersionInt()>=2){
+                config.setAllowDeleteAuthor(true);
+            }
 
             return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
         });
@@ -326,6 +343,13 @@ public class PulpAppForSpark {
 
             config.showAmendLinks(true);
             config.setPublisherNamesLinks(true);
+            config.allowDelete(false);
+
+            if(pulp.getAppVersionInt()>=2){
+                config.setAllowDeletePublisher(true);
+            }
+
+
             return pulp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
         });
 
@@ -378,6 +402,13 @@ public class PulpAppForSpark {
 
             config.showAmendLinks(true);
             config.setSeriesNamesLinks(true);
+            config.allowDelete(false);
+
+            if(pulp.getAppVersionInt()>=2){
+                config.setAllowDeleteSeries(true);
+            }
+
+
             return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
         });
 

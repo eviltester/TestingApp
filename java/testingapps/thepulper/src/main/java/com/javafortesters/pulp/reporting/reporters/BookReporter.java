@@ -142,8 +142,12 @@ public class BookReporter {
                     amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span("amendbook" + book.getId(), amend );
                 }
 
+                String delete = "";
+                if (reportConfig.allowDeleteBook()){
+                    delete = new FilledHTMLTemplate(reportConfig.getAppVersion()).deleteBookButton(book.getId(), "[x]", book.getTitle());
+                }
 
-                return (title + " " + faqs + " " + amend).trim();
+                return (title + " " + faqs + " " + amend + " " + delete).trim();
 
             }else{
                 return defaultTitle;

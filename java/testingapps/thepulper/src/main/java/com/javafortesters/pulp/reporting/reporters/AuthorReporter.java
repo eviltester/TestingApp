@@ -33,28 +33,35 @@ public class AuthorReporter {
 
         final String defaultNameOutput = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-name-%s", author.getId()), author.getName());
 
-        if(reportConfig!=null){
+        if(reportConfig!=null) {
 
-            String faqs="";
-            if(reportConfig.includeFaqLinks()) {
-                 faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(),"author/faqs", MyUrlEncoder.encode(author.getName()));
-                 faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-faqs-%s", author.getId()), faqs);
+            String faqs = "";
+            if (reportConfig.includeFaqLinks()) {
+                faqs = String.format(" [<a href='%s%s?searchterm=%s'>faqs</a>]", reportConfig.getReportPath(), "author/faqs", MyUrlEncoder.encode(author.getName()));
+                faqs = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-faqs-%s", author.getId()), faqs);
             }
 
             String name = defaultNameOutput;
-            if(reportConfig.areAuthorNamesLinks()) {
+            if (reportConfig.areAuthorNamesLinks()) {
                 name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
                 name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
             }
 
-            String amend="";
-            if(reportConfig.areAuthorAmendLinksShown()) {
+            String amend = "";
+            if (reportConfig.areAuthorAmendLinksShown()) {
                 amend = String.format("[<a href='%s%s' alt='Amend'>amend</a>]",
                         reportConfig.withoutPostLink().withoutReportInPath().getReportPath("amend/author?author="), author.getId(), author.getName());
                 amend = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-amend-%s", author.getId()), amend);
             }
 
-            return (name + " "  + faqs + " " + amend).trim();
+            String delete = "";
+            if (reportConfig.allowDeleteAuthor()){
+                delete = new FilledHTMLTemplate(reportConfig.getAppVersion()).deleteAuthorButton(author.getId(), "[x]", author.getName());
+            }
+
+
+
+            return (name + " "  + faqs + " " + amend + " " + delete).trim();
 
         }else{
             return defaultNameOutput;

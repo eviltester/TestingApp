@@ -17,6 +17,10 @@ public class ReportConfig {
     private boolean bookAmendLink=false;
     private boolean seriesAmendLink=false;
 
+    private boolean allowDeleteAuthor = false;
+    private boolean allowDeleteBook = false;
+    private boolean allowDeleteSeries = false;
+    private boolean allowDeletePublisher = false;
 
     // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
     public ReportConfig(String appversion, boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
@@ -42,6 +46,23 @@ public class ReportConfig {
         this.bookAmendLink = reportConfig.areBookAmendLinksShown();
         this.seriesAmendLink = reportConfig.areSeriesAmendLinksShown();
         this.includeFaqLinks = reportConfig.includeFaqLinks();
+        this.allowDeleteAuthor = reportConfig.allowDeleteAuthor();
+    }
+
+    public boolean allowDeleteAuthor() {
+        return allowDeleteAuthor;
+    }
+
+    public boolean allowDeleteBook() {
+        return allowDeleteBook;
+    }
+
+    public boolean allowDeletePublisher() {
+        return allowDeletePublisher;
+    }
+
+    public boolean allowDeleteSeries() {
+        return allowDeleteSeries;
     }
 
     public String getAppVersion() {
@@ -181,5 +202,28 @@ public class ReportConfig {
     }
     public void setSeriesNamesLinks(final boolean arelinks) {
         areSeriesNamesLinks = arelinks;
+    }
+
+    public void setAllowDeleteBook(final boolean allowDelete) {
+        allowDeleteBook = allowDelete;
+    }
+
+    public void setAllowDeleteAuthor(final boolean allowDelete) {
+        allowDeleteAuthor = allowDelete;
+    }
+
+    public void setAllowDeleteSeries(final boolean allowDelete) {
+        allowDeleteSeries = allowDelete;
+    }
+
+    public void setAllowDeletePublisher(final boolean allowDelete) {
+        allowDeletePublisher = allowDelete;
+    }
+
+    public void allowDelete(final boolean allowDelete) {
+        allowDeleteAuthor = allowDelete;
+        allowDeleteBook = allowDelete;
+        allowDeletePublisher = allowDelete;
+        allowDeleteSeries = allowDelete;
     }
 }

@@ -1,12 +1,3 @@
-<script type="text/javascript">
-function areYouSureYouWantToDeleteAuthor(){
-    if(confirm("Are you sure you want to delete !!AUTHORNAME!!?")){
-        return true;
-    }else{
-        return false;
-    }
-}
-</script>
 
 <h2>Amend Author</h2>
 
@@ -23,9 +14,9 @@ function areYouSureYouWantToDeleteAuthor(){
             <input id="updateauthorbutton" type="submit" value="Update" />
         </form>
         <hr/>
-        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
+        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor('!!AUTHORNAME!!')" method="post">
             <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
-            <input id="deleteauthorbutton" type="submit" value="Delete"  />
+            <input id="deleteauthorbutton" type="submit" value="Delete" title="Delete Author !!AUTHORNAME!!"  />
         </form>
     </div>
 
