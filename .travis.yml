@@ -1,3 +1,4 @@
+before_script: cd java
 language: java
 script: mvn test
 jdk:
