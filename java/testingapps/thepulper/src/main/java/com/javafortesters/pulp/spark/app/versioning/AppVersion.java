@@ -13,6 +13,10 @@ public class AppVersion {
         setAppVersion(version);
     }
 
+    public static String asPathVersion(final int anAppVersion) {
+        return String.format("v%03d", anAppVersion);
+    }
+
     public void setAppVersion(int version){
 
         if(version > MAX_VERSION){
@@ -24,7 +28,7 @@ public class AppVersion {
     }
 
     public String getAppVersion(){
-        return String.format("v%03d", appVersion);
+        return asPathVersion(appVersion);
     }
 
     public int getAppVersionInt() {

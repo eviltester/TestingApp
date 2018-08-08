@@ -5,6 +5,7 @@ import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
@@ -150,7 +151,8 @@ public class HtmlReports {
 
         AppPageBuilder page = new AppPageBuilder("Help", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/content/help.html");
+        String pageToRender = new VersionedResourceReader(appversion).asString("/content/help.html");
+        //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/content/help.html");
 
         page.appendToBody(pageToRender);
         return page.toString();

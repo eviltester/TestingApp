@@ -1,11 +1,14 @@
 package com.javafortesters.pulp.reader;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
 
 public class ResourceReader {
 
 
+    // TODO: this looks like it should really close stuff
     public String asString(String resourceName){
 
         try {
@@ -24,5 +27,26 @@ public class ResourceReader {
             e.printStackTrace();
             return "";
         }
+    }
+
+    public boolean doesResourceExist(final String path) {
+        try {
+
+            InputStream in = this.getClass().getResourceAsStream(path);
+            if(in==null){
+                return false;
+            }
+            in.close();
+            return true;
+
+        }catch(FileNotFoundException e){
+            return false;
+
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
     }
 }

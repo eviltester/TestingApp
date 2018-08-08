@@ -4,6 +4,7 @@ import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class AmendPublisherPage {
@@ -25,7 +26,13 @@ public class AmendPublisherPage {
 
         AppPageBuilder page = new AppPageBuilder("Amend Publisher", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/update/edit-book-publisher-content.html");
+        String pageToRender = new VersionedResourceReader(appversion).asString("/page-template/entity-crud/update/edit-book-publisher-content.html");
+
+        if(!(new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/update/edit-book-publisher-content.html").contentEquals(pageToRender))){
+            throw new RuntimeException("Template reading different");
+        };
+
+        //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/update/edit-book-publisher-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
         template.replace("!!ID!!", publisher.getId());
