@@ -10,6 +10,7 @@ import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
+import com.javafortesters.pulp.spark.AppVersion;
 
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class FilterTestPage {
     private final boolean fieldsAreNavigable;
     private final boolean isSearch;
     private final boolean isPaginated;
-    private final String appversion;
+    private final AppVersion appversion;
     private BookFilter filter;
     private PulpData data;
     private boolean doReport;
@@ -36,7 +37,7 @@ public class FilterTestPage {
         I haven't templated this for different app versions because this is
         designed for exploratory testing
      */
-    public FilterTestPage(boolean isList, boolean navigation, boolean isSearch, boolean isPaginated, String appversion) {
+    public FilterTestPage(boolean isList, boolean navigation, boolean isSearch, boolean isPaginated, AppVersion appversion) {
         filter = new BookFilter();
         this.showAsList = isList;
         this.fieldsAreNavigable = navigation;
@@ -49,7 +50,7 @@ public class FilterTestPage {
 
         AppPageBuilder page = new AppPageBuilder("Filter Test Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/filter-test-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
 

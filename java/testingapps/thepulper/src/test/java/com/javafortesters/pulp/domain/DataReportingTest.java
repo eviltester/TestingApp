@@ -6,6 +6,7 @@ import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.AppVersion;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -23,7 +24,7 @@ public class DataReportingTest {
         populator.populateFrom(reader);
 
 
-        PulpReporter reporter = new PulpReporter(books, "v001");
+        PulpReporter reporter = new PulpReporter(books, new AppVersion(1));
 
         Collection<String> simpleReport = reporter.getBooksAsStrings();
 
@@ -60,7 +61,7 @@ public class DataReportingTest {
     public void simpleReportHasBasicHtmlStructure(){
         PulpApp app = new PulpApp();
         app.readData(new SavageReader("/data/pulp/doc_savage_test.csv"));
-        app.reports().configure(ReportConfig.justStrings("v001"));
+        app.reports().configure(ReportConfig.justStrings(new AppVersion(1)));
         String report = app.reports().getAuthorsAsHtmlList();
         System.out.println(report);
 

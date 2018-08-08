@@ -1,16 +1,18 @@
 package com.javafortesters.pulp.html.gui.snippets;
 
+import com.javafortesters.pulp.spark.AppVersion;
+
 public class AppPageBuilder {
 
     private final String title;
     private final StringBuilder pageOutput;
     private final StringBuilder pageBody;
-    private final String appversion;
+    private final AppVersion appversion;
 
-    public AppPageBuilder(String aTitle, String app_version_template_path){
+    public AppPageBuilder(String aTitle, AppVersion app_version){
         this.title = aTitle;
         pageOutput = new StringBuilder();
-        this.appversion = app_version_template_path;
+        this.appversion = app_version;
 
         pageOutput.append(new PageSnippets(appversion).getPageHead(this.title));
         pageOutput.append(new PageSnippets(appversion).getDropDownMenu());

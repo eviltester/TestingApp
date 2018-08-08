@@ -41,7 +41,7 @@ public class SeriesReporter {
 
             String name = defaultSeriesOutput;
             if(reportConfig.areSeriesNamesLinks()) {
-                if(reportConfig.getAppVersion().contentEquals("v001")){
+                if(reportConfig.getAppVersion().currentVersionIs(1)){
                     // link to books
                     name = String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
                     name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);

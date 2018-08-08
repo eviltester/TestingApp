@@ -1,8 +1,10 @@
 package com.javafortesters.pulp.reporting;
 
 
+import com.javafortesters.pulp.spark.AppVersion;
+
 public class ReportConfig {
-    private String appversion;
+    private AppVersion appversion;
     private boolean areAuthorNamesLinks;
     private boolean areYearsLinks;
     private boolean arePublisherNamesLinks;
@@ -23,7 +25,7 @@ public class ReportConfig {
     private boolean allowDeletePublisher = false;
 
     // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
-    public ReportConfig(String appversion, boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
+    public ReportConfig(AppVersion appversion, boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
         this.appversion = appversion;
         this.areAuthorNamesLinks = areAuthorNamesLinks;
         this.areYearsLinks = areYearsLinks;
@@ -65,7 +67,7 @@ public class ReportConfig {
         return allowDeleteSeries;
     }
 
-    public String getAppVersion() {
+    public AppVersion getAppVersion() {
         return appversion;
     }
 
@@ -73,7 +75,7 @@ public class ReportConfig {
         return linksPostFix;
     }
 
-    public static ReportConfig justStrings(String appversion) {
+    public static ReportConfig justStrings(AppVersion appversion) {
 
         return new ReportConfig(appversion, false, false, false, false, false);
     }

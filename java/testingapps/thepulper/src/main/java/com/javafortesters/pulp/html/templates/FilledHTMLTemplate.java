@@ -1,11 +1,12 @@
 package com.javafortesters.pulp.html.templates;
 
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class FilledHTMLTemplate {
-    private final String appversion;
+    private final AppVersion appversion;
 
-    public FilledHTMLTemplate(final String appversion) {
+    public FilledHTMLTemplate(final AppVersion appversion) {
         this.appversion = appversion;
     }
 
@@ -80,12 +81,12 @@ public class FilledHTMLTemplate {
 
     public String deleteButton(final String template_name, final String id, final String buttonText, final String title) {
 
-        if(appversion.contentEquals("v001")){
+        if(appversion.currentVersionIs(1)){
             return "";
             // List button delete only appeared in version 2
         }
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/snippets/delete/" + template_name);
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/snippets/delete/" + template_name);
 
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("!!ID!!", id);

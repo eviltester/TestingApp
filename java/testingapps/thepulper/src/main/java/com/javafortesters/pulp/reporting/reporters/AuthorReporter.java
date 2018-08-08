@@ -43,7 +43,7 @@ public class AuthorReporter {
 
             String name = defaultNameOutput;
             if (reportConfig.areAuthorNamesLinks()) {
-                if(reportConfig.getAppVersion().contentEquals("v001")){
+                if(reportConfig.getAppVersion().currentVersionIs(1)){
                     // link to books
                     name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
                     name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);

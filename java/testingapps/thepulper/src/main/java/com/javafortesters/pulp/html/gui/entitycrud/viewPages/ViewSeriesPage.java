@@ -4,18 +4,19 @@ import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class ViewSeriesPage {
 
     private final PulpSeries series;
-    private final String appversion;
+    private final AppVersion appversion;
     private String output="";
 
     public void setOutput(final String output) {
         this.output=output;
     }
 
-    public ViewSeriesPage(PulpSeries aSeries, final String appversion){
+    public ViewSeriesPage(PulpSeries aSeries, final AppVersion appversion){
         this.series = aSeries;
         this.appversion = appversion;
     }
@@ -24,7 +25,7 @@ public class ViewSeriesPage {
 
         AppPageBuilder page = new AppPageBuilder("View Series", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/read/view-book-series-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-series-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

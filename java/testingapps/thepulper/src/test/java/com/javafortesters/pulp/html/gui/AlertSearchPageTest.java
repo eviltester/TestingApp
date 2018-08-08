@@ -3,6 +3,7 @@ package com.javafortesters.pulp.html.gui;
 import com.javafortesters.pulp.PulpApp;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.AppVersion;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,11 +14,11 @@ public class AlertSearchPageTest {
         PulpApp app = new PulpApp();
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
 
-        AlertSearchPage page = new AlertSearchPage("v001");
+        AlertSearchPage page = new AlertSearchPage(new AppVersion(1));
 
         //System.out.println(page.asHTMLString());
 
-        Assert.assertNotEquals("",page.asHTMLString(ReportConfig.justStrings("v001")));
+        Assert.assertNotEquals("",page.asHTMLString(ReportConfig.justStrings(new AppVersion(1))));
     }
 
     @Test
@@ -25,11 +26,11 @@ public class AlertSearchPageTest {
         PulpApp app = new PulpApp();
         app.readData( new SavageReader("/data/pulp/doc_savage_test.csv"));
 
-        AlertSearchPage page = new AlertSearchPage("v001").setSearchTerms("title", "contains", "The");
+        AlertSearchPage page = new AlertSearchPage(new AppVersion(1)).setSearchTerms("title", "contains", "The");
         page.setConfirmSearch(true);
         page.setDataFrom(app.books());
 
-        String pageToRender = page.asHTMLString(ReportConfig.justStrings("v001"));
+        String pageToRender = page.asHTMLString(ReportConfig.justStrings(new AppVersion(1)));
         System.out.println(pageToRender);
 
         Assert.assertNotEquals("",pageToRender);

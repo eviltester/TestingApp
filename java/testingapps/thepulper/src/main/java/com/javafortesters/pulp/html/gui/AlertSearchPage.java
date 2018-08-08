@@ -8,6 +8,7 @@ import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
+import com.javafortesters.pulp.spark.AppVersion;
 
 
 import java.util.Collection;
@@ -15,14 +16,14 @@ import java.util.Collection;
 public class AlertSearchPage {
 
 
-    private final String appversion;
+    private final AppVersion appversion;
     private String searchWhat="";
     private String searchHow="";
     private String searchTerm="";
     private boolean confirmSearch=true;
     private PulpData data;
 
-    public AlertSearchPage(String appversion){
+    public AlertSearchPage(AppVersion appversion){
         this.appversion = appversion;
     }
 
@@ -30,7 +31,7 @@ public class AlertSearchPage {
 
         AppPageBuilder page = new AppPageBuilder("Search Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/alert-search-page-body-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/alert-search-page-body-content.html");
 
         StringBuilder dataOutput = new StringBuilder();
 

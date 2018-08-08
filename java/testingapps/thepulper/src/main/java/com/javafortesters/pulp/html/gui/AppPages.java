@@ -18,12 +18,13 @@ import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewPublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewSeriesPage;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class AppPages {
     private final PulpData books;
-    private final String appversion;
+    private final AppVersion appversion;
 
-    public AppPages(final PulpData theBooks, String appversion) {
+    public AppPages(final PulpData theBooks, AppVersion appversion) {
         this.books = theBooks;
         this.appversion = appversion;
     }

@@ -8,13 +8,14 @@ import com.javafortesters.pulp.html.templates.HtmlTemplates;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class CreateBookPage {
 
     private final PulpData books;
-    private final String appversion;
+    private final AppVersion appversion;
 
-    public CreateBookPage(final PulpData theBooks, final String appversion){
+    public CreateBookPage(final PulpData theBooks, final AppVersion appversion){
         this.books = theBooks;
         this.appversion = appversion;
     }
@@ -30,7 +31,7 @@ public class CreateBookPage {
         AppPageBuilder page = new AppPageBuilder("Create Book", appversion);
 
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/create/create-book-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/create/create-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

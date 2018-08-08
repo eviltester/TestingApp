@@ -1,14 +1,15 @@
 package com.javafortesters.pulp.html;
 
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
+import com.javafortesters.pulp.spark.AppVersion;
 
 import java.util.Collection;
 
 public class HTMLReporter {
 
-    private final String appversion;
+    private final AppVersion appversion;
 
-    public HTMLReporter(final String appversion) {
+    public HTMLReporter(final AppVersion appversion) {
         this.appversion = appversion;
     }
 

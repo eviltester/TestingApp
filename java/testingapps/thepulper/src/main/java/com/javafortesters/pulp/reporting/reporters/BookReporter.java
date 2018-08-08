@@ -7,6 +7,7 @@ import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.AppVersion;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ public class BookReporter {
         this.authorReporter = new AuthorReporter(reportConfig);
     }
 
-    public static BookReporter getEmpty(String appversion) {
+    public static BookReporter getEmpty(AppVersion appversion) {
         return new BookReporter(ReportConfig.justStrings(appversion), new PulpAuthors(), new PulpPublishers(), new PulpSeriesCollection());
     }
 
@@ -127,7 +128,7 @@ public class BookReporter {
                 String title = "";
                 if(reportConfig.areTitlesLinks()){
 
-                    if(reportConfig.getAppVersion().contentEquals("v001")){
+                    if(reportConfig.getAppVersion().currentVersionIs(1)){
                         // link to book as list
                         title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
                         title = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);

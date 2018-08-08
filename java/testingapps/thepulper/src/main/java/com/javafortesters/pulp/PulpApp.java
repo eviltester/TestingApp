@@ -6,12 +6,12 @@ import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class PulpApp {
-    private static final int MAX_VERSION = 2;
+
     private final PulpData books;
-    private String appversion;
-    private int raqAppVersion;
+    private AppVersion appVersion;
 
     HtmlReports reports;
 
@@ -19,20 +19,11 @@ public class PulpApp {
 
         books = new PulpData();
         //reports = new HtmlReports(books, this.appversion);
-        setAppVersion(2);
+        appVersion = new AppVersion(2);
+        reports = new HtmlReports(books, appVersion);
     }
 
-    public void setAppVersion(int version){
 
-        raqAppVersion = version;
-
-        if(version > MAX_VERSION){
-            return;
-        }
-        appversion = String.format("v%03d", version);
-        reports = new HtmlReports(books, this.appversion);
-
-    }
     public void readData(PulpSeriesCSVReader reader) {
         PulpDataPopulator populator = new PulpDataPopulator(books);
         populator.populateFrom(reader);
@@ -43,7 +34,7 @@ public class PulpApp {
     }
 
     public HtmlReports reports(ReportConfig config) {
-        return new HtmlReports(books, appversion).configure(config);
+        return new HtmlReports(books, appVersion).configure(config);
     }
 
     public PulpData books() {
@@ -51,19 +42,25 @@ public class PulpApp {
     }
 
     public AppPages page() {
-        return new AppPages(books, appversion);
+        return new AppPages(books, appVersion);
 
     }
 
     public String getAppVersion() {
-        return appversion;
+        return appVersion.getAppVersion();
     }
 
     public HtmlReports stringReports() {
-        return reports(ReportConfig.justStrings(appversion));
+        return reports(ReportConfig.justStrings(appVersion));
     }
 
     public int getAppVersionInt() {
-        return raqAppVersion;
+        return appVersion.getAppVersionInt();
+    }
+
+    public void setAppVersion(final int version) {
+
+        appVersion.setAppVersion(version);
+        reports = new HtmlReports(books, appVersion);
     }
 }

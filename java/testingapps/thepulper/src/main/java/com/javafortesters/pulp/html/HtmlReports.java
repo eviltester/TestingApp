@@ -9,6 +9,7 @@ import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
+import com.javafortesters.pulp.spark.AppVersion;
 
 
 import java.util.Collection;
@@ -16,10 +17,10 @@ import java.util.Collection;
 public class HtmlReports {
     private final PulpReporter reporter;
     private final PulpData data;
-    private final String appversion;
+    private final AppVersion appversion;
     private ReportConfig reportConfig;
 
-    public HtmlReports(PulpData books, String appversion) {
+    public HtmlReports(PulpData books, AppVersion appversion) {
         this.data = books;
         this.appversion = appversion;
         reporter = new PulpReporter(books, appversion);

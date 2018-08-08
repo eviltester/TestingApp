@@ -5,9 +5,8 @@ public class ToDoListTest {
     // NEXT:
     //  Allow app to support versions more easily for planning features based on testing exercises
     //
-    //  AppVersion should be an object
     //  We can ask AppVersion .canDo(ACTION) and if it is avail in that version it will tell us
-    //  convert code to a AppVersion instead of contentEquals("v001")
+    //      convert code to use a .canDo(ACTION) AppVersion instead of currentVersionIs(1)
     //
     //  Partition
     //
@@ -147,4 +146,6 @@ public class ToDoListTest {
     // create a READ page for Series, Author, Publisher, Book and link these to/from the edit screen, and add link to list of books from both view and edit screen
     //      with links to the related things eg. books published by, faq etc.
     //      have the names in tables and lists link to the view screen instead of the list screen
+    //  AppVersion should be an object
+    //  convert code to a AppVersion instead of contentEquals("v001")
 }

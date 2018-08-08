@@ -8,6 +8,7 @@ import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import java.util.List;
 public class FaqRenderPage {
 
     private final boolean showiframe;
-    private final String appversion;
+    private final AppVersion appversion;
     String searchFaqTerm = "Doc Savage";
     SearchEngine searchEngine = SearchEngine.getDefault();
     String faqsForType = "author";
 
-    public FaqRenderPage(String typeOfFaq, String forTerm, boolean showiframe, String appversion) {
+    public FaqRenderPage(String typeOfFaq, String forTerm, boolean showiframe, AppVersion appversion) {
         this.searchFaqTerm=forTerm;
         faqsForType=typeOfFaq;
         this.showiframe = showiframe;
@@ -33,8 +34,8 @@ public class FaqRenderPage {
         AppPageBuilder page = new AppPageBuilder("Authors with FAQs", appversion);
 
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/faqs-page-body-content.html");
-        String iframeSection = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/query-iframe.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/faqs-page-body-content.html");
+        String iframeSection = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/query-iframe.html");
 
         MyTemplate pageTemplate = new MyTemplate(pageToRender);
         pageTemplate.replace("<!-- TITLE GOES HERE -->", String.format("<h1>List of FAQs for %s: %s</h1>", faqsForType, searchFaqTerm));

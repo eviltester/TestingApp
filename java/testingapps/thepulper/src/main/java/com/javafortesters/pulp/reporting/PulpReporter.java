@@ -2,6 +2,7 @@ package com.javafortesters.pulp.reporting;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.reporting.reporters.*;
+import com.javafortesters.pulp.spark.AppVersion;
 
 import java.util.*;
 
@@ -10,7 +11,7 @@ public class PulpReporter {
     BookReporter reporter;
     private ReportConfig reportConfig;
 
-    public PulpReporter(PulpData books, String appversion) {
+    public PulpReporter(PulpData books, AppVersion appversion) {
         this.data = books;
         configure(ReportConfig.justStrings(appversion));
     }

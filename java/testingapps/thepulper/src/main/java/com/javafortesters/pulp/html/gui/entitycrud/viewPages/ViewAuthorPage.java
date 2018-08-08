@@ -4,18 +4,19 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class ViewAuthorPage {
 
     private final PulpAuthor author;
-    private final String appversion;
+    private final AppVersion appversion;
     private String output="";
 
     public void setOutput(final String output) {
         this.output=output;
     }
 
-    public ViewAuthorPage(PulpAuthor anAuthor, final String appversion){
+    public ViewAuthorPage(PulpAuthor anAuthor, final AppVersion appversion){
         this.author = anAuthor;
         this.appversion = appversion;
     }
@@ -24,7 +25,7 @@ public class ViewAuthorPage {
 
         AppPageBuilder page = new AppPageBuilder("View Author", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/read/view-book-author-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-author-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("!!ID!!", author.getId());
         template.replace("!!AUTHORNAME!!", author.getName());

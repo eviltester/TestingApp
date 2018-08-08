@@ -39,7 +39,7 @@ public class PublisherReporter {
 
             String name = defaultNameOutput;
             if(reportConfig.arePublishersLinks()){
-                if(reportConfig.getAppVersion().contentEquals("v001")){
+                if(reportConfig.getAppVersion().currentVersionIs(1)){
                     // link to books
                     name = String.format("<a href='%s?publisher=%s'>%s</a>",
                             reportConfig.getReportPath("books"), item.getId(), item.getName());

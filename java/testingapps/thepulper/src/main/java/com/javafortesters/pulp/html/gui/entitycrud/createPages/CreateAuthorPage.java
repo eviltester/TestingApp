@@ -3,13 +3,14 @@ package com.javafortesters.pulp.html.gui.entitycrud.createPages;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.spark.AppVersion;
 
 public class CreateAuthorPage {
 
-    private final String appversion;
+    private final AppVersion appversion;
     private String output="";
 
-    public CreateAuthorPage(final String appversion) {
+    public CreateAuthorPage(final AppVersion appversion) {
         this.appversion = appversion;
     }
 
@@ -21,7 +22,7 @@ public class CreateAuthorPage {
 
         AppPageBuilder page = new AppPageBuilder("Create Author", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/create/create-book-author-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/create/create-book-author-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- OUTPUT GOES HERE -->", output);
 
