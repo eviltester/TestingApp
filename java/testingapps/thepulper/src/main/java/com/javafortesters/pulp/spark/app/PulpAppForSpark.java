@@ -28,6 +28,10 @@ public class PulpAppForSpark {
         pulp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
 
 
+        get("/apps/pulp/gui/view/author", (req, res) -> {
+            return pulp.page().viewAuthorPage(req.queryParams("author")).asHTMLString();
+        });
+
         get("/apps/pulp/gui/create/author", (req, res) -> {
             return pulp.page().createAuthorPage().asHTMLString();
         });
@@ -52,6 +56,10 @@ public class PulpAppForSpark {
             return "";
         });
 
+        get("/apps/pulp/gui/view/series", (req, res) -> {
+            return pulp.page().viewSeriesPage(req.queryParams("series")).asHTMLString();
+        });
+
         get("/apps/pulp/gui/create/series", (req, res) -> {
             return pulp.page().createSeriesPage().asHTMLString();
         });
@@ -60,7 +68,7 @@ public class PulpAppForSpark {
             return new CreateFlowsHandler(pulp).seriesCreate(req, res);
         });
 
-        ///apps/pulp/gui/amend/author?author=id
+        ///apps/pulp/gui/amend/series?series=id
         get("/apps/pulp/gui/amend/series", (req, res) -> {
             return pulp.page().amendSeriesPage(req.queryParams("series")).asHTMLString();
         });
@@ -73,6 +81,10 @@ public class PulpAppForSpark {
             pulp.books().deleteSeries(req.queryParams("seriesid"));
             res.redirect("/apps/pulp/gui/reports/series/list/navigation");
             return "";
+        });
+
+        get("/apps/pulp/gui/view/publisher", (req, res) -> {
+            return pulp.page().viewPublisherPage(req.queryParams("publisher")).asHTMLString();
         });
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
@@ -97,6 +109,11 @@ public class PulpAppForSpark {
             res.redirect("/apps/pulp/gui/reports/publishers/list/navigation");
             return "";
         });
+
+        get("/apps/pulp/gui/view/book", (req, res) -> {
+            return pulp.page().viewBookPage(req.queryParams("book")).asHTMLString();
+        });
+
 
         get("/apps/pulp/gui/create/book", (req, res) -> {
             return pulp.page().createBookPage().asHTMLString();

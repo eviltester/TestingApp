@@ -1,0 +1,35 @@
+
+<div id="view-book-section-!!BOOKID!!">
+
+    <h2>Book Details !!BOOKTITLE!!</h2>
+
+    <ul name="details-list">
+        <li name = "book-id">!!BOOKID!!</li>
+        <li name = "book-title"><a href="/apps/pulp/gui/reports/books/table/navigation?book=!!BOOKID!!">!!BOOKTITLE!!</a></li>
+        <li name = "seriesid"><a href="/apps/pulp/gui/view/series?series=!!SERIESID!!">!!SERIESNAME!!</a></li>
+        <-- LIST OF AUTHORS -->
+        <li name = "house-author"><a href="/apps/pulp/gui/view/author?author=!!HOUSEAUTHORID!!">!!HOUSEAUTHORNAME!!</a></li>
+        <li name = "publisher"><a href="/apps/pulp/gui/view/publisher?publisher=!!PUBLISHERID!!">!!PUBLISHERNAME!!</a></li>
+        <li name = "seriesidentifier">!!SERIESIDENTIFIER!!</li>
+        <li name = "yearofpub"><a href="/apps/pulp/gui/reports/books/list/navigation?year=!!PUBLICATIONYEAR!!">!!PUBLICATIONYEAR!!</a></li>
+
+    </ul>
+
+    <hr/>
+
+    <div name="edit-actions">
+        <a href="/apps/pulp/gui/amend/book?book=!!BOOKID!!" id="edit-book-link-!!BOOKID!!" title="Edit Book !!BOOKTITLE!!">Edit Book</a>
+    </div>
+
+    <hr/>
+
+    <div name="link-items">
+        <!-- list of books -->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?book=!!BOOKID!!" id="book-list-series-link-!!BOOKID!!" title="Book in list">Book As List</a>
+    </div>
+
+    <hr/>
+
+    <!-- OUTPUT GOES HERE -->
+
+</div>

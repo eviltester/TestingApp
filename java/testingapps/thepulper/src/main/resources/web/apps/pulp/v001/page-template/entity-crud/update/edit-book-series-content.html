@@ -15,7 +15,7 @@
     <div>
         <form id="amendform" action="series" method="post">
 
-            <input type = "hidden" name="seriesid" value="!!SERIESID!!"/>
+            <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <label for="seriesname">Name of Series</label>
             <input type="text" id="seriesname" name="seriesname" required="required" value="!!SERIESNAME!!" pattern=".{1,}">
 
@@ -24,7 +24,7 @@
         </form>
         <hr/>
         <form id="deleteform" action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
-            <input type = "hidden" name="seriesid" value="!!SERIESID!!"/>
+            <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <input id="deletebutton" type="submit" value="Delete" />
         </form>
     </div>

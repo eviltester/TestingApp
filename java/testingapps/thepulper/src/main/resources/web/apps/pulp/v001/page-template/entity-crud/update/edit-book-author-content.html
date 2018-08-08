@@ -15,7 +15,7 @@ function areYouSureYouWantToDeleteAuthor(){
     <div>
         <form id="amendform" action="author" method="post">
 
-            <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
+            <input type = "hidden" name="authorid" value="!!ID!!"/>
             <label for="authorname">Name of author</label>
             <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
 
@@ -24,7 +24,7 @@ function areYouSureYouWantToDeleteAuthor(){
         </form>
         <hr/>
         <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
-            <input type = "hidden" name="authorid" value="!!AUTHORID!!"/>
+            <input type = "hidden" name="authorid" value="!!ID!!"/>
             <input id="deletebutton" type="submit" value="Delete"  />
         </form>
     </div>

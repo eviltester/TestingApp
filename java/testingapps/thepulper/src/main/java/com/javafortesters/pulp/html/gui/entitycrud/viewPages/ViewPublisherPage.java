@@ -1,16 +1,15 @@
-package com.javafortesters.pulp.html.gui.entitycrud.updatePages;
+package com.javafortesters.pulp.html.gui.entitycrud.viewPages;
 
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
-import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
-public class AmendPublisherPage {
+public class ViewPublisherPage {
     private final PulpPublisher publisher;
     private final String appversion;
 
-    public AmendPublisherPage(final PulpPublisher aPublisher, final String appversion) {
+    public ViewPublisherPage(final PulpPublisher aPublisher, final String appversion) {
         this.publisher = aPublisher;
         this.appversion = appversion;
     }
@@ -23,9 +22,9 @@ public class AmendPublisherPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Amend Publisher", appversion);
+        AppPageBuilder page = new AppPageBuilder("View Publisher", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/update/edit-book-publisher-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/read/view-book-publisher-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
         template.replace("!!ID!!", publisher.getId());

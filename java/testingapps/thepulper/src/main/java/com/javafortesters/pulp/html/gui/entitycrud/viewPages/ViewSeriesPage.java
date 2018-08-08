@@ -1,12 +1,11 @@
-package com.javafortesters.pulp.html.gui.entitycrud.updatePages;
+package com.javafortesters.pulp.html.gui.entitycrud.viewPages;
 
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
-import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
 
-public class AmendSeriesPage {
+public class ViewSeriesPage {
 
     private final PulpSeries series;
     private final String appversion;
@@ -16,16 +15,16 @@ public class AmendSeriesPage {
         this.output=output;
     }
 
-    public AmendSeriesPage(PulpSeries aSeries, final String appversion){
+    public ViewSeriesPage(PulpSeries aSeries, final String appversion){
         this.series = aSeries;
         this.appversion = appversion;
     }
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Amend Series", appversion);
+        AppPageBuilder page = new AppPageBuilder("View Series", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/update/edit-book-series-content.html");
+        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/page-template/entity-crud/read/view-book-series-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

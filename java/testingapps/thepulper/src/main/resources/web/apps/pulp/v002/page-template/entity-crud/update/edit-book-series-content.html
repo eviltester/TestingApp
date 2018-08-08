@@ -6,7 +6,7 @@
     <div>
         <form id="amendseriesform" action="series" method="post">
 
-            <input type = "hidden" name="seriesid" value="!!SERIESID!!"/>
+            <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <label for="seriesname">Name of Series</label>
             <input type="text" id="seriesname" name="seriesname" required="required" value="!!SERIESNAME!!" pattern=".{1,}">
 
@@ -15,10 +15,24 @@
         </form>
         <hr/>
         <form id="deleteform" action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
-            <input type = "hidden" name="seriesid" value="!!SERIESID!!"/>
+            <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <input id="deleteseriesbutton" type="submit" value="Delete" />
         </form>
     </div>
+
+    <hr/>
+
+    <div name="view-actions">
+        <a href="/apps/pulp/gui/view/series?series=!!ID!!" id="view-series-link-!!ID!!" title="View Series !!SERIESNAME!!">View Series</a>
+    </div>
+
+    <hr/>
+
+    <div name="link-items">
+        <!-- list of books in the series -->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?series=!!ID!!" id="book-list-series-link-!!ID!!" title="Books In Series !!SERIESNAME!!">List of Books in Series</a>
+    </div>
+
 
 </div>
 

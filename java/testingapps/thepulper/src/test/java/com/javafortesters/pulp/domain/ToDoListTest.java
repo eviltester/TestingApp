@@ -3,14 +3,19 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      add an [i] info screen where we can 'read' the information for the thing
-    //      with links to the related things eg. books published by, faq etc.
-    //      have an [i] link in the tables - configurable along with [amend]
-    //      add pagination to lists
+    //      have the names in tables and lists link to the view screen instead of the list screen
+    //      have the [amend][x][i] only appear in a list when filtered to 1 item
+
 
     //  v3
     //      have an admin option to configure which search engine is used for the faqs
     //      admin option to configure pagination settings
+    //      templates should have the ability to drop down to previous version if nothing for current version
+    //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
+    //      add a config option to allow lists to link to list or view or amend, etc.
+    //      add an [i] info screen where we can 'read' the information for the thing
+    //      have an [i] link in the tables - configurable along with [amend]
+    //      add pagination to lists
 
     // TODO: Basic GUI functionality
     // Can have a lot without login
@@ -120,4 +125,8 @@ public class ToDoListTest {
 
     //20180806 DONE
     // incorporate DELETE into lists for version 002
+
+    //20180808 DONE
+    // create a READ page for Series, Author, Publisher, Book and link these to/from the edit screen, and add link to list of books from both view and edit screen
+    //      with links to the related things eg. books published by, faq etc.
 }

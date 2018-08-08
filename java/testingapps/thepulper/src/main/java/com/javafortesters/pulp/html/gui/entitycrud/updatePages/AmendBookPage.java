@@ -57,7 +57,7 @@ public class AmendBookPage {
                 selected = true;
             }
 
-            options.append(option(author.getId(), author.getName(), "AUTHRO", selected));
+            options.append(option(author.getId(), author.getName(), "AUTHOR", selected));
         }
         // Ignore for the moment - make a multi select
         template.replaceSection("<!-- AUTHOR-ID-OPTIONS -->", options.toString());

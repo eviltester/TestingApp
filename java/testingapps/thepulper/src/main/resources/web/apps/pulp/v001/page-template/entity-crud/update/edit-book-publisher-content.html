@@ -15,7 +15,7 @@
     <div>
         <form id="amendform" action="publisher" method="post">
 
-            <input type = "hidden" name="publisherid" value="!!PUBLISHERID!!"/>
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
             <label for="publishername">Name of publisher</label>
             <input type="text" id="publishername" name="name" value="!!PUBLISHERNAME!!" required="required" pattern=".{1,}">
 
@@ -24,7 +24,7 @@
         </form>
         <hr/>
         <form id="deleteform" action="deletepublisher" method="post" onsubmit="return areYouSureYouWantToDeletePublisher()">
-            <input type = "hidden" name="publisherid" value="!!PUBLISHERID!!"/>
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
             <input id="deletebutton" type="submit" value="Delete" />
         </form>
     </div>

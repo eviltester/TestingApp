@@ -1,0 +1,28 @@
+
+<div id="view-series-author-!!ID!!">
+
+    <h2>Author Details !!AUTHORNAME!!</h2>
+
+    <ul name="details-list">
+        <li name = "author-id">!!ID!!</li>
+        <li name = "author-name">!!AUTHORNAME!!</li>
+    </ul>
+
+    <hr/>
+
+    <div name="edit-actions">
+        <a href="/apps/pulp/gui/amend/author?author=!!ID!!" id="edit-author-link-!!ID!!" title="Edit AUTHOR !!AUTHORNAME!!">Edit Author</a>
+    </div>
+
+    <hr/>
+
+    <div name="link-items">
+        <!-- list of books by author -->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?author=!!ID!!" id="book-list-author-link-!!ID!!" title="Books By Author !!AUTHORNAME!!">List of Books By Author</a>
+    </div>
+
+    <hr/>
+
+    <!-- OUTPUT GOES HERE -->
+
+</div>
