@@ -7,7 +7,7 @@ import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 
@@ -34,8 +34,11 @@ public class FaqRenderPage {
         AppPageBuilder page = new AppPageBuilder("Authors with FAQs", appversion);
 
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/faqs-page-body-content.html");
-        String iframeSection = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/query-iframe.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString("/page-template/faqs-page-body-content.html");
+        String iframeSection = versionedReader.asString("/page-template/query-iframe.html");
+        //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/faqs-page-body-content.html");
+        //String iframeSection = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/query-iframe.html");
 
         MyTemplate pageTemplate = new MyTemplate(pageToRender);
         pageTemplate.replace("<!-- TITLE GOES HERE -->", String.format("<h1>List of FAQs for %s: %s</h1>", faqsForType, searchFaqTerm));

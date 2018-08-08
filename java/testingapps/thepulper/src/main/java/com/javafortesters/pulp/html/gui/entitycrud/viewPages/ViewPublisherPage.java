@@ -3,7 +3,7 @@ package com.javafortesters.pulp.html.gui.entitycrud.viewPages;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class ViewPublisherPage {
@@ -25,7 +25,9 @@ public class ViewPublisherPage {
 
         AppPageBuilder page = new AppPageBuilder("View Publisher", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-publisher-content.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString( "/page-template/entity-crud/read/view-book-publisher-content.html");
+//        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-publisher-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
         template.replace("!!ID!!", publisher.getId());

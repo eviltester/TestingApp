@@ -1,7 +1,7 @@
 package com.javafortesters.pulp.html.gui.snippets;
 
 import com.javafortesters.pulp.html.templates.MyTemplate;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class PageSnippets {
@@ -19,7 +19,9 @@ public class PageSnippets {
     public String getPageHead(String title){
         StringBuilder report = new StringBuilder();
 
-        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-header.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString("/page-template/snippets/page-header.html");
+//        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-header.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- TITLE -->", title);
         report.append(template.toString());
@@ -34,7 +36,9 @@ public class PageSnippets {
 
         StringBuilder report = new StringBuilder();
 
-        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-footer.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString("/page-template/snippets/page-footer.html");
+//        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-footer.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- VERSION -->", appversion.getAppVersion());
         report.append(template.toString());
@@ -44,7 +48,9 @@ public class PageSnippets {
     public String getSnippet(final String snippet) {
 
         try {
-            final String pageToRender = new ResourceReader().asString( snippetsPathPrefix + snippet);
+            final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+            final String pageToRender = versionedReader.asString( "/page-template/snippets/"+snippet);
+//            final String pageToRender = new ResourceReader().asString( snippetsPathPrefix + snippet);
             final MyTemplate template = new MyTemplate(pageToRender);
             return template.toString();
         }catch(Exception e){

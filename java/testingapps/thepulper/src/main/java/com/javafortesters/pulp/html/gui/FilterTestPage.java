@@ -5,7 +5,7 @@ import com.javafortesters.pulp.html.HTMLReporter;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
@@ -49,7 +49,8 @@ public class FilterTestPage {
 
         AppPageBuilder page = new AppPageBuilder("Filter Test Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/filter-test-page-body-content.html");
+        String pageToRender = new VersionedResourceReader(appversion).asString("/page-template/filter-test-page-body-content.html");
+        //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/filter-test-page-body-content.html");
         MyTemplate template = new MyTemplate(pageToRender);
 
 

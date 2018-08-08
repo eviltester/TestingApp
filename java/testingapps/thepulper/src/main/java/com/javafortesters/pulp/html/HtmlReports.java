@@ -4,7 +4,6 @@ import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
-import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;

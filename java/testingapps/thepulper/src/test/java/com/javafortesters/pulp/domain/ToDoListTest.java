@@ -5,6 +5,7 @@ public class ToDoListTest {
     // NEXT:
     //
     //      Roll out versioned reader and delete any templates where they are identical between versions
+    //               - find new ResourceReader() and replace with VersionedResourceReader
     //      templates should have the ability to drop down to previous version if nothing for current version
     //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
     //

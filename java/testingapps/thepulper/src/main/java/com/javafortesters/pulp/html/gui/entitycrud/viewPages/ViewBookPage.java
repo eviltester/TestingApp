@@ -7,7 +7,7 @@ import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 import java.util.Collection;
@@ -34,7 +34,9 @@ public class ViewBookPage {
 
         AppPageBuilder page = new AppPageBuilder("View Book", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-book-content.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString( "/page-template/entity-crud/read/view-book-book-content.html");
+//        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/read/view-book-book-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 

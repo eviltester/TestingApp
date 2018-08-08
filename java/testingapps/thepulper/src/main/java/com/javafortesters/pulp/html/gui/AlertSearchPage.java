@@ -4,7 +4,7 @@ import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyTemplate;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
@@ -31,7 +31,9 @@ public class AlertSearchPage {
 
         AppPageBuilder page = new AppPageBuilder("Search Page", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/alert-search-page-body-content.html");
+
+        String pageToRender = new VersionedResourceReader(appversion).asString("/page-template/alert-search-page-body-content.html");
+        //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/alert-search-page-body-content.html");
 
         StringBuilder dataOutput = new StringBuilder();
 

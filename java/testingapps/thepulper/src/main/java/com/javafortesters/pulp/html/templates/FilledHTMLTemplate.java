@@ -1,6 +1,5 @@
 package com.javafortesters.pulp.html.templates;
 
-import com.javafortesters.pulp.reader.ResourceReader;
 import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 import com.javafortesters.pulp.spark.app.versioning.AppVersionSettings;
@@ -90,9 +89,9 @@ public class FilledHTMLTemplate {
 
         String pageToRender = new VersionedResourceReader(appversion).asString("/page-template/snippets/delete/" + template_name);
 
-        if(!(new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/snippets/delete/" + template_name).contentEquals(pageToRender))){
-            throw new RuntimeException("Template reading different");
-        };
+//        if(!(new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/snippets/delete/" + template_name).contentEquals(pageToRender))){
+//            throw new RuntimeException("Template reading different");
+//        };
 
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("!!ID!!", id);

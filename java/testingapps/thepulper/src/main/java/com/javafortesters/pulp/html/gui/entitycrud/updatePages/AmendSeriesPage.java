@@ -3,7 +3,7 @@ package com.javafortesters.pulp.html.gui.entitycrud.updatePages;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
-import com.javafortesters.pulp.reader.ResourceReader;
+import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class AmendSeriesPage {
@@ -25,7 +25,9 @@ public class AmendSeriesPage {
 
         AppPageBuilder page = new AppPageBuilder("Amend Series", appversion);
 
-        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/update/edit-book-series-content.html");
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString( "/page-template/entity-crud/update/edit-book-series-content.html");
+//        String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion.getAppVersion() + "/page-template/entity-crud/update/edit-book-series-content.html");
 
         MyTemplate template = new MyTemplate(pageToRender);
 
