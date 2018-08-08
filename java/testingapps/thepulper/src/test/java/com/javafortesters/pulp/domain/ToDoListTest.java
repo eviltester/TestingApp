@@ -3,7 +3,23 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-
+    //  Allow app to support versions more easily for planning features based on testing exercises
+    //
+    //  AppVersion should be an object
+    //  We can ask AppVersion .canDo(ACTION) and if it is avail in that version it will tell us
+    //  convert code to a AppVersion instead of contentEquals("v001")
+    //
+    //  Partition
+    //
+    //      templates should have the ability to drop down to previous version if nothing for current version
+    //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
+    //
+    //  Allow creating custom versions
+    //      via JSON API
+    //      via loading from file in app
+    //      via admin form
+    //      via CLI interface
+    //
 
 
 
@@ -13,8 +29,6 @@ public class ToDoListTest {
     //      re-enable and test the iframe on faqs
     //      have an admin option to configure which search engine is used for the faqs
     //      admin option to configure pagination settings
-    //      templates should have the ability to drop down to previous version if nothing for current version
-    //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
     //      add a config option to allow lists to link to list or view or amend, etc.
     //      add an [i] info screen where we can 'read' the information for the thing
     //      have an [i] link in the tables - configurable along with [amend]
