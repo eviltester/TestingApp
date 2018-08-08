@@ -2,11 +2,11 @@ package com.javafortesters.pulp.spark.app.versioning;
 
 public class AppVersion {
 
-    private static final int MAX_VERSION = 2;
+    public static final int MAX_VERSION = 4;
 
     AppVersionConfig settings = new AppVersionConfig();
 
-    int appVersion = 1;
+    int appVersion = 1; // default starting app version
 
     public AppVersion(final int version) {
 

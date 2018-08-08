@@ -83,7 +83,7 @@ public class FilledHTMLTemplate {
     public String deleteButton(final String template_name, final String id, final String buttonText, final String title) {
 
 
-        if(!appversion.are(AppVersionSettings.INLINE_DELETE_BUTTONS_AVAILABLE)){
+        if(!appversion.are(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST)){
             return "";
         }
 

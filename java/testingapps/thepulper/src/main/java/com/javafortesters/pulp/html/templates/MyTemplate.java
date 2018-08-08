@@ -16,6 +16,7 @@ public class MyTemplate {
         if(startOfSection==-1){
             // could not find it
             System.out.println("Could not find start of section " + sectionMarker);
+            return this;
         }
 
         int endOfSection = template.indexOf(sectionMarker, startOfSection + sectionMarker.length());
@@ -23,6 +24,7 @@ public class MyTemplate {
         if(endOfSection==-1){
             // could not find it
             System.out.println("Could not find end of section " + sectionMarker);
+            return this;
         }
 
         this.template = template.substring(0, startOfSection) + replacement + template.substring(endOfSection+sectionMarker.length());

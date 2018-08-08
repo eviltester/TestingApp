@@ -1,0 +1,45 @@
+
+
+<h2>Amend Publisher</h2>
+
+<div id="amendpublishersection">
+
+    <div>
+        <form id="amendpublisherform" action="publisher" method="post">
+
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
+            <label for="publishername">Name of publisher</label>
+            <input type="text" id="publishername" name="name" value="!!PUBLISHERNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="updatepublisherbutton" type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" action="deletepublisher" method="post" onsubmit="return areYouSureYouWantToDeletePublisher()">
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
+            <input id="deletepublisherbutton" type="submit" value="Delete" />
+        </form>
+    </div>
+
+    <hr/>
+
+    <div name="view-actions">
+        <a href="/apps/pulp/gui/view/publisher?publisher=!!ID!!" id="view-publisher-link-!!ID!!" title="View Publisher !!PUBLISHERNAME!!">View Publisher</a>
+    </div>
+
+    <hr/>
+
+    <div name="link-items">
+        <!-- list of books by publisher-->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?publisher=!!ID!!" id="book-list-publisher-link-!!ID!!" title="Books In Publisher !!PUBLISHERNAME!!">List of Books by Publisher</a>
+    </div>
+
+</div>
+
+<hr/>
+
+<!-- OUTPUT GOES HERE -->
+
+<hr/>
+
+<!-- FOOTER GOES HERE -->

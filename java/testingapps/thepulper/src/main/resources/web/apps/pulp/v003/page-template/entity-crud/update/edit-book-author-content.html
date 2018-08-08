@@ -1,0 +1,43 @@
+
+<h2>Amend Author</h2>
+
+<div id="amendauthorsection">
+
+    <div>
+        <form id="amendauthorform" action="author" method="post">
+
+            <input type = "hidden" name="authorid" value="!!ID!!"/>
+            <label for="authorname">Name of author</label>
+            <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="updateauthorbutton" type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor('!!AUTHORNAME!!')" method="post">
+            <input type = "hidden" name="authorid" value="!!ID!!"/>
+            <input id="deleteauthorbutton" type="submit" value="Delete" title="Delete Author !!AUTHORNAME!!"  />
+        </form>
+    </div>
+
+    <hr/>
+
+    <div name="view-actions">
+        <a href="/apps/pulp/gui/view/author?author=!!ID!!" id="view-author-link-!!ID!!" title="View Author !!AUTHORNAME!!">View Author</a>
+    </div>
+
+    <hr/>
+
+    <div name="link-items">
+        <!-- list of books by author -->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?author=!!ID!!" id="book-list-author-link-!!ID!!" title="Books By Author !!AUTHORNAME!!">List of Books By Author</a>
+    </div>
+
+</div>
+
+<hr/>
+<!-- OUTPUT GOES HERE -->
+
+<hr/>
+
+<!-- FOOTER GOES HERE -->

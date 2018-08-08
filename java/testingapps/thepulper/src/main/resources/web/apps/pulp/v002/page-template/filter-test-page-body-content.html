@@ -1,22 +1,22 @@
-<form id="filtertestform" action="filtertest" method="get">
+<form id="filterform" action="filtertest" method="get">
     Rendering Style:<br/>
-    <input id="rendering-table" type="radio" name="style" value='table'/>Table
-    <input id="rendering-list" type="radio" name="style" value='list'/>List
+    <input type="radio" name="style" value='table'/>Table
+    <input type="radio" name="style" value='list'/>List
     <br/>
     <hr/>
     Data is:<br/>
-    <input id="data-static" type="radio" name="navigation" value='static'/>Static
-    <input id="data-nav" type="radio" name="navigation" value='navigation'/>Navigable
+    <input type="radio" name="navigation" value='static'/>Static
+    <input type="radio" name="navigation" value='navigation'/>Navigable
     <br/>
     <hr/>
     Search Term Control: <br/>
-    <input id="search-term" type="checkbox" name="search" value='cansearch'/>Search <br/>
-    <input id="search-term-text" type="text" name='searchterm' size="15"/>
+    <input type="checkbox" name="search" value='cansearch'/>Search <br/>
+    <input type="text" name='searchterm' size="15"/>
     <br/>
     <hr/>
     Pagination Control:<br/>
-    <input id="pagination" type="checkbox" name="paginate" value='ispaged'/>Paginate<br/>
-    Current Page: <select id="pagination-page" name="page">
+    <input type="checkbox" name="paginate" value='ispaged'/>Paginate<br/>
+    Current Page: <select name="page">
     <!-- PAGE-OPTIONS -->
     <option value="1">
         1
@@ -38,7 +38,7 @@
     </option>
     <!-- PAGE-OPTIONS -->
 </select>
-    Number Per Page: <select id="pagination-limit" name="pagelimit" selected="selected">
+    Number Per Page: <select name="pagelimit" selected="selected">
     <!-- PAGE-LIMIT-OPTIONS -->
     <option value="1">
         1
@@ -63,7 +63,7 @@
     <br/>
     <hr/>
     Page Template:<br/>
-    <select id="page-template" name="template" multiple size="4">
+    <select name="template" multiple size="4">
         <option value='title'>
             Title
         </option>
@@ -79,7 +79,7 @@
     </select>
     <br/>
     <hr/>
-    <input id="filter-submit-button" type="submit" name="submitbutton" value="View Books"/>
+    <input type="submit" name="submitbutton" value="View Books"/>
 </form>
 
 <hr/>

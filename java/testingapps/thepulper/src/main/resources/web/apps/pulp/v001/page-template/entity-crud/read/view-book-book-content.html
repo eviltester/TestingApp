@@ -1,0 +1,29 @@
+
+<div id="view-book-section-!!BOOKID!!">
+
+    <h2>Book Details !!BOOKTITLE!!</h2>
+
+    <ul>
+        <li>ID: !!BOOKID!!</li>
+        <li>Title: <a href="/apps/pulp/gui/reports/books/table/navigation?book=!!BOOKID!!">!!BOOKTITLE!!</a></li>
+        <li>Series: <a href="/apps/pulp/gui/view/series?series=!!SERIESID!!">!!SERIESNAME!!</a></li>
+        <-- LIST OF AUTHORS -->
+        <li>Author: <a href="/apps/pulp/gui/view/author?author=!!HOUSEAUTHORID!!">!!HOUSEAUTHORNAME!!</a></li>
+        <li>Publisher: <a href="/apps/pulp/gui/view/publisher?publisher=!!PUBLISHERID!!">!!PUBLISHERNAME!!</a></li>
+        <li>Identifier: !!SERIESIDENTIFIER!!</li>
+        <li>Published: <a href="/apps/pulp/gui/reports/books/list/navigation?year=!!PUBLICATIONYEAR!!">!!PUBLICATIONYEAR!!</a></li>
+
+    </ul>
+
+    <hr/>
+
+    <div>
+        <!-- list of books -->
+        <a href="/apps/pulp/gui/reports/books/table/navigation?book=!!BOOKID!!" id="book-list-series-link-!!BOOKID!!" title="Book in list">Book As List</a>
+    </div>
+
+    <hr/>
+
+    <!-- OUTPUT GOES HERE -->
+
+</div>

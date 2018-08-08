@@ -1,0 +1,84 @@
+<!-- based on https://codepen.io/philhoyt/pen/ujHzd -->
+<!-- Menu:
+    Books |
+    Authors > List, FAQ |
+    Publishers | Series | Years | Search |
+    Create > Author, Series, Publisher, Book |
+    Reports > Books, Authors, Publishers, Series, Years | Admin > Filter -->
+
+<div class="main_menu">
+<nav id="primary_nav_wrap">
+    <ul>
+        <li id="menu-home"><a href="/apps/pulp/gui/">Home</a>
+            <ul>
+                <li id="menu-help"><a href="/apps/pulp/gui/help">Help</a></li>
+                <li id="submenu-home"><a href="/apps/pulp/gui/">Menu</a></li>
+            </ul>
+        </li>
+        <li id="menu-books-menu"><a href="/apps/pulp/gui/menu/books">Books</a>
+            <ul>
+                <li id="menu-books-table"><a href="/apps/pulp/gui/reports/books/table/navigation">Table</a></li>
+                <li id="menu-books-list"><a href="/apps/pulp/gui/reports/books/list/navigation">List</a></li>
+                <li id="menu-books-list-faq"><a href="/apps/pulp/gui/reports/books/list/navigation/faqs">FAQs</a></li>
+            </ul>
+        </li>
+        <li id="menu-authors-menu"><a href="/apps/pulp/gui/menu/authors">Authors</a>
+            <ul>
+                <li id="menu-authors-list"><a href="/apps/pulp/gui/reports/authors/list/navigation">List</a></li>
+                <li id="menu-authors-faq-list"><a href="/apps/pulp/gui/reports/authors/list/navigation/faqs">FAQ</a></li>
+            </ul>
+        </li>
+
+        <li id="menu-publishers-menu"><a href="/apps/pulp/gui/menu/publishers">Publishers</a>
+        <ul>
+            <li id="menu-publishers-list"><a href="/apps/pulp/gui/reports/publishers/list/navigation">Publishers</a></li>
+            <li id="menu-publishers-faq-list"><a href="/apps/pulp/gui/reports/publishers/list/navigation/faqs">FAQ</a></li>
+        </ul>
+        </li>
+
+        <li id="menu-series-menu"><a href="/apps/pulp/gui/menu/series">Series</a>
+        <ul>
+            <li id="menu-series-list"><a href="/apps/pulp/gui/reports/series/list/navigation">Series</a></li>
+            <li id="menu-series-faq-list"><a href="/apps/pulp/gui/reports/series/list/navigation/faqs">FAQ</a></li>
+        </ul>
+        </li>
+
+        <li id="menu-years-menu"><a href="/apps/pulp/gui/menu/years">Years</a>
+        <ul>
+            <li id="menu-years-list"><a href="/apps/pulp/gui/reports/years/list/navigation">Years</a></li>
+            <li id="menu-years-faq-list"><a href="/apps/pulp/gui/reports/years/list/navigation/faqs">FAQs</a></li>
+        </ul>
+        </li>
+
+        <li id="menu-books-search" name="menu-books-search"><a href="/apps/pulp/gui/reports/books/search">Search</a></li>
+        <li id="menu-create-menu"><a href="/apps/pulp/gui/menu/create">Create</a>
+            <ul>
+                <li id="menu-create-author"><a href="/apps/pulp/gui/create/author">Author</a></li>
+                <li id="menu-create-series"><a href="/apps/pulp/gui/create/series">Series</a></li>
+                <li id="menu-create-publisher"><a href="/apps/pulp/gui/create/publisher">Publisher</a></li>
+                <li id="menu-create-book"><a href="/apps/pulp/gui/create/book">Book</a></li>
+            </ul>
+        </li>
+
+        <li  id="menu-reports-menu"><a href="/apps/pulp/gui/menu/reports">Reports</a>
+            <ul>
+                <li id="menu-books-report-table"><a href="/apps/pulp/gui/reports/books/table/static">Books</a></li>
+                <li id="menu-books-report-list"><a href="/apps/pulp/gui/reports/books/list/static">Book List</a></li>
+                <li id="menu-authors-report-list"><a href="/apps/pulp/gui/reports/authors/list/static">Authors</a></li>
+                <li id="menu-publishers-report-list"><a href="/apps/pulp/gui/reports/publishers/list/static">Publishers</a></li>
+                <li id="menu-series-report-list"><a href="/apps/pulp/gui/reports/series/list/static">Series</a></li>
+                <li id="menu-years-report-list"><a href="/apps/pulp/gui/reports/years/list/static">Years</a></li>
+            </ul>
+        </li>
+        <li id="menu-admin-menu"><a href="/apps/pulp/gui/menu/admin">Admin</a>
+            <ul>
+                <li id="menu-admin-filter"><a href="/apps/pulp/gui/admin/filtertest">Filter</a></li>
+                <!-- List of Versions -->
+                <li id="menu-admin-shutdown"><a href="/shutdown" onclick="return areYouSureYouWantToShutdown()">Shutdown</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+</div>
+<br style="clear:both;"/>
+<hr/>

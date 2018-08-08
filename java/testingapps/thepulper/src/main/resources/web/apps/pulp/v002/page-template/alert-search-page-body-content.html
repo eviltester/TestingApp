@@ -43,10 +43,10 @@
     }
 </script>
 
-<p id="searchconfirmreturn"></p>
-<input id="exitsearchbutton" type="button" onclick="show_alert_and_exit()" value="Exit Page" />
-<input id="helpsearchbutton" type="button" onclick="show_help_alert()" value="Show help alert box" />
-<input id="searchforbutton" type="button" onclick="show_search_alert()" value="Dialog Based Search" />
+<p id="confirmreturn"></p>
+<input id="exitbutton" type="button" onclick="show_alert_and_exit()" value="Exit Page" />
+<input id="helpbutton" type="button" onclick="show_help_alert()" value="Show help alert box" />
+<input id="searchfor" type="button" onclick="show_search_alert()" value="Dialog Based Search" />
 <br/>
 <hr/>
 
@@ -55,13 +55,13 @@
     <div>
         <form id="searchform" action="search" onsubmit="return areYouSureYouWantToSearch();" method="get">
             <!-- value="!!searchterm!!" to have a default search term -->
-            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!" required="required">
+            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!">
             <input type="hidden" name="what" value="title"/>
             <input type="hidden" name="how" value="contains"/>
             <input type="hidden" name="mode" value="form"/>
             <label for="searchterminput">Search for What Book Title?</label>
             <br/>
-            <input id="searchbuttonform" type="submit" value="Search" />
+            <input id="searchbutton" type="submit" value="Search" />
             <br/>
             <!-- !!checked!! checked or not checked -->
             <input type="checkbox" id="confirmsearch" name="confirmsearchcheck" !!checked!!/>
@@ -71,8 +71,8 @@
 
 </div>
 
-<div id='searchdataoutput'>
-    <!-- OUTPUT GOES HERE -->
+<div name='output'>
+<!-- OUTPUT GOES HERE -->
 </div>
 
 <!-- FOOTER GOES HERE -->

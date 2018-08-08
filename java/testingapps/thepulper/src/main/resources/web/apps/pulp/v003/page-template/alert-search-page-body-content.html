@@ -1,0 +1,78 @@
+<script type="text/javascript">
+    function show_help_alert()
+    {
+        alert("This page allows you to \n search for titles of \n pulp novels available \n for reporting in The Pulper.");
+    }
+    function show_alert_and_exit()
+    {
+        if(confirm("Are you sure you want to exit search?")){
+            window.location.href=window.location.pathname.substr(0, window.location.pathname.length - "/search".length);
+        }else{
+            document.getElementById('confirmreturn').innerHTML="Thanks for continuing to search!";
+        }
+    }
+    function areYouSureYouWantToSearch(){
+
+        // if we have selected the confirm search checkbox
+        if(document.getElementById("confirmsearch").checked === false){
+            return;
+        }
+
+        if(confirm("Are you sure you want to search?")){
+            if(document.forms["searchform"]["searchterm"].value.trim()==""){
+                alert("You need to enter a search term");
+                return false;
+            }
+            return true;
+        }else{
+            return false;
+        }
+    }
+    function show_search_alert()
+    {
+
+        var promptRet=prompt("Search for What Title?");
+        if(show_search_alert!=null){
+
+            var confirmSearch="";
+            if(document.getElementById("confirmsearch").checked === true){
+                confirmSearch="&confirmsearchcheck=on";
+            }
+            window.location.href="search?what=title&how=contains&mode=dialog&searchterm=" + encodeURI(promptRet) + confirmSearch;
+        }
+    }
+</script>
+
+<p id="searchconfirmreturn"></p>
+<input id="exitsearchbutton" type="button" onclick="show_alert_and_exit()" value="Exit Page" />
+<input id="helpsearchbutton" type="button" onclick="show_help_alert()" value="Show help alert box" />
+<input id="searchforbutton" type="button" onclick="show_search_alert()" value="Dialog Based Search" />
+<br/>
+<hr/>
+
+<div id="titlesearchform">
+
+    <div>
+        <form id="searchform" action="search" onsubmit="return areYouSureYouWantToSearch();" method="get">
+            <!-- value="!!searchterm!!" to have a default search term -->
+            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!" required="required">
+            <input type="hidden" name="what" value="title"/>
+            <input type="hidden" name="how" value="contains"/>
+            <input type="hidden" name="mode" value="form"/>
+            <label for="searchterminput">Search for What Book Title?</label>
+            <br/>
+            <input id="searchbuttonform" type="submit" value="Search" />
+            <br/>
+            <!-- !!checked!! checked or not checked -->
+            <input type="checkbox" id="confirmsearch" name="confirmsearchcheck" !!checked!!/>
+            <label for="confirmsearch">Confirm Searches</label>
+        </form>
+    </div>
+
+</div>
+
+<div id='searchdataoutput'>
+    <!-- OUTPUT GOES HERE -->
+</div>
+
+<!-- FOOTER GOES HERE -->

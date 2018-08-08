@@ -11,6 +11,8 @@ import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 
 
+import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST;
+import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -151,11 +153,21 @@ public class PulpAppForSpark {
             }
 
             config.showAmendLinks(false);
-            config.showBookAmendLink(true);
+            config.allowDelete(false);
+
+            if(pulp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+                config.showBookAmendLink(true);
+            }
+            if(pulp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+                // list doesn't have enough room - only show in table
+                // config.setAllowDeleteBook(true);
+            }
+
 
             // TODO if filtered at all then show authors, publishers, series and years as links
 
             config.setTitlesAreLinks(true);
+
             return pulp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
 
@@ -183,10 +195,13 @@ public class PulpAppForSpark {
             final ReportConfig config = new ReportConfig(pulp.reports().getReportConfig());
 
             config.showAmendLinks(false);
-            if(pulp.getAppVersionInt()==1) {
+
+            if(pulp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)){
                 config.showBookAmendLink(true);
+            }
+            if(pulp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 // table has enough space to allow delete button rendering
-                // config.setAllowDeleteBook(true);
+                config.setAllowDeleteBook(true);
             }
 
             config.setTitlesAreLinks(true);
@@ -326,12 +341,18 @@ public class PulpAppForSpark {
             }
 
 
-            config.showAmendLinks(true);
             config.setAuthorNamesLinks(true);
             config.allowDelete(false);
 
-            // possibly if filtered then allow delete tec.
-            // config.setAllowDeleteAuthor(true);
+            if(pulp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+                config.showAmendLinks(true);
+            }
+            if(pulp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+                config.setAllowDeleteAuthor(true);
+            }
+
+
+            // possibly if filtered then allow delete etc..
 
 
             return pulp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
@@ -358,12 +379,15 @@ public class PulpAppForSpark {
                 config.setIncludeFaqLinks(false);
             }
 
-            config.showAmendLinks(true);
+
             config.setPublisherNamesLinks(true);
             config.allowDelete(false);
 
-            if(pulp.getAppVersionInt()>=2){
-            //    config.setAllowDeletePublisher(true);
+            if(pulp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+                config.showAmendLinks(true);
+            }
+            if(pulp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+                config.setAllowDeletePublisher(true);
             }
 
 
@@ -417,14 +441,16 @@ public class PulpAppForSpark {
                 config.setIncludeFaqLinks(false);
             }
 
-            config.showAmendLinks(true);
+            config.showAmendLinks(false);
             config.setSeriesNamesLinks(true);
             config.allowDelete(false);
 
-            if(pulp.getAppVersionInt()>=2){
-            //    config.setAllowDeleteSeries(true);
+            if(pulp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+                config.showAmendLinks(true);
             }
-
+            if(pulp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+                config.setAllowDeleteSeries(true);
+            }
 
             return pulp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
         });

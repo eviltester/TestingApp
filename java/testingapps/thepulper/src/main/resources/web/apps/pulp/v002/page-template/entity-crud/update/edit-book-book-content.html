@@ -1,9 +1,19 @@
-<h2>Amend Book</h2>
+<script type="text/javascript">
+    function areYouSureYouWantToDeleteBook(){
+        if(confirm("Are you sure you want to delete !!BOOKTITLE!!?")){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
 
-<div id="amendbooksection">
+<h1>Amend Book</h1>
+
+<div id="amendobjectsection">
 
     <div>
-        <form id="amendbookform" action="book" method="post">
+        <form id="amendform" action="book" method="post">
 
             <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
             <label for="booktitle">Title of book</label>
@@ -55,29 +65,16 @@
             <br/>
 
 
-            <input id="updatebookbutton" type="submit" value="Update" />
+            <input id="updatebutton" type="submit" value="Update" />
         </form>
         <hr/>
         <form id="deleteform" action="deletebook" method="post" onsubmit="return areYouSureYouWantToDeleteBook()">
             <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
-            <input id="deletebookbutton" type="submit" value="Delete" />
+            <input id="deletebutton" type="submit" value="Delete" />
         </form>
     </div>
 
-    <hr/>
-
-    <div name="view-actions">
-        <a href="/apps/pulp/gui/view/book?book=!!BOOKID!!" id="view-book-link-!!BOOKID!!" title="View Book !!BOOKTITLE!!">View Book</a>
-    </div>
-
-    <hr/>
-
-    <div name="link-items">
-        <!-- list of books -->
-        <a href="/apps/pulp/gui/reports/books/table/navigation?book=!!BOOKID!!" id="book-list-series-link-!!BOOKID!!" title="Book in list">Book As List</a>
-    </div>
 </div>
-
 
 <hr/>
 

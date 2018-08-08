@@ -29,7 +29,24 @@ public class PageSnippets {
     }
 
     public String getDropDownMenu() {
-        return getSnippet("dropdownmenu.html");
+        StringBuilder report = new StringBuilder();
+
+        //<!-- List of Versions -->
+        //                <li id="menu-set-version-1"><a href="/apps/pulp/gui/admin/version/1">v001</a></li>
+        //                <li id="menu-set-version-2"><a href="/apps/pulp/gui/admin/version/2">v002</a></li>
+        //                <li id="menu-set-version-3"><a href="/apps/pulp/gui/admin/version/3">v003</a></li>
+        final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
+        String pageToRender = versionedReader.asString("/page-template/snippets/dropdownmenu.html");
+
+        StringBuilder versions = new StringBuilder();
+        for(int version=1; version <= AppVersion.MAX_VERSION; version++){
+            versions.append(String.format("<li id=\"menu-set-version-%d\"><a href=\"/apps/pulp/gui/admin/version/%d\">%s</a></li>", version, version, AppVersion.asPathVersion(version)));
+        }
+
+        MyTemplate template = new MyTemplate(pageToRender);
+        template.replace("<!-- List of Versions -->", versions.toString());
+        report.append(template.toString());
+        return report.toString();
     }
 
     public String getPageFooter() {

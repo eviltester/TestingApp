@@ -46,16 +46,12 @@ public class PulpApp {
 
     }
 
-    public String getAppVersion() {
-        return appVersion.getAppVersion();
+    public AppVersion getAppVersion() {
+        return appVersion;
     }
 
     public HtmlReports stringReports() {
         return reports(ReportConfig.justStrings(appVersion));
-    }
-
-    public int getAppVersionInt() {
-        return appVersion.getAppVersionInt();
     }
 
     public void setAppVersion(final int version) {

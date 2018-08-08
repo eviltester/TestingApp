@@ -4,26 +4,10 @@ public class ToDoListTest {
 
     // NEXT:
     //
-    //      Roll out versioned reader and delete any templates where they are identical between versions
-    //               - find new ResourceReader() and replace with VersionedResourceReader
-    //      templates should have the ability to drop down to previous version if nothing for current version
-    //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
-    //
-    //  Create different versions
-    //      e.g.
-    //      v 1 - just a READ app so only lists and the lists link to View screens
-    //      v 2 - CRUD app
-    //      v 3 - CRUD app that is easier to automate with HTML IDs
-    //      v 4 - CRUD app - easier to automate with insitu amend and delete on Series, Author and Publisher lists
-    //      v 5 - CRUD app
-    //
     //      Create a text line for each capability and have the HELP page show the capabilities that are 'true'
+    //      possibly create a history list to add to the bottom of the help file?
     //
-    //  Allow app to support versions more easily for planning features based on testing exercises
-    //
-    //
-    //  Partition
-    //
+    //      - Release new version of app
     //
     //  Allow creating custom versions
     //      via JSON API
@@ -31,9 +15,6 @@ public class ToDoListTest {
     //      via admin form
     //      via CLI interface
     //
-
-
-
     //  v3
     //      add faqs to the view page
     //      have the [amend][x][i] only appear in a list when filtered to 1 item
@@ -162,5 +143,20 @@ public class ToDoListTest {
     //  convert code to a AppVersion instead of contentEquals("v001")
     //  We can ask AppVersion .canDo(ACTION) and if it is avail in that version it will tell us
     //      convert code to use a .canDo(ACTION) AppVersion instead of currentVersionIs(1)
-    //  created a VersionedResourceReader that will drop down through the versions looking for a resource - currently implemented on help
+    //  created a VersionedResourceReader that will drop down through the versions looking for a resource -
+    // currently implemented on help
+    //      Roll out versioned reader and delete any templates where they are identical between versions
+    //               - find new ResourceReader() and replace with VersionedResourceReader
+    //      templates should have the ability to drop down to previous version if nothing for current version
+    //          e.g. /v003/page-template/entity-crud/update/edit-book-series-content.html NotExist - check for v002 if exists, use, check for v001 if exist, use, pass back "" as fall through
+    //
+    //  Allow app to support versions more easily for planning features based on testing exercises
+    //
+    //  Create different versions
+    //      e.g.
+    //      v 1 - just a READ app so only lists and the lists link to View screens
+    //      v 2 - CRUD app - basic CRUD APP
+    //      v 3 - CRUD app that is easier to automate with HTML IDs - current v002
+    //      v 4 - CRUD app - easier to automate with insitu amend and delete on Series, Author and Publisher lists
+
 }

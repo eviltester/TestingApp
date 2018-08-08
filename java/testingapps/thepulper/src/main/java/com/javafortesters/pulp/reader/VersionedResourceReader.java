@@ -2,7 +2,6 @@ package com.javafortesters.pulp.reader;
 
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class VersionedResourceReader {
@@ -32,7 +31,7 @@ public class VersionedResourceReader {
             foundInPathVersion = AppVersion.asPathVersion(foundInVersion);
         }
 
-        if(foundInVersion==0){
+        if(foundInVersion<=0){
             System.out.println(String.format("Could not find %s %s %s", pathPrefix, this.appversion.getAppVersion(), pathPostfix));
             return "";
 
