@@ -2,7 +2,7 @@ package com.javafortesters.pulp.reporting;
 
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.reporting.reporters.*;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 import java.util.*;
 

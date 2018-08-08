@@ -18,7 +18,7 @@ import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewBookPage;
 import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewPublisherPage;
 import com.javafortesters.pulp.html.gui.entitycrud.viewPages.ViewSeriesPage;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class AppPages {
     private final PulpData books;

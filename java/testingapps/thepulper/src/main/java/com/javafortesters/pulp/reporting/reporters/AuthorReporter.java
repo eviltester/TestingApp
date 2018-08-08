@@ -4,6 +4,7 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.app.versioning.AppVersionSettings;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +44,7 @@ public class AuthorReporter {
 
             String name = defaultNameOutput;
             if (reportConfig.areAuthorNamesLinks()) {
-                if(reportConfig.getAppVersion().currentVersionIs(1)){
+                if(reportConfig.getAppVersion().are(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST)){
                     // link to books
                     name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
                     name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);

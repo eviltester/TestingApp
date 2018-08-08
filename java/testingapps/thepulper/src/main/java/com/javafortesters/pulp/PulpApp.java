@@ -6,7 +6,7 @@ import com.javafortesters.pulp.html.gui.AppPages;
 import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class PulpApp {
 

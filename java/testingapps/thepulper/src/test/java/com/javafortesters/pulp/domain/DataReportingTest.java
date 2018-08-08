@@ -6,7 +6,7 @@ import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 import org.junit.Assert;
 import org.junit.Test;
 

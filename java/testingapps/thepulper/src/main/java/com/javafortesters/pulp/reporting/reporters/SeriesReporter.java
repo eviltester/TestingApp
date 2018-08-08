@@ -4,6 +4,7 @@ import com.javafortesters.pulp.domain.objects.PulpSeries;
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reporting.ReportConfig;
+import com.javafortesters.pulp.spark.app.versioning.AppVersionSettings;
 
 import java.util.*;
 
@@ -41,7 +42,8 @@ public class SeriesReporter {
 
             String name = defaultSeriesOutput;
             if(reportConfig.areSeriesNamesLinks()) {
-                if(reportConfig.getAppVersion().currentVersionIs(1)){
+
+                if(reportConfig.getAppVersion().are(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST)){
                     // link to books
                     name = String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
                     name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);

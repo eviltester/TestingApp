@@ -9,7 +9,7 @@ import com.javafortesters.pulp.reporting.PulpReporter;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 
 import java.util.Collection;

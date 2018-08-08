@@ -1,6 +1,6 @@
 package com.javafortesters.pulp.html.gui.snippets;
 
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class AppPageBuilder {
 

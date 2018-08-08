@@ -3,7 +3,7 @@ package com.javafortesters.pulp.html.gui;
 import com.javafortesters.pulp.PulpApp;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 import org.junit.Assert;
 import org.junit.Test;
 

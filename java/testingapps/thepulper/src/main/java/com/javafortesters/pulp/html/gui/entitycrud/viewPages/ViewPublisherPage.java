@@ -4,7 +4,7 @@ import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.ResourceReader;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class ViewPublisherPage {
     private final PulpPublisher publisher;

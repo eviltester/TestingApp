@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.html.templates;
 
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersionSettings;
 
 /**
  * Used to encapsulate inline templates a much as possible
@@ -16,7 +17,8 @@ public class HtmlTemplates {
     public MyTemplate getSelectOption() {
         String templateString = "<option value='!!VALUE!!'>!!TEXT!!</option>";
 
-        if(appversion.currentVersionIs(2)){
+
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString  = "<option name='!!ID!!' value='!!VALUE!!'>!!TEXT!!</option>\n";
         }
 
@@ -27,7 +29,7 @@ public class HtmlTemplates {
     public MyTemplate getSelectOptionSelected() {
         String templateString = "<option value='!!VALUE!!' selected>!!TEXT!!</option>";
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString  = "<option name='!!ID!!' value='!!VALUE!!' selected='selected'>!!TEXT!!</option>\n";
         }
 
@@ -37,7 +39,7 @@ public class HtmlTemplates {
     public MyTemplate getSearchResultMessage() {
         String templateString ="<p>!!MESSAGE!!</p>";
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString="<p id='searchresultmessage' class='errormessage'>!!MESSAGE!!</p>";
         }
 
@@ -47,7 +49,7 @@ public class HtmlTemplates {
     public MyTemplate getLi() {
         String templateString ="<li>!!TEXT!!</li>";
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString="<li id='!!ID!!' class='!!CLASS!!'>!!TEXT!!</li>";
         }
 
@@ -57,7 +59,7 @@ public class HtmlTemplates {
     public MyTemplate getErrorMessage() {
         String templateString ="<h2>!!MESSAGE!!</h2>";
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString="<h2 name='error'>!!MESSAGE!!</h2>";
         }
 
@@ -68,7 +70,7 @@ public class HtmlTemplates {
         String templateString ="<a target='_blank' href='!!HREF!!'>!!LINKTEXT!!</a>";
 
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString="<a name='!!NAME!!' target='_blank' rel='noreferrer' href='!!HREF!!'>!!LINKTEXT!!</a>";
         }
 
@@ -78,7 +80,7 @@ public class HtmlTemplates {
     public MyTemplate getTableTag() {
         String templateString = "<table>";
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString = "<table id='!!ID!!' name='!!NAME!!'>";
         }
 
@@ -88,7 +90,7 @@ public class HtmlTemplates {
     public MyTemplate getSpanTag() {
         String templateString = "!!TEXT!!";  // don't actually output the span
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString = "<span id='!!ID!!'>!!TEXT!!</span>";
         }
 
@@ -98,7 +100,7 @@ public class HtmlTemplates {
     public MyTemplate getUlTag() {
         String templateString = "<ul>";  // don't actually output the span
 
-        if(appversion.currentVersionIs(2)){
+        if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
             templateString = "<ul id='!!ID!!'>";
         }
 

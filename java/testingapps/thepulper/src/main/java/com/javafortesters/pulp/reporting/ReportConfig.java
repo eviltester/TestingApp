@@ -1,7 +1,7 @@
 package com.javafortesters.pulp.reporting;
 
 
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 public class ReportConfig {
     private AppVersion appversion;

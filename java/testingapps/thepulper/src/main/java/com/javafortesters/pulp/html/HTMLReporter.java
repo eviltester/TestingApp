@@ -1,7 +1,7 @@
 package com.javafortesters.pulp.html;
 
 import com.javafortesters.pulp.html.templates.FilledHTMLTemplate;
-import com.javafortesters.pulp.spark.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 import java.util.Collection;
 
