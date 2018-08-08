@@ -39,9 +39,17 @@ public class PublisherReporter {
 
             String name = defaultNameOutput;
             if(reportConfig.arePublishersLinks()){
-                name = String.format("<a href='%s?publisher=%s'>%s</a>",
-                        reportConfig.getReportPath("books"), item.getId(), item.getName());
-                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
+                if(reportConfig.getAppVersion().contentEquals("v001")){
+                    // link to books
+                    name = String.format("<a href='%s?publisher=%s'>%s</a>",
+                            reportConfig.getReportPath("books"), item.getId(), item.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
+                }else{
+                    // link to thing
+                    name = String.format("<a href='%s%s' title='View Details'>%s</a>",
+                            reportConfig.withoutPostLink().withoutReportInPath().getReportPath("view/publisher?publisher="), item.getId(), item.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("publisher-details-%s", item.getId()), name);
+                }
             }
 
             String amend="";

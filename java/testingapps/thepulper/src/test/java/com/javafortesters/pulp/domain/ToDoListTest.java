@@ -3,11 +3,14 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //      have the names in tables and lists link to the view screen instead of the list screen
-    //      have the [amend][x][i] only appear in a list when filtered to 1 item
+
+
 
 
     //  v3
+    //      add faqs to the view page
+    //      have the [amend][x][i] only appear in a list when filtered to 1 item
+    //      re-enable and test the iframe on faqs
     //      have an admin option to configure which search engine is used for the faqs
     //      admin option to configure pagination settings
     //      templates should have the ability to drop down to previous version if nothing for current version
@@ -129,4 +132,5 @@ public class ToDoListTest {
     //20180808 DONE
     // create a READ page for Series, Author, Publisher, Book and link these to/from the edit screen, and add link to list of books from both view and edit screen
     //      with links to the related things eg. books published by, faq etc.
+    //      have the names in tables and lists link to the view screen instead of the list screen
 }

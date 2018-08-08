@@ -41,8 +41,17 @@ public class SeriesReporter {
 
             String name = defaultSeriesOutput;
             if(reportConfig.areSeriesNamesLinks()) {
-                name = String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
-                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);
+                if(reportConfig.getAppVersion().contentEquals("v001")){
+                    // link to books
+                    name = String.format("<a href='%s?series=%s'>%s</a>", reportConfig.getReportPath("books"), item.getId(), item.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);
+                }else{
+                    // link to thing
+                    name = String.format("<a href='%s%s' title='View Details'>%s</a>",
+                            reportConfig.withoutPostLink().withoutReportInPath().getReportPath("view/series?series="), item.getId(), item.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("series-details-%s", item.getId()), name);
+                }
+
             }
 
             String amend="";

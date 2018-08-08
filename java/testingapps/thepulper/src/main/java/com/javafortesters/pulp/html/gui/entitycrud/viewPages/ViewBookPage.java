@@ -52,7 +52,7 @@ public class ViewBookPage {
 
         StringBuilder authorsInLi = new StringBuilder();
 
-        String authorTemplate = "<li name = \"author-named\"><a href=\"/apps/pulp/gui/view/author?author=!!AUTHORID!!\">!!AUTHORNAME!!</a></li>";
+        String authorTemplate = "<li name = \"author-named\">Author: <a href=\"/apps/pulp/gui/view/author?author=!!AUTHORID!!\">!!AUTHORNAME!!</a></li>";
         final MyTemplate authorLi = new MyTemplate(authorTemplate);
 
         for(PulpAuthor author : books.authors().getAllOrderedByName()){

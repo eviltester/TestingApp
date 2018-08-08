@@ -43,8 +43,16 @@ public class AuthorReporter {
 
             String name = defaultNameOutput;
             if (reportConfig.areAuthorNamesLinks()) {
-                name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
-                name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
+                if(reportConfig.getAppVersion().contentEquals("v001")){
+                    // link to books
+                    name = String.format("<a href='%s?author=%s'>%s</a>", reportConfig.getReportPath("books"), author.getId(), author.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
+                }else{
+                    // link to thing
+                    name = String.format("<a href='%s%s'>%s</a>",
+                            reportConfig.withoutPostLink().withoutReportInPath().getReportPath("view/author?author="), author.getId(), author.getName());
+                    name = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("author-details-%s", author.getId()), name);
+                }
             }
 
             String amend = "";

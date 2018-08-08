@@ -126,8 +126,18 @@ public class BookReporter {
 
                 String title = "";
                 if(reportConfig.areTitlesLinks()){
-                    title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
-                    title = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);
+
+                    if(reportConfig.getAppVersion().contentEquals("v001")){
+                        // link to book as list
+                        title = String.format("<a href='%s?book=%s'>%s</a>", reportConfig.getReportPath("books"), book.getId(), book.getTitle());
+                        title = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book%stitle", book.getId()), title);
+                    }else{
+                        // link to thing
+                        title = String.format("<a href='%s%s' title='View Details'>%s</a>",
+                                reportConfig.withoutPostLink().withoutReportInPath().getReportPath("view/book?book="), book.getId(), book.getTitle());
+                        title = new FilledHTMLTemplate(reportConfig.getAppVersion()).span(String.format("book-details-%s", book.getId()), title);
+                    }
+
                 }else{
                     title = defaultTitle;
                 }
