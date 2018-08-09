@@ -3,6 +3,7 @@ package com.javafortesters.pulp.html;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.gui.snippets.PageSnippets;
+import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.PaginatorRender;
 import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.reporting.PulpReporter;
@@ -13,6 +14,7 @@ import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
 
 import java.util.Collection;
+import java.util.List;
 
 public class HtmlReports {
     private final PulpReporter reporter;
@@ -150,10 +152,36 @@ public class HtmlReports {
 
         AppPageBuilder page = new AppPageBuilder("Help", appversion);
 
-        String pageToRender = new VersionedResourceReader(appversion).asString("/content/help.html");
+
+        String pageTemplate = new VersionedResourceReader(appversion).asString("/content/help.html");
         //String pageToRender = new ResourceReader().asString("/web/apps/pulp/" + appversion + "/content/help.html");
 
-        page.appendToBody(pageToRender);
+        MyTemplate template = new MyTemplate(pageTemplate);
+
+        List<String> capabilities = appversion.getCapabilities(true);
+        StringBuilder ul = new StringBuilder();
+
+        ul.append("<h3>Current Version Capabilities</h3>\n");
+        ul.append("<ul>\n");
+        for(String summary : capabilities){
+            ul.append(String.format("<li>%s</li>%n", summary));
+        }
+        ul.append("</ul>\n");
+
+        template.replace("<!-- CAPABILITYLIST -->", ul.toString());
+
+
+        StringBuilder versionHistory = new StringBuilder();
+        for(int version = AppVersion.MAX_VERSION; version>0; version--){
+            String versionHelp = new VersionedResourceReader(appversion).asString(String.format("/content/help-version-%03d.html", version));
+            versionHistory.append(versionHelp);
+            versionHistory.append("\n");
+        }
+
+        template.replace("<!-- VERSIONHISTORY -->", versionHistory.toString());
+
+
+        page.appendToBody(template.toString());
         return page.toString();
 
 

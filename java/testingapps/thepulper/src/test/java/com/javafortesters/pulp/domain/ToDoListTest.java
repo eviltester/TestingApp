@@ -3,9 +3,7 @@ package com.javafortesters.pulp.domain;
 public class ToDoListTest {
 
     // NEXT:
-    //
-    //      Create a text line for each capability and have the HELP page show the capabilities that are 'true'
-    //      possibly create a history list to add to the bottom of the help file?
+
     //
     //      - Release new version of app
     //
@@ -158,5 +156,10 @@ public class ToDoListTest {
     //      v 2 - CRUD app - basic CRUD APP
     //      v 3 - CRUD app that is easier to automate with HTML IDs - current v002
     //      v 4 - CRUD app - easier to automate with insitu amend and delete on Series, Author and Publisher lists
+
+    //20180809 DONE
+    //
+    //      Create a text line for each capability and have the HELP page show the capabilities that are 'true'
+    //      create a history list to add to the bottom of the help file
 
 }

@@ -1,5 +1,9 @@
 package com.javafortesters.pulp.spark.app.versioning;
 
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.List;
+
 public class AppVersion {
 
     public static final int MAX_VERSION = 4;
@@ -61,5 +65,18 @@ public class AppVersion {
 
     private boolean getSetting(final AppVersionSettings appVersionSetting) {
         return settings.getSettingAsBoolean(appVersionSetting);
+    }
+
+    public List<String> getCapabilities(final boolean where) {
+
+        List<String> descriptions = new ArrayList<>();
+
+        for(AppVersionSettings setting : EnumSet.allOf(AppVersionSettings.class)){
+            if(settings.getSettingAsBoolean(setting)==where){
+                descriptions.add(setting.getDescription());
+            }
+        }
+
+        return descriptions;
     }
 }

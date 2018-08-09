@@ -13,19 +13,19 @@
 <div id="amendobjectsection">
 
     <div>
-        <form id="amendform" action="series" method="post">
+        <form action="series" method="post">
 
             <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <label for="seriesname">Name of Series</label>
             <input type="text" id="seriesname" name="seriesname" required="required" value="!!SERIESNAME!!" pattern=".{1,}">
 
             <br/>
-            <input id="updatebutton" type="submit" value="Update" />
+            <input type="submit" value="Update" />
         </form>
         <hr/>
-        <form id="deleteform" action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
+        <form action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
             <input type = "hidden" name="seriesid" value="!!ID!!"/>
-            <input id="deletebutton" type="submit" value="Delete" />
+            <input type="submit" value="Delete" />
         </form>
     </div>
 

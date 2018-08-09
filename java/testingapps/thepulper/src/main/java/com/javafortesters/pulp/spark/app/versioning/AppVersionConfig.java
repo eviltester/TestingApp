@@ -9,8 +9,8 @@ import java.util.Map;
  */
 public class AppVersionConfig {
 
-    Map<String, AppVersionConfigValue> configSettings = new HashMap();
-    int displayedVersionNumber = 1;
+    private Map<String, AppVersionConfigValue> configSettings = new HashMap();
+    private int displayedVersionNumber = 1;
 
     public boolean getSettingAsBoolean(final AppVersionSettings appVersionSetting) {
 
@@ -49,8 +49,8 @@ public class AppVersionConfig {
             case 2:
                 // specific version 2 config here
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
-                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, false);
                 retConfig.setDisplayedVersionNumber(2);
 
                 break;
@@ -58,8 +58,8 @@ public class AppVersionConfig {
             case 3:
                 // specific version 2 config here
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
-                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setDisplayedVersionNumber(3);
 
                 break;

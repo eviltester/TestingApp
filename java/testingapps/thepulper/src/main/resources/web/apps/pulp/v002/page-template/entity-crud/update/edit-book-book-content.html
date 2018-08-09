@@ -13,7 +13,7 @@
 <div id="amendobjectsection">
 
     <div>
-        <form id="amendform" action="book" method="post">
+        <form action="book" method="post">
 
             <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
             <label for="booktitle">Title of book</label>
@@ -65,12 +65,12 @@
             <br/>
 
 
-            <input id="updatebutton" type="submit" value="Update" />
+            <input type="submit" value="Update" />
         </form>
         <hr/>
-        <form id="deleteform" action="deletebook" method="post" onsubmit="return areYouSureYouWantToDeleteBook()">
+        <form  action="deletebook" method="post" onsubmit="return areYouSureYouWantToDeleteBook()">
             <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
-            <input id="deletebutton" type="submit" value="Delete" />
+            <input  type="submit" value="Delete" />
         </form>
     </div>
 

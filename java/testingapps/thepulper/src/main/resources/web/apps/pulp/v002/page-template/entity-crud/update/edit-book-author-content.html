@@ -13,19 +13,19 @@ function areYouSureYouWantToDeleteAuthor(){
 <div id="amendobjectsection">
 
     <div>
-        <form id="amendform" action="author" method="post">
+        <form action="author" method="post">
 
             <input type = "hidden" name="authorid" value="!!ID!!"/>
             <label for="authorname">Name of author</label>
             <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
 
             <br/>
-            <input id="updatebutton" type="submit" value="Update" />
+            <input type="submit" value="Update" />
         </form>
         <hr/>
-        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
+        <form action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
             <input type = "hidden" name="authorid" value="!!ID!!"/>
-            <input id="deletebutton" type="submit" value="Delete"  />
+            <input type="submit" value="Delete"  />
         </form>
     </div>
 
