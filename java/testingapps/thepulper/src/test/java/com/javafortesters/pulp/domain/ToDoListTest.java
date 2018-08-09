@@ -35,10 +35,7 @@ public class ToDoListTest {
     // # DELETE
 
     // # TODO: READ
-
-    // Create an entity Read Page which will link to Amend
     // Entity Read page could show a filtered list of books published by, written by, in series, by date etc.
-    // Book Read page should have a list of the authors, publishers, series, dates etc. with links
 
     // TODO: fix paging bug to support authors, series, publishers etc. - currently just books
     // TODO: Create a Frames view which has side frame for list and mainframe for report and top frame for search?
@@ -54,7 +51,7 @@ public class ToDoListTest {
 
     // TODO: allow user configuration of the search engines: google, bing, duckduckgo etc. - in admin
     // TODO: for test filter page add [author], [series], [year], [publisher] as drop downs
-    // TODO: CSS for styling - swap in/out for different versions
+
 
     // TODO: Table Column sort by DOM using Javascript
     // TODO: filter sort by direct page load call
@@ -64,10 +61,6 @@ public class ToDoListTest {
     // CRUD create your own reportes - templates columns, styles
 
     // TODO: add sorting button on the series, authors and publishers list pages
-
-
-    // TODO: create rendering objects
-    // TODO: add names, ids, classes etc. to rendered items
 
     // # TODO: API
     // - try and add thingifier as the backend then get a lot of this for free
@@ -79,7 +72,6 @@ public class ToDoListTest {
     // # TODO: GUI version which is API Powered
     // TODO: add a simple GUI that uses the REST API for reporting the books
     // TODO: add an AJAX based GUI that uses the REST API for reporting the books
-
 
     // TODO: can READ and get without authentication
     // TODO: add a single admin user hard coded
@@ -161,5 +153,14 @@ public class ToDoListTest {
     //
     //      Create a text line for each capability and have the HELP page show the capabilities that are 'true'
     //      create a history list to add to the bottom of the help file
+    //
+    //  Tidy todo file to trim work done
+    // Create an entity Read Page which will link to Amend
+    // Book Read page should have a list of the authors, publishers, series, dates etc. with links
+    // CSS for styling - swap in/out for different versions
+    // create rendering objects
+    // add names, ids, classes etc. to rendered items
+
+
 
 }
