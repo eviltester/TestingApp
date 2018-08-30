@@ -76,3 +76,43 @@
     display:block;
     z-index:100;
 }
+
+/* https://css-tricks.com/three-line-menu-navicon/ */
+/* hamburger menu */
+@media only screen and ( max-width:1024px) {
+
+    #primary_nav_wrap
+    {
+        position: relative;
+        width: 1em;
+        height: 1em;
+        padding-left: 1.25em;
+        z-index:100;
+    }
+    #primary_nav_wrap:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.25em;
+        width: 1em;
+        height: 0.15em;
+        background: black;
+        box-shadow:
+                0 0.25em 0 0 black,
+                0 0.5em 0 0 black;
+    }
+    #primary_nav_wrap:hover ul{
+        display:block;
+    }
+    #primary_nav_wrap:hover ul ul{
+        display:none;
+    }
+
+    #primary_nav_wrap:hover ul li:hover > ul{
+        display:none;
+    }
+
+    #primary_nav_wrap ul{
+        display:none;
+    }
+}
