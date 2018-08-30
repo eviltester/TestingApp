@@ -32,7 +32,7 @@ public class VersionedResourceReader {
         }
 
         if(foundInVersion<=0){
-            System.out.println(String.format("Could not find %s %s %s", pathPrefix, this.appversion.getAppVersion(), pathPostfix));
+            //System.out.println(String.format("Could not find %s %s %s", pathPrefix, this.appversion.getAppVersion(), pathPostfix));
             return "";
 
         }else{
