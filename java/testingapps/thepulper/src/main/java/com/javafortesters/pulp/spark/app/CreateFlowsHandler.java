@@ -34,6 +34,7 @@ public class CreateFlowsHandler {
         try{
             final PulpAuthor author = pulp.books().authors().add(name);
             if(author==null){
+                res.status(400);
                 page.setOutput(String.format("<h2>Error Adding Author %s</h2>", name));
             }else {
                 name = pulp.reports(pulp.reports().getReportConfig().setPostFixPath("/list/navigation")).
@@ -41,6 +42,7 @@ public class CreateFlowsHandler {
                 page.setOutput(String.format("<h2>Added Author %s</h2>", name));
             }
         }catch(Exception e){
+            res.status(500);
             page.setOutput(String.format("<h2>%s</h2><p>%s</p>",e.getMessage(), SparkUtils.getMyStackTrace(e)));
         }
 

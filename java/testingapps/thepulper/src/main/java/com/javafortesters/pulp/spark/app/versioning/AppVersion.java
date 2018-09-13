@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AppVersion {
 
-    public static final int MAX_VERSION = 4;
+    public static final int MAX_VERSION = 5;
 
     AppVersionConfig settings = new AppVersionConfig();
 

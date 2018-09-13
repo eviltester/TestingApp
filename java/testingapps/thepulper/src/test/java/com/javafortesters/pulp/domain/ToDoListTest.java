@@ -5,7 +5,7 @@ public class ToDoListTest {
     // NEXT:
 
     //
-    //      - Release new version of app
+    // create a v 5 and add animation to the drop down menu reveal to make it harder to automate
     //
     //  Allow creating custom versions
     //      via JSON API
