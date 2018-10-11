@@ -12,7 +12,7 @@ public class ResourceReader {
     public String asString(String resourceName){
 
         try {
-            InputStream in = this.getClass().getResourceAsStream(resourceName);
+            InputStream in = this.getClass().getResourceAsStream(osIndependentResourcePath(resourceName));
 
             // http://web.archive.org/web/20140531042945/https://weblogs.java.net/blog/pat/archive/2004/10/stupid_scanner_1.html
             Scanner scanner = new Scanner(in).useDelimiter("\\A");
@@ -29,10 +29,14 @@ public class ResourceReader {
         }
     }
 
+    private String osIndependentResourcePath(String path){
+        return path.replaceAll("\\\\","/");
+    }
+
     public boolean doesResourceExist(final String path) {
         try {
 
-            InputStream in = this.getClass().getResourceAsStream(path);
+            InputStream in = this.getClass().getResourceAsStream(osIndependentResourcePath(path));
             if(in==null){
                 return false;
             }

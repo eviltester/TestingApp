@@ -11,7 +11,11 @@ public class CsvReader {
 
     public void read() {
         this.data = new ResourceReader().asString(resourcePath);
-        this.lines = data.split("\n");
+        String splitter = "\n";
+        if(data.contains("\r\n")){
+            splitter = "\r\n";
+        }
+        this.lines = data.split(splitter);
     }
 
     public int numberOfLines() {
