@@ -1,11 +1,14 @@
 package uk.co.compendiumdev.spark.app;
 
 import spark.Spark;
+import uk.co.compendiumdev.spark.app.mock.MockApi;
 
 import static spark.Spark.get;
 import static spark.Spark.staticFileLocation;
 
 public class CompendiumDevAppsForSpark {
+
+    public MockApi mockApi = new MockApi();
 
     public CompendiumDevAppsForSpark(){
         // javascript games
@@ -25,6 +28,12 @@ public class CompendiumDevAppsForSpark {
         //sloganizer header redirects to avoid going on the internet
         get("/page/dearEvilTester", (req, res) -> {res.redirect("/apps/pages/dear-evil-tester.html"); return "";});
         get("/contact.html", (req, res) -> {res.redirect("/apps/pages/contact.html"); return "";});
+
+        get("/apps/reflect", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
+        get("/apps/reflect/*", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
+        get("/apps/api/mock/reflect", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
+        get("/apps/api/mock/reflect/*", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
+
     }
 
     public static CompendiumDevAppsForSpark runLocally(Integer proxyport) {
