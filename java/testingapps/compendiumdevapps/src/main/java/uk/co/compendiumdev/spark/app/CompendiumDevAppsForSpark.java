@@ -31,9 +31,12 @@ public class CompendiumDevAppsForSpark {
 
         get("/apps/reflect", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
         get("/apps/reflect/*", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
+
+        // Backwards compatible url i.e. https://www.compendiumdev.co.uk/apps/api/mock/reflect
         get("/apps/api/mock/reflect", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
         get("/apps/api/mock/reflect/*", (req, res) -> { res.status(200); res.type("text/html"); return mockApi.reflect(req);});
 
+        
     }
 
     public static CompendiumDevAppsForSpark runLocally(Integer proxyport) {
