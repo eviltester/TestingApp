@@ -56,7 +56,7 @@ public class AppVersionConfig {
                 break;
 
             case 3:
-                // specific version 2 config here
+                // specific version 3 config here
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
@@ -65,7 +65,7 @@ public class AppVersionConfig {
                 break;
 
             case 4:
-                // specific version 2 config here
+                // specific version 4 config here
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
