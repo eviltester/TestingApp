@@ -15,3 +15,7 @@ I'm on mac
 - `heroku deploy:jar target/thepulper-1-2-2-jar-with-dependencies.jar --app thepulper`
 
 had to add `:target/*` to the procfile when deploying fat app
+
+after deployment:
+
+https://thepulper.herokuapp.com
