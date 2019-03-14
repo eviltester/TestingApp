@@ -1,15 +1,13 @@
 package com.javafortesters.pulp.spark.app;
 
 import com.javafortesters.pulp.PulpApp;
-import com.javafortesters.pulp.html.gui.AlertSearchPage;
-import com.javafortesters.pulp.html.gui.FaqRenderPage;
-import com.javafortesters.pulp.html.gui.FilterTestPage;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import spark.Request;
+import spark.Session;
 
 
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST;
@@ -23,20 +21,36 @@ public class PulpAppForSpark {
 
     // TODO support multiple apps each with a different session
 
-    PulpApp pulp;
+    private static final String SESSION_APP = "sessionPulpApp";
+    private static final int MAX_SESSION_LENGTH = 60*5;
+
 
     public PulpApp getPulpApp(Request req){
 
+        PulpApp sessionPulpApp;
         // initially a singleton
         // TODO: get the app for the current session
-        // TODO: delete app sessions which are too old
-        if(pulp==null){
-            pulp = new PulpApp();
-            pulp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
-            pulp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
-            pulp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
+        // TODO: delete app sessions which are too old - should happen automatically with MAX Session LEngth
+        Session session = req.session(false);
+
+        if (session == null) {
+            // user does not have a session create it
+            session = req.session();
+            session.maxInactiveInterval(MAX_SESSION_LENGTH);
+
+            sessionPulpApp = new PulpApp();
+            sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
+            sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
+            sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
+
+            session.attribute(SESSION_APP, sessionPulpApp);
+
+
+        } else {
+            sessionPulpApp = session.attribute(SESSION_APP);
         }
-        return pulp;
+
+        return sessionPulpApp;
     }
 
     public PulpAppForSpark(){
@@ -50,7 +64,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/create/author", (req, res) -> {
-            return new CreateFlowsHandler(pulp).authorCreate(req, res);
+            return new CreateFlowsHandler(getPulpApp(req)).authorCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/author?author=id
@@ -59,7 +73,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/author", (req, res) -> {
-            return new AmendFlowsHandler(pulp).authorAmend(req, res);
+            return new AmendFlowsHandler(getPulpApp(req)).authorAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deleteauthor", (req, res) -> {
@@ -78,7 +92,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/create/series", (req, res) -> {
-            return new CreateFlowsHandler(pulp).seriesCreate(req, res);
+            return new CreateFlowsHandler(getPulpApp(req)).seriesCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/series?series=id
@@ -87,7 +101,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {
-            return new AmendFlowsHandler(pulp).seriesAmend(req, res);
+            return new AmendFlowsHandler(getPulpApp(req)).seriesAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deleteseries", (req, res) -> {
@@ -105,7 +119,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/create/publisher", (req, res) -> {
-            return new CreateFlowsHandler(pulp).publisherCreate(req, res);
+            return new CreateFlowsHandler(getPulpApp(req)).publisherCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/publisher?publisher=id
@@ -114,7 +128,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/publisher", (req, res) -> {
-            return new AmendFlowsHandler(pulp).publisherAmend(req, res);
+            return new AmendFlowsHandler(getPulpApp(req)).publisherAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deletepublisher", (req, res) -> {
@@ -133,7 +147,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/create/book", (req, res) -> {
-            return new CreateFlowsHandler(pulp).bookCreate(req, res);
+            return new CreateFlowsHandler(getPulpApp(req)).bookCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/book?book=id
@@ -142,7 +156,7 @@ public class PulpAppForSpark {
         });
 
         post("/apps/pulp/gui/amend/book", (req, res) -> {
-            return new AmendFlowsHandler(pulp).bookAmend(req, res);
+            return new AmendFlowsHandler(getPulpApp(req)).bookAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deletebook", (req, res) -> {
