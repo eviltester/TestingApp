@@ -13,13 +13,14 @@ public class PulpApp {
     private final PulpData books;
     private AppVersion appVersion;
 
+
     HtmlReports reports;
 
     public PulpApp() {
 
         books = new PulpData();
         //reports = new HtmlReports(books, this.appversion);
-        appVersion = new AppVersion(2);
+        appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
         reports = new HtmlReports(books, appVersion);
     }
 

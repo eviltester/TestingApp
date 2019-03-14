@@ -72,7 +72,14 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setDisplayedVersionNumber(4);
                 break;
-
+            case 5:
+                // specific version 4 config here
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setDisplayedVersionNumber(4);
+                break;
 
         }
 

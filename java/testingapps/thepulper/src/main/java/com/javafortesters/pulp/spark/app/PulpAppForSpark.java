@@ -22,15 +22,14 @@ public class PulpAppForSpark {
     // TODO support multiple apps each with a different session
 
     private static final String SESSION_APP = "sessionPulpApp";
-    private static final int MAX_SESSION_LENGTH = 60*5;
+    private static final int MAX_SESSION_LENGTH = 60*5;  // set max session without interactivity to 5 minutes
+    private boolean allowsShutdown=false;
 
 
     public PulpApp getPulpApp(Request req){
 
         PulpApp sessionPulpApp;
-        // initially a singleton
-        // TODO: get the app for the current session
-        // TODO: delete app sessions which are too old - should happen automatically with MAX Session LEngth
+        // create a session based set of app data that is deleted after 5 minutes of inactivity
         Session session = req.session(false);
 
         if (session == null) {
@@ -39,6 +38,7 @@ public class PulpAppForSpark {
             session.maxInactiveInterval(MAX_SESSION_LENGTH);
 
             sessionPulpApp = new PulpApp();
+            sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
             sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
             sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
             sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
@@ -53,7 +53,14 @@ public class PulpAppForSpark {
         return sessionPulpApp;
     }
 
-    public PulpAppForSpark(){
+    public PulpAppForSpark() {
+        // by default do not allow shutdown
+        this(false);
+    }
+
+    public PulpAppForSpark(boolean allowsShutdown){
+
+        this.allowsShutdown = allowsShutdown;
 
         get("/apps/pulp/gui/view/author", (req, res) -> {
             return getPulpApp(req).page().viewAuthorPage(req.queryParams("author")).asHTMLString();

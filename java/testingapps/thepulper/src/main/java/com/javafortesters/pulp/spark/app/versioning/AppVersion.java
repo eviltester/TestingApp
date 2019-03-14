@@ -7,10 +7,12 @@ import java.util.List;
 public class AppVersion {
 
     public static final int MAX_VERSION = 5;
+    public static final int DEFAULT_VERSION = 2;
 
     AppVersionConfig settings = new AppVersionConfig();
 
     int appVersion = 1; // default starting app version
+    private boolean versionAllowsShutdown=false;
 
     public AppVersion(final int version) {
 
@@ -78,5 +80,13 @@ public class AppVersion {
         }
 
         return descriptions;
+    }
+
+    public boolean allowsShutdown() {
+        return this.versionAllowsShutdown;
+    }
+
+    public void willAllowShutdown(final boolean allowsShutdown) {
+        this.versionAllowsShutdown=allowsShutdown;
     }
 }

@@ -66,6 +66,24 @@
                     </archive>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>${herokumaven.version}</version>
+                <configuration>
+                    <jdkVersion>${herokujdk.version}</jdkVersion>
+                    <!-- Use your own application name -->
+                    <appName>thepulper</appName>
+                    <processTypes>
+                        <!-- https://devcenter.heroku.com/articles/deploying-java-applications-with-the-heroku-maven-plugin -->
+                        <!-- Tell Heroku how to launch your application -->
+                        <!-- You might have to remove the ./ in front   -->
+                        <!-- <web>java -jar /target/thepulper-1-2-2-jar-with-dependencies.jar</web>-->
+                        <!-- try from procfile -->
+                        <web>java $JAVA_OPTS -cp target/classes:target/dependency/* com.javafortesters.thepulper.MainApp</web>
+                    </processTypes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

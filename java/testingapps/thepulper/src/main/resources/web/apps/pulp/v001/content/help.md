@@ -8,6 +8,8 @@ The data sets are Pulp Magazine editions from the 30s and 40s because, frankly, 
 
 The data has a variety of publishers, magazines and series pre-populated.
 
+Each user has a unique session. This is valid for 5 minutes without activity, at which point it will be deleted and you will be provided with a new session.
+
 ## Entities
 
 The main entities are:

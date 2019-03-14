@@ -43,8 +43,13 @@ public class PageSnippets {
             versions.append(String.format("<li id=\"menu-set-version-%d\"><a href=\"/apps/pulp/gui/admin/version/%d\">%s</a></li>", version, version, AppVersion.asPathVersion(version)));
         }
 
+        String shutdownMenuItem = "<li id=\"menu-admin-shutdown\"><a href=\"/shutdown\" onclick=\"return areYouSureYouWantToShutdown()\">Shutdown</a></li>";
+
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- List of Versions -->", versions.toString());
+        if(appversion.allowsShutdown()) {
+            template.replace("<!-- Allow Shutdown -->", shutdownMenuItem);
+        }
         report.append(template.toString());
         return report.toString();
     }

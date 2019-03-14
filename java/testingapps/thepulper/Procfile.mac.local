@@ -1,0 +1,1 @@
+web: java -cp ./target/thepulper-1-2-2-jar-with-dependencies.jar com.javafortesters.thepulper.MainApp
