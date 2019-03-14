@@ -7,6 +7,7 @@ public class PaginationDetails {
     private int currentPage;
     private int numberOfPages;
     private BookFilter filterUsed;
+    private String itemPlural = "books";
 
     public void setPaginated(boolean b) {
         this.paginated = b;
@@ -50,5 +51,13 @@ public class PaginationDetails {
 
     public BookFilter getFilter() {
         return filterUsed;
+    }
+
+    public String getItemsName() {
+        return itemPlural;
+    }
+
+    public void setNameOfThings(final String listOfWhat) {
+        itemPlural = listOfWhat;
     }
 }

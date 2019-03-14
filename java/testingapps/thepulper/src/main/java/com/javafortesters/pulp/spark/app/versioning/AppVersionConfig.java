@@ -78,6 +78,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
                 retConfig.setDisplayedVersionNumber(4);
                 break;
 

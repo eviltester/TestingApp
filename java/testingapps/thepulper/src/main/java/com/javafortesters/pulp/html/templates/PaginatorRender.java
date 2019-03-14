@@ -11,7 +11,7 @@ public class PaginatorRender {
 
     public String renderAsText() {
 
-        String paging = "Showing All " + paginationDetails.getTotalItems() + " books.";
+        String paging = String.format("Showing All %d %s.", paginationDetails.getTotalItems(), paginationDetails.getItemsName());
 
         if (paginationDetails.isPaginated()){
             paging = String.format("Showing Page %d of %d (total items %d)", paginationDetails.getCurrentPage(), paginationDetails.getTotalPages(), paginationDetails.getTotalItems());

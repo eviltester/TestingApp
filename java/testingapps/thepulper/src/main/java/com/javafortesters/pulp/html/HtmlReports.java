@@ -11,6 +11,7 @@ import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.reporters.BookReporter;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.AppVersionSettings;
 
 
 import java.util.Collection;
@@ -82,7 +83,12 @@ public class HtmlReports {
 
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
 
-        page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/list/%s",reportConfig.getReportPath(), urlArg, style)));
+        if(appversion.are(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS)){
+            page.appendToBody(new PaginatorRender(SimplePaginator.getPaginationDetails(simpleReport, listOfWhat)).renderAsClickable(String.format("%s%s/list/%s", reportConfig.getReportPath(), urlArg, style)));
+        }else {
+            // initial hacky code with unfinished pagination
+            page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/list/%s", reportConfig.getReportPath(), urlArg, style)));
+        }
 
         return page.toString();
 
@@ -97,7 +103,8 @@ public class HtmlReports {
         page.appendToBody(thingsAsTable);
 
         String style = reportConfig.areYearsLinks() ? "navigation" : "static";
-        page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/table/%s",reportConfig.getReportPath() , urlArg, style)));
+
+        page.appendToBody(new PaginatorRender(this.data.books().getPaginationDetails()).renderAsClickable(String.format("%s%s/table/%s", reportConfig.getReportPath(), urlArg, style)));
 
         return page.toString();
     }
@@ -177,6 +184,14 @@ public class HtmlReports {
             versionHistory.append(versionHelp);
             versionHistory.append("\n");
         }
+
+        StringBuilder versionselect = new StringBuilder();
+        versionselect.append("\n<p><strong>Select Version</strong></p>\n<ul>\n");
+        for(int version=1; version <= AppVersion.MAX_VERSION; version++){
+            versionselect.append(String.format("<li id=\"help-list-set-version-%d\"><a href=\"/apps/pulp/gui/admin/version/%d\">%s</a></li>\n", version, version, AppVersion.asPathVersion(version)));
+        }
+        versionselect.append("\n");
+        versionHistory.append(versionselect.toString());
 
         template.replace("<!-- VERSIONHISTORY -->", versionHistory.toString());
 
