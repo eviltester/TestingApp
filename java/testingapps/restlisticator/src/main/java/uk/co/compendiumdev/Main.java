@@ -4,6 +4,9 @@ import spark.Spark;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
 import uk.co.compendiumdev.restlisticator.testappconfig.FeatureToggles;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by Alan on 04/07/2017.
  */
@@ -46,11 +49,26 @@ public class Main {
             }
         }
 
+        // By default run in single user mode
+        // use a -multiuser argument to force it into multi user mode and have to use GET /sessionid
+
+        final List<String> argsAsList = Arrays.asList(args);
+        if(System.getenv().containsKey("RestListicatorMultiUser")){
+            argsAsList.add("-multiuser");
+        }
+        if(System.getProperties().containsKey("RestListicatorMultiUser")){
+            argsAsList.add("-multiuser");
+        }
+
+        // TODO: add some tests around multiuser mode
+
         // TODO: add a shutdown verb as configurable through arguments e.g. -shutdownable=false
 
         Spark.port(proxyport);
-        
-        RestServer restServer = new RestServer(args, "");
+
+        String []newargs = argsAsList.toArray(new String[argsAsList.size()]);
+
+        RestServer restServer = new RestServer(newargs, "");
         restServer.documentationDetails(proxyport);
 
         System.out.println("Running on " + Spark.port());
