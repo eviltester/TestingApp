@@ -52,7 +52,7 @@ Use Basic authentication to use these users.
 
 - `-port=1234` set the port to supplied integer (defaults to 4567)
 - `-bugfixes=false` (defaults to true)
-- `-resettimmer=MILLISECONDS` e.g. `-resettimmer=1000`
+- `-resettimer=MILLISECONDS` e.g. `-resettimer=1000`
     - sets the default list application timer, by default locally this is 0 as single user mode is inferred
     - on the cloud this is set to 5 minutes (300000 milliseconds)
     - this can also be configured by setting and environment variable or property called `RestListicatorApiResetMillis`
