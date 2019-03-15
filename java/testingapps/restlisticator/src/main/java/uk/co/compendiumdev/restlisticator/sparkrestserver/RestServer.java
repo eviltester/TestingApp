@@ -21,7 +21,7 @@ public class RestServer {
     // by default running on port 4567
     private Integer theProxyPort=4567;
 
-    // 30 seconds - TODO: make this settable with an environment variable or property or command line arg
+    // 30 seconds - this is settable with an environment variable or property or command line arg
     private Integer MAX_SESSION_INACTIVE_INTERVAL = 30; // in seconds
 
 
@@ -37,19 +37,19 @@ public class RestServer {
         if (headervalue != null && headervalue.length() > 0) {
             // There is a header, if there is no session then it may have expired or we may not have started it
 
-            // TODO: if X-SESSIONID does not match current session then provide a 403
+            // if X-SESSIONID does not match current session then provide a 403
             if(session == null || !session.id().equalsIgnoreCase(headervalue)){
                 response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"X-SESSIONID_header_mismatch\", error_description=\"X-SESSIONID header does not match session details, perhaps your session expired?\"");
                 halt(403);
             }else{
-                // TODO: if X-SESSIONID matches current session and there is a sessionapi then return it
+                // if X-SESSIONID matches current session and there is a sessionapi then return it
                 if(session.attribute("SESSIONAPI")!=null) {
                     return request.session().attribute("SESSIONAPI");
                 }
             }
         }
 
-        // if there is no X-SESSIONID then return theapi
+        // if there is no X-SESSIONID then return default singleton theapi
         return theapi;
 
     }
