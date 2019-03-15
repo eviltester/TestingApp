@@ -72,6 +72,13 @@ Use Basic authentication to use these users.
 - `/feature-toggles` - `superadmin` can toggle app features on and off
 - `/sessionid` - get a unique sessionid to isolate your testing from other users, use the session id in a `X-SESSIONID` header
 
+
+> NOTE:
+> if you see `{username}` or `{guid}` mentioned in the end point documentation.
+> This means "replace {username} with an actual username"
+> e.g. `/users/{username}/apikey` would be `/users/admin/apikey`
+
+
 The end points may be nested in a sub path e.g. `/listicator/heartbeat`
 
 Check with your system admin to find out how the application has been configured.
@@ -82,7 +89,7 @@ On heroku the requests are of the form:
 
 Running locally it is likely to be (by default):
 
-- `GET https://localhost:4567/listicator/heartbeat`
+- `GET https://localhost:4567/heartbeat`
 
 
 ---
@@ -422,3 +429,37 @@ The system has been coded with some known bugs - these are all fixed by default.
 See if you can find them.
 
 `java -jar rest-list-system.jar -bugfixes=false`
+
+
+---
+
+
+## Details
+
+This application has been written by [Alan Richardson](https://eviltester.com)
+
+Copyright [Compendium Developments Ltd](https://compendiumdev.co.uk)
+
+Source code is available as part of "[The Evil Tester's Compendium of Testing Apps](https://github.com/eviltester/TestingApp)" with source on Github.
+
+Deployed to Heroku at [rest-list-system.herokuapp.com/listicator/](https://rest-list-system.herokuapp.com/listicator/)
+
+Recommended tools for exploratory testing of REST API:
+
+- [Insomnia](https://insomnia.rest/)
+- [Postman](https://www.getpostman.com/)
+
+If you are interested in learning how to test APIs then you might find the book by Alan Richardson called "[Automating and Testing a REST API](https://www.eviltester.com/page/books/automating-testing-api-casestudy/)" useful.
+
+The book has a [support page with many videos and sample code](https://compendiumdev.co.uk/page/tracksrestsupport).
+
+---
+
+### More Details About the Author
+
+- [www.eviltester.com](https://www.eviltester.com) - Software Testing Blogs and Articles
+- [www.compendiumdev.co.uk](https://www.compendiumdev.co.uk) - Consultancy & Training
+- [digitalonlinetactics.com](https://digitalonlinetactics.com) - Online Marketing Blog
+- [uk.linkedin.com/in/eviltester](https://uk.linkedin.com/in/eviltester)
+- [twitter.com/eviltester](https://twitter.com/eviltester)
+- [patreon.com/eviltester](https://patreon.com/eviltester) - I release a lot of exclusive training content on Patreon

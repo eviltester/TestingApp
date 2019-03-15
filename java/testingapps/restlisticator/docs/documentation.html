@@ -72,6 +72,12 @@
 <li><code>/feature-toggles</code> - <code>superadmin</code> can toggle app features on and off</li>
 <li><code>/sessionid</code> - get a unique sessionid to isolate your testing from other users, use the session id in a <code>X-SESSIONID</code> header</li>
 </ul>
+<blockquote>
+<p>NOTE:<br />
+if you see <code>{username}</code> or <code>{guid}</code> mentioned in the end point documentation.<br />
+This means &quot;replace {username} with an actual username&quot;<br />
+e.g. <code>/users/{username}/apikey</code> would be <code>/users/admin/apikey</code></p>
+</blockquote>
 <p>The end points may be nested in a sub path e.g. <code>/listicator/heartbeat</code></p>
 <p>Check with your system admin to find out how the application has been configured.</p>
 <p>On heroku the requests are of the form:</p>
@@ -80,7 +86,7 @@
 </ul>
 <p>Running locally it is likely to be (by default):</p>
 <ul>
-<li><code>GET https://localhost:4567/listicator/heartbeat</code></li>
+<li><code>GET https://localhost:4567/heartbeat</code></li>
 </ul>
 <hr />
 <h2>End Points</h2>
@@ -423,4 +429,27 @@
 <p>The system has been coded with some known bugs - these are all fixed by default. If you would like to test your testing skills then start with <code>-bugfixes=false</code> to have the known bugs present in the application.</p>
 <p>See if you can find them.</p>
 <p><code>java -jar rest-list-system.jar -bugfixes=false</code></p>
+<hr />
+<h2>Details</h2>
+<p>This application has been written by <a href="https://eviltester.com">Alan Richardson</a></p>
+<p>Copyright <a href="https://compendiumdev.co.uk">Compendium Developments Ltd</a></p>
+<p>Source code is available as part of &quot;<a href="https://github.com/eviltester/TestingApp">The Evil Tester's Compendium of Testing Apps</a>&quot; with source on Github.</p>
+<p>Deployed to Heroku at <a href="https://rest-list-system.herokuapp.com/listicator/">rest-list-system.herokuapp.com/listicator/</a></p>
+<p>Recommended tools for exploratory testing of REST API:</p>
+<ul>
+<li><a href="https://insomnia.rest/">Insomnia</a></li>
+<li><a href="https://www.getpostman.com/">Postman</a></li>
+</ul>
+<p>If you are interested in learning how to test APIs then you might find the book by Alan Richardson called &quot;<a href="https://www.eviltester.com/page/books/automating-testing-api-casestudy/">Automating and Testing a REST API</a>&quot; useful.</p>
+<p>The book has a <a href="https://compendiumdev.co.uk/page/tracksrestsupport">support page with many videos and sample code</a>.</p>
+<hr />
+<h3>More Details About the Author</h3>
+<ul>
+<li><a href="https://www.eviltester.com">www.eviltester.com</a> - Software Testing Blogs and Articles</li>
+<li><a href="https://www.compendiumdev.co.uk">www.compendiumdev.co.uk</a> - Consultancy &amp; Training</li>
+<li><a href="https://digitalonlinetactics.com">digitalonlinetactics.com</a> - Online Marketing Blog</li>
+<li><a href="https://uk.linkedin.com/in/eviltester">uk.linkedin.com/in/eviltester</a></li>
+<li><a href="https://twitter.com/eviltester">twitter.com/eviltester</a></li>
+<li><a href="https://patreon.com/eviltester">patreon.com/eviltester</a> - I release a lot of exclusive training content on Patreon</li>
+</ul>
 </body>
