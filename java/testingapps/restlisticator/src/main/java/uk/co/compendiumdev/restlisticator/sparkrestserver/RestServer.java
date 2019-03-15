@@ -44,7 +44,7 @@ public class RestServer {
                     // If no session matches X-SESSION then not authenticated
                 if(!singleUserMode){
 
-                    if(!request.pathInfo().equalsIgnoreCase("/sessionid")) {
+                    if(!request.pathInfo().equalsIgnoreCase("/sessionid") && !request.pathInfo().equalsIgnoreCase(ApiEndPoint.DOCUMENTATION.getPath())) {
                         Session session = request.session(false); // get the current session
                         final String headervalue = request.headers("X-SESSIONID");
                         if (headervalue == null || headervalue.length() == 0) {
@@ -90,12 +90,16 @@ public class RestServer {
         });
 
         // Documentation
-        get(ApiEndPoint.DOCUMENTATION.getPath(), (request, response) -> {return getApi(request).getDocumentation(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+        get(ApiEndPoint.DOCUMENTATION.getPath(), (request, response) -> {
+            // TODO: generate different documentation for the multiuser mode
+            // can get documentation without an X-SESSIONID because it is through the browser
+            return theapi.getDocumentation(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
 
 
         // /heartbeat
-        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return getApi(request).getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+        // can GET heartbeat without a session having been created - added as a subtle bug in multiuser mode
+        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return theapi.getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
             });
         options(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> { response.header("Allow", "GET"); response.status(200); return "";});
         path(ApiEndPoint.HEARTBEAT.getPath(), () -> {
