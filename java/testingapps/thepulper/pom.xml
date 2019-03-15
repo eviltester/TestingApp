@@ -8,7 +8,7 @@
     <parent>
         <artifactId>testing-apps-root</artifactId>
         <groupId>uk.co.compendiumdev.testing</groupId>
-        <version>1.1.0</version>
+        <version>1-1-0</version>
     </parent>
 
 

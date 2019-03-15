@@ -7,7 +7,7 @@
 <groupId>uk.co.compendiumdev.testing</groupId>
 <artifactId>testapp</artifactId>
 <packaging>pom</packaging>
-<version>1-3-1</version>
+<version>1-3-4</version>
 <!-- <version>1.3</version>-->
 
 <!--
@@ -18,6 +18,7 @@ v1.4 - split into multiple pom.xnl
 -->
 
     <properties>
+        <testapp.version>1-3-4</testapp.version>
         <junit.version>4.12</junit.version>
         <spark.version>2.7.2</spark.version>
         <gson.version>2.8.1</gson.version>
@@ -34,7 +35,12 @@ v1.4 - split into multiple pom.xnl
               version of http://compendiumdev.co.uk/apps/api/mock/reflect
         -->
         <compendiumdevapps.version>1-1-1</compendiumdevapps.version>
-        <restlisticator.version>1-2-0</restlisticator.version>
+
+        <!-- RestListicator version
+            1-2-1 - has sessionid for individual user sessions and a timer to reset the default api session instance
+        -->
+        <restlisticator.version>1-2-1</restlisticator.version>
+
         <!--
         1.3.1 has a fix for search engine page because the javascript for cookies was not loaded
         -->
@@ -47,8 +53,9 @@ v1.4 - split into multiple pom.xnl
         version 1.2.0 pulper 4 different versions, with help file
         version 1.2.1 pulper v5 has an XHTTP request on author create
         1.2.2 has operating system independent resource loading i.e. it didn't work on windows
+        1-2-3 has different app instantiation internally for each connected user via JSESSIONID
         -->
-        <thepulper.version>1-2-2</thepulper.version>
+        <thepulper.version>1-2-3</thepulper.version>
 
         <!-- COLLECTED APPS -->
         <!-- 1-2-0 has the pulper with CRUD and formatting-->

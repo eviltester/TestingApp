@@ -1,6 +1,7 @@
 package uk.co.compendiumdev.restlisticator.sparkrestserver;
 
 import spark.Request;
+import spark.Response;
 import spark.Session;
 import uk.co.compendiumdev.Main;
 import uk.co.compendiumdev.restlisticator.api.Api;
@@ -16,35 +17,41 @@ import static spark.Spark.*;
 public class RestServer {
 
     Api theapi = new Api(new TheListicator());
-    Boolean singleUserMode = true;
-    private Integer theProxyPort=4567;
 
     // by default running on port 4567
+    private Integer theProxyPort=4567;
+
+    // 30 seconds - TODO: make this settable with an environment variable or property or command line arg
+    private Integer MAX_SESSION_INACTIVE_INTERVAL = 30; // in seconds
 
 
-    private Api getApi(final Request request) {
+
+
+    private Api getApi(final Request request, final Response response) {
         // rather than multiuser and single user mode allow /sessionid to create new api within the session for the user
         Session session = request.session(false);
-        if(session == null){
-            return theapi;
-        }else{
 
-            // TODO: if X-SESSIONID matches current session and there is a sessionapi then return it
+        final String headervalue = request.headers("X-SESSIONID");
+
+        // if there is a current X-SESSIONID then check if it is valid and if so, return it
+        if (headervalue != null && headervalue.length() > 0) {
+            // There is a header, if there is no session then it may have expired or we may not have started it
+
             // TODO: if X-SESSIONID does not match current session then provide a 403
-            // TODO: if there is no X-SESSIONID then return theapi
-            if(session.attribute("SESSIONAPI")!=null){
-                return request.session().attribute("SESSIONAPI");
+            if(session == null || !session.id().equalsIgnoreCase(headervalue)){
+                response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"X-SESSIONID_header_mismatch\", error_description=\"X-SESSIONID header does not match session details, perhaps your session expired?\"");
+                halt(403);
             }else{
-                return theapi;
+                // TODO: if X-SESSIONID matches current session and there is a sessionapi then return it
+                if(session.attribute("SESSIONAPI")!=null) {
+                    return request.session().attribute("SESSIONAPI");
+                }
             }
         }
 
+        // if there is no X-SESSIONID then return theapi
+        return theapi;
 
-        // for a single user multi user toggle then this would be used
-//        if(singleUserMode){
-//            return theapi;
-//        }
-//        return request.session().attribute("SESSIONAPI");
     }
 
     public void configureRestServerRouting(String nestedPath) {
@@ -58,32 +65,11 @@ public class RestServer {
         //port(1234);
 
         // to support debugging show the path we were called with
-        path("*", () -> { before("", (request, response) -> {
-                // System.out.println("Received Request " + request.pathInfo());
-
-            // TODO: we might not need this... we could allow multiple users on default to make it easier for people to get started, but if you use /sessionid you get your own session
-                // If not in single user mode
-                    // If no X-SESSION header then not authenticated
-                    // If no session matches X-SESSION then not authenticated
-//                if(!singleUserMode){
+//        path("*", () -> { before("", (request, response) -> {
+//                // System.out.println("Received Request " + request.pathInfo());
 //
-//                    if(!request.pathInfo().equalsIgnoreCase("/sessionid") && !request.pathInfo().equalsIgnoreCase(ApiEndPoint.DOCUMENTATION.getPath())) {
-//                        Session session = request.session(false); // get the current session
-//                        final String headervalue = request.headers("X-SESSIONID");
-//                        if (headervalue == null || headervalue.length() == 0) {
-//                            response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"no_X-SESSIONID_header\", error_description=\"Message needs to have a valid X-SESSIONID header with a value that matches a valid session\"");
-//                            halt(403);
-//                        } else {
-//                            if (session == null || !(request.session().id().equalsIgnoreCase(headervalue)) || request.session().isNew()) {
-//                                response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"bad_X-SESSIONID_header\", error_description=\"X-SESSIONID header not recognised\"");
-//                                halt(403);
-//                            }
-//                        }
-//                    }
-//                }
-
-            });
-        });
+//            });
+//        });
 
         get(ApiEndPoint.getUrlPrefix()+"/sessionid", (request, response) -> {
             response.status(200);
@@ -92,20 +78,19 @@ public class RestServer {
 
             if(session == null) {
 
+                // we do not have a session so crate one of limited duration identified by the X-SESSIONID
                 session = request.session();
                 response.header("X-SESSIONID", request.session().id());
-                if(!singleUserMode) {
 
-                    session.maxInactiveInterval(30); // 30 seconds - TODO: make this settable with an environment variable or property or command line arg
+                session.maxInactiveInterval(MAX_SESSION_INACTIVE_INTERVAL);
 
-                    // Create app and add it to the session
-                    Api anApi = new Api(new TheListicator());
-                    anApi.setDocumentationDetails(theProxyPort, ApiEndPoint.getUrlPrefix());
-                    session.attribute("SESSIONAPI",  anApi);
-                }
+                // Create app and add it to the session
+                Api anApi = new Api(new TheListicator());
+                anApi.setDocumentationDetails(theProxyPort, ApiEndPoint.getUrlPrefix());
+                session.attribute("SESSIONAPI",  anApi);
 
             }else{
-                // existing session
+                // existing session - remind user of the session id
                 response.header("X-SESSIONID", request.session().id());
             }
 
@@ -114,20 +99,19 @@ public class RestServer {
 
         // Documentation
         get(ApiEndPoint.DOCUMENTATION.getPath(), (request, response) -> {
-            // TODO: generate different documentation for the multiuser mode
             // can get documentation without an X-SESSIONID because it is through the browser
             return theapi.getDocumentation(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
 
 
         // /heartbeat
-        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return getApi(request).getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return getApi(request,response).getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
             });
         options(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> { response.header("Allow", "GET"); response.status(200); return "";});
         path(ApiEndPoint.HEARTBEAT.getPath(), () -> {
             before("", (request, response) -> {
                 // TODO distinguish between 401 Unauthorized (no credentials supplied), 403 Forbidden and 405 Not Allowed
-                if(!getApi(request).isMethodAllowed(ApiEndPoint.HEARTBEAT.getPath(),new SparkApiRequest(request))){
+                if(!getApi(request,response).isMethodAllowed(ApiEndPoint.HEARTBEAT.getPath(),new SparkApiRequest(request))){
                     halt(405);
                 }
             });
@@ -136,19 +120,19 @@ public class RestServer {
 
         // /lists
         get(ApiEndPoint.LISTS.getPath(), (request, response) -> {
-            return getApi(request).getLists(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).getLists(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         post(ApiEndPoint.LISTS.getPath(), (request, response) -> {
-            return getApi(request).setLists(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).setLists(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         put(ApiEndPoint.LISTS.getPath(), (request, response) -> {
-            return getApi(request).putList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).putList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         options(ApiEndPoint.LISTS.getPath(), (request, response) -> { response.header("Allow", "GET, POST, PUT"); response.status(200); return "";});
         // catch unallowed verbs on /lists
         path(ApiEndPoint.LISTS.getPath(), () -> {
             before("", (request, response) -> {
-                if(!getApi(request).isMethodAllowed(ApiEndPoint.LISTS.getPath(),new SparkApiRequest(request))){
+                if(!getApi(request,response).isMethodAllowed(ApiEndPoint.LISTS.getPath(),new SparkApiRequest(request))){
                     halt(405);
                 }
             });
@@ -156,26 +140,26 @@ public class RestServer {
 
         // /lists/*
         get(ApiEndPoint.LISTS.getPath("*"), (request, response) -> {
-            return getApi(request).getList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).getList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         put(ApiEndPoint.LISTS.getPath("*"), (request, response) -> {
-            return getApi(request).putList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).putList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         post(ApiEndPoint.LISTS.getPath("*"), (request, response) -> {
-            return getApi(request).partialAmendList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).partialAmendList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         patch(ApiEndPoint.LISTS.getPath("*"), (request, response) -> {
-            return getApi(request).patchAmendList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).patchAmendList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         delete(ApiEndPoint.LISTS.getPath("*"), (request, response) -> {
-            return getApi(request).deleteList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).deleteList(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         // since this doesn't check the value this is really a bug and should only return 200 when the entity exists, and 404 when it doesn't
         // TODO - POST here is a bug and should be feature toggle, able
         options(ApiEndPoint.LISTS.getPath("*"), (request, response) -> { response.header("Allow", "GET, POST, PUT, PATCH, DELETE"); response.status(200); return "";});
         path(ApiEndPoint.LISTS.getPath("*"), () -> {
             before("", (request, response) -> {
-                if(!getApi(request).isMethodAllowed(ApiEndPoint.LISTS.getPath("*"),new SparkApiRequest(request))){
+                if(!getApi(request,response).isMethodAllowed(ApiEndPoint.LISTS.getPath("*"),new SparkApiRequest(request))){
                     halt(405);
                 }
             });
@@ -183,26 +167,26 @@ public class RestServer {
 
 
         get(ApiEndPoint.USERS.getPath(), (request, response) -> {
-            return getApi(request).getUsers(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).getUsers(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         post(ApiEndPoint.USERS.getPath(), (request, response) -> {
-            return getApi(request).createUserDetails(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).createUserDetails(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         options(ApiEndPoint.USERS.getPath(), (request, response) -> { response.header("Allow", "GET, POST"); response.status(200); return "";});
 
         put(ApiEndPoint.USERS.getPath("*/password"), (request, response) -> {
-            return getApi(request).setUserPassword(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).setUserPassword(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         options(ApiEndPoint.USERS.getPath("*/password"), (request, response) -> { response.header("Allow", "GET, PUT"); response.status(200); return "";});
 
         put(ApiEndPoint.USERS.getPath("*/apikey"), (request, response) -> {
-            return getApi(request).setUserApiKey(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).setUserApiKey(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         options(ApiEndPoint.USERS.getPath("*/apikey"), (request, response) -> { response.header("Allow", "GET, PUT"); response.status(200); return "";});
 
 
         get(ApiEndPoint.USERS.getPath("*"), (request, response) -> {
-            return getApi(request).getUserDetails(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).getUserDetails(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         options(ApiEndPoint.USERS.getPath("*"), (request, response) -> { response.header("Allow", "GET"); response.status(200); return "";});
 
@@ -215,7 +199,7 @@ public class RestServer {
                 if(request.splat()!=null && request.splat()[0].endsWith("/apikey")){
                     pathToCheck = "*/apikey";
                 }
-                if(!getApi(request).isMethodAllowed(ApiEndPoint.USERS.getPath(pathToCheck),new SparkApiRequest(request))){
+                if(!getApi(request,response).isMethodAllowed(ApiEndPoint.USERS.getPath(pathToCheck),new SparkApiRequest(request))){
                     halt(405);
                 }
             });
@@ -224,17 +208,17 @@ public class RestServer {
 
 
         get(ApiEndPoint.FEATURE_TOGGLES.getPath(), (request, response) -> {
-            return getApi(request).getFeatureToggles(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).getFeatureToggles(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
         // Super Admin only can amend feature toggles
         post(ApiEndPoint.FEATURE_TOGGLES.getPath(), (request, response) -> {
-            return getApi(request).setFeatureToggles(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+            return getApi(request,response).setFeatureToggles(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
         });
 
         options(ApiEndPoint.FEATURE_TOGGLES.getPath(), (request, response) -> { response.header("Allow", "GET, POST"); response.status(200); return "";});
         path(ApiEndPoint.FEATURE_TOGGLES.getPath(), () -> {
             before("", (request, response) -> {
-                if(!getApi(request).isMethodAllowed(ApiEndPoint.FEATURE_TOGGLES.getPath(),new SparkApiRequest(request))){
+                if(!getApi(request,response).isMethodAllowed(ApiEndPoint.FEATURE_TOGGLES.getPath(),new SparkApiRequest(request))){
                     halt(405);
                 }
             });
@@ -275,10 +259,18 @@ public class RestServer {
                     }
                 }
             }
-            // in Heroku this would be set by adding a Config Vars RestListicatorMultiUser
-            if(arg.startsWith("-multiuser")){
-                singleUserMode=false;
+            if(arg.startsWith("-maxsessionseconds")){
+                String[]details = arg.split("=");
+
+                if(details!=null && details.length>1){
+                    try {
+                        MAX_SESSION_INACTIVE_INTERVAL = Integer.parseInt(details[1]);
+                    }catch(Exception e){
+                        System.out.println("Could not set max inactive interval to " + details[1]);
+                    }
+                }
             }
+
         }
 
         if(resetTimer>0) {

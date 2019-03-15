@@ -39,16 +39,7 @@ public class Main {
 
         int resetTimer=0; // by default no reset timer
 
-        // By default run in single user mode
-        // use a -multiuser argument to force it into multi user mode and have to use GET /sessionid
-
         final List<String> argsAsList = Arrays.asList(args);
-        if(System.getenv().containsKey("RestListicatorMultiUser")){
-            argsAsList.add("-multiuser");
-        }
-        if(System.getProperties().containsKey("RestListicatorMultiUser")){
-            argsAsList.add("-multiuser");
-        }
 
 
         // we can automatically reset the default api details by using -resettimmer=MILLISECONDS
@@ -58,6 +49,15 @@ public class Main {
         }
         if(System.getProperties().containsKey("RestListicatorApiResetMillis")){
             argsAsList.add("-resettimer="+System.getProperty("RestListicatorApiResetMillis"));
+        }
+
+        // we can automatically reset the length of a session before it is inactive by using -maxsessionseconds=SECONDS
+        // allow setting this from environment config or properties to support different deployment and startup mechanisms
+        if(System.getenv().containsKey("RestListicatorMaxSessionSeconds")){
+            argsAsList.add("--maxsessionseconds="+System.getenv("RestListicatorMaxSessionSeconds"));
+        }
+        if(System.getProperties().containsKey("RestListicatorMaxSessionSeconds")){
+            argsAsList.add("--maxsessionseconds="+System.getProperty("RestListicatorMaxSessionSeconds"));
         }
 
 
@@ -75,7 +75,7 @@ public class Main {
 
 
 
-        // TODO: add some tests around multiuser mode
+        // TODO: add some tests around multiuser sessions mode
 
         // TODO: add a shutdown verb as configurable through arguments e.g. -shutdownable=false
 
