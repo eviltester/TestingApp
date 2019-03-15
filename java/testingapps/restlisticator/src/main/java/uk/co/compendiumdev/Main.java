@@ -56,10 +56,10 @@ public class Main {
         // we can automatically reset the length of a session before it is inactive by using -maxsessionseconds=SECONDS
         // allow setting this from environment config or properties to support different deployment and startup mechanisms
         if(System.getenv().containsKey("RestListicatorMaxSessionSeconds")){
-            argsAsList.add("--maxsessionseconds="+System.getenv("RestListicatorMaxSessionSeconds"));
+            argsAsList.add("-maxsessionseconds="+System.getenv("RestListicatorMaxSessionSeconds"));
         }
         if(System.getProperties().containsKey("RestListicatorMaxSessionSeconds")){
-            argsAsList.add("--maxsessionseconds="+System.getProperty("RestListicatorMaxSessionSeconds"));
+            argsAsList.add("-maxsessionseconds="+System.getProperty("RestListicatorMaxSessionSeconds"));
         }
 
 

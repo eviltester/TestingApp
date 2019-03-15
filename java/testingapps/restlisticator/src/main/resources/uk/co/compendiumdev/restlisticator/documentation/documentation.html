@@ -9,22 +9,57 @@
 </ul>
 </li>
 </ul>
-<h2>Install and Running</h2>
-<p><a href="http://compendiumdev.co.uk/downloads/apps/restlisticator/v1/rest-list-system.jar">download the jar</a></p>
+<h2>The application has been deployed to Heroku</h2>
+<p>You can run the application locally or run it from a cloud system.</p>
+<p>The application has been deployed to Heroku at</p>
+<ul>
+<li>https://rest-list-system.herokuapp.com/listicator/</li>
+</ul>
+<p>The cloud version will:</p>
+<ul>
+<li>reset the shared default lists every 5 minutes.</li>
+<li>allocate a unique session when <code>/sessionid</code> is called with 2 minutes of inactivity</li>
+</ul>
+<h2>Multi-User Support</h2>
+<p>By default all requests use the 'global' set of data. This makes the application easy to use for single users and multiple users can access this, although they will be amending each others data.</p>
+<p>If a user wants a unique session, perhaps because they want to automate and have deterministic results without interference from other users they must use a <code>X-SESSIONID</code> header.</p>
+<p><code>GET /sessionid</code> e.g. GET http://localhost:4567/listicator/sessionid</p>
+<h2>Install and Running Locally</h2>
+<p><a href="https://github.com/eviltester/TestingApp/releases">download the jar from TestingApp Releases on Github</a></p>
 <ul>
 <li>run by typing:
 <ul>
 <li><code>java -jar &lt;insertnameofjarfilehere&gt;.jar</code></li>
-<li>e.g. if you downloaded <code>restlisticator.jar</code> then it would be <code>java -jar restlisticator.jar</code></li>
+<li>e.g. if you downloaded <code>rest-list-system.jar</code> then it would be <code>java -jar rest-list-system.jar</code></li>
 </ul>
 </li>
 </ul>
 <p>If you double click it then it will be running in the background on port 4567 - you might have to use task manager to kill the Java VM that it is running on to exit.</p>
+<h2>Built in Users</h2>
 <p>Three users are created by default with different permissions: <code>superadmin</code>, <code>admin</code>, <code>user</code> - all have the default password set to <code>password</code></p>
-<p>Command Line Arguments:</p>
+<p>Use Basic authentication to use these users.</p>
+<ul>
+<li>username: <code>superadmin</code>, password: <code>password</code></li>
+<li>username: <code>admin</code>, password: <code>password</code></li>
+<li>username: <code>user</code>, password: <code>password</code></li>
+</ul>
+<h2>Command Line Arguments For Local Execution</h2>
 <ul>
 <li><code>-port=1234</code> set the port to supplied integer (defaults to 4567)</li>
 <li><code>-bugfixes=false</code> (defaults to true)</li>
+<li><code>-resettimmer=MILLISECONDS</code> e.g. <code>-resettimmer=1000</code>
+<ul>
+<li>sets the default list application timer, by default locally this is 0 as single user mode is inferred</li>
+<li>on the cloud this is set to 5 minutes (300000 milliseconds)</li>
+<li>this can also be configured by setting and environment variable or property called <code>RestListicatorApiResetMillis</code></li>
+</ul>
+</li>
+<li><code>-maxsessionseconds=SECONDS</code> e.g. <code>-maxsessionseconds=60</code>
+<ul>
+<li>sets the individual session created by <code>/sessionid</code> to be deleted after 60 seconds of inactivity</li>
+<li>this can also be configured by setting and environment variable or property called <code>RestListicatorMaxSessionSeconds</code></li>
+</ul>
+</li>
 </ul>
 <h2>End Points Summary</h2>
 <ul>
@@ -35,9 +70,18 @@
 <li><code>/users/{username}/password</code> - amend a User's password</li>
 <li><code>/users/{username}/apikey</code> - amend a User's api key</li>
 <li><code>/feature-toggles</code> - <code>superadmin</code> can toggle app features on and off</li>
+<li><code>/sessionid</code> - get a unique sessionid to isolate your testing from other users, use the session id in a <code>X-SESSIONID</code> header</li>
 </ul>
 <p>The end points may be nested in a sub path e.g. <code>/listicator/heartbeat</code></p>
 <p>Check with your system admin to find out how the application has been configured.</p>
+<p>On heroku the requests are of the form:</p>
+<ul>
+<li><code>GET https://rest-list-system.herokuapp.com/listicator/heartbeat</code></li>
+</ul>
+<p>Running locally it is likely to be (by default):</p>
+<ul>
+<li><code>GET https://localhost:4567/listicator/heartbeat</code></li>
+</ul>
 <hr />
 <h2>End Points</h2>
 <h3>Heartbeat</h3>
@@ -48,6 +92,7 @@
 </ul>
 </li>
 </ul>
+<p>e.g.</p>
 <pre><code>curl -i -X GET http://localhost:4567/heartbeat
 </code></pre>
 <pre><code>curl -v -X GET http://localhost:4567/heartbeat
@@ -194,11 +239,20 @@
 &lt;/list&gt;
 </code></pre>
 <hr />
-<p>PATCH /lists/{guid}</p>
-<p>{<br />
-&quot;guid&quot;: &quot;d4625287-989a-4454-b01a-cb99545a87a6&quot;,<br />
-&quot;title&quot;: &quot;title2&quot;,<br />
-}</p>
+<hr />
+<p><code>POST /lists</code></p>
+<p>With a body</p>
+<pre><code>{title:'my title custom'}
+</code></pre>
+<p>Would create a list - try experimenting with the different fields: <code>guid</code>, <code>description</code>, <code>createdDate</code>, <code>amendedDate</code> etc.</p>
+<hr />
+<p><code>PATCH /lists/{guid}</code></p>
+<p>Where <code>{guid}</code> would be an actual guid value e.g. <code>d4625287-989a-4454-b01a-cb99545a87a6</code></p>
+<pre><code>{
+    &quot;guid&quot;: &quot;d4625287-989a-4454-b01a-cb99545a87a6&quot;,
+    &quot;title&quot;: &quot;title2&quot;,
+}
+</code></pre>
 <p>_currently does not comply with https://tools.ietf.org/html/rfc7396 _</p>
 <hr />
 <h3>Users</h3>

@@ -6,23 +6,59 @@
    - User management
    - Feature-Toggles to configure the app
 
-## Install and Running
+## The application has been deployed to Heroku
 
-[download the jar](http://compendiumdev.co.uk/downloads/apps/restlisticator/v1/rest-list-system.jar)
+You can run the application locally or run it from a cloud system.
+
+The application has been deployed to Heroku at
+
+- https://rest-list-system.herokuapp.com/listicator/
+ 
+The cloud version will:
+ 
+- reset the shared default lists every 5 minutes.
+- allocate a unique session when `/sessionid` is called with 2 minutes of inactivity
+
+## Multi-User Support
+
+By default all requests use the 'global' set of data. This makes the application easy to use for single users and multiple users can access this, although they will be amending each others data.
+
+If a user wants a unique session, perhaps because they want to automate and have deterministic results without interference from other users they must use a `X-SESSIONID` header.
+
+`GET /sessionid` e.g. GET http://localhost:4567/listicator/sessionid 
+
+## Install and Running Locally
+
+[download the jar from TestingApp Releases on Github](https://github.com/eviltester/TestingApp/releases)
 
 
 - run by typing:
     - `java -jar <insertnameofjarfilehere>.jar`
-    - e.g. if you downloaded `restlisticator.jar` then it would be `java -jar restlisticator.jar`
+    - e.g. if you downloaded `rest-list-system.jar` then it would be `java -jar rest-list-system.jar`
 
 If you double click it then it will be running in the background on port 4567 - you might have to use task manager to kill the Java VM that it is running on to exit.
 
+## Built in Users
+
 Three users are created by default with different permissions: `superadmin`, `admin`, `user` - all have the default password set to `password`
 
-Command Line Arguments:
+Use Basic authentication to use these users.
+
+- username: `superadmin`, password: `password`
+- username: `admin`, password: `password`
+- username: `user`, password: `password`
+
+## Command Line Arguments For Local Execution
 
 - `-port=1234` set the port to supplied integer (defaults to 4567)
 - `-bugfixes=false` (defaults to true)
+- `-resettimmer=MILLISECONDS` e.g. `-resettimmer=1000`
+    - sets the default list application timer, by default locally this is 0 as single user mode is inferred
+    - on the cloud this is set to 5 minutes (300000 milliseconds)
+    - this can also be configured by setting and environment variable or property called `RestListicatorApiResetMillis`
+- `-maxsessionseconds=SECONDS` e.g. `-maxsessionseconds=60`
+    - sets the individual session created by `/sessionid` to be deleted after 60 seconds of inactivity
+    - this can also be configured by setting and environment variable or property called `RestListicatorMaxSessionSeconds`
 
 ## End Points Summary
 
@@ -34,10 +70,19 @@ Command Line Arguments:
 - `/users/{username}/password` - amend a User's password
 - `/users/{username}/apikey` - amend a User's api key
 - `/feature-toggles` - `superadmin` can toggle app features on and off
+- `/sessionid` - get a unique sessionid to isolate your testing from other users, use the session id in a `X-SESSIONID` header
 
 The end points may be nested in a sub path e.g. `/listicator/heartbeat`
 
 Check with your system admin to find out how the application has been configured.
+
+On heroku the requests are of the form:
+
+- `GET https://rest-list-system.herokuapp.com/listicator/heartbeat`
+
+Running locally it is likely to be (by default):
+
+- `GET https://localhost:4567/listicator/heartbeat`
 
 
 ---
@@ -48,6 +93,8 @@ Check with your system admin to find out how the application has been configured
 
 - `/heartbeat`
     - `GET` - return 200 to indicate server is running
+
+e.g.
 
 ~~~~~~~~
 curl -i -X GET http://localhost:4567/heartbeat
@@ -194,14 +241,34 @@ curl -X GET ^
 </list>
 ~~~~~~~~
 
+
 ---
 
-PATCH /lists/{guid}
+---
 
+
+`POST /lists`
+
+With a body
+
+~~~~~~~~
+{title:'my title custom'}
+~~~~~~~~
+
+Would create a list - try experimenting with the different fields: `guid`, `description`, `createdDate`, `amendedDate` etc.
+
+---
+
+`PATCH /lists/{guid}`
+
+Where `{guid}` would be an actual guid value e.g. `d4625287-989a-4454-b01a-cb99545a87a6`
+
+~~~~~~~~
 {
     "guid": "d4625287-989a-4454-b01a-cb99545a87a6",
     "title": "title2",
 }
+~~~~~~~~
 
 _currently does not comply with https://tools.ietf.org/html/rfc7396 _
 
