@@ -2,6 +2,8 @@ package uk.co.compendiumdev;
 
 import spark.Spark;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,8 +41,8 @@ public class Main {
 
         int resetTimer=0; // by default no reset timer
 
-        final List<String> argsAsList = Arrays.asList(args);
-
+        List<String> argsAsList = new ArrayList<>();
+        argsAsList.addAll(Arrays.asList(args));
 
         // we can automatically reset the default api details by using -resettimmer=MILLISECONDS
         // allow setting this from environment config or properties to support different deployment and startup mechanisms

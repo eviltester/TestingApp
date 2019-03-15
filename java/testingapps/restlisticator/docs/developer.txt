@@ -14,7 +14,6 @@ java -jar target\rest-list-system-1.1-SNAPSHOT-jar-with-dependencies -bugfixes=f
 
 For heroku:
 
-mvn heroku:deploy
 heroku local web -f Procfile.windows
 
 
@@ -37,3 +36,42 @@ Heroku
     - click edit
     - flip 'on' switch to 'off'
     - confirm
+
+
+# deploy to heroku
+
+Development notes.
+
+First install heroku
+
+https://devcenter.heroku.com/articles/heroku-cli
+
+I'm on mac
+
+- `brew tap heroku/brew && brew install heroku`
+- `heroku plugins:install heroku-cli-deploy`
+- `heroku login`
+- `mvn package`
+- `heroku deploy:jar target/rest-list-system-1-2-1-jar-with-dependencies.jar --app rest-list-system`
+
+had to add `:target/*` to the procfile when deploying fat app
+
+after deployment:
+
+https://rest-list-system.herokuapp.com
+
+
+To run locally
+
+`heroku local -f Procfile.windows`
+
+
+Set the Config vars
+
+RestListicatorApiResetMillis
+1000*60*5
+300000
+
+RestListicatorMaxSessionSeconds
+2 minutes
+120
