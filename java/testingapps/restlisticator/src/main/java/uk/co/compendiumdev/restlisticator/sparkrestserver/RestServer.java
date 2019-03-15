@@ -251,6 +251,7 @@ public class RestServer {
 
     public RestServer(String[] args, String nestedPath) {
 
+        int resetTimer = 0;
 
         // process any command line arguments which apply to Rest listicator
         for(String arg : args){
@@ -263,10 +264,26 @@ public class RestServer {
                     System.out.println("All known bugs are now " + (bugfixeson ? "fixed" : "buggy"));
                 }
             }
+            if(arg.startsWith("-resettimer")){
+                String[]details = arg.split("=");
+
+                if(details!=null && details.length>1){
+                    try {
+                        resetTimer = Integer.parseInt(details[1]);
+                    }catch(Exception e){
+                        System.out.println("Could not reset timer to " + details[1]);
+                    }
+                }
+            }
             // in Heroku this would be set by adding a Config Vars RestListicatorMultiUser
             if(arg.startsWith("-multiuser")){
                 singleUserMode=false;
             }
+        }
+
+        if(resetTimer>0) {
+            System.out.println("Configured resetTimer every X milliseconds where 0 means timer is not set: " + resetTimer);
+            scheduleResetEveryMillis(resetTimer); // 30 seconds //1000*60*3); // 3 minutes
         }
 
         configureRestServerRouting(nestedPath);
@@ -282,7 +299,7 @@ public class RestServer {
         return theapi;
     }
 
-    public void scheduleResetEveryMillis(final int milliseconds) {
+    private void scheduleResetEveryMillis(final int milliseconds) {
         // use java in built task scheduler to reset the default api details ever X minutes
         // https://stackoverflow.com/questions/7814089/how-to-schedule-a-periodic-task-in-java
         // https://docs.oracle.com/javase/6/docs/api/java/util/Timer.html

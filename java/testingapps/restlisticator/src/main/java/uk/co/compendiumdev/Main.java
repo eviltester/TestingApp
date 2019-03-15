@@ -1,15 +1,9 @@
 package uk.co.compendiumdev;
 
 import spark.Spark;
-import uk.co.compendiumdev.restlisticator.api.Api;
-import uk.co.compendiumdev.restlisticator.domain.app.TheListicator;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
-import uk.co.compendiumdev.restlisticator.testappconfig.FeatureToggles;
-
 import java.util.Arrays;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static spark.Spark.get;
 
@@ -43,17 +37,7 @@ public class Main {
             proxyport = getHerokuAssignedPort();
         }
 
-        for(String arg : args){
-            System.out.println("Args: " + arg);
-
-            if(arg.startsWith("-port")){
-                String[]details = arg.split("=");
-                if(details!=null && details.length>1){
-                    proxyport = Integer.parseInt(details[1].trim());
-                    System.out.println("Will configure web server to use port " + proxyport);
-                }
-            }
-        }
+        int resetTimer=0; // by default no reset timer
 
         // By default run in single user mode
         // use a -multiuser argument to force it into multi user mode and have to use GET /sessionid
@@ -65,6 +49,31 @@ public class Main {
         if(System.getProperties().containsKey("RestListicatorMultiUser")){
             argsAsList.add("-multiuser");
         }
+
+
+        // we can automatically reset the default api details by using -resettimmer=MILLISECONDS
+        // allow setting this from environment config or properties to support different deployment and startup mechanisms
+        if(System.getenv().containsKey("RestListicatorApiResetMillis")){
+            argsAsList.add("-resettimer="+System.getenv("RestListicatorApiResetMillis"));
+        }
+        if(System.getProperties().containsKey("RestListicatorApiResetMillis")){
+            argsAsList.add("-resettimer="+System.getProperty("RestListicatorApiResetMillis"));
+        }
+
+
+        for(String arg : argsAsList){
+            System.out.println("Args: " + arg);
+
+            if(arg.startsWith("-port")){
+                String[]details = arg.split("=");
+                if(details!=null && details.length>1){
+                    proxyport = Integer.parseInt(details[1].trim());
+                    System.out.println("Will configure web server to use port " + proxyport);
+                }
+            }
+        }
+
+
 
         // TODO: add some tests around multiuser mode
 
@@ -80,13 +89,9 @@ public class Main {
 
         RestServer restServer = new RestServer(newargs, "/listicator"); // added /listicator to make standalone same as main
         restServer.documentationDetails(proxyport);
-        restServer.scheduleResetEveryMillis(30000); // 30 seconds //1000*60*3); // 3 minutes
+
 
         System.out.println("Running on " + Spark.port());
-
-
-
-
 
     }
 
