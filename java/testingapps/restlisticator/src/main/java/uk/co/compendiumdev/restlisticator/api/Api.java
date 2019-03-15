@@ -22,13 +22,22 @@ import java.util.Map;
 public class Api {
 
     // TODO split this into App - listicator, usermanager and Api(wrapper around app)
-    private final TheListicator listicator;
+    private TheListicator listicator;
     private String documentationHTML;
     private Map<String, User> users = new HashMap<>();
 
     private PayloadConvertor payloadConvertor=new PayloadConvertor();
 
     public Api(TheListicator theListicator) {
+        resetApi(theListicator);
+
+        // cache documentation
+        DocumentationReader docs = new DocumentationReader();
+        this.documentationHTML = docs.getInstructionsAsHTMLPage();
+    }
+
+    public void resetApi(final TheListicator theListicator) {
+        users = new HashMap<>();
         this.listicator = theListicator;
 
         // create some default users
@@ -44,10 +53,6 @@ public class Api {
 
         // normal user
         addNormalUser("user", "password");
-
-        // cache documentation
-        DocumentationReader docs = new DocumentationReader();
-        this.documentationHTML = docs.getInstructionsAsHTMLPage();
     }
 
     public void addNormalUser(String username, String password){
@@ -402,4 +407,6 @@ public class Api {
     public void setDocumentationDetails(Integer proxyport, String urlPrefix) {
         this.documentationHTML = documentationHTML.replace("/localhost:4567", "/localhost:" + proxyport + urlPrefix);
     }
+
+
 }

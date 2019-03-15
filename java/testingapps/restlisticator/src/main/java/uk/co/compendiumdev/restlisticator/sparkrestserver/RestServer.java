@@ -2,10 +2,14 @@ package uk.co.compendiumdev.restlisticator.sparkrestserver;
 
 import spark.Request;
 import spark.Session;
+import uk.co.compendiumdev.Main;
 import uk.co.compendiumdev.restlisticator.api.Api;
 import uk.co.compendiumdev.restlisticator.domain.app.TheListicator;
 import uk.co.compendiumdev.restlisticator.http.ApiEndPoint;
 import uk.co.compendiumdev.restlisticator.testappconfig.FeatureToggles;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static spark.Spark.*;
 
@@ -19,10 +23,28 @@ public class RestServer {
 
 
     private Api getApi(final Request request) {
-        if(singleUserMode){
+        // rather than multiuser and single user mode allow /sessionid to create new api within the session for the user
+        Session session = request.session(false);
+        if(session == null){
             return theapi;
+        }else{
+
+            // TODO: if X-SESSIONID matches current session and there is a sessionapi then return it
+            // TODO: if X-SESSIONID does not match current session then provide a 403
+            // TODO: if there is no X-SESSIONID then return theapi
+            if(session.attribute("SESSIONAPI")!=null){
+                return request.session().attribute("SESSIONAPI");
+            }else{
+                return theapi;
+            }
         }
-        return request.session().attribute("SESSIONAPI");
+
+
+        // for a single user multi user toggle then this would be used
+//        if(singleUserMode){
+//            return theapi;
+//        }
+//        return request.session().attribute("SESSIONAPI");
     }
 
     public void configureRestServerRouting(String nestedPath) {
@@ -39,30 +61,31 @@ public class RestServer {
         path("*", () -> { before("", (request, response) -> {
                 // System.out.println("Received Request " + request.pathInfo());
 
+            // TODO: we might not need this... we could allow multiple users on default to make it easier for people to get started, but if you use /sessionid you get your own session
                 // If not in single user mode
                     // If no X-SESSION header then not authenticated
                     // If no session matches X-SESSION then not authenticated
-                if(!singleUserMode){
-
-                    if(!request.pathInfo().equalsIgnoreCase("/sessionid") && !request.pathInfo().equalsIgnoreCase(ApiEndPoint.DOCUMENTATION.getPath())) {
-                        Session session = request.session(false); // get the current session
-                        final String headervalue = request.headers("X-SESSIONID");
-                        if (headervalue == null || headervalue.length() == 0) {
-                            response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"no_X-SESSIONID_header\", error_description=\"Message needs to have a valid X-SESSIONID header with a value that matches a valid session\"");
-                            halt(403);
-                        } else {
-                            if (session == null || !(request.session().id().equalsIgnoreCase(headervalue)) || request.session().isNew()) {
-                                response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"bad_X-SESSIONID_header\", error_description=\"X-SESSIONID header not recognised\"");
-                                halt(403);
-                            }
-                        }
-                    }
-                }
+//                if(!singleUserMode){
+//
+//                    if(!request.pathInfo().equalsIgnoreCase("/sessionid") && !request.pathInfo().equalsIgnoreCase(ApiEndPoint.DOCUMENTATION.getPath())) {
+//                        Session session = request.session(false); // get the current session
+//                        final String headervalue = request.headers("X-SESSIONID");
+//                        if (headervalue == null || headervalue.length() == 0) {
+//                            response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"no_X-SESSIONID_header\", error_description=\"Message needs to have a valid X-SESSIONID header with a value that matches a valid session\"");
+//                            halt(403);
+//                        } else {
+//                            if (session == null || !(request.session().id().equalsIgnoreCase(headervalue)) || request.session().isNew()) {
+//                                response.header("WWW-Authenticate", "Bearer realm=\"restlisticator\", error=\"bad_X-SESSIONID_header\", error_description=\"X-SESSIONID header not recognised\"");
+//                                halt(403);
+//                            }
+//                        }
+//                    }
+//                }
 
             });
         });
 
-        get("/sessionid", (request, response) -> {
+        get(ApiEndPoint.getUrlPrefix()+"/sessionid", (request, response) -> {
             response.status(200);
 
             Session session = request.session(false); // get the current session
@@ -73,7 +96,7 @@ public class RestServer {
                 response.header("X-SESSIONID", request.session().id());
                 if(!singleUserMode) {
 
-                    session.maxInactiveInterval(30); // 30 seconds
+                    session.maxInactiveInterval(30); // 30 seconds - TODO: make this settable with an environment variable or property or command line arg
 
                     // Create app and add it to the session
                     Api anApi = new Api(new TheListicator());
@@ -98,8 +121,7 @@ public class RestServer {
 
 
         // /heartbeat
-        // can GET heartbeat without a session having been created - added as a subtle bug in multiuser mode
-        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return theapi.getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
+        get(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> {return getApi(request).getHeartbeat(new SparkApiRequest(request),new SparkApiResponse(response)).getBody();
             });
         options(ApiEndPoint.HEARTBEAT.getPath(), (request, response) -> { response.header("Allow", "GET"); response.status(200); return "";});
         path(ApiEndPoint.HEARTBEAT.getPath(), () -> {
@@ -254,5 +276,40 @@ public class RestServer {
     public void documentationDetails(Integer proxyport) {
         theapi.setDocumentationDetails(proxyport, ApiEndPoint.getUrlPrefix());
         theProxyPort = proxyport;
+    }
+
+    public Api getSingletonApi() {
+        return theapi;
+    }
+
+    public void scheduleResetEveryMillis(final int milliseconds) {
+        // use java in built task scheduler to reset the default api details ever X minutes
+        // https://stackoverflow.com/questions/7814089/how-to-schedule-a-periodic-task-in-java
+        // https://docs.oracle.com/javase/6/docs/api/java/util/Timer.html
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new APIResetTask(theapi), milliseconds, milliseconds);
+    }
+
+
+    private class APIResetTask extends TimerTask {
+
+        private final Api managedApi;
+
+        public APIResetTask(Api apiToReset){
+
+            this.managedApi = apiToReset;
+
+        }
+
+        public void run() {
+            try {
+
+                System.out.println("Resetting listicator api");
+                managedApi.resetApi(new TheListicator());
+
+            } catch (Exception ex) {
+                System.out.println("error running thread " + ex.getMessage());
+            }
+        }
     }
 }

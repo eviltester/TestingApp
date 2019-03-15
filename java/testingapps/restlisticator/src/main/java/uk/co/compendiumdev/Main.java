@@ -1,11 +1,15 @@
 package uk.co.compendiumdev;
 
 import spark.Spark;
+import uk.co.compendiumdev.restlisticator.api.Api;
+import uk.co.compendiumdev.restlisticator.domain.app.TheListicator;
 import uk.co.compendiumdev.restlisticator.sparkrestserver.RestServer;
 import uk.co.compendiumdev.restlisticator.testappconfig.FeatureToggles;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static spark.Spark.get;
 
@@ -76,8 +80,15 @@ public class Main {
 
         RestServer restServer = new RestServer(newargs, "/listicator"); // added /listicator to make standalone same as main
         restServer.documentationDetails(proxyport);
+        restServer.scheduleResetEveryMillis(30000); // 30 seconds //1000*60*3); // 3 minutes
 
         System.out.println("Running on " + Spark.port());
 
+
+
+
+
     }
+
+
 }
