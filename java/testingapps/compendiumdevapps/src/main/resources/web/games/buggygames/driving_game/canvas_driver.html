@@ -182,7 +182,7 @@ function playGame(){
   points=distanceTravelled*10;
   points+=bonuspoints;
   changeSpanText('thePoints', points);
-  changeSpanText('theSpeed', millisecondsBetweenScrolls); ///500);
+  changeSpanText('theSpeed', 50 + Math.floor(500-millisecondsBetweenScrolls)); ///500);
   changeSpanText('lives', lives);
   changeSpanText('health', currenthealth);
 
