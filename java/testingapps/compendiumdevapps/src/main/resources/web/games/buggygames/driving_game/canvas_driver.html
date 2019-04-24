@@ -69,10 +69,14 @@ document.onkeydown = function onkeydown(event) {
 
 var track = new Array();
 
+function showInfo(message){
+  changeSpanText('info', message);
+}
+
 function instructions(){
 	//document.getElementById('gameboard').style.display = 'none';
 	if(startGame){
-    changeSpanText('info', "Drive Safely");
+    showInfo("Drive Safely");
 		window.clearInterval(theTimer);
 		document.getElementById('instructions').style.display = 'none';
 		document.getElementById('gameboard').style.display = 'block';
@@ -315,7 +319,7 @@ function setDifficultyLevel(theLevel){
 }
 
 function endGame(){
-  changeSpanText('info', "!!GAME OVER!! You Crashed! You Scored " + points);
+  showInfo("!!GAME OVER!! You Crashed! You Scored " + points);
   startGame=false;
   window.clearInterval(theTimer);
   document.getElementById('instructions').style.display = 'block';
@@ -366,13 +370,36 @@ function displayTheTrackToTheConsole(){
   trackDisplay = trackArray.join("");
 
   console.log(trackDisplay);
+  
 
+}
+
+function centerCar(){
+  carPosition = track[carLine].indexOf(" ")+
+                Math.floor(
+                    (track[carLine].lastIndexOf(" ")-track[carLine].indexOf(" ")
+                    )/2);
 }
 
 function checkForCrash(carSpace){
     //if(carSpace != " "){  // are you on a road?
   if(carSpace == "*"){ // have you hit a wall?
-    hasCrashed=true;
+
+    lives--;
+    if(lives<1){
+      // deaded
+      hasCrashed=true;
+    }else{
+      // second chance
+      showInfo("OUCH - be careful - lives left: " + lives);
+      millisecondsBetweenScrolls*=3;
+      if(millisecondsBetweenScrolls>500){
+        millisecondsBetweenScrolls=500;
+      }
+      centerCar()
+    }
+
+    
     return true;
   }
   return false;
@@ -399,6 +426,7 @@ function setValuesToStartingValues(){
    minWidthOfTrack=4;
    trackWidthChangeEvery=5;
    currentAcceleration=50;
+   lives = 3;
 
    points=0;
    startGame = false;
@@ -445,8 +473,10 @@ function setValuesToStartingValues(){
   var maxWidthOfArena=60;
   var widthOfTrack=maxWidthOfArena-6;
   var minWidthOfTrack=8;
-  var trackWidthChangeModulus=50;
+  var trackWidthChangeEvery=5;
+  var currentAcceleration=50;
   var maxTrackLines=20;
+  var lives = 3;
 
   var carPosition = posOfLeftOfTrack + (widthOfTrack/2);
   var points=0;
@@ -477,8 +507,9 @@ function setValuesToStartingValues(){
 
   <div id="instructions">
   	<h1>Instructions</h1>
-  	<p>Use left and Right to keep your car 'V' on the track.</p>
-  	<p>Hit a wall '*' and you will explode into 'X'.</p>
+  	<p>Use left and Right to keep your car 'V' on the track.
+       Hit a wall '*' and you will explode "X". Each Time you
+       explode you lose a life. You only have 3 lives.</p>
   	<h2>Press space to start game</h2>
     <!-- prototype for set start level difficulty -->
     <input id="setLevel" style="display:none" value="1" />
