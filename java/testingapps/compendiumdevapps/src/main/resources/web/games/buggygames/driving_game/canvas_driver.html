@@ -219,97 +219,55 @@ function scroll(){
   }
 }
 
+function getNewLevelDetails(aDistance){
+
+  for(var changeIndex=0; changeIndex<levelSettings.changes.length; changeIndex++){
+    var changes = levelSettings.changes[changeIndex];
+    if(aDistance>=changes.start && aDistance<=changes.end){
+      return changes;
+    }
+  }
+
+  return levelSettings.defaultChanges;
+
+}
+
 function changeSpeed(){
 
-  if(distanceTravelled<100){
-    if(distanceToNextSpeedChange<0){
-      distanceToNextSpeedChange=5;
-      currentAcceleration=100;
-      trackWidthChangeEvery=1;
-    }
-    if(widthOfTrack<12){
-        widthOfTrack=12;
-      }
-      return;
+  //{start:0, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit=500},
+
+  if(distanceTravelled > currentLevelChanges.end){
+    currentLevelChanges = getNewLevelDetails(distanceTravelled);
   }
 
-  if(distanceTravelled<200){
-    if(distanceToNextSpeedChange<0){
-      distanceToNextSpeedChange=3;
-      currentAcceleration=50;
-      trackWidthChangeEvery=2;
-    }
+  if(distanceToNextSpeedChange<0){
+    if(currentLevelChanges.tillSpeedChange!=null){
+      distanceToNextSpeedChange=currentLevelChanges.tillSpeedChange;
 
-      if(widthOfTrack<10){
-        widthOfTrack=10;
+      if(currentLevelChanges.accel!=null){
+        currentAcceleration=currentLevelChanges.accel;
       }
-    return;
-  }
+      if(currentLevelChanges.widthChangeEvery!=null){
+        trackWidthChangeEvery=currentLevelChanges.widthChangeEvery;
+      }      
 
-  if(distanceTravelled<300){
-    if(distanceToNextSpeedChange<0){
-      distanceToNextSpeedChange=3;
-      currentAcceleration=30;
-      trackWidthChangeEvery=10;
-    }
-    if(widthOfTrack<7){
-        widthOfTrack=7;
-      }
-    return;
-  }
-
-
-  if(distanceTravelled<400){
-    currentAcceleration=50;
-    trackWidthChangeEvery=10;
-    maxSpeedMillis-=10;
-        if(maxSpeedMillis<150){
-          maxSpeedMillis=150;
+      if(currentLevelChanges.maxSpeedMillisChange!=null){
+        maxSpeedMillis-=currentLevelChanges.maxSpeedMillisChange;
+        if(currentLevelChanges.milliSpeedLimit!=null){
+          if(maxSpeedMillis<currentLevelChanges.milliSpeedLimit){
+            maxSpeedMillis=currentLevelChanges.milliSpeedLimit;
+          }
         }
-    return;
-  }
-
-  if(distanceTravelled<500){
-    currentAcceleration=70;
-    trackWidthChangeEvery=10;
-    if(widthOfTrack<5){
-        widthOfTrack=5;
       }
-      return;
-  }
-
-  if(distanceTravelled<600){
-    trackWidthChangeEvery=10;
-    if(widthOfTrack<4){
-        widthOfTrack=4;
+    }
+    if(currentLevelChanges.minWidth!=null){
+      if(widthOfTrack<currentLevelChanges.minWidth){
+        widthOfTrack=currentLevelChanges.minWidth;
       }
-      return;
-  }
-  
-  if(distanceTravelled<700){
-    minWidthOfTrack=3;
-    trackWidthChangeEvery=10;
-    return;
-  }
-
-  if(distanceTravelled<800){
-    minWidthOfTrack=1;
-    trackWidthChangeEvery=10;
-    return;
+    }
   }
 }
 
-
-/*
-function changeTrackWidth(){
-  if(distanceTravelled%trackWidthChangeModulus==0){
-      widthOfTrack-=getRandomInt(0, maxWidthOfTrackIncrement);
-      if(widthOfTrack < minWidthOfTrack){
-        widthOfTrack = minWidthOfTrack;
-      }
-  }
-}
-*/
 
 function changeTrackWidth(){
   //console.log(trackWidthChangeEvery)
@@ -486,6 +444,23 @@ function adjustTheTrackForRoadWeaving(){
 
 function setValuesToStartingValues(){
 
+
+  levelSettings = { changes:[
+                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
+                      {start:40, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:500},
+                      {start:101, end:200, tillSpeedChange:5, accel:50, widthChangeEvery:2, minWidth:10, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:400},
+                      {start:201, end:300, tillSpeedChange:3, accel:30, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
+                      {start:301, end:400, tillSpeedChange:3, accel:50, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:10, milliSpeedLimit:150},
+                      {start:401, end:500, tillSpeedChange:3, accel:30, widthChangeEvery:10, minWidth:6, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:200},
+                      {start:501, end:600, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:4, maxWidth:4, maxSpeedMillisChange:null, milliSpeedLimit:150},
+                      {start:601, end:700, tillSpeedChange:2, accel:20, widthChangeEvery:10, minWidth:3, maxWidth:3, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:701, end:800, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:1, maxWidth:1, maxSpeedMillisChange:null, milliSpeedLimit:null},
+                    ],
+                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:5, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:50}
+                  };
+
+   currentLevelChanges = levelSettings.changes[0];
+
    posOfLeftOfTrack=1;
    maxWidthOfArena=60;
    widthOfTrack=58;
@@ -537,6 +512,7 @@ function setValuesToStartingValues(){
 
 
   var distanceTravelled, distanceToNextSpeedChange, speedChanges, fontSize, fontWidth;
+  var levelSettings, currentLevelChanges;
   var carLine; // car position line display
   var posOfLeftOfTrack=1;
   var maxWidthOfArena=60;
