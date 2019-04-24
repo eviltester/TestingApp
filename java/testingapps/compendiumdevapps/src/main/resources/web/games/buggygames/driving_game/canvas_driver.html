@@ -182,7 +182,7 @@ function playGame(){
   points=distanceTravelled*10;
   points+=bonuspoints;
   changeSpanText('thePoints', points);
-  changeSpanText('theSpeed', millisecondsBetweenScrolls/500);
+  changeSpanText('theSpeed', millisecondsBetweenScrolls); ///500);
   changeSpanText('lives', lives);
   changeSpanText('health', currenthealth);
 
@@ -204,8 +204,10 @@ function playGame(){
 function scroll(){
     // change speed
     distanceToNextSpeedChange--;
+    //console.log("distance to speed change " + distanceToNextSpeedChange);
   if(distanceToNextSpeedChange<0){
       millisecondsBetweenScrolls-=currentAcceleration;
+      //console.log("speed " + millisecondsBetweenScrolls + " and max " + maxSpeedMillis);
 
       if(millisecondsBetweenScrolls<maxSpeedMillis){
         millisecondsBetweenScrolls=maxSpeedMillis;
@@ -236,28 +238,40 @@ function changeSpeed(){
 
   //{start:0, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit=500},
 
+
+
   if(distanceTravelled > currentLevelChanges.end){
     currentLevelChanges = getNewLevelDetails(distanceTravelled);
   }
 
+  
+
   if(distanceToNextSpeedChange<0){
+
+    //console.log(currentLevelChanges);
+
+
+
     if(currentLevelChanges.tillSpeedChange!=null){
+
       distanceToNextSpeedChange=currentLevelChanges.tillSpeedChange;
 
       if(currentLevelChanges.accel!=null){
         currentAcceleration=currentLevelChanges.accel;
+        //console.log("accel: " + currentAcceleration);
       }
       if(currentLevelChanges.widthChangeEvery!=null){
         trackWidthChangeEvery=currentLevelChanges.widthChangeEvery;
+        //console.log("trackWidthChangeEvery: " + trackWidthChangeEvery);
       }      
 
       if(currentLevelChanges.maxSpeedMillisChange!=null){
         maxSpeedMillis-=currentLevelChanges.maxSpeedMillisChange;
-        if(currentLevelChanges.milliSpeedLimit!=null){
-          if(maxSpeedMillis<currentLevelChanges.milliSpeedLimit){
-            maxSpeedMillis=currentLevelChanges.milliSpeedLimit;
-          }
-        }
+        //console.log("maxSpeedMillis: " + maxSpeedMillis);
+      }
+      if(currentLevelChanges.milliSpeedLimit!=null){       
+          maxSpeedMillis=currentLevelChanges.milliSpeedLimit;
+         // console.log("speed limit changed maxSpeedMillis: " + maxSpeedMillis);
       }
     }
     if(currentLevelChanges.minWidth!=null){
@@ -446,17 +460,17 @@ function setValuesToStartingValues(){
 
 
   levelSettings = { changes:[
-                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
-                      {start:40, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:500},
-                      {start:101, end:200, tillSpeedChange:5, accel:50, widthChangeEvery:2, minWidth:10, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:400},
-                      {start:201, end:300, tillSpeedChange:3, accel:30, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
-                      {start:301, end:400, tillSpeedChange:3, accel:50, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:10, milliSpeedLimit:150},
-                      {start:401, end:500, tillSpeedChange:3, accel:30, widthChangeEvery:10, minWidth:6, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:200},
-                      {start:501, end:600, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:4, maxWidth:4, maxSpeedMillisChange:null, milliSpeedLimit:150},
-                      {start:601, end:700, tillSpeedChange:2, accel:20, widthChangeEvery:10, minWidth:3, maxWidth:3, maxSpeedMillisChange:null, milliSpeedLimit:100},
-                      {start:701, end:800, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:1, maxWidth:1, maxSpeedMillisChange:null, milliSpeedLimit:null},
+                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:40, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:350},
+                      {start:101, end:200, tillSpeedChange:3, accel:5, widthChangeEvery:10, minWidth:10, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
+                      {start:201, end:300, tillSpeedChange:3, accel:10, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:250},
+                      {start:301, end:400, tillSpeedChange:3, accel:10, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:10, milliSpeedLimit:200},
+                      {start:401, end:500, tillSpeedChange:3, accel:15, widthChangeEvery:10, minWidth:6, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:150},
+                      {start:501, end:600, tillSpeedChange:2, accel:20, widthChangeEvery:10, minWidth:4, maxWidth:4, maxSpeedMillisChange:null, milliSpeedLimit:125},
+                      {start:601, end:700, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:3, maxWidth:3, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:701, end:800, tillSpeedChange:2, accel:40, widthChangeEvery:10, minWidth:1, maxWidth:1, maxSpeedMillisChange:null, milliSpeedLimit:50},
                     ],
-                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:5, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:50}
+                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:5, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
                   };
 
    currentLevelChanges = levelSettings.changes[0];
