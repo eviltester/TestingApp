@@ -312,12 +312,12 @@ function changeTrackWidth(){
 */
 
 function changeTrackWidth(){
-  console.log(trackWidthChangeEvery)
+  //console.log(trackWidthChangeEvery)
 
   if(distanceTravelled%trackWidthChangeEvery==0){
     
       widthOfTrack-=1;
-      console.log("track change " + widthOfTrack)
+      //console.log("track change " + widthOfTrack)
       if(widthOfTrack < minWidthOfTrack){
         widthOfTrack = minWidthOfTrack;
         // track lowest - make it faster instead
