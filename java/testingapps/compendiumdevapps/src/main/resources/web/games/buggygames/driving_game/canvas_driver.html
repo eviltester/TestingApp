@@ -180,8 +180,11 @@ function playGame(){
   // calculate points etc.
   distanceTravelled++;
   points=distanceTravelled*10;
+  points+=bonuspoints;
   changeSpanText('thePoints', points);
   changeSpanText('theSpeed', millisecondsBetweenScrolls/500);
+  changeSpanText('lives', lives);
+  changeSpanText('health', currenthealth);
 
   scroll()
 
@@ -295,6 +298,8 @@ function changeTrackWidth(){
 
 function setDifficultyLevel(theLevel){
 
+  bonuspoints = theLevel*1000;
+
   var levels =[{s:500,w:40},
                {s:450,w:35},
                {s:400,w:30},
@@ -369,7 +374,8 @@ function displayTheTrackToTheConsole(){
 
   trackDisplay = trackArray.join("");
 
-  console.log(trackDisplay);
+  // enable for console driver - 2 in 1 game mega bonus - double winner you are
+  //console.log(trackDisplay);
   
 
 }
@@ -381,22 +387,49 @@ function centerCar(){
                     )/2);
 }
 
+function bumpCarBackOnToRoad(){
+  var leftSide = track[carLine].indexOf(" ");
+  var rightSide = track[carLine].lastIndexOf(" ");
+  if(carPosition<=leftSide){
+    carPosition=leftSide+1;
+  }else{
+    carPosition=rightSide-1;
+  }
+}
+
+
 function checkForCrash(carSpace){
     //if(carSpace != " "){  // are you on a road?
+    var justLostALife = false;
+
   if(carSpace == "*"){ // have you hit a wall?
 
-    lives--;
+    currenthealth--;
+    if(currenthealth<1){
+      lives--;
+      justLostALife = true;
+      currenthealth=maxhealth;
+    }
+
+    
     if(lives<1){
       // deaded
       hasCrashed=true;
     }else{
+
       // second chance
-      showInfo("OUCH - be careful - lives left: " + lives);
-      millisecondsBetweenScrolls*=3;
-      if(millisecondsBetweenScrolls>500){
-        millisecondsBetweenScrolls=500;
+      showInfo("OUCH - be careful - Health: " + currenthealth + " - Lives left: " + lives);
+
+      if(justLostALife){
+        millisecondsBetweenScrolls*=3;
+        if(millisecondsBetweenScrolls>500){
+          millisecondsBetweenScrolls=500;
+        }
+        centerCar()
+      }else{
+        // bump car on to road
+        bumpCarBackOnToRoad();
       }
-      centerCar()
     }
 
     
@@ -427,8 +460,11 @@ function setValuesToStartingValues(){
    trackWidthChangeEvery=5;
    currentAcceleration=50;
    lives = 3;
+   maxhealth = 4;
+   currenthealth = 4;
 
    points=0;
+   bonuspoints=0;
    startGame = false;
    trackString = " - ";
    carDisplay = "V";
@@ -477,9 +513,12 @@ function setValuesToStartingValues(){
   var currentAcceleration=50;
   var maxTrackLines=20;
   var lives = 3;
+  var maxhealth = 4;
+  var currenthealth = 4;
 
   var carPosition = posOfLeftOfTrack + (widthOfTrack/2);
   var points=0;
+  var bonuspoints=0;
   var startGame = false;
   var promptForValues=false;
   // build a string and display to the console
@@ -508,9 +547,10 @@ function setValuesToStartingValues(){
   <div id="instructions">
   	<h1>Instructions</h1>
   	<p>Use left and Right to keep your car 'V' on the track.
-       Hit a wall '*' and you will explode "X". Each Time you
+       Hit a wall '*' and you will lose health. You only have 4 health.
+       If you lose all your health, you explode "X". Each Time you
        explode you lose a life. You only have 3 lives.</p>
-  	<h2>Press space to start game</h2>
+  	<p><strong>Press space to start game</strong></p>
     <!-- prototype for set start level difficulty -->
     <input id="setLevel" style="display:none" value="1" />
   </div>
@@ -518,12 +558,16 @@ function setValuesToStartingValues(){
   <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
 
   <div id="gameboard">
-  	<h1>Points: <span id='thePoints'></span></h1>
-    <h1>Speed: <span id='theSpeed'></span></h1>
+  	<p>
+      Points: <span id='thePoints'></span>
+      Speed: <span id='theSpeed'></span>
+      Health: <span id='health'></span>
+      Lives: <span id='lives'></span>
+    </p>
     <canvas id="gamedisplay" width="500" height="500"></canvas>
   </div>
 
-  <h1>Info: <span id='info'></span></h1>
+  <h2>Info: <span id='info'></span></h2>
 
 </body>
 </html>
