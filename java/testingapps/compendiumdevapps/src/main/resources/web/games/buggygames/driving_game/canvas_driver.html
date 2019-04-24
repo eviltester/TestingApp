@@ -275,8 +275,11 @@ function changeSpeed(){
       }
     }
     if(currentLevelChanges.minWidth!=null){
-      if(widthOfTrack<currentLevelChanges.minWidth){
-        widthOfTrack=currentLevelChanges.minWidth;
+        minWidthOfTrack=currentLevelChanges.minWidth;
+    }
+    if(currentLevelChanges.maxWidth!=null){
+      if(currentLevelChanges.maxWidth<maxWidthOfArena){
+        maxWidthOfTrack=currentLevelChanges.maxWidth;
       }
     }
   }
@@ -288,16 +291,32 @@ function changeTrackWidth(){
 
   if(distanceTravelled%trackWidthChangeEvery==0){
     
-      widthOfTrack-=1;
       //console.log("track change " + widthOfTrack)
       if(widthOfTrack < minWidthOfTrack){
-        widthOfTrack = minWidthOfTrack;
-        // track lowest - make it faster instead
-        maxSpeedMillis-=10;
-        if(maxSpeedMillis<10){
-          maxSpeedMillis=10;
-        }
+        // too small bring withing width
+        widthOfTrack++;
+        return;
       }
+      if(widthOfTrack > maxWidthOfTrack){
+        // too big get width back within tolerances
+        widthOfTrack--;
+        return;
+      }
+
+      // decide if we make bigger or smaller
+      var sizeOptions = [];
+      sizeOptions.push(0); // stay same size
+      for(var addItem=widthOfTrack;addItem<maxWidthOfTrack;addItem++){
+        sizeOptions.push(1); // increase
+      }
+      for(var addItem=minWidthOfTrack;addItem<widthOfTrack;addItem++){
+        sizeOptions.push(-1); // decrease
+      }
+
+      var sizeBy = Math.floor(Math.random()*sizeOptions.length);
+      //console.log("choose option " + sizeBy);
+      //console.log("widen " + sizeOptions[sizeBy]);
+      widthOfTrack+=sizeOptions[sizeBy];
   }
 }
 
@@ -460,25 +479,34 @@ function setValuesToStartingValues(){
 
 
   levelSettings = { changes:[
-                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:100},
-                      {start:40, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:350},
-                      {start:101, end:200, tillSpeedChange:3, accel:5, widthChangeEvery:10, minWidth:10, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:300},
-                      {start:201, end:300, tillSpeedChange:3, accel:10, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:250},
-                      {start:301, end:400, tillSpeedChange:3, accel:10, widthChangeEvery:10, minWidth:7, maxWidth:100, maxSpeedMillisChange:10, milliSpeedLimit:200},
-                      {start:401, end:500, tillSpeedChange:3, accel:15, widthChangeEvery:10, minWidth:6, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit:150},
-                      {start:501, end:600, tillSpeedChange:2, accel:20, widthChangeEvery:10, minWidth:4, maxWidth:4, maxSpeedMillisChange:null, milliSpeedLimit:125},
-                      {start:601, end:700, tillSpeedChange:2, accel:30, widthChangeEvery:10, minWidth:3, maxWidth:3, maxSpeedMillisChange:null, milliSpeedLimit:100},
-                      {start:701, end:800, tillSpeedChange:2, accel:40, widthChangeEvery:10, minWidth:1, maxWidth:1, maxSpeedMillisChange:null, milliSpeedLimit:50},
+                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:40, end:80, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:300},
+                      {start:81, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:250},
+                      {start:101, end:150, tillSpeedChange:3, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:200},
+                      {start:151, end:200, tillSpeedChange:3, accel:5, widthChangeEvery:2, minWidth:5, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:180},
+                      {start:201, end:250, tillSpeedChange:3, accel:10, widthChangeEvery:3, minWidth:4, maxWidth:8, maxSpeedMillisChange:null, milliSpeedLimit:190},
+                      {start:251, end:300, tillSpeedChange:3, accel:10, widthChangeEvery:2, minWidth:7, maxWidth:13, maxSpeedMillisChange:null, milliSpeedLimit:170},
+                      {start:301, end:350, tillSpeedChange:3, accel:10, widthChangeEvery:2, minWidth:5, maxWidth:9, maxSpeedMillisChange:10, milliSpeedLimit:160},
+                      {start:351, end:400, tillSpeedChange:3, accel:10, widthChangeEvery:1, minWidth:5, maxWidth:8, maxSpeedMillisChange:10, milliSpeedLimit:150},
+                      {start:401, end:500, tillSpeedChange:3, accel:15, widthChangeEvery:2, minWidth:5, maxWidth:6, maxSpeedMillisChange:null, milliSpeedLimit:150},
+                      {start:501, end:600, tillSpeedChange:2, accel:20, widthChangeEvery:3, minWidth:3, maxWidth:6, maxSpeedMillisChange:null, milliSpeedLimit:125},
+                      {start:601, end:700, tillSpeedChange:2, accel:30, widthChangeEvery:2, minWidth:3, maxWidth:5, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:701, end:800, tillSpeedChange:2, accel:40, widthChangeEvery:4, minWidth:3, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:50},
+                      {start:801, end:900, tillSpeedChange:2, accel:40, widthChangeEvery:2, minWidth:2, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:40},
+                      {start:901, end:1000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:1, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:30},
+                      {start:1001, end:2000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:1, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:20},
                     ],
-                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:5, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
+                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:1, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
                   };
 
    currentLevelChanges = levelSettings.changes[0];
 
    posOfLeftOfTrack=1;
-   maxWidthOfArena=60;
-   widthOfTrack=58;
+   maxWidthOfArena=defaultMaxWidthOfTrack;
+   widthOfTrack=maxWidthOfArena-2;
+   maxWidthOfTrack=widthOfTrack;
    minWidthOfTrack=4;
+
    trackWidthChangeEvery=5;
    currentAcceleration=50;
    lives = 3;
@@ -525,12 +553,15 @@ function setValuesToStartingValues(){
 }
 
 
+  var defaultMaxWidthOfTrack=60;
+
   var distanceTravelled, distanceToNextSpeedChange, speedChanges, fontSize, fontWidth;
   var levelSettings, currentLevelChanges;
   var carLine; // car position line display
   var posOfLeftOfTrack=1;
   var maxWidthOfArena=60;
   var widthOfTrack=maxWidthOfArena-6;
+  var maxWidthOfTrack=widthOfTrack;
   var minWidthOfTrack=8;
   var trackWidthChangeEvery=5;
   var currentAcceleration=50;
