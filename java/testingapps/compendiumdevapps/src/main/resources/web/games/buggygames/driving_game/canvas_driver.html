@@ -169,6 +169,8 @@ function scrollTrack(nextLine){
     track.push(nextLine);
 }
 
+
+
 function playGame(){
 
   // calculate points etc.
@@ -177,21 +179,8 @@ function playGame(){
   changeSpanText('thePoints', points);
   changeSpanText('theSpeed', millisecondsBetweenScrolls/500);
 
-  // change speed
-  distanceToNextSpeedChange--;
-  if(distanceToNextSpeedChange<0){
-      millisecondsBetweenScrolls-=50;
+  scroll()
 
-      if(millisecondsBetweenScrolls<maxSpeedMillis){
-        millisecondsBetweenScrolls=maxSpeedMillis;
-      }
-
-      window.clearInterval(theTimer);
-      theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
-
-      changeSpeed();
-
-  }
 
   // change track width
   changeTrackWidth();
@@ -205,19 +194,54 @@ function playGame(){
 	}
 }
 
+function scroll(){
+    // change speed
+    distanceToNextSpeedChange--;
+  if(distanceToNextSpeedChange<0){
+      millisecondsBetweenScrolls-=currentAcceleration;
+
+      if(millisecondsBetweenScrolls<maxSpeedMillis){
+        millisecondsBetweenScrolls=maxSpeedMillis;
+      }
+
+      window.clearInterval(theTimer);
+      theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
+
+      changeSpeed();
+
+  }
+}
+
 function changeSpeed(){
-  speedChanges++;
+
+  if(distanceTravelled<100){
+    if(distanceToNextSpeedChange<0){
+      distanceToNextSpeedChange=5;
+      currentAcceleration=20;
+      trackWidthChangeEvery=2;
+    }
+    if(widthOfTrack<12){
+        widthOfTrack=12;
+      }
+  }
 
   if(distanceTravelled<200){
+    if(distanceToNextSpeedChange<0){
       distanceToNextSpeedChange=3;
-      trackWidthChangeModulus=1;  
-      speedChanges=0;
-      if(widthOfTrack<8){
-        widthOfTrack=8;
+      currentAcceleration=50;
+      trackWidthChangeEvery=15;
+    }
+
+      if(widthOfTrack<10){
+        widthOfTrack=10;
       }
   }
 
   if(distanceTravelled<300){
+    if(distanceToNextSpeedChange<0){
+      distanceToNextSpeedChange=3;
+      currentAcceleration=30;
+    }
     if(widthOfTrack<7){
         widthOfTrack=7;
       }
@@ -225,6 +249,7 @@ function changeSpeed(){
 
 
   if(distanceTravelled<400){
+    currentAcceleration=50;
     maxSpeedMillis-=10;
         if(maxSpeedMillis<150){
           maxSpeedMillis=150;
@@ -236,32 +261,8 @@ function changeSpeed(){
         widthOfTrack=5;
       }
   }
-
-
-  //5, 10, 20, 50,
-  switch(speedChanges){
-      case 0:
-        distanceToNextSpeedChange=5;
-        trackWidthChangeModulus=2;
-        break;
-      case 1:
-      case 2:
-      case 3:
-        distanceToNextSpeedChange=10;
-        trackWidthChangeModulus=1;
-        break;
-      case 4:
-      case 5:
-      case 6:
-        distanceToNextSpeedChange=20;
-        trackWidthChangeModulus=1;
-        break;
-      default:
-        distanceToNextSpeedChange=30;
-        trackWidthChangeModulus=1;
-        speedChanges=0;
-  }
 }
+
 
 /*
 function changeTrackWidth(){
@@ -275,11 +276,11 @@ function changeTrackWidth(){
 */
 
 function changeTrackWidth(){
-  if(distanceTravelled%trackWidthChangeModulus==0){
+  if(distanceTravelled%trackWidthChangeEvery==0){
       widthOfTrack-=1;
       if(widthOfTrack < minWidthOfTrack){
         widthOfTrack = minWidthOfTrack;
-        // track lowest - make it faster
+        // track lowest - make it faster instead
         maxSpeedMillis-=10;
         if(maxSpeedMillis<10){
           maxSpeedMillis=10;
@@ -396,6 +397,8 @@ function setValuesToStartingValues(){
    maxWidthOfArena=60;
    widthOfTrack=58;
    minWidthOfTrack=4;
+   trackWidthChangeEvery=5;
+   currentAcceleration=50;
 
    points=0;
    startGame = false;
@@ -407,7 +410,6 @@ function setValuesToStartingValues(){
    distanceToNextSpeedChange=5;
    speedChanges=0;
    maxSpeedMillis=100;
-   trackWidthChangeModulus=20;
    maxWidthOfTrackIncrement=3;
 
    maxTrackLines=20;
