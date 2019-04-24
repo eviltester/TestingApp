@@ -224,49 +224,78 @@ function changeSpeed(){
   if(distanceTravelled<100){
     if(distanceToNextSpeedChange<0){
       distanceToNextSpeedChange=5;
-      currentAcceleration=20;
-      trackWidthChangeEvery=2;
+      currentAcceleration=100;
+      trackWidthChangeEvery=1;
     }
     if(widthOfTrack<12){
         widthOfTrack=12;
       }
+      return;
   }
 
   if(distanceTravelled<200){
     if(distanceToNextSpeedChange<0){
       distanceToNextSpeedChange=3;
       currentAcceleration=50;
-      trackWidthChangeEvery=15;
+      trackWidthChangeEvery=2;
     }
 
       if(widthOfTrack<10){
         widthOfTrack=10;
       }
+    return;
   }
 
   if(distanceTravelled<300){
     if(distanceToNextSpeedChange<0){
       distanceToNextSpeedChange=3;
       currentAcceleration=30;
+      trackWidthChangeEvery=10;
     }
     if(widthOfTrack<7){
         widthOfTrack=7;
       }
+    return;
   }
 
 
   if(distanceTravelled<400){
     currentAcceleration=50;
+    trackWidthChangeEvery=10;
     maxSpeedMillis-=10;
         if(maxSpeedMillis<150){
           maxSpeedMillis=150;
         }
+    return;
   }
 
   if(distanceTravelled<500){
+    currentAcceleration=70;
+    trackWidthChangeEvery=10;
     if(widthOfTrack<5){
         widthOfTrack=5;
       }
+      return;
+  }
+
+  if(distanceTravelled<600){
+    trackWidthChangeEvery=10;
+    if(widthOfTrack<4){
+        widthOfTrack=4;
+      }
+      return;
+  }
+  
+  if(distanceTravelled<700){
+    minWidthOfTrack=3;
+    trackWidthChangeEvery=10;
+    return;
+  }
+
+  if(distanceTravelled<800){
+    minWidthOfTrack=1;
+    trackWidthChangeEvery=10;
+    return;
   }
 }
 
@@ -283,8 +312,12 @@ function changeTrackWidth(){
 */
 
 function changeTrackWidth(){
+  console.log(trackWidthChangeEvery)
+
   if(distanceTravelled%trackWidthChangeEvery==0){
+    
       widthOfTrack-=1;
+      console.log("track change " + widthOfTrack)
       if(widthOfTrack < minWidthOfTrack){
         widthOfTrack = minWidthOfTrack;
         // track lowest - make it faster instead
