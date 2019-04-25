@@ -2,6 +2,28 @@
 <head>
     <title>Canvas Driver</title>
 
+    <style>
+        .render-area {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            width: 800px;}
+        .responsive-canvas{
+          width: 100%;
+          text-align:center;
+        }
+        #gameboard{
+          text-align:center;
+        }
+        .responsive-canvas canvas{
+          display: inline;
+        }
+        #instructions h1 {color: #000000;}
+        #instructions p {color: rgb(57, 0, 0);}
+        #gameboard p {color: rgb(14, 67, 147);}
+        #gameboard h2 {color: rgb(255, 0, 0);}
+      </style>
 
 <script>
 
@@ -475,10 +497,9 @@ function adjustTheTrackForRoadWeaving(){
   }
 }
 
-function setValuesToStartingValues(){
+function getLevelData(){
 
-
-  levelSettings = { changes:[
+  return { changes:[
                       {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:100},
                       {start:40, end:80, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:250},
                       {start:81, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:230},
@@ -500,6 +521,12 @@ function setValuesToStartingValues(){
                     ],
                     defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:1, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
                   };
+}
+
+function setValuesToStartingValues(){
+
+
+  levelSettings = getLevelData();
 
    currentLevelChanges = levelSettings.changes[0];
 
@@ -598,32 +625,37 @@ function setValuesToStartingValues(){
 </head>
 <body>
 
-<h1>Canvas Driver</h1>
+  <div class="render-area">
+  <h1>Canvas Driver</h1>
 
-  <div id="instructions">
-  	<h1>Instructions</h1>
-  	<p>Use left and Right to keep your car 'V' on the track.
-       Hit a wall '*' and you will lose health. You only have 4 health.
-       If you lose all your health, you explode "X". Each Time you
-       explode you lose a life. You only have 3 lives.</p>
-  	<p><strong>Press space to start game</strong></p>
-    <!-- prototype for set start level difficulty -->
-    <input id="setLevel" style="display:none" value="1" />
-  </div>
+    <div id="instructions">
+      <h1>Instructions</h1>
+      <p>Use left and Right to keep your car 'V' on the track.
+        Hit a wall '*' and you will lose health. You only have 4 health.
+        If you lose all your health, you explode "X". Each Time you
+        explode you lose a life. You only have 3 lives.</p>
+      <p><strong>Press space to start game</strong></p>
+      <!-- prototype for set start level difficulty -->
+      <input id="setLevel" style="display:none" value="1" />
+    </div>
 
-  <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
+    <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
 
-  <div id="gameboard">
-  	<p>
-      Points: <span id='thePoints'></span>
-      Speed: <span id='theSpeed'></span>
-      Health: <span id='health'></span>
-      Lives: <span id='lives'></span>
-    </p>
-    <canvas id="gamedisplay" width="500" height="500"></canvas>
-  </div>
+    <div id="gameboard">
+      <p>
+        Points: <span id='thePoints'></span>
+        Speed: <span id='theSpeed'></span>
+        Health: <span id='health'></span>
+        Lives: <span id='lives'></span>
+      </p>
+      <div class="responsive-canvas">
+        <canvas id="gamedisplay" width="500" height="500"></canvas>
+      </div>
+      <h2>Info: <span id='info'></span></h2>
+    </div>
 
-  <h2>Info: <span id='info'></span></h2>
+    
 
+</div>
 </body>
 </html>
