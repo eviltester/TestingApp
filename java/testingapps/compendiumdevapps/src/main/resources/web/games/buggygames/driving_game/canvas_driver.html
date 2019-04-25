@@ -745,8 +745,34 @@ function setValuesToStartingValues(){
   var maxWidthOfTrackIncrement=3;
 
 
+function displayHighScoresOnPage(){
+  //https://stackoverflow.com/questions/14643617/create-table-using-javascript
+    var parent = document.getElementById("highscoredisplay");
+    parent.innerHTML = ''; // delete any existing table data
+    var tbl  = document.createElement('table');
+    tbl.style.width  = '100px';
+    tbl.style.border = '1px solid black';
+
+    for(var scoreinc = 0; scoreinc < highScores.length; scoreinc++){
+        var tr = tbl.insertRow();
+        
+        var td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].name));
+        td.style.border = '1px solid black';
+
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].score));
+        td.style.border = '1px solid black';
+
+    }
+    
+    parent.appendChild(tbl);
+
+}
+
   saveHighScoresToCookies();
   loadHighScores();
+
 
 </script>
 
@@ -767,6 +793,13 @@ function setValuesToStartingValues(){
       <input id="setLevel" style="display:none" value="1" />
     </div>
 
+    <div id="highscoreboard" style="display:none">
+      <h2>High Scores</h2>
+      <div id="highscoredisplay">
+
+      </div>
+
+    </div>
     <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
 
     <div id="gameboard">
@@ -785,5 +818,10 @@ function setValuesToStartingValues(){
     
 
 </div>
+
+
+<script> 
+  displayHighScoresOnPage();
+</script>
 </body>
 </html>
