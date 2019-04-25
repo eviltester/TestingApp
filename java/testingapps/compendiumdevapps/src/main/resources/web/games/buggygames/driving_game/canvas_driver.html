@@ -126,6 +126,7 @@ function instructions(){
     showInfo("Drive Safely");
 		window.clearInterval(theTimer);
 		document.getElementById('instructions').style.display = 'none';
+    document.getElementById('highscoreboard').style.display = 'none';
 		document.getElementById('gameboard').style.display = 'block';
 		setValuesToStartingValues();
 
@@ -409,9 +410,11 @@ function setDifficultyLevel(theLevel){
 
 function endGame(){
   showInfo("!!GAME OVER!! You Crashed! You Scored " + points);
+  captureHighScore(points);
   startGame=false;
   window.clearInterval(theTimer);
   document.getElementById('instructions').style.display = 'block';
+  document.getElementById('highscoreboard').style.display = 'block';
   //document.getElementById('gameboard').style.display = 'none';
   theTimer = window.setInterval(instructions, millisecondsBetweenScrolls);
 
@@ -588,6 +591,30 @@ function setDifficulty(){
 
 var highScores = [ {name:"KAR",score:7000}, {name:"AAA",score:6000}, {name:"AJR",score:8000}, {name:"___",score:5000}, {name:"BOB",score:4000},  {name:"HI_",score:3000}   ]
 
+function captureHighScore(points){
+  if(highScores.length < maxHighScores || points>highScores[highScores.length-1]){
+    var initials = prompt(points + " is a HIGH SCORE. Please enter your initials", "AAA");
+    if(!initials){
+      initials = "AAA";
+    }
+    addHighScore(points, initials);
+  }
+}
+
+function addHighScore(points, initials){
+  highScores.push({name:initials, score:points});
+  sortHighScores();
+  trimHighScores();
+  saveHighScoresToCookies();
+  displayHighScoresOnPage();
+}
+
+function trimHighScores(){
+  if(highScores.length>maxHighScores){
+    highScores.pop();
+  }
+}
+
 function saveHighScoresToCookies(){
 
   var cookieString="highscores=";
@@ -646,6 +673,33 @@ function loadHighScores(){
   sortHighScores();
 
 }
+
+function displayHighScoresOnPage(){
+  //https://stackoverflow.com/questions/14643617/create-table-using-javascript
+    var parent = document.getElementById("highscoredisplay");
+    parent.innerHTML = ''; // delete any existing table data
+    var tbl  = document.createElement('table');
+    tbl.style.width  = '100px';
+    tbl.style.border = '1px solid black';
+
+    for(var scoreinc = 0; scoreinc < highScores.length; scoreinc++){
+        var tr = tbl.insertRow();
+        
+        var td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].name));
+        td.style.border = '1px solid black';
+
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].score));
+        td.style.border = '1px solid black';
+
+    }
+    
+    parent.appendChild(tbl);
+
+}
+
+
 
 function setValuesToStartingValues(){
 
@@ -708,6 +762,7 @@ function setValuesToStartingValues(){
 }
 
 
+  var maxHighScores=10;
   var defaultMaxWidthOfTrack=60;
   var difficultyLevel=0;
   var distanceTravelled, distanceToNextSpeedChange, speedChanges, fontSize, fontWidth;
@@ -745,32 +800,11 @@ function setValuesToStartingValues(){
   var maxWidthOfTrackIncrement=3;
 
 
-function displayHighScoresOnPage(){
-  //https://stackoverflow.com/questions/14643617/create-table-using-javascript
-    var parent = document.getElementById("highscoredisplay");
-    parent.innerHTML = ''; // delete any existing table data
-    var tbl  = document.createElement('table');
-    tbl.style.width  = '100px';
-    tbl.style.border = '1px solid black';
 
-    for(var scoreinc = 0; scoreinc < highScores.length; scoreinc++){
-        var tr = tbl.insertRow();
-        
-        var td = tr.insertCell();
-        td.appendChild(document.createTextNode(highScores[scoreinc].name));
-        td.style.border = '1px solid black';
-
-        td = tr.insertCell();
-        td.appendChild(document.createTextNode(highScores[scoreinc].score));
-        td.style.border = '1px solid black';
-
-    }
-    
-    parent.appendChild(tbl);
-
-}
-
-  saveHighScoresToCookies();
+  if(!getCookie("highscores")){
+    saveHighScoresToCookies();
+  }
+  
   loadHighScores();
 
 
@@ -793,7 +827,7 @@ function displayHighScoresOnPage(){
       <input id="setLevel" style="display:none" value="1" />
     </div>
 
-    <div id="highscoreboard" style="display:none">
+    <div id="highscoreboard" style="">
       <h2>High Scores</h2>
       <div id="highscoredisplay">
 
