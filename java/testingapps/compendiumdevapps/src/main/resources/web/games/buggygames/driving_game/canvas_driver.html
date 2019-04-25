@@ -586,6 +586,67 @@ function setDifficulty(){
   difficultySettings = difficultyTiers[difficultyLevel];
 }
 
+var highScores = [ {name:"KAR",score:7000}, {name:"AAA",score:6000}, {name:"AJR",score:8000}, {name:"___",score:5000}, {name:"BOB",score:4000},  {name:"HI_",score:3000}   ]
+
+function saveHighScoresToCookies(){
+
+  var cookieString="highscores=";
+  for(var scoreinc=0; scoreinc < highScores.length; scoreinc++){
+    cookieString+= highScores[scoreinc].name + ":" + highScores[scoreinc].score + "&";
+  }
+  document.cookie = cookieString + ";";
+}
+
+// https://www.w3schools.com/js/js_cookies.asp
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function sortHighScores(){
+
+  highScores = highScores.sort(
+                  function(a, b){return b.score - a.score;}
+                );
+
+}
+
+function loadHighScores(){
+
+  var highScoreCookie = getCookie("highscores");
+  console.log(highScoreCookie);
+  var rawHighScores = highScoreCookie.split("&");
+  console.log(rawHighScores);
+
+  var newHighScores = [];
+
+  for(var scoreinc=0; scoreinc<rawHighScores.length; scoreinc++){
+    if(rawHighScores[scoreinc]!=null && rawHighScores[scoreinc].length>0){
+      var aScore = rawHighScores[scoreinc].split(":");
+      if(aScore.length>=2){
+        if(aScore[0].length>1 && Number.isInteger(parseInt(aScore[1]))){
+          newHighScores.push({name:aScore[0],score:parseInt(aScore[1])});
+        }
+      }
+    }
+  }
+
+  highScores = newHighScores;
+  sortHighScores();
+
+}
+
 function setValuesToStartingValues(){
 
 
@@ -684,6 +745,8 @@ function setValuesToStartingValues(){
   var maxWidthOfTrackIncrement=3;
 
 
+  saveHighScoresToCookies();
+  loadHighScores();
 
 </script>
 
