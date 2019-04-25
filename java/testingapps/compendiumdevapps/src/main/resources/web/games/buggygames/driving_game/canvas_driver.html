@@ -63,13 +63,16 @@ function getTrackLine(left, roadWidth, trackWidth){
 
 document.onkeydown = function onkeydown(event) {
 
-	// console.log(event.keyCode);
+	console.log(event.keyCode);
   var LEFT_KEY = 37;
   var RIGHT_KEY = 39;
   var UP_KEY = 38;
   var DOWN_KEY = 40;
   var SPACE_KEY = 32;
   var ENTER_KEY = 13;
+  var ONE_KEY = 49;
+  var TWO_KEY = 50;
+  var THREE_KEY = 51;
 
 	if(event.keyCode==LEFT_KEY){
 		carPosition-=1;
@@ -80,12 +83,34 @@ document.onkeydown = function onkeydown(event) {
 	}
 
 	if(event.keyCode==SPACE_KEY){
+    difficultyLevel=0;
+    setDifficulty();
+    showInfo("Drive Normally");
 		startGame=true;
 	}
 
   if(event.keyCode==ENTER_KEY){
     promptForValues=true;
   }
+
+  if(event.keyCode==ONE_KEY){
+    difficultyLevel=1;
+    setDifficulty();
+    showInfo("Drive " + difficultySettings.name);
+		startGame=true;
+	}
+  if(event.keyCode==TWO_KEY){
+    difficultyLevel=2;
+    setDifficulty();
+    showInfo("Drive " + difficultySettings.name);
+		startGame=true;
+	}
+  if(event.keyCode==THREE_KEY){
+    difficultyLevel=3;
+    setDifficulty();
+    showInfo("Drive " + difficultySettings.name);
+		startGame=true;
+	}
 
 }
 
@@ -202,7 +227,7 @@ function playGame(){
   // calculate points etc.
   distanceTravelled++;
   points=distanceTravelled*10;
-  points+=bonuspoints;
+  points+=bonuspoints + difficultySettings.startBonus;
   changeSpanText('thePoints', points);
   changeSpanText('theSpeed', 50 + Math.floor(500-millisecondsBetweenScrolls)); ///500);
   changeSpanText('lives', lives);
@@ -258,8 +283,8 @@ function getNewLevelDetails(aDistance){
 
 function changeSpeed(){
 
-  //{start:0, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit=500},
-
+  //level {start:0, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit=500},
+  //difficulty {name:"normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0}
 
 
   if(distanceTravelled > currentLevelChanges.end){
@@ -279,7 +304,10 @@ function changeSpeed(){
       distanceToNextSpeedChange=currentLevelChanges.tillSpeedChange;
 
       if(currentLevelChanges.accel!=null){
-        currentAcceleration=currentLevelChanges.accel;
+        currentAcceleration=currentLevelChanges.accel+difficultySettings.accel;
+        if(currentAcceleration<5){
+          currentAcceleration=5;
+        }
         //console.log("accel: " + currentAcceleration);
       }
       if(currentLevelChanges.widthChangeEvery!=null){
@@ -292,16 +320,26 @@ function changeSpeed(){
         //console.log("maxSpeedMillis: " + maxSpeedMillis);
       }
       if(currentLevelChanges.milliSpeedLimit!=null){       
-          maxSpeedMillis=currentLevelChanges.milliSpeedLimit;
+          maxSpeedMillis=currentLevelChanges.milliSpeedLimit-difficultySettings.speedDecrement;
          // console.log("speed limit changed maxSpeedMillis: " + maxSpeedMillis);
       }
     }
+
+    
     if(currentLevelChanges.minWidth!=null){
-        minWidthOfTrack=currentLevelChanges.minWidth;
+        minWidthOfTrack=currentLevelChanges.minWidth-difficultySettings.minTrackDecrement;
+        if(minWidthOfTrack<1){
+          minWidthOfTrack=1;
+        }
     }
+
+    
     if(currentLevelChanges.maxWidth!=null){
       if(currentLevelChanges.maxWidth<maxWidthOfArena){
-        maxWidthOfTrack=currentLevelChanges.maxWidth;
+        maxWidthOfTrack=currentLevelChanges.maxWidth-difficultySettings.maxTrackDecrement;
+        if(maxWidthOfTrack>maxWidthOfArena){
+          maxWidthOfTrack=maxWidthOfArena;
+        }
       }
     }
   }
@@ -344,7 +382,7 @@ function changeTrackWidth(){
 
 function setDifficultyLevel(theLevel){
 
-  bonuspoints = theLevel*1000;
+  bonuspoints = difficultySettings.startBonus + theLevel*1000;
 
   var levels =[{s:500,w:40},
                {s:450,w:35},
@@ -454,7 +492,10 @@ function checkForCrash(carSpace){
     if(currenthealth<1){
       lives--;
       justLostALife = true;
-      currenthealth=maxhealth;
+      currenthealth=maxhealth-difficultySettings.maxHealthDecrement;
+      if(currenthealth<1){
+        currenthealth=1;
+      }
     }
 
     
@@ -497,9 +538,7 @@ function adjustTheTrackForRoadWeaving(){
   }
 }
 
-function getLevelData(){
-
-  return { changes:[
+var defaultLevelData = { changes:[
                       {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:100},
                       {start:40, end:80, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:250},
                       {start:81, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:230},
@@ -515,18 +554,44 @@ function getLevelData(){
                       {start:601, end:700, tillSpeedChange:2, accel:30, widthChangeEvery:2, minWidth:3, maxWidth:5, maxSpeedMillisChange:null, milliSpeedLimit:100},
                       {start:701, end:800, tillSpeedChange:2, accel:40, widthChangeEvery:4, minWidth:3, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:50},
                       {start:801, end:900, tillSpeedChange:2, accel:40, widthChangeEvery:2, minWidth:2, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:40},
-                      {start:901, end:1000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:1, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:30},
-                      {start:1001, end:2000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:1, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:20},
-                      {start:2001, end:4000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:1, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:20},
+                      {start:901, end:1000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:30},
+                      {start:1001, end:2000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:20},
+                      {start:2001, end:4000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:20},
                     ],
+                    // pretty much only bots can do default
                     defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:1, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
                   };
+
+function getLevelData(){
+  return defaultLevelData;
+}
+
+var defaultDifficulties = [
+            {name:"Normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0, accel:0},
+            {name:"Easy", speedDecrement:-100, minTrackDecrement:-3, maxTrackDecrement:-3, maxHealthDecrement:-1, startBonus:0, accel:-10},
+            {name:"Hard", speedDecrement:100, minTrackDecrement:2, maxTrackDecrement:2, maxHealthDecrement:2, startBonus:1000, accel:10},
+            {name:"Harder", speedDecrement:200, minTrackDecrement:4, maxTrackDecrement:4, maxHealthDecrement:3, startBonus:2000, accel:15}
+         ];
+
+function getDifficulties(){
+
+  return defaultDifficulties;
+}
+
+function setDifficulty(){
+  difficultyTiers = getDifficulties();
+  if(difficultyLevel>=difficultyTiers.length){
+    difficultyLevel=0;
+  }
+  difficultySettings = difficultyTiers[difficultyLevel];
 }
 
 function setValuesToStartingValues(){
 
 
   levelSettings = getLevelData();
+  setDifficulty();
+
 
    currentLevelChanges = levelSettings.changes[0];
 
@@ -583,7 +648,7 @@ function setValuesToStartingValues(){
 
 
   var defaultMaxWidthOfTrack=60;
-
+  var difficultyLevel=0;
   var distanceTravelled, distanceToNextSpeedChange, speedChanges, fontSize, fontWidth;
   var levelSettings, currentLevelChanges;
   var carLine; // car position line display
