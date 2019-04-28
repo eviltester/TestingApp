@@ -23,6 +23,18 @@
         #instructions p {color: rgb(57, 0, 0);}
         #gameboard p {color: rgb(14, 67, 147);}
         #gameboard h2 {color: rgb(255, 0, 0);}
+        .pressstart{
+          text-align: center;
+          font-size: 2em;
+        }
+        .blink{
+          animation: blinky 1s step-start infinite;
+        }
+        @keyframes blinky{
+          50%{
+            opacity: 0;
+          }
+        }
       </style>
 
 <script>
@@ -61,58 +73,59 @@ function getTrackLine(left, roadWidth, trackWidth){
     return track;
 }
 
+var LEFT_KEY = 37;
+var RIGHT_KEY = 39;
+var UP_KEY = 38;
+var DOWN_KEY = 40;
+var SPACE_KEY = 32;
+var ENTER_KEY = 13;
+var ONE_KEY = 49;
+var TWO_KEY = 50;
+var THREE_KEY = 51;
+
+
+var keys = [];
+keys[LEFT_KEY] = left_key_action;
+keys[RIGHT_KEY] = right_key_action;
+keys[SPACE_KEY] = function(){startDifficulty(0)};
+keys[ENTER_KEY] = promptForValues;
+
+
+function left_key_action(){
+  carPosition-=1;
+}
+
+function right_key_action(){
+  carPosition+=1;
+}
+
+function startDifficulty(diff){
+    difficultyLevel=diff;
+    setDifficulty();
+    showInfo(difficultySettings.name);
+		startGame=true;
+}
+
+function promptForValues(){
+  promptForValues=true;
+}
+
 document.onkeydown = function onkeydown(event) {
 
-	console.log(event.keyCode);
-  var LEFT_KEY = 37;
-  var RIGHT_KEY = 39;
-  var UP_KEY = 38;
-  var DOWN_KEY = 40;
-  var SPACE_KEY = 32;
-  var ENTER_KEY = 13;
-  var ONE_KEY = 49;
-  var TWO_KEY = 50;
-  var THREE_KEY = 51;
-
-	if(event.keyCode==LEFT_KEY){
-		carPosition-=1;
-	}
-
-	if(event.keyCode==RIGHT_KEY){
-		carPosition+=1;
-	}
-
-	if(event.keyCode==SPACE_KEY){
-    difficultyLevel=0;
-    setDifficulty();
-    showInfo("Drive Normally");
-		startGame=true;
-	}
-
-  if(event.keyCode==ENTER_KEY){
-    promptForValues=true;
+	//console.log(event.keyCode);
+  if (keys.hasOwnProperty(event.keyCode)) {
+    keys[event.keyCode]();
   }
 
-  if(event.keyCode==ONE_KEY){
-    difficultyLevel=1;
-    setDifficulty();
-    showInfo("Drive " + difficultySettings.name);
-		startGame=true;
-	}
-  if(event.keyCode==TWO_KEY){
-    difficultyLevel=2;
-    setDifficulty();
-    showInfo("Drive " + difficultySettings.name);
-		startGame=true;
-	}
-  if(event.keyCode==THREE_KEY){
-    difficultyLevel=3;
-    setDifficulty();
-    showInfo("Drive " + difficultySettings.name);
-		startGame=true;
-	}
-
 }
+
+// extra difficulties
+keys[ONE_KEY] = function(){startDifficulty(1)};
+keys[TWO_KEY] = function(){startDifficulty(2)};
+keys[THREE_KEY] = function(){startDifficulty(3)};
+//keys[52] = function(){startDifficulty(4)};  // too hard 
+//keys[53] = function(){startDifficulty(5)};  // much too hard
+
 
 var track = new Array();
 
@@ -197,22 +210,20 @@ function drawTrack(){
 }
 
 function drawCar(carLine,carPosition){
-    var canvas = document.getElementById("gamedisplay");
-
-    if(canvas.getContext){
-        var context2d = canvas.getContext("2d");
-        context2d.fillStyle = "#000000";
-        context2d.fillText("V",carPosition*fontWidth,carLine*fontSize);
-    }
+  drawCarAs(carLine, carPosition, "V");
 }
 
 function drawCrashedCar(carLine,carPosition){
+  drawCarAs(carLine, carPosition, "X");
+}
+
+function drawCarAs(carLine,carPosition, carChar){
     var canvas = document.getElementById("gamedisplay");
 
     if(canvas.getContext){
         var context2d = canvas.getContext("2d");
         context2d.fillStyle = "#000000";
-        context2d.fillText("X",carPosition*fontWidth,carLine*fontSize);
+        context2d.fillText(carChar,carPosition*fontWidth,carLine*fontSize);
     }
 }
 
@@ -570,10 +581,12 @@ function getLevelData(){
 }
 
 var defaultDifficulties = [
-            {name:"Normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0, accel:0},
-            {name:"Easy", speedDecrement:-100, minTrackDecrement:-3, maxTrackDecrement:-3, maxHealthDecrement:-1, startBonus:0, accel:-10},
-            {name:"Hard", speedDecrement:100, minTrackDecrement:2, maxTrackDecrement:2, maxHealthDecrement:2, startBonus:1000, accel:10},
-            {name:"Harder", speedDecrement:200, minTrackDecrement:4, maxTrackDecrement:4, maxHealthDecrement:3, startBonus:2000, accel:15}
+            {name:"Drive Normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0, accel:0},
+            {name:"Drive Easy", speedDecrement:-100, minTrackDecrement:-3, maxTrackDecrement:-3, maxHealthDecrement:-1, startBonus:0, accel:-10},
+            {name:"Drive Hard", speedDecrement:100, minTrackDecrement:2, maxTrackDecrement:2, maxHealthDecrement:2, startBonus:1000, accel:10},
+            {name:"Drive Harder", speedDecrement:150, minTrackDecrement:3, maxTrackDecrement:2, maxHealthDecrement:3, startBonus:2000, accel:15},
+            {name:"Live Free or Drive Hard", speedDecrement:200, minTrackDecrement:3, maxTrackDecrement:3, maxHealthDecrement:3, startBonus:3000, accel:20},
+            {name:"A Good Day to Drive Hard", speedDecrement:200, minTrackDecrement:4, maxTrackDecrement:4, maxHealthDecrement:3, startBonus:4000, accel:25}
          ];
 
 function getDifficulties(){
@@ -582,14 +595,14 @@ function getDifficulties(){
 }
 
 function setDifficulty(){
-  difficultyTiers = getDifficulties();
+  var difficultyTiers = getDifficulties();
   if(difficultyLevel>=difficultyTiers.length){
     difficultyLevel=0;
   }
   difficultySettings = difficultyTiers[difficultyLevel];
 }
 
-var highScores = [ {name:"KAR",score:7000}, {name:"AAA",score:6000}, {name:"AJR",score:8000}, {name:"___",score:5000}, {name:"BOB",score:4000},  {name:"HI_",score:3000}   ]
+var highScores = [ {name:"KAR",score:7000}, {name:"AAA",score:6000}, {name:"AJR",score:8000}, {name:"___",score:5000}, {name:"BOB",score:4000},  {name:"HI_",score:3000}   ];
 
 function captureHighScore(points){
   if(highScores.length < maxHighScores || points>highScores[highScores.length-1]){
@@ -822,7 +835,7 @@ function setValuesToStartingValues(){
         Hit a wall '*' and you will lose health. You only have 4 health.
         If you lose all your health, you explode "X". Each Time you
         explode you lose a life. You only have 3 lives.</p>
-      <p><strong>Press space to start game</strong></p>
+      <p class="pressstart blink"><strong>Press space to start game</strong></p>
       <!-- prototype for set start level difficulty -->
       <input id="setLevel" style="display:none" value="1" />
     </div>
@@ -859,3 +872,4 @@ function setValuesToStartingValues(){
 </script>
 </body>
 </html>
+<!-- note to self php -S localhost:8000-->
