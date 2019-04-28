@@ -73,6 +73,39 @@ function getTrackLine(left, roadWidth, trackWidth){
     return track;
 }
 
+
+// RESET KEYS
+
+function showMessage(message){
+	document.getElementById('message').style.display = 'block';
+  changeSpanText('message', message);
+}
+
+function hideMessage(){
+  document.getElementById('message').style.display = 'none';
+}
+
+function resetLeftKey(event){
+    showMessage("Left Key Set to "+event.keyCode);
+    keys[event.keyCode]=left_key_action;
+}
+function resetRightKey(event){
+    showMessage("Right Key Set to "+event.keyCode);
+    keys[event.keyCode]=right_key_action;
+}
+
+function redefineKeys(){
+
+  showMessage("Redefining Keys...");
+  setTimeout(function(){showMessage("Get Ready to Press The Keys You Want for LEFT and RIGHT")}, 500);
+  setTimeout(function(){showMessage("Press The Key For Left NOW");document.onkeydown = resetLeftKey}, 3000);
+  setTimeout(function(){showMessage("Press The Key For Right NOW");document.onkeydown = resetRightKey}, 6000);
+  setTimeout(function (){showMessage("Keys have been redefined");document.onkeydown = handleKeyPress}, 9000);
+  setTimeout(function (){hideMessage()}, 11000);
+}
+
+// DEFAULT KEYS
+
 var LEFT_KEY = 37;
 var RIGHT_KEY = 39;
 var UP_KEY = 38;
@@ -110,19 +143,24 @@ function promptForValues(){
   promptForValues=true;
 }
 
-document.onkeydown = function onkeydown(event) {
 
+
+
+
+function handleKeyPress(event){
 	//console.log(event.keyCode);
   if (keys.hasOwnProperty(event.keyCode)) {
     keys[event.keyCode]();
   }
-
 }
+
+document.onkeydown = handleKeyPress;
 
 // extra difficulties
 keys[ONE_KEY] = function(){startDifficulty(1)};
 keys[TWO_KEY] = function(){startDifficulty(2)};
 keys[THREE_KEY] = function(){startDifficulty(3)};
+keys[82] = redefineKeys; // Press r to redefine keys
 //keys[52] = function(){startDifficulty(4)};  // too hard 
 //keys[53] = function(){startDifficulty(5)};  // much too hard
 
@@ -829,12 +867,15 @@ function setValuesToStartingValues(){
   <div class="render-area">
   <h1>Canvas Driver</h1>
 
+  <h2><span id='message' style="display:none"></span></h2>
+
     <div id="instructions">
       <h1>Instructions</h1>
-      <p>Use left and Right to keep your car 'V' on the track.
+      <p>Use cursor left and cursor Right to keep your car 'V' on the track.
         Hit a wall '*' and you will lose health. You only have 4 health.
         If you lose all your health, you explode "X". Each Time you
         explode you lose a life. You only have 3 lives.</p>
+        <p><em>Press 'r' to redefine the keys.</em></p>
       <p class="pressstart blink"><strong>Press space to start game</strong></p>
       <!-- prototype for set start level difficulty -->
       <input id="setLevel" style="display:none" value="1" />
