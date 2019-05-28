@@ -1,0 +1,79 @@
+<html>
+<head>
+    <title>Select</title>
+</head>
+<body>
+
+<script>
+
+    function changeselect(obj){
+
+        document.getElementById("message").innerText="";
+
+        var timeout = Math.floor((Math.random() * 2000) + 500);
+
+        var selectedList = "";
+
+        if(obj.multiple) {
+            for (var index = 0; index < obj.options.length; index++) {
+
+                opt = obj.options[index];
+
+                if (opt.selected) {
+                    selectedList = selectedList + opt.value;
+                    selectedList = selectedList + ", ";
+                }
+            }
+
+            if(selectedList.endsWith(", ")){
+                selectedList = selectedList.substr(0, selectedList.length-2);
+            }
+
+            if(selectedList.length==0){
+                selectedList="NOTHING";
+            }
+
+        }else{
+            selectedList = obj.value;
+        }
+
+        var displayMessage = "Received message: selected " + selectedList;
+
+        setTimeout(function(){document.getElementById("message").innerText=displayMessage}, timeout);
+
+    }
+</script>
+
+<h2 id="instruction-title" style="background-color: #000000; color: rgb(255,0,0);">Instructions</h2>
+
+<p id="instruction-text" name="instructions">Select an item from the list to show the response message.</p>
+
+<hr/>
+
+<select id="select-menu" onchange="changeselect(this)">
+    <option value="1">Option 1</option>
+    <option value="2">Option 2</option>
+    <option value="3">Option 3</option>
+    <option value="4">Option 4</option>
+</select>
+
+<button id="resend-select" onclick="changeselect(document.getElementById('select-menu'))">Resend Message</button>
+
+<hr/>
+
+<select id="select-multi" size="5" multiple onchange="changeselect(this)">
+    <option value="10">First</option>
+    <option value="20">Second</option>
+    <option value="30">Third</option>
+    <option value="40">Fourth</option>
+    <option value="50">Fifth</option>
+</select>
+
+<button id="resend-multi" onclick="changeselect(document.getElementById('select-multi'))">Resend Message</button>
+
+<hr/>
+
+<p id="message"></p>
+
+</body>
+</html>
