@@ -39,14 +39,39 @@
 
         var displayMessage = "Received message: selected " + selectedList;
 
+        var addUnder = "single-list";
+        if(obj.multiple) {
+            var addUnder = "multi-list";
+        }
+
+        var optionalRandomTiming = location.hash ? parseInt(location.hash.substr(1)) : 0;
+        if(optionalRandomTiming!=0){
+            // delay history if hash has number
+            var hashtimeout = Math.floor((Math.random() * optionalRandomTiming) + 500);
+            setTimeout(addHistoryText,hashtimeout, displayMessage, addUnder);
+        }else {
+            // display history immediately
+            addHistoryText(displayMessage, addUnder);
+        }
+
+
         setTimeout(function(){document.getElementById("message").innerText=displayMessage}, timeout);
 
     }
+
+    function addHistoryText(displayMessage, addUnder){
+        var liElement = document.createElement("li");
+        liElement.setAttribute("class", "message");
+        var textElement = document.createTextNode(displayMessage);
+        liElement.appendChild(textElement);
+        document.getElementById(addUnder).appendChild(liElement);
+    }
+
 </script>
 
 <h2 id="instruction-title" style="background-color: #000000; color: rgb(255,0,0);">Instructions</h2>
 
-<p id="instruction-text" name="instructions">Select an item from the list to show the response message.</p>
+<p id="instruction-text" name="instructions" data-locator="instructions">Select an item from the list to show the response message.</p>
 
 <hr/>
 
@@ -57,7 +82,7 @@
     <option value="4">Option 4</option>
 </select>
 
-<button id="resend-select" onclick="changeselect(document.getElementById('select-menu'))">Resend Message</button>
+<button id="resend-select" onclick="changeselect(document.getElementById('select-menu'))">Resend Single Option Message</button>
 
 <hr/>
 
@@ -69,11 +94,26 @@
     <option value="50">Fifth</option>
 </select>
 
-<button id="resend-multi" onclick="changeselect(document.getElementById('select-multi'))">Resend Message</button>
+<button id="resend-multi" name="resend-select" onclick="changeselect(document.getElementById('select-multi'))">Resend Multi Option Message</button>
 
 <hr/>
 
 <p id="message"></p>
+
+<hr/>
+
+<h2 id="history">Message History</h2>
+
+<ul id="messages">
+
+    <li id="single">Single
+        <ul id="single-list" name="list"></ul>
+    </li>
+    <li id="multi">Multi
+        <ul id="multi-list" name="list"></ul>
+    </li>
+
+</ul>
 
 </body>
 </html>
