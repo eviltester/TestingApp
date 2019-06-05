@@ -8,7 +8,7 @@
 
     function changeselect(obj){
 
-        document.getElementById("message").innerText="";
+        hideTheMessage();
 
         var timeout = Math.floor((Math.random() * 2000) + 500);
 
@@ -55,8 +55,28 @@
         }
 
 
-        setTimeout(function(){document.getElementById("message").innerText=displayMessage}, timeout);
+        setTimeout(displayThisMessage, timeout, displayMessage);
 
+    }
+
+    function hideTheMessage(){
+        // rather than display blank
+        // document.getElementById("message").innerText="";
+        //remove entirely to simulate Ajax style calls
+        var elem = document.getElementById("message");
+        if(elem){
+            elem.parentNode.removeChild(elem);
+        }
+    }
+
+    function displayThisMessage(theMessage){
+        var elem = document.getElementById("message");
+        if(!elem){
+            elem =  document.createElement("p");
+            elem.setAttribute("id","message");
+            document.getElementById("message-render").appendChild(elem);
+        }
+        document.getElementById("message").innerText=theMessage;
     }
 
     function addHistoryText(displayMessage, addUnder){
@@ -98,7 +118,9 @@
 
 <hr/>
 
-<p id="message"></p>
+<div id="message-render">
+    <!-- <p id="message"></p> -->
+</div>
 
 <hr/>
 
@@ -114,6 +136,7 @@
     </li>
 
 </ul>
+
 
 </body>
 </html>
