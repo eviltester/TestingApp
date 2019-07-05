@@ -6,6 +6,7 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,7 +24,13 @@ public class BookEntity {
         this.publicationYear = publicationYear;
         this.seriesId = seriesId;
         //TODO: this.pulpSeries
-        this.authors = new AuthorListEntity(new PulpAuthors().addAll(allAuthors)).authors;
+
+        this.authors = new ArrayList();
+
+        for(PulpAuthor author : allAuthors){
+            authors.add(new AuthorEntity(author.getId(), author.getName()));
+        }
+
         // TODO this.pulpPublisher
     }
 }

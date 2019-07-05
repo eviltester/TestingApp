@@ -27,10 +27,6 @@ public class PulpAuthors {
         return author;
     }
 
-    public PulpAuthors addAll(Collection<PulpAuthor> authorsToAdd){
-        authors.addAll(authorsToAdd);
-        return this;
-    }
 
     private PulpAuthor getNextAuthor(String authorName) {
         return new PulpAuthor(String.valueOf(key++), authorName);
