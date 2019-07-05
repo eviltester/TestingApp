@@ -81,7 +81,17 @@ public class PulpAppForSpark {
     }
 
     public PulpApp getPulpAppForApi(String api_auth_header){
-        return api_session_mapping.get(api_auth_header).attribute(SESSION_APP);
+        final Session session = api_session_mapping.get(api_auth_header);
+        PulpApp sessionPulpApp=null;
+        try{
+            sessionPulpApp = session.attribute(SESSION_APP);
+        }catch(Exception e){
+            // session is no valid
+            session.invalidate();
+            api_session_mapping.remove(api_auth_header);
+            halt(401, new EntityResponse().setErrorStatus(401, "X-API-Auth header is invalid - check in the GUI").getErrorMessage());
+        }
+        return sessionPulpApp;
     }
 
     public PulpAppForSpark() {
@@ -130,6 +140,8 @@ public class PulpAppForSpark {
             }
 
             // TODO: check if session is still valid via time
+
+            // need to delete invalid sessions
 
         });
 
