@@ -1,12 +1,16 @@
 package com.javafortesters.pulp.spark.app;
 
 import com.javafortesters.pulp.PulpApp;
+import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
 import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
+import com.javafortesters.pulp.spark.app.crudhandling.AmendFlowsHandler;
+import com.javafortesters.pulp.spark.app.crudhandling.CreateFlowsHandler;
 import spark.Request;
+import spark.Response;
 import spark.Session;
 
 
@@ -58,9 +62,34 @@ public class PulpAppForSpark {
         this(false);
     }
 
+    public String apiEntityResponse(Response res, final EntityResponse response){
+        res.status(response.getStatusCode());
+        res.header("ContentType", response.getContentType());
+        if(response.isError()){
+            return response.getErrorMessage();
+        }else{
+            return response.getResponseBody();
+        }
+    }
+
     public PulpAppForSpark(boolean allowsShutdown){
 
         this.allowsShutdown = allowsShutdown;
+
+        //
+        // BASIC API
+        //
+        get("/apps/pulp/api/authors/:authorid", (req, res) -> {
+            final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+            return apiEntityResponse(res, response);
+        });
+
+        get("/apps/pulp/api/authors", (req, res) -> {
+            final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
+            return apiEntityResponse(res, response);
+        });
+
+
 
         get("/apps/pulp/gui/view/author", (req, res) -> {
             return getPulpApp(req).page().viewAuthorPage(req.queryParams("author")).asHTMLString();

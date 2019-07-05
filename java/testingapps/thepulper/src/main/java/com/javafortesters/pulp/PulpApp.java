@@ -1,5 +1,6 @@
 package com.javafortesters.pulp;
 
+import com.javafortesters.pulp.api.PulpEntities;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.html.HtmlReports;
 import com.javafortesters.pulp.html.gui.AppPages;
@@ -11,6 +12,7 @@ import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 public class PulpApp {
 
     private final PulpData books;
+    private final PulpEntities entities;
     private AppVersion appVersion;
 
 
@@ -22,6 +24,7 @@ public class PulpApp {
         //reports = new HtmlReports(books, this.appversion);
         appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
         reports = new HtmlReports(books, appVersion);
+        entities = new PulpEntities(books);
     }
 
 
@@ -59,5 +62,9 @@ public class PulpApp {
 
         appVersion.setAppVersion(version);
         reports = new HtmlReports(books, appVersion);
+    }
+
+    public PulpEntities entities() {
+        return entities;
     }
 }

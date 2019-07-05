@@ -1,4 +1,4 @@
-package com.javafortesters.pulp.spark.app;
+package com.javafortesters.pulp.spark.app.crudhandling;
 
 import com.javafortesters.pulp.PulpApp;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
