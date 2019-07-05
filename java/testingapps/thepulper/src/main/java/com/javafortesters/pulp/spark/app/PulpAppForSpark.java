@@ -286,9 +286,18 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
-        // TODO: series and publisher in book
+
         // TODO: API Session handling
         // TODO: CxUD interaction [R] is done at this point in todo list
+
+        // TODO: Future API End Points
+        // /apps/pulp/api/publishers/id/series
+        // /apps/pulp/api/publishers/id/authors
+        // /apps/pulp/api/publishers/id/books
+        // /apps/pulp/api/series/id/books
+        // /apps/pulp/api/series/id/authors
+        // /apps/pulp/api/authors/id/books
+        // /apps/pulp/api/authors/id/publishers
 
         // End API processing with unknown end points
         path("/apps/pulp/api/*", () -> {
