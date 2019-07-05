@@ -115,7 +115,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/authors", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
@@ -136,6 +136,29 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
+        path("/apps/pulp/api/books", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getBooks(req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getBooks(req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
 
 
         // End API processing with unknown end points

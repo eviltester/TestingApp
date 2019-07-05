@@ -1,7 +1,9 @@
 package com.javafortesters.pulp.api;
 
 import com.google.gson.Gson;
-import com.javafortesters.pulp.api.entities.AuthorEntity;
+import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
+import com.javafortesters.pulp.api.entities.single.AuthorEntity;
+import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 
@@ -34,5 +36,15 @@ public class PulpEntities {
 
         response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
+    }
+
+    public EntityResponse getBooks(final String acceptFormat) {
+        final EntityResponse response = new EntityResponse();
+
+        BooksListEntity entity = new BooksListEntity(bookdata);
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+
     }
 }

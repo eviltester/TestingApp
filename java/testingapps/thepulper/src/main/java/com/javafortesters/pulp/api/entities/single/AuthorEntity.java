@@ -1,4 +1,4 @@
-package com.javafortesters.pulp.api.entities;
+package com.javafortesters.pulp.api.entities.single;
 
 public class AuthorEntity {
 
