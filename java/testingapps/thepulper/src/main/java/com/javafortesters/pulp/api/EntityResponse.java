@@ -26,16 +26,18 @@ public class EntityResponse {
         this.errorMessage = errorMessage;
     }
 
-    public void setErrorStatus(final int statusCode, final String errorMessage) {
+    public EntityResponse setErrorStatus(final int statusCode, final String errorMessage) {
         errorResponse=true;
         setStatus(statusCode);
         setErrorMessage(errorMessage);
+        return this;
     }
 
-    public void setSuccessStatus(final int statusCode, final String responseBody) {
+    public EntityResponse setSuccessStatus(final int statusCode, final String responseBody) {
         errorResponse=false;
         setStatus(statusCode);
         setResponseBody(responseBody);
+        return this;
     }
 
     private void setResponseBody(final String responseBody) {

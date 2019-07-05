@@ -16,8 +16,7 @@ import spark.Session;
 
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST;
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 
 public class PulpAppForSpark {
@@ -72,6 +71,12 @@ public class PulpAppForSpark {
         }
     }
 
+    private String apiEmptyEntityResponse(final Response res, final EntityResponse response) {
+        apiEntityResponse(res, response);
+        return "";
+    }
+
+
     public PulpAppForSpark(boolean allowsShutdown){
 
         this.allowsShutdown = allowsShutdown;
@@ -79,15 +84,73 @@ public class PulpAppForSpark {
         //
         // BASIC API
         //
-        get("/apps/pulp/api/authors/:authorid", (req, res) -> {
-            final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
-            return apiEntityResponse(res, response);
+        final EntityResponse notAllowed = new EntityResponse().setErrorStatus(405, "Not allowed, sorry");
+        final EntityResponse unknown = new EntityResponse().setErrorStatus(404, "Unknown API EndPoint");
+
+
+        path("/apps/pulp/api/authors/:authorid", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
-        get("/apps/pulp/api/authors", (req, res) -> {
-            final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
-            return apiEntityResponse(res, response);
+        path("/apps/pulp/api/authors", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
+
+
+
+        // End API processing with unknown end points
+        path("/apps/pulp/api/*", () -> {
+            get("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            post("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            delete("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            put("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            trace("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            options("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            patch("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+            head("", (req, res) -> {  return apiEntityResponse(res, unknown);});
+        });
+
+
 
 
 
@@ -552,7 +615,6 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports/", (req, res) -> { return getPulpApp(req).reports().getIndexPage();});
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
     }
-
 
 
 
