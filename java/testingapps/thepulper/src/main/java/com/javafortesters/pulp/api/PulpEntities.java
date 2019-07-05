@@ -2,13 +2,13 @@ package com.javafortesters.pulp.api;
 
 import com.google.gson.Gson;
 import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
-import com.javafortesters.pulp.api.entities.single.AuthorEntity;
+import com.javafortesters.pulp.api.entities.lists.SeriesListEntity;
+import com.javafortesters.pulp.api.entities.single.*;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
-import com.javafortesters.pulp.api.entities.single.BookEntity;
-import com.javafortesters.pulp.api.entities.single.SeriesEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 
 public class PulpEntities {
@@ -85,4 +85,29 @@ public class PulpEntities {
         response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
     }
+
+    public EntityResponse getAllSeries(final String acceptformat) {
+        final EntityResponse response = new EntityResponse();
+
+        SeriesListEntity entity = new SeriesListEntity(bookdata.series());
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+    }
+
+    public EntityResponse getPublisher(final String publisherid, final String accept) {
+        final PulpPublisher publisher = bookdata.publishers().get(publisherid);
+        final EntityResponse response = new EntityResponse();
+
+        if(publisher==PulpPublisher.UNKNOWN_PUBLISHER){
+            response.setErrorStatus(404, String.format("Publisher %s not found", publisherid));
+            return response;
+        }
+
+        PublisherEntity entity = new PublisherEntity(publisher.getId(), publisher.getName());
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+    }
+
 }

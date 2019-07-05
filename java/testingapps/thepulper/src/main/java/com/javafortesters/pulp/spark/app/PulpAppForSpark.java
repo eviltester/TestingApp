@@ -39,6 +39,7 @@ public class PulpAppForSpark {
             // user does not have a session create it
             session = req.session();
             session.maxInactiveInterval(MAX_SESSION_LENGTH);
+
             sessionPulpApp = new PulpApp();
             sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
             sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
@@ -212,10 +213,55 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
+        path("/apps/pulp/api/series", () -> {
 
-        // TODO: series/id
-        // TODO: series
-        // TODO: publisher/id
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAllSeries(req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getAllSeries(req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
+
+
+        path("/apps/pulp/api/publisher/:publisherid", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
+        
         // TODO: publisher
         // TODO: series and publisher in book
         // TODO: API Session handling
