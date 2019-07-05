@@ -238,7 +238,7 @@ public class PulpAppForSpark {
         });
 
 
-        path("/apps/pulp/api/publisher/:publisherid", () -> {
+        path("/apps/pulp/api/publishers/:publisherid", () -> {
 
             head("", (req, res) -> {
                 final EntityResponse response = getPulpApp(req).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
@@ -261,8 +261,31 @@ public class PulpAppForSpark {
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
+
+        path("/apps/pulp/api/publishers", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getPublishers(req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getPublishers(req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
         
-        // TODO: publisher
         // TODO: series and publisher in book
         // TODO: API Session handling
         // TODO: CxUD interaction [R] is done at this point in todo list

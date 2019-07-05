@@ -2,6 +2,7 @@ package com.javafortesters.pulp.api;
 
 import com.google.gson.Gson;
 import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
+import com.javafortesters.pulp.api.entities.lists.PublisherListEntity;
 import com.javafortesters.pulp.api.entities.lists.SeriesListEntity;
 import com.javafortesters.pulp.api.entities.single.*;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
@@ -110,4 +111,12 @@ public class PulpEntities {
         return response;
     }
 
+    public EntityResponse getPublishers(final String accept) {
+        final EntityResponse response = new EntityResponse();
+
+        PublisherListEntity entity = new PublisherListEntity(bookdata.publishers());
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+    }
 }
