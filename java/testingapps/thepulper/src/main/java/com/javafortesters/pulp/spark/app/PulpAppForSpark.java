@@ -14,6 +14,9 @@ import spark.Response;
 import spark.Session;
 
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST;
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST;
 import static spark.Spark.*;
@@ -25,8 +28,11 @@ public class PulpAppForSpark {
     // TODO support multiple apps each with a different session
 
     private static final String SESSION_APP = "sessionPulpApp";
+    private static final String SESSION_API_SECRET = "apisecret";
     private static final int MAX_SESSION_LENGTH = 60*5;  // set max session without interactivity to 5 minutes
     private boolean allowsShutdown=false;
+
+    private Map<String, Session> api_session_mapping= new ConcurrentHashMap<>();
 
 
     public PulpApp getPulpApp(Request req){
@@ -48,7 +54,20 @@ public class PulpAppForSpark {
 
             session.attribute(SESSION_APP, sessionPulpApp);
 
-            // TODO: generate an API secret code attached to each session and show in admin interface
+            // For an API to be valid you have to access the GUI first
+            String appApiKey = sessionPulpApp.getAPISecret();
+
+            session.attribute(SESSION_API_SECRET, appApiKey);
+
+            System.out.println(appApiKey);
+            api_session_mapping.put(appApiKey, session);
+
+            System.out.println("Session count " + api_session_mapping.size());
+
+
+
+            // DONE: generate an API secret code attached to each session
+            // TODO: show API Secret code in admin interface
             // TODO: disallow any API call without secret code as not authenticated
             // TODO: may have to add session cookie to header in API request to keep session active
             // TODO: this needs to be done prior to any api update methods otherwise we can't retrieve the changes
@@ -59,6 +78,10 @@ public class PulpAppForSpark {
         }
 
         return sessionPulpApp;
+    }
+
+    public PulpApp getPulpAppForApi(String api_auth_header){
+        return api_session_mapping.get(api_auth_header).attribute(SESSION_APP);
     }
 
     public PulpAppForSpark() {
@@ -93,15 +116,32 @@ public class PulpAppForSpark {
         final EntityResponse unknown = new EntityResponse().setErrorStatus(404, "Unknown API EndPoint");
 
 
+        before("/apps/pulp/api/*", (request, response) -> {
+            // before any API request, check for an X-API-AUTH header
+            // the value of the X-API-AUTH header must match the value displayed on the GUI
+            if(request.headers("X-API-AUTH")==null) {
+                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "You need to add the X-API-Auth header with the secret key shown in the GUI")));
+            }
+
+            // check if the API AUTH is known to us
+            Session session = api_session_mapping.get(request.headers("X-API-AUTH"));
+            if(session==null){
+                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "X-API-Auth header is invalid - check in the GUI")));
+            }
+
+            // TODO: check if session is still valid via time
+
+        });
+
         path("/apps/pulp/api/authors/:authorid", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -120,12 +160,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/authors", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAuthors(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAuthors(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAuthors(req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -144,12 +184,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/books/:bookid", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getBook(req.params(":bookid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBook(req.params(":bookid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getBook(req.params(":bookid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBook(req.params(":bookid"),req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -168,12 +208,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/books", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getBooks(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBooks(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getBooks(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBooks(req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -192,12 +232,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/series/:seriesid", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -216,12 +256,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/series", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAllSeries(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAllSeries(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getAllSeries(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAllSeries(req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -241,12 +281,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/publishers/:publisherid", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -265,12 +305,12 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/publishers", () -> {
 
             head("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getPublishers(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getPublishers(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpApp(req).entities().getPublishers(req.headers("Accept"));
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getPublishers(req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 

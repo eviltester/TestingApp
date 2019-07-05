@@ -9,10 +9,13 @@ import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 
+import java.util.UUID;
+
 public class PulpApp {
 
     private final PulpData books;
     private final PulpEntities entities;
+    private final String apisecret;
     private AppVersion appVersion;
 
 
@@ -25,6 +28,7 @@ public class PulpApp {
         appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
         reports = new HtmlReports(books, appVersion);
         entities = new PulpEntities(books);
+        apisecret = UUID.randomUUID().toString();
     }
 
 
@@ -66,5 +70,9 @@ public class PulpApp {
 
     public PulpEntities entities() {
         return entities;
+    }
+
+    public String getAPISecret() {
+        return apisecret;
     }
 }
