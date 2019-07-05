@@ -21,11 +21,13 @@ public class HtmlReports {
     private final PulpReporter reporter;
     private final PulpData data;
     private final AppVersion appversion;
+    private final String apikey;
     private ReportConfig reportConfig;
 
-    public HtmlReports(PulpData books, AppVersion appversion) {
+    public HtmlReports(PulpData books, AppVersion appversion, String apikey) {
         this.data = books;
         this.appversion = appversion;
+        this.apikey = apikey;
         reporter = new PulpReporter(books, appversion);
 
         reportConfig = ReportConfig.justStrings(appversion);
@@ -137,7 +139,11 @@ public class HtmlReports {
             }
         }
 
-        return page.toString();
+        MyTemplate template = new MyTemplate(page.toString());
+        template.replace("<!-- API-SECRET-KEY -->", apikey);
+        template.replace("<!-- VERSIONSELECTLIST -->", getVersionSelect());
+
+        return template.toString();
     }
 
 
@@ -154,6 +160,27 @@ public class HtmlReports {
         return this;
     }
 
+    public String getVersionHistory(){
+
+        StringBuilder versionHistory = new StringBuilder();
+        for(int version = AppVersion.MAX_VERSION; version>0; version--){
+            String versionHelp = new VersionedResourceReader(appversion).asString(String.format("/content/help-version-%03d.html", version));
+            versionHistory.append(versionHelp);
+            versionHistory.append("\n");
+        }
+
+        return versionHistory.toString();
+    }
+
+    public String getVersionSelect(){
+        StringBuilder versionselect = new StringBuilder();
+        versionselect.append("\n<p><strong>Select Version</strong></p>\n<ul>\n");
+        for(int version=1; version <= AppVersion.MAX_VERSION; version++){
+            versionselect.append(String.format("<li id=\"help-list-set-version-%d\"><a href=\"/apps/pulp/gui/admin/version/%d\">%s</a></li>\n", version, version, AppVersion.asPathVersion(version)));
+        }
+        versionselect.append("</ul>\n");
+        return versionselect.toString();
+    }
 
     public String getHelpPage() {
 
@@ -178,22 +205,10 @@ public class HtmlReports {
         template.replace("<!-- CAPABILITYLIST -->", ul.toString());
 
 
-        StringBuilder versionHistory = new StringBuilder();
-        for(int version = AppVersion.MAX_VERSION; version>0; version--){
-            String versionHelp = new VersionedResourceReader(appversion).asString(String.format("/content/help-version-%03d.html", version));
-            versionHistory.append(versionHelp);
-            versionHistory.append("\n");
-        }
 
-        StringBuilder versionselect = new StringBuilder();
-        versionselect.append("\n<p><strong>Select Version</strong></p>\n<ul>\n");
-        for(int version=1; version <= AppVersion.MAX_VERSION; version++){
-            versionselect.append(String.format("<li id=\"help-list-set-version-%d\"><a href=\"/apps/pulp/gui/admin/version/%d\">%s</a></li>\n", version, version, AppVersion.asPathVersion(version)));
-        }
-        versionselect.append("\n");
-        versionHistory.append(versionselect.toString());
 
-        template.replace("<!-- VERSIONHISTORY -->", versionHistory.toString());
+        template.replace("<!-- VERSIONHISTORY -->", getVersionHistory());
+        template.replace("<!-- VERSIONSELECTLIST -->", getVersionSelect());
 
 
         page.appendToBody(template.toString());

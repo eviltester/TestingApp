@@ -67,10 +67,9 @@ public class PulpAppForSpark {
 
 
             // DONE: generate an API secret code attached to each session
-            // TODO: show API Secret code in admin interface
-            // TODO: disallow any API call without secret code as not authenticated
-            // TODO: may have to add session cookie to header in API request to keep session active
-            // TODO: this needs to be done prior to any api update methods otherwise we can't retrieve the changes
+            // DONE: delete any stored api sessions that are invalid when accessed
+            // DONE: show API Secret code in admin interface
+            // DONE: disallow any API call without secret code as not authenticated
 
 
         } else {
@@ -141,7 +140,7 @@ public class PulpAppForSpark {
 
             // TODO: check if session is still valid via time
 
-            // need to delete invalid sessions
+            // need to delete invalid sessions over time
 
         });
 

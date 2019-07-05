@@ -23,12 +23,13 @@ public class PulpApp {
 
     public PulpApp() {
 
+        apisecret = UUID.randomUUID().toString();
         books = new PulpData();
         //reports = new HtmlReports(books, this.appversion);
         appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
-        reports = new HtmlReports(books, appVersion);
+        reports = new HtmlReports(books, appVersion, apisecret);
         entities = new PulpEntities(books);
-        apisecret = UUID.randomUUID().toString();
+
     }
 
 
@@ -42,7 +43,7 @@ public class PulpApp {
     }
 
     public HtmlReports reports(ReportConfig config) {
-        return new HtmlReports(books, appVersion).configure(config);
+        return new HtmlReports(books, appVersion, apisecret).configure(config);
     }
 
     public PulpData books() {
@@ -65,7 +66,7 @@ public class PulpApp {
     public void setAppVersion(final int version) {
 
         appVersion.setAppVersion(version);
-        reports = new HtmlReports(books, appVersion);
+        reports = new HtmlReports(books, appVersion, apisecret);
     }
 
     public PulpEntities entities() {

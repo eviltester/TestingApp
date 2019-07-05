@@ -42,6 +42,8 @@ The different versions may be easier to automate, harder, different stylings, bu
 
 <!-- VERSIONHISTORY -->
 
+<!-- VERSIONSELECTLIST -->
+
 ## Pulp Magazines
 
 It can be outrageously expensive to collect original pulp magazines and they have a tendency to fall apart when you try to read them.
