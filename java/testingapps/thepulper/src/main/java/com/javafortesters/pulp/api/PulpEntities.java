@@ -4,8 +4,12 @@ import com.google.gson.Gson;
 import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
 import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
+import com.javafortesters.pulp.api.entities.single.BookEntity;
+import com.javafortesters.pulp.api.entities.single.SeriesEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.domain.objects.PulpSeries;
 
 public class PulpEntities {
     private final PulpData bookdata;
@@ -46,5 +50,39 @@ public class PulpEntities {
         response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
 
+    }
+
+    public EntityResponse getBook(final String bookid, final String acceptformat) {
+        final PulpBook book = bookdata.books().get(bookid);
+        final EntityResponse response = new EntityResponse();
+
+        if(book==PulpBook.UNKNOWN_BOOK){
+            response.setErrorStatus(404, String.format("Book %s not found", bookid));
+            return response;
+        }
+
+        BookEntity entity = new BookEntity(book.getId(), book.getTitle(), book.getPublicationYear(), book.getSeriesId(),
+                                            bookdata.series().get(book.getSeriesIndex()),
+                                            bookdata.authors().getAll(book.getAuthorIndexes()),
+                                            bookdata.publishers().get(book.getPublisherIndex())
+                                            );
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+    }
+
+    public EntityResponse getSeries(final String seriesid, final String acceptformat) {
+        final PulpSeries series = bookdata.series().get(seriesid);
+        final EntityResponse response = new EntityResponse();
+
+        if(series==PulpSeries.UNKNOWN_SERIES){
+            response.setErrorStatus(404, String.format("Series %s not found", seriesid));
+            return response;
+        }
+
+        SeriesEntity entity = new SeriesEntity(series.getId(), series.getName());
+
+        response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
     }
 }

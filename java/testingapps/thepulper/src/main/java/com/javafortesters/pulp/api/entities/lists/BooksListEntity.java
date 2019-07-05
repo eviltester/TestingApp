@@ -1,10 +1,7 @@
 package com.javafortesters.pulp.api.entities.lists;
 
-import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.single.BookEntity;
-import com.javafortesters.pulp.domain.groupings.PulpBooks;
 import com.javafortesters.pulp.domain.groupings.PulpData;
-import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 
 import java.util.ArrayList;

@@ -39,7 +39,6 @@ public class PulpAppForSpark {
             // user does not have a session create it
             session = req.session();
             session.maxInactiveInterval(MAX_SESSION_LENGTH);
-
             sessionPulpApp = new PulpApp();
             sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
             sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
@@ -47,6 +46,11 @@ public class PulpAppForSpark {
             sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
 
             session.attribute(SESSION_APP, sessionPulpApp);
+
+            // TODO: generate an API secret code attached to each session and show in admin interface
+            // TODO: disallow any API call without secret code as not authenticated
+            // TODO: may have to add session cookie to header in API request to keep session active
+            // TODO: this needs to be done prior to any api update methods otherwise we can't retrieve the changes
 
 
         } else {
@@ -136,6 +140,30 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
+        path("/apps/pulp/api/books/:bookid", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getBook(req.params(":bookid"),req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getBook(req.params(":bookid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
+
         path("/apps/pulp/api/books", () -> {
 
             head("", (req, res) -> {
@@ -160,6 +188,38 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
+        path("/apps/pulp/api/series/:seriesid", () -> {
+
+            head("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
+                return apiEmptyEntityResponse(res, response);
+            });
+
+            get("", (req, res) -> {
+                final EntityResponse response = getPulpApp(req).entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+        });
+
+
+        // TODO: series/id
+        // TODO: series
+        // TODO: publisher/id
+        // TODO: publisher
+        // TODO: series and publisher in book
+        // TODO: API Session handling
+        // TODO: CxUD interaction [R] is done at this point in todo list
 
         // End API processing with unknown end points
         path("/apps/pulp/api/*", () -> {
