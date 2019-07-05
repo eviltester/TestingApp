@@ -285,7 +285,7 @@ public class PulpAppForSpark {
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
-        
+
         // TODO: series and publisher in book
         // TODO: API Session handling
         // TODO: CxUD interaction [R] is done at this point in todo list

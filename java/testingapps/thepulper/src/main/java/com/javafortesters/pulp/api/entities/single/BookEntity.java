@@ -14,6 +14,8 @@ public class BookEntity {
     public final int publicationYear;
     public final String seriesId;
     public final List<AuthorEntity> authors;
+    private final SeriesEntity series;
+    private final PublisherEntity publisher;
 
     public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
                       final PulpSeries pulpSeries, final Collection<PulpAuthor> allAuthors, final PulpPublisher pulpPublisher) {
@@ -22,7 +24,7 @@ public class BookEntity {
         this.publicationYear = publicationYear;
         this.seriesId = seriesId;
 
-        //TODO: this.pulpSeries
+        this.series = new SeriesEntity(pulpSeries.getId(), pulpSeries.getName());
 
         this.authors = new ArrayList();
 
@@ -30,6 +32,6 @@ public class BookEntity {
             authors.add(new AuthorEntity(author.getId(), author.getName()));
         }
 
-        // TODO this.pulpPublisher
+        this.publisher = new PublisherEntity(pulpPublisher.getId(), pulpPublisher.getName());
     }
 }
