@@ -29,10 +29,35 @@ public class PulpAppForSpark {
 
     private static final String SESSION_APP = "sessionPulpApp";
     private static final String SESSION_API_SECRET = "apisecret";
+
+    // TODO: make max session configurable through environment variables
     private static final int MAX_SESSION_LENGTH = 60*5;  // set max session without interactivity to 5 minutes
+    private static final long CHECK_FOR_EXPIRED_API_SESSIONS_EVERY_MILLIS = 60*3*1000;  // checkfor expired api sessions every 3 minutes
     private boolean allowsShutdown=false;
 
     private Map<String, Session> api_session_mapping= new ConcurrentHashMap<>();
+
+    long lastDeleteExpiredCheck=0;
+
+    private void deleteExpiredAPISessions() {
+
+        long currentCheck = System.currentTimeMillis();
+        if(lastDeleteExpiredCheck>(currentCheck-CHECK_FOR_EXPIRED_API_SESSIONS_EVERY_MILLIS)){
+            return;
+        }
+
+        lastDeleteExpiredCheck=currentCheck;
+
+        for(String sessionKey : api_session_mapping.keySet()){
+            Session session = api_session_mapping.get(sessionKey);
+            try{
+                final PulpApp app = session.attribute(SESSION_APP);
+            }catch(Exception e){
+                System.out.println("automatically removed api session " + sessionKey);
+                api_session_mapping.remove(sessionKey);
+            }
+        }
+    }
 
 
     public PulpApp getPulpApp(Request req){
@@ -59,18 +84,10 @@ public class PulpAppForSpark {
 
             session.attribute(SESSION_API_SECRET, appApiKey);
 
-            System.out.println(appApiKey);
+            // System.out.println(appApiKey);
             api_session_mapping.put(appApiKey, session);
 
-            System.out.println("Session count " + api_session_mapping.size());
-
-
-
-            // DONE: generate an API secret code attached to each session
-            // DONE: delete any stored api sessions that are invalid when accessed
-            // DONE: show API Secret code in admin interface
-            // DONE: disallow any API call without secret code as not authenticated
-
+            // System.out.println("Session count " + api_session_mapping.size());
 
         } else {
             sessionPulpApp = session.attribute(SESSION_APP);
@@ -88,7 +105,7 @@ public class PulpAppForSpark {
             // session is no valid
             session.invalidate();
             api_session_mapping.remove(api_auth_header);
-            halt(401, new EntityResponse().setErrorStatus(401, "X-API-Auth header is invalid - check in the GUI").getErrorMessage());
+            halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getErrorMessage());
         }
         return sessionPulpApp;
     }
@@ -129,18 +146,16 @@ public class PulpAppForSpark {
             // before any API request, check for an X-API-AUTH header
             // the value of the X-API-AUTH header must match the value displayed on the GUI
             if(request.headers("X-API-AUTH")==null) {
-                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "You need to add the X-API-Auth header with the secret key shown in the GUI")));
+                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "You need to add the X-API-AUTH header with the secret key shown in the GUI")));
             }
 
             // check if the API AUTH is known to us
             Session session = api_session_mapping.get(request.headers("X-API-AUTH"));
             if(session==null){
-                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "X-API-Auth header is invalid - check in the GUI")));
+                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI")));
             }
 
-            // TODO: check if session is still valid via time
-
-            // need to delete invalid sessions over time
+            deleteExpiredAPISessions();
 
         });
 
