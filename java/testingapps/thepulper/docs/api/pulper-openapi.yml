@@ -15,14 +15,16 @@ paths:
           type: string
           required: true
       produces:
-        - application/json; charset=utf-8
+        - application/json
       responses:
         '200':
-          description: ''
+          description: 'returns an array of book objects'
           schema:
             type: object
             properties:
-              message:
-                type: string
+              books:
+                type: array
             required:
-              - message
+              - books
+        '401':
+           description: 'when X-API-AUTH header is missing or invalid'
