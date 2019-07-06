@@ -432,7 +432,11 @@ public class PulpAppForSpark {
         get("/apps/pulp", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
 
         before("/apps/pulp/*", (request, response) -> {
-            requestPulpApp.app(getPulpApp(request));
+            // only check using request if null,
+            // because it may have been set by X-API-AUTH header
+            if(requestPulpApp.app()==null) {
+                requestPulpApp.app(getPulpApp(request));
+            }
         });
 
         get("/apps/pulp/gui/view/author", (req, res) -> {
