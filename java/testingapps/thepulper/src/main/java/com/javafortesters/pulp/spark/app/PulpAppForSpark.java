@@ -21,6 +21,28 @@ import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.AM
 import static com.javafortesters.pulp.spark.app.versioning.AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST;
 import static spark.Spark.*;
 
+/*
+
+Basic plan
+
+| Resource   |  GET (read)  | POST (create, amend) | PUT (create, replace)        | DELETE          |
+|------------|--------------|----------------------|------------------------------|-----------------|
+| /plural    | list of X    | create/amend an item | create/replace full payloads | 405 NOT ALLOWED |
+| /plural/id | specific X   | 405 NOT ALLOWED      | replace with full payload    | delete specific |
+
+
+filtering of fields in response  /plural?fields=fieldname1,fieldname2
+sorting on lists  /plural?sort=
+search/filtering by fields for GET lists  /plural?fieldname=value&fieldname2<=value
+
+Done:
+
+GET /plural
+GET /plural/id
+DELETE /plural/id
+
+
+ */
 
 public class PulpAppForSpark {
 
@@ -377,6 +399,7 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
+            // TODO: Create/Amend publisher with POST and PUT
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
@@ -408,7 +431,7 @@ public class PulpAppForSpark {
         });
 
 
-        // TODO: API Session handling
+        // TODO: API Session handling (create from API, use from GUI)
         // TODO: CxUD interaction [R] is done at this point in todo list
         // TODO: xstream for xml to honour content-type and accept headers
 
