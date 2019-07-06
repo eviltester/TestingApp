@@ -129,10 +129,30 @@ public class PulpEntities {
             return response;
         }
 
-        if(bookdata.books().delete(bookid)){
+        if(bookdata.deleteBook(bookid)){
             response.setSuccessStatus(204, ""); // String.format("Book %s deleted", bookid));
         }else{
             response.setErrorStatus(500, String.format("Unknown error deleting Book %s", bookid));
+        }
+
+        return response;
+    }
+
+    public EntityResponse deleteAuthor(final String authorid, final String accept) {
+
+        final EntityResponse response = new EntityResponse();
+
+        final PulpAuthor author = bookdata.authors().get(authorid);
+
+        if(author==PulpAuthor.UNKNOWN_AUTHOR){
+            response.setErrorStatus(404, String.format("Author %s not found", authorid));
+            return response;
+        }
+
+        if(bookdata.deleteAuthor(authorid)){
+            response.setSuccessStatus(204, ""); // String.format("Author %s deleted", authorid));
+        }else {
+            response.setErrorStatus(500, String.format("Unknown error deleting Author %s", authorid));
         }
 
         return response;

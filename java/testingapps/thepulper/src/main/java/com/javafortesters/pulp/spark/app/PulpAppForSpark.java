@@ -198,6 +198,11 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/authors/:authorid", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -208,20 +213,24 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            delete("",  (req, res) -> {
+                final EntityResponse response = requestPulpApp.app().entities().deleteAuthor(req.params(":authorid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
             });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
         path("/apps/pulp/api/authors", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getAuthors(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -232,10 +241,6 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
-            });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
@@ -246,6 +251,11 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/books/:bookid", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getBook(req.params(":bookid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -256,13 +266,8 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
-            });
-
             delete("",  (req, res) -> {
-                final EntityResponse response = requestPulpApp.app().entities().deleteBook(req.params("bookid"),req.headers("Accept"));
+                final EntityResponse response = requestPulpApp.app().entities().deleteBook(req.params(":bookid"),req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 

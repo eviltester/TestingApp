@@ -153,14 +153,14 @@ public class PulpBooks {
         }
     }
 
-    public void deleteAuthoredBy(final String id) {
+    public boolean deleteAuthoredBy(final String id) {
 
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
         // remove this author from any books authored list
@@ -178,11 +178,17 @@ public class PulpBooks {
             }
         }
 
+        // TODO: add any error reporting if cannot remove
+        // currently this is just a boolean false with no addition information about what error happened
+
+        boolean removed = true;
 
         // if book has no authors afterwards then delete the book
         for(PulpBook aBook : removeThese){
-            books.remove(aBook);
+            removed = removed && books.remove(aBook);
         }
+
+        return removed;
     }
 
     public void deleteAnyInSeries(final String id) {

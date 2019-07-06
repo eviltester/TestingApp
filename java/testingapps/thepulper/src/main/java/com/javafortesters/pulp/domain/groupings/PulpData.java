@@ -40,10 +40,12 @@ public class PulpData {
         theBooks.deletePublishedBy(id);
     }
 
-    public void deleteAuthor(final String id) {
-        theAuthors.delete(id);
+    public boolean deleteAuthor(final String id) {
+        final boolean deletedAuthor = theAuthors.delete(id);
         // delete any books authored by the author if they are the only author
-        theBooks.deleteAuthoredBy(id);
+        final boolean deletedBooks = theBooks.deleteAuthoredBy(id);
+
+        return deletedAuthor && deletedBooks;
     }
 
     public void deleteSeries(final String id) {
@@ -51,7 +53,7 @@ public class PulpData {
         theBooks.deleteAnyInSeries(id);
     }
 
-    public void deleteBook(final String id) {
-        theBooks.delete(id);
+    public boolean deleteBook(final String id) {
+        return theBooks.delete(id);
     }
 }

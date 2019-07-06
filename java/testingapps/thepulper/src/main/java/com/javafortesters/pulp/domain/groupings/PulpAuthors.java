@@ -84,15 +84,15 @@ public class PulpAuthors {
         return someAuthors;
     }
 
-    public void delete(final String id) {
+    public boolean delete(final String id) {
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
-        authors.remove(get(id));
+        return authors.remove(get(id));
     }
 }
