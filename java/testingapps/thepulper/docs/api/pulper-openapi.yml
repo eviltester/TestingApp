@@ -110,8 +110,10 @@ definitions:
       publicationYear: 1933
       seriesId: "Apr, 1933"
       authors:
-        id: "4"
-        name: "Lester Dent"
+        - id: "4"
+          name: "Lester Dent"
+        - id: "5"
+          name: "Someone Else"
       series:
         id: "1"
         name: "Doc Savage"
