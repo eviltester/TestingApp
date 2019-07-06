@@ -79,6 +79,11 @@ responses:
           description: 'description of the error, i.e. was the header missing, or was it invalid'
       required:
         - errorMessage
+    examples:
+      application/json:
+        {
+          "errorMessage": "X-API-AUTH header is invalid - check in the GUI"
+        }
 definitions:
   BookItem:
     type: object
@@ -99,6 +104,20 @@ definitions:
         $ref: '#/definitions/SeriesItem'
       publisher:
         $ref: '#/definitions/PublisherItem'
+    example:
+      id: "2"
+      title: "The Land of Terror"
+      publicationYear: 1933
+      seriesId: "Apr, 1933"
+      authors:
+        id: "4"
+        name: "Lester Dent"
+      series:
+        id: "1"
+        name: "Doc Savage"
+      publisher:
+        id: "1"
+        name: "Street And Smith"
   AuthorItem:
     type: object
     properties:
