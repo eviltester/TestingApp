@@ -191,13 +191,13 @@ public class PulpBooks {
         return removed;
     }
 
-    public void deleteAnyInSeries(final String id) {
+    public boolean deleteAnyInSeries(final String id) {
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
         List<PulpBook> removeThese = new ArrayList<>();
@@ -207,8 +207,15 @@ public class PulpBooks {
             }
         }
 
+        // TODO: add any error reporting if cannot remove
+        // currently this is just a boolean false with no addition information about what error happened
+
+        boolean removed = true;
+
         for(PulpBook aBook : removeThese){
-            books.remove(aBook);
+            removed = removed && books.remove(aBook);
         }
+
+        return removed;
     }
 }

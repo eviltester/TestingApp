@@ -43,6 +43,26 @@ public class PulpEntities {
         return response;
     }
 
+    public EntityResponse deleteAuthor(final String authorid, final String accept) {
+
+        final EntityResponse response = new EntityResponse();
+
+        final PulpAuthor author = bookdata.authors().get(authorid);
+
+        if(author==PulpAuthor.UNKNOWN_AUTHOR){
+            response.setErrorStatus(404, String.format("Author %s not found", authorid));
+            return response;
+        }
+
+        if(bookdata.deleteAuthor(authorid)){
+            response.setSuccessStatus(204, ""); // String.format("Author %s deleted", authorid));
+        }else {
+            response.setErrorStatus(500, String.format("Unknown error deleting Author %s", authorid));
+        }
+
+        return response;
+    }
+
     public EntityResponse getBooks(final String acceptFormat) {
         final EntityResponse response = new EntityResponse();
 
@@ -72,6 +92,24 @@ public class PulpEntities {
         return response;
     }
 
+    public EntityResponse deleteBook(final String bookid, final String accept) {
+
+        final EntityResponse response = new EntityResponse();
+
+        if(bookdata.books().get(bookid)==PulpBook.UNKNOWN_BOOK){
+            response.setErrorStatus(404, String.format("Book %s not found", bookid));
+            return response;
+        }
+
+        if(bookdata.deleteBook(bookid)){
+            response.setSuccessStatus(204, ""); // String.format("Book %s deleted", bookid));
+        }else{
+            response.setErrorStatus(500, String.format("Unknown error deleting Book %s", bookid));
+        }
+
+        return response;
+    }
+
     public EntityResponse getSeries(final String seriesid, final String acceptformat) {
         final PulpSeries series = bookdata.series().get(seriesid);
         final EntityResponse response = new EntityResponse();
@@ -93,6 +131,24 @@ public class PulpEntities {
         SeriesListEntity entity = new SeriesListEntity(bookdata.series());
 
         response.setSuccessStatus(200,new Gson().toJson(entity));
+        return response;
+    }
+
+    public EntityResponse deleteSeries(final String seriesid, final String accept) {
+        final PulpSeries series = bookdata.series().get(seriesid);
+        final EntityResponse response = new EntityResponse();
+
+        if(series==PulpSeries.UNKNOWN_SERIES){
+            response.setErrorStatus(404, String.format("Series %s not found", seriesid));
+            return response;
+        }
+
+        if(bookdata.deleteSeries(seriesid)){
+            response.setSuccessStatus(204, ""); // String.format("Book %s deleted", bookid));
+        }else{
+            response.setErrorStatus(500, String.format("Unknown error deleting Series %s", seriesid));
+        }
+
         return response;
     }
 
@@ -120,41 +176,4 @@ public class PulpEntities {
         return response;
     }
 
-    public EntityResponse deleteBook(final String bookid, final String accept) {
-
-        final EntityResponse response = new EntityResponse();
-
-        if(bookdata.books().get(bookid)==PulpBook.UNKNOWN_BOOK){
-            response.setErrorStatus(404, String.format("Book %s not found", bookid));
-            return response;
-        }
-
-        if(bookdata.deleteBook(bookid)){
-            response.setSuccessStatus(204, ""); // String.format("Book %s deleted", bookid));
-        }else{
-            response.setErrorStatus(500, String.format("Unknown error deleting Book %s", bookid));
-        }
-
-        return response;
-    }
-
-    public EntityResponse deleteAuthor(final String authorid, final String accept) {
-
-        final EntityResponse response = new EntityResponse();
-
-        final PulpAuthor author = bookdata.authors().get(authorid);
-
-        if(author==PulpAuthor.UNKNOWN_AUTHOR){
-            response.setErrorStatus(404, String.format("Author %s not found", authorid));
-            return response;
-        }
-
-        if(bookdata.deleteAuthor(authorid)){
-            response.setSuccessStatus(204, ""); // String.format("Author %s deleted", authorid));
-        }else {
-            response.setErrorStatus(500, String.format("Unknown error deleting Author %s", authorid));
-        }
-
-        return response;
-    }
 }

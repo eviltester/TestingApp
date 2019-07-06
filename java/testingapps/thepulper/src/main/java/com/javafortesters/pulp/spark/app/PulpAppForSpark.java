@@ -279,6 +279,11 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/books", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getBooks(req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -287,11 +292,6 @@ public class PulpAppForSpark {
             get("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getBooks(req.headers("Accept"));
                 return apiEntityResponse(res, response);
-            });
-
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
@@ -303,6 +303,11 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/series/:seriesid", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getSeries(req.params(":seriesid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -313,14 +318,13 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            delete("",  (req, res) -> {
+                final EntityResponse response = requestPulpApp.app().entities().deleteSeries(req.params(":seriesid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
             });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });

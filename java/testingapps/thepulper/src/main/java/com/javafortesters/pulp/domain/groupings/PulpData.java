@@ -48,9 +48,13 @@ public class PulpData {
         return deletedAuthor && deletedBooks;
     }
 
-    public void deleteSeries(final String id) {
-        theSerieses.delete(id);
-        theBooks.deleteAnyInSeries(id);
+    public boolean deleteSeries(final String id) {
+
+        final boolean deletedSeries = theSerieses.delete(id);
+
+        final boolean deletedBooks =theBooks.deleteAnyInSeries(id);
+
+        return deletedSeries && deletedBooks;
     }
 
     public boolean deleteBook(final String id) {

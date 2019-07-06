@@ -77,15 +77,15 @@ public class PulpSeriesCollection {
         return sorted;
     }
 
-    public void delete(final String id) {
+    public boolean delete(final String id) {
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
-        serieses.remove(get(id));
+        return serieses.remove(get(id));
     }
 }
