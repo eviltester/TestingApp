@@ -119,4 +119,22 @@ public class PulpEntities {
         response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
     }
+
+    public EntityResponse deleteBook(final String bookid, final String accept) {
+
+        final EntityResponse response = new EntityResponse();
+
+        if(bookdata.books().get(bookid)==PulpBook.UNKNOWN_BOOK){
+            response.setErrorStatus(404, String.format("Book %s not found", bookid));
+            return response;
+        }
+
+        if(bookdata.books().delete(bookid)){
+            response.setSuccessStatus(204, ""); // String.format("Book %s deleted", bookid));
+        }else{
+            response.setErrorStatus(500, String.format("Unknown error deleting Book %s", bookid));
+        }
+
+        return response;
+    }
 }

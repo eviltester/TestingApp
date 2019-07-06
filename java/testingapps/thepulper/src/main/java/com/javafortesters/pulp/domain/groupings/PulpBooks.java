@@ -119,16 +119,16 @@ public class PulpBooks {
         return years;
     }
 
-    public void delete(final String id) {
+    public boolean delete(final String id) {
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
-        books.remove(get(id));
+        return books.remove(get(id));
     }
 
     public void deletePublishedBy(final String id) {
