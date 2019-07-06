@@ -1,3 +1,5 @@
+# http://editor.swagger.io
+# https://swagger.io/docs/specification/about/
 swagger: '2.0'
 info:
   version: '1.0'
@@ -6,14 +8,19 @@ host: localhost:4567
 basePath: /apps/pulp/api/
 schemes:
   - http
+securityDefinitions:
+  # X-API-AUTH: guid
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-AUTH
+    description: The X-API-AUTH value can be found listed in the Admin page on the GUI
+# Global security (applies to all operations):
+security:
+  - APIKeyHeader: []
 paths:
   /books:
     get:
-      parameters:
-        - in: header
-          name: X-API-AUTH
-          type: string
-          required: true
       produces:
         - application/json
       responses:
@@ -24,7 +31,62 @@ paths:
             properties:
               books:
                 type: array
+                items:
+                  $ref: '#/definitions/BookItem'
+                description: 'An array of books, will be empty if there are no books'
             required:
               - books
         '401':
-           description: 'when X-API-AUTH header is missing or invalid'
+          $ref: '#/responses/APIUnauthorizedError'
+responses:
+  APIUnauthorizedError:
+    description: X-API-AUTH header is missing or invalid
+    schema:
+      type: object
+      properties:
+        errorMessage:
+          type: string
+          description: 'description of the error, i.e. was the header missing, or was it invalid'
+      required:
+        - errorMessage
+definitions:
+  BookItem:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      publicationYear:
+        type: integer
+      seriesId:
+        type: string
+      authors:
+        type: array
+        items:
+          $ref: '#/definitions/AuthorItem'
+      series:
+        $ref: '#/definitions/SeriesItem'
+      publisher:
+        $ref: '#/definitions/PublisherItem'
+  AuthorItem:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+  SeriesItem:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+  PublisherItem:
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
