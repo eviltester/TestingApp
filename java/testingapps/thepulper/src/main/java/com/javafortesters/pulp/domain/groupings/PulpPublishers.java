@@ -81,15 +81,15 @@ public class PulpPublishers {
         return sorted;
     }
 
-    public void delete(final String id) {
+    public boolean delete(final String id) {
         if(id==null){
-            return;
+            return false;
         }
 
         if(id.isEmpty()){
-            return;
+            return false;
         }
 
-        publishers.remove(get(id));
+        return publishers.remove(get(id));
     }
 }

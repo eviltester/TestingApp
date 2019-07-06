@@ -32,12 +32,14 @@ public class PulpData {
     }
 
 
-    public void deletePublisher(final String id) {
+    public boolean deletePublisher(final String id) {
         // delete the publisher from publishers collection
-        thePublishers.delete(id);
+        final boolean deletedPublisher = thePublishers.delete(id);
 
         // delete any books published by the publisher
-        theBooks.deletePublishedBy(id);
+        final boolean deletedBooks = theBooks.deletePublishedBy(id);
+
+        return deletedPublisher && deletedBooks;
     }
 
     public boolean deleteAuthor(final String id) {

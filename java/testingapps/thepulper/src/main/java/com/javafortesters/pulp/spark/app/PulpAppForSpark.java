@@ -356,6 +356,12 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/publishers/:publisherid", () -> {
 
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            });
+
+
             head("", (req, res) -> {
                 final EntityResponse response = requestPulpApp.app().entities().getPublisher(req.params(":publisherid"),req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
@@ -366,14 +372,13 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+            delete("",  (req, res) -> {
+                final EntityResponse response = requestPulpApp.app().entities().deletePublisher(req.params(":publisherid"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
             });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });

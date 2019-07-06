@@ -176,4 +176,22 @@ public class PulpEntities {
         return response;
     }
 
+    public EntityResponse deletePublisher(final String publisherid, final String accept) {
+
+        final PulpPublisher publisher = bookdata.publishers().get(publisherid);
+        final EntityResponse response = new EntityResponse();
+
+        if(publisher==PulpPublisher.UNKNOWN_PUBLISHER){
+            response.setErrorStatus(404, String.format("Publisher %s not found", publisherid));
+            return response;
+        }
+
+        if(bookdata.deletePublisher(publisherid)){
+            response.setSuccessStatus(204, ""); // String.format("Publisher %s deleted", publisherid));
+        }else{
+            response.setErrorStatus(500, String.format("Unknown error deleting Publisher %s", publisherid));
+        }
+
+        return response;
+    }
 }
