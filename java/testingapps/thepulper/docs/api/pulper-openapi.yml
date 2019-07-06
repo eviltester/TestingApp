@@ -36,6 +36,36 @@ paths:
                 description: 'An array of books, will be empty if there are no books'
             required:
               - books
+          examples:
+            application/json:
+              {
+                "books": [
+                {
+                  "id": "1",
+                  "title": "The Man of Bronze",
+                  "publicationYear": 1933,
+                  "seriesId": "Mar, 1933",
+                  "authors": [
+                  {
+                    "id": "4",
+                    "name": "Lester Dent"
+                  },
+                  {
+                    "id": "10",
+                    "name": "Kenneth Robeson"
+                  }
+                  ],
+                  "series": {
+                    "id": "1",
+                    "name": "Doc Savage"
+                  },
+                  "publisher": {
+                    "id": "1",
+                    "name": "Street And Smith"
+                  }
+                }
+                ]
+              }
         '401':
           $ref: '#/responses/APIUnauthorizedError'
 responses:
