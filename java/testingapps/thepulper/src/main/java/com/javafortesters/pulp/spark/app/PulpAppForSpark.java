@@ -126,6 +126,10 @@ public class PulpAppForSpark {
 
         } else {
             sessionPulpApp = session.attribute(SESSION_APP);
+            // a GUI request was made, is the API still valid? or has it been removed?
+            if(api_session_mapping.get(sessionPulpApp.getAPISecret())==null){
+                api_session_mapping.put(sessionPulpApp.getAPISecret(), session);
+            }
         }
 
         return sessionPulpApp;
@@ -154,7 +158,7 @@ public class PulpAppForSpark {
 
     public String apiEntityResponse(Response res, final EntityResponse response){
         res.status(response.getStatusCode());
-        res.header("ContentType", response.getContentType());
+        res.header("content-type", response.getContentType());
         if(response.isError()){
             return response.getErrorMessage();
         }else{

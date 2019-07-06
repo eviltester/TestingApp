@@ -1,0 +1,28 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: The Pulper API
+host: localhost:4567
+basePath: /apps/pulp/api/
+schemes:
+  - http
+paths:
+  /books:
+    get:
+      parameters:
+        - in: header
+          name: X-API-AUTH
+          type: string
+          required: true
+      produces:
+        - application/json; charset=utf-8
+      responses:
+        '200':
+          description: ''
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+            required:
+              - message
