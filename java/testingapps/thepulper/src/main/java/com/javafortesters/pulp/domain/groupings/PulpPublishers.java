@@ -52,6 +52,11 @@ public class PulpPublishers {
     }
 
     public PulpPublisher findByName(String name) {
+
+        if(name==null){
+            return PulpPublisher.UNKNOWN_PUBLISHER;
+        }
+
         for(PulpPublisher publisher : publishers){
             if(publisher.getName().contentEquals(name)){
                 return publisher;

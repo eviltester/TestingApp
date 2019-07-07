@@ -14,8 +14,8 @@ public class BookEntity {
     public final int publicationYear;
     public final String seriesId;
     public final List<AuthorEntity> authors;
-    private final SeriesEntity series;
-    private final PublisherEntity publisher;
+    public final SeriesEntity series;
+    public final PublisherEntity publisher;
 
     public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
                       final PulpSeries pulpSeries, final Collection<PulpAuthor> allAuthors, final PulpPublisher pulpPublisher) {

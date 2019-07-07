@@ -293,7 +293,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/books", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
+                res.header("Allow", "OPTIONS, GET, HEAD, POST");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -307,7 +307,11 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            post("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createAmendBook(req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+
+            });
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
@@ -433,6 +437,14 @@ public class PulpAppForSpark {
         // TODO: xstream for xml to honour content-type and accept headers
 
         // TODO: Future API End Points
+
+        // /apps/pulp/api/books/id/publishers
+        // Amend publishers for a book
+        // /apps/pulp/api/books/id/series
+        // Amend series for a book
+        // /apps/pulp/api/books/id/authors
+        // Amend authors for a book
+
         // /apps/pulp/api/publishers/id/series
         // /apps/pulp/api/publishers/id/authors
         // /apps/pulp/api/publishers/id/books
@@ -440,6 +452,7 @@ public class PulpAppForSpark {
         // /apps/pulp/api/series/id/authors
         // /apps/pulp/api/authors/id/books
         // /apps/pulp/api/authors/id/publishers
+
 
         // End API processing with unknown end points
         path("/apps/pulp/api/*", () -> {

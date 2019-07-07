@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.domain.groupings;
 
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
+import com.javafortesters.pulp.domain.objects.PulpPublisher;
 
 import java.util.*;
 
@@ -48,6 +49,11 @@ public class PulpAuthors {
     }
 
     public PulpAuthor findByName(String name) {
+
+        if(name==null){
+            return PulpAuthor.UNKNOWN_AUTHOR;
+        }
+
         for(PulpAuthor author : authors){
             if(author.getName().equalsIgnoreCase(name)){
                 return author;

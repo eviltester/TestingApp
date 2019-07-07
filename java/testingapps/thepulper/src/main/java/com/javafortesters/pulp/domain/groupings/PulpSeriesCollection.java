@@ -48,6 +48,11 @@ public class PulpSeriesCollection {
     }
 
     public PulpSeries findByName(String name) {
+
+        if(name==null){
+            return PulpSeries.UNKNOWN_SERIES;
+        }
+
         for(PulpSeries aSeries : serieses){
             if(aSeries.getName().equalsIgnoreCase(name)){
                 return aSeries;

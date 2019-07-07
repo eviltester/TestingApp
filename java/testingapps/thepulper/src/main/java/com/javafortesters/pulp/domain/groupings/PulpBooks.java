@@ -1,5 +1,6 @@
 package com.javafortesters.pulp.domain.groupings;
 
+import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
@@ -77,8 +78,6 @@ public class PulpBooks {
     }
 
     public List<PulpBook> findByAuthorId(String authorId) {
-
-
 
         List<PulpBook> authored = new ArrayList<>();
 

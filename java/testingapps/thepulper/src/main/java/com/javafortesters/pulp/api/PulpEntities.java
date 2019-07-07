@@ -15,6 +15,7 @@ import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -95,13 +96,9 @@ public class PulpEntities {
             return response;
         }
 
-        BookEntity entity = new BookEntity(book.getId(), book.getTitle(), book.getPublicationYear(), book.getSeriesId(),
-                                            bookdata.series().get(book.getSeriesIndex()),
-                                            bookdata.authors().getAll(book.getAuthorIndexes()),
-                                            bookdata.publishers().get(book.getPublisherIndex())
-                                            );
+        return new EntityResponse().setSuccessStatus(201, convertor.toJson(book, bookdata));
 
-        return response.setSuccessStatus(200,new Gson().toJson(entity));
+
 
     }
 
@@ -222,6 +219,7 @@ public class PulpEntities {
         public AuthorEntity authorEntityToActOn;
         public SeriesEntity seriesEntityToActOn;
         private PublisherEntity publisherEntityToActOn;
+        private BookEntity bookEntityToActOn;
 
         public ActionToDo isError(final int status, final String message) {
             actionName = "ERROR";
@@ -268,6 +266,18 @@ public class PulpEntities {
         public ActionToDo isAmend(final PublisherEntity publisher) {
             actionName = "AMEND";
             publisherEntityToActOn = publisher;
+            return this;
+        }
+
+        public ActionToDo isCreate(final BookEntity book) {
+            actionName = "CREATE";
+            bookEntityToActOn = book;
+            return this;
+        }
+
+        public ActionToDo isAmend(final BookEntity book) {
+            actionName = "AMEND";
+            bookEntityToActOn = book;
             return this;
         }
     }
@@ -368,6 +378,10 @@ public class PulpEntities {
                     response.addHeader("location", getLocationHeaderFor(created));
                     return response;
                 }
+                if(action.bookEntityToActOn!=null){
+                    return processCreateAmendBookAction(action);
+                }
+
             }
             if(action.actionName.contentEquals("AMEND")){
                 if(action.authorEntityToActOn!=null){
@@ -388,6 +402,9 @@ public class PulpEntities {
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
+                if(action.bookEntityToActOn!=null){
+                    return processCreateAmendBookAction(action);
+                }
             }
         }catch(Exception e) {
             exceptionMessage = e.getMessage();
@@ -397,6 +414,8 @@ public class PulpEntities {
 
 
     }
+
+
 
     private ActionToDo identifyCreateAmendActionForAuthorEntity(final AuthorEntity author) {
 
@@ -505,6 +524,208 @@ public class PulpEntities {
 
             return action.isAmend(single);
         }
+    }
+
+    private ActionToDo identifyCreateAmendActionForBookEntity(final BookEntity single) {
+
+
+        if(single.id !=null && single.id.length()>=0) {
+
+            final PulpBook existingBook = bookdata.books().get(single.id);
+            if(existingBook != null && existingBook!= PulpBook.UNKNOWN_BOOK) {
+                // OK, we will amend this - allow duplicate titles - potentially duplicate books
+                return new ActionToDo().isAmend(single);
+            }else{
+                return new ActionToDo().isError(404, String.format("Unknown Book %s %s", single.id, single.title));
+            }
+        }
+
+        // Book mandatory
+        // id
+        // title
+        // a series index to identify the series
+        // at least one author index to identify the author
+        // what to do for house author index?
+        // a series id
+        // a publication year
+        // a publisher index to identify the publisher
+
+        // ACTION: ERROR, 400, message
+        if(single.title == null || single.title.length()==0){
+            return new ActionToDo().isError(400, String.format("Series title cannot be empty"));
+        }
+        if(single.series==null || (single.series.id == null && single.series.name == null)){
+            return new ActionToDo().isError(400, String.format("Series cannot be empty"));
+        }
+        if((single.series.id + single.series.name).length()==0){
+            return new ActionToDo().isError(400, String.format("Series must be identifiable"));
+        }
+        if(single.publisher==null || (single.publisher.id == null && single.publisher.name == null)){
+            return new ActionToDo().isError(400, String.format("Publisher cannot be empty"));
+        }
+        if((single.publisher.id + single.publisher.name).length()==0){
+            return new ActionToDo().isError(400, String.format("Publisher must be identifiable"));
+        }
+        if(single.authors==null || single.authors.size()==0){
+            return new ActionToDo().isError(400, String.format("Book must have authors"));
+        }
+        if(single.seriesId == null || single.seriesId.length()==0){
+            return new ActionToDo().isError(400, String.format("Book must have a series id"));
+        }
+        if(single.publicationYear<=0){
+            return new ActionToDo().isError(400, String.format("Book must have a publication year"));
+        }
+
+
+        // This is too complicated
+        // publishers, series and authors must exist
+
+        PulpPublisher publisher;
+        if(single.publisher.id==null){
+            publisher = bookdata.publishers().findByName(single.publisher.name);
+        }else{
+            publisher = bookdata.publishers().get(single.publisher.id);
+        }
+
+        if(publisher==null || publisher==PulpPublisher.UNKNOWN_PUBLISHER){
+            return new ActionToDo().isError(404, String.format("Cannot find publisher %s named: %s", single.publisher.id, single.publisher.name));
+        }
+
+        PulpSeries series;
+        if(single.series.id==null){
+            series = bookdata.series().findByName(single.series.name);
+        }else{
+            series = bookdata.series().get(single.series.id);
+        }
+
+        if(series==null || series==PulpSeries.UNKNOWN_SERIES){
+            return new ActionToDo().isError(404, String.format("Cannot find series %s named: %s", single.series.id, single.series.name));
+        }
+
+
+        for(AuthorEntity anAuthor : single.authors){
+
+            PulpAuthor author;
+            if(anAuthor.id==null){
+                author = bookdata.authors().findByName(anAuthor.name);
+            }else{
+                author = bookdata.authors().get(anAuthor.id);
+            }
+
+            if(author==null || author==PulpAuthor.UNKNOWN_AUTHOR){
+                return new ActionToDo().isError(404, String.format("Cannot find author %s named: %s", anAuthor.id, anAuthor.name));
+            }
+        }
+
+        // OK, we will create this - allow duplicate titles - potentially duplicate books
+        return new ActionToDo().isCreate(single);
+
+    }
+
+    private EntityResponse processCreateAmendBookAction(final ActionToDo action) {
+
+        final BookEntity book = action.bookEntityToActOn;
+
+        PulpPublisher publisher = null;
+        if(book.publisher != null) {
+            if (book.publisher.id == null) {
+                publisher = bookdata.publishers().findByName(book.publisher.name);
+            } else {
+                publisher = bookdata.publishers().get(book.publisher.id);
+            }
+        }
+
+        PulpSeries series=null;
+        if(book.series != null) {
+            if (book.series != null && book.series.id == null) {
+                series = bookdata.series().findByName(book.series.name);
+            } else {
+                series = bookdata.series().get(book.series.id);
+            }
+        }
+
+
+        List<PulpAuthor> authors = new ArrayList<PulpAuthor>();
+        List<String> authorIds = new ArrayList<>();
+
+        if(book.authors!=null) {
+            for (AuthorEntity anAuthor : book.authors) {
+
+                PulpAuthor author;
+                if (anAuthor.id == null) {
+                    author = bookdata.authors().findByName(anAuthor.name);
+                } else {
+                    author = bookdata.authors().get(anAuthor.id);
+                }
+
+                if (author == null || author == PulpAuthor.UNKNOWN_AUTHOR) {
+                    return new EntityResponse().setErrorStatus(404, String.format("Cannot find author %s named: %s", anAuthor.id, anAuthor.name));
+                }
+
+                authors.add(author);
+                authorIds.add(author.getId());
+            }
+        }
+
+        if(action.actionName.contentEquals("CREATE")) {
+
+            if(publisher==null || publisher==PulpPublisher.UNKNOWN_PUBLISHER){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot find publisher %s named: %s", book.publisher.id, book.publisher.name));
+            }
+
+            if(series==null || series==PulpSeries.UNKNOWN_SERIES){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot find series %s named: %s", book.series.id, book.series.name));
+            }
+
+            if(authors.size()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot create a book without authors"));
+            }
+
+            final PulpBook actualBook = bookdata.books().add(series.getId(), authors.get(0).getId(), "", book.title, book.seriesId, book.publicationYear, publisher.getId());
+
+            for (PulpAuthor addAuthor : authors) {
+                actualBook.addCoAuthor(addAuthor.getId());
+            }
+
+            return new EntityResponse().setSuccessStatus(201, convertor.toJson(actualBook, bookdata));
+
+        }
+
+        if(action.actionName.contentEquals("AMEND")) {
+
+            if(publisher!=null && publisher==PulpPublisher.UNKNOWN_PUBLISHER){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot find publisher %s named: %s", book.publisher.id, book.publisher.name));
+            }
+
+            if(series!=null && series==PulpSeries.UNKNOWN_SERIES){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot find series %s named: %s", book.series.id, book.series.name));
+            }
+
+            final BookEntity bookDetails = action.bookEntityToActOn;
+
+            if(bookDetails.authors!=null && authorIds.size()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot remove all authors"));
+            }
+
+
+            final PulpBook actualBook = bookdata.books().get(action.bookEntityToActOn.id);
+            actualBook.amendTitle(bookDetails.title);
+            if(bookDetails.publicationYear>0) {
+                actualBook.amendPublicationYear(String.valueOf(bookDetails.publicationYear));
+            }
+
+            if(publisher!=null) {
+                actualBook.amendPublisher(publisher.getId());
+            }
+            if(series!=null) {
+                actualBook.amendSeries(series.getId());
+            }
+            actualBook.amendAuthors(authorIds);
+            actualBook.amendSeriesIdentifier(bookDetails.seriesId);
+            return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
+        }
+
+        return new EntityResponse().setErrorStatus(500, String.format("Error processing action %s", new Gson().toJson(action)));
     }
 
 
@@ -632,6 +853,74 @@ public class PulpEntities {
 
         }
     }
+
+    public EntityResponse createAmendBook(final String body, final String contentType, final String accept) {
+
+        // Book is more complicated because it has sub relationships
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        BookEntity single=null;
+        BooksListEntity list= new BooksListEntity(new PulpData());
+
+        try {
+            single = new Gson().fromJson(body, BookEntity.class);
+        }catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
+
+        try {
+            list = new Gson().fromJson(body, BooksListEntity.class);
+        }catch (Exception e2){
+            // nope - can't accept this then
+            errorMessage = errorMessage + " , " + e2.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Books %s", errorMessage));
+        }
+
+
+        // Minimum for a book
+
+        // did we get a single item?
+        if(single!=null && (single.title!=null || single.id!=null || single.seriesId!=null || single.authors!=null ||
+                            single.series!=null || single.publisher!=null || single.publicationYear>0)){
+
+            ActionToDo action = identifyCreateAmendActionForBookEntity(single);
+            return processCreateAmendAction(action);
+
+        }else{
+
+            if(list == null || list.books == null){
+                // that was not a Series list
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Books %s", errorMessage));
+            }
+
+            List<ActionToDo> actions = new ArrayList();
+
+            // process book list
+            for( BookEntity aSingleItem : list.books){
+                actions.add(identifyCreateAmendActionForBookEntity(aSingleItem));
+            }
+
+            List<EntityResponse> responses = new ArrayList<>();
+            for(ActionToDo action : actions){
+
+                responses.add(processCreateAmendAction(action));
+            }
+
+            // TODO - fix this egregious hack and create a proper bulk report entity
+            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
+
+        }
+    }
+
 
 
 
