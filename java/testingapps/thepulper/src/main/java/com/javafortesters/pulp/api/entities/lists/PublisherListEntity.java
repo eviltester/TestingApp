@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublisherListEntity {
-    private final List<PublisherEntity> publishers;
+    public final List<PublisherEntity> publishers;
 
     public PublisherListEntity(final PulpPublishers datapublishers) {
         this.publishers = new ArrayList();

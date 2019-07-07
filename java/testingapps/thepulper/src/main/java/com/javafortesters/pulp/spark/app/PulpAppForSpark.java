@@ -413,11 +413,14 @@ public class PulpAppForSpark {
             });
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
+                res.header("Allow", "OPTIONS, GET, HEAD, POST");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            post("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createAmendPublisher(req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});

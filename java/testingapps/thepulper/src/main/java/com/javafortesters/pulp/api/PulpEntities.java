@@ -8,6 +8,7 @@ import com.javafortesters.pulp.api.entities.single.*;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
 import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.domain.groupings.PulpPublishers;
 import com.javafortesters.pulp.domain.groupings.PulpSeriesCollection;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
@@ -171,10 +172,8 @@ public class PulpEntities {
             return response;
         }
 
-        PublisherEntity entity = new PublisherEntity(publisher.getId(), publisher.getName());
+        return response.setSuccessStatus(200, convertor.toJson(publisher));
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
-        return response;
     }
 
     public EntityResponse getPublishers(final String accept) {
@@ -212,6 +211,8 @@ public class PulpEntities {
         return null;
     }
 
+
+
     private class ActionToDo{
 
         public String actionName;
@@ -220,6 +221,7 @@ public class PulpEntities {
         public Map<String, String> headers = new HashMap<>();
         public AuthorEntity authorEntityToActOn;
         public SeriesEntity seriesEntityToActOn;
+        private PublisherEntity publisherEntityToActOn;
 
         public ActionToDo isError(final int status, final String message) {
             actionName = "ERROR";
@@ -254,6 +256,18 @@ public class PulpEntities {
         public ActionToDo isAmend(final SeriesEntity series) {
             actionName = "AMEND";
             seriesEntityToActOn = series;
+            return this;
+        }
+
+        public ActionToDo isCreate(final PublisherEntity publisher) {
+            actionName = "CREATE";
+            publisherEntityToActOn = publisher;
+            return this;
+        }
+
+        public ActionToDo isAmend(final PublisherEntity publisher) {
+            actionName = "AMEND";
+            publisherEntityToActOn = publisher;
             return this;
         }
     }
@@ -348,6 +362,12 @@ public class PulpEntities {
                     response.addHeader("location", getLocationHeaderFor(created));
                     return response;
                 }
+                if(action.publisherEntityToActOn!=null){
+                    final PulpPublisher created = bookdata.publishers().add(action.publisherEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(created));
+                    response.addHeader("location", getLocationHeaderFor(created));
+                    return response;
+                }
             }
             if(action.actionName.contentEquals("AMEND")){
                 if(action.authorEntityToActOn!=null){
@@ -359,6 +379,12 @@ public class PulpEntities {
                 if(action.seriesEntityToActOn!=null){
                     final PulpSeries actual = bookdata.series().get(action.seriesEntityToActOn.id);
                     actual.amendName(action.seriesEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
+                    return response;
+                }
+                if(action.publisherEntityToActOn!=null){
+                    final PulpPublisher actual = bookdata.publishers().get(action.publisherEntityToActOn.id);
+                    actual.amendName(action.publisherEntityToActOn.name);
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
@@ -445,6 +471,41 @@ public class PulpEntities {
         }
     }
 
+    private ActionToDo identifyCreateAmendActionForPublisherEntity(final PublisherEntity single) {
+        final ActionToDo action = new ActionToDo();
+
+        // ACTION: ERROR, 400, message
+        if(single.name == null || single.name.length()==0){
+            return action.isError(400, String.format("Publisher name cannot be empty"));
+        }
+
+        // ACTION: ERROR, 409, message, headers
+        // ACTION: ERROR, 404, message
+        // ACTION: CREATE, AuthorEntity
+        // ACTION: AMEND, AuthorEntity
+
+        // does it have an id?
+        if(single.id ==null || single.id.length()==0){
+
+            PulpPublisher existing = bookdata.publishers().findByName(single.name);
+
+            if(existing!=PulpPublisher.UNKNOWN_PUBLISHER){
+                return action.isError(409, String.format("Cannot create publisher. Publisher '%s' already exists with id %s.", existing.getName(), existing.getId())).
+                        withHeader("location", getLocationHeaderFor(existing));
+            }
+
+            // OK, we will create this
+            return action.isCreate(single);
+
+        }else{
+            // treat this as an amend
+            if(bookdata.publishers().get(single.id) == PulpPublisher.UNKNOWN_PUBLISHER){
+                return action.isError(404, String.format("Unknown Publisher %s", single.id));
+            }
+
+            return action.isAmend(single);
+        }
+    }
 
 
     public EntityResponse createAmendSeries(final String body, final String contentType, final String accept) {
@@ -510,6 +571,68 @@ public class PulpEntities {
         }
     }
 
+    public EntityResponse createAmendPublisher(final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        PublisherEntity single=null;
+        PublisherListEntity list= new PublisherListEntity(new PulpPublishers());
+
+        try {
+            single = new Gson().fromJson(body, PublisherEntity.class);
+        }catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
+
+        try {
+            list = new Gson().fromJson(body, PublisherListEntity.class);
+        }catch (Exception e2){
+            // nope - can't accept this then
+            errorMessage = errorMessage + " , " + e2.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publishers %s", errorMessage));
+        }
+
+
+        // did we get a single item?
+        if(single!=null && single.name!=null){
+
+            ActionToDo action = identifyCreateAmendActionForPublisherEntity(single);
+            return processCreateAmendAction(action);
+
+        }else{
+
+            if(list == null || list.publishers == null){
+                // that was not a Series list
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publishers %s", errorMessage));
+            }
+
+            List<ActionToDo> actions = new ArrayList();
+
+            // process author list
+            for( PublisherEntity aSingleItem : list.publishers){
+                actions.add(identifyCreateAmendActionForPublisherEntity(aSingleItem));
+            }
+
+            List<EntityResponse> responses = new ArrayList<>();
+            for(ActionToDo action : actions){
+
+                responses.add(processCreateAmendAction(action));
+            }
+
+            // TODO - fix this egregious hack and create a proper bulk report entity
+            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
+
+        }
+    }
+
 
 
     private String getLocationHeaderFor(final PulpAuthor theAuthor) {
@@ -518,6 +641,10 @@ public class PulpEntities {
     private String getLocationHeaderFor(final PulpSeries existing) {
         return rooturl + "/series/" + existing.getId();
     }
+    private String getLocationHeaderFor(final PulpPublisher existing) {
+        return rooturl + "/publishers/" + existing.getId();
+    }
+
 
     public PulpEntities setRootUrl(final String rootUrl) {
         this.rooturl = rootUrl;
