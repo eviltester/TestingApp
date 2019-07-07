@@ -245,7 +245,7 @@ public class PulpEntities {
 
                 PulpAuthor existingAuthor = bookdata.authors().findByName(author.name);
                 if(existingAuthor!=PulpAuthor.UNKNOWN_AUTHOR){
-                    response.setErrorStatus(409, String.format("Cannot create author. Author already exists."));
+                    response.setErrorStatus(409, String.format("Cannot create author. Author '%s' already exists with id %s.", existingAuthor.getName(), existingAuthor.getId()));
                     addLocationHeaderFor(response, existingAuthor);
                     return response;
                 }
