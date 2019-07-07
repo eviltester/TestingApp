@@ -13,6 +13,11 @@ import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PulpEntities {
     private final PulpData bookdata;
     private final DomainToEntityConvertor convertor;;
@@ -199,12 +204,53 @@ public class PulpEntities {
         return response;
     }
 
+    private EntityResponse canProcessContentType(String contentType){
+        if(contentType==null || (!contentType.endsWith("json"))){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content-type %s", contentType));
+        }
+        return null;
+    }
+
+    private class ActionToDo{
+
+        public String actionName;
+        public int errorStatus;
+        public String errorMessage=null;
+        public Map<String, String> headers = new HashMap<>();
+        public AuthorEntity authorEntityToActOn;
+
+        public ActionToDo isError(final int status, final String message) {
+            actionName = "ERROR";
+            errorStatus = status;
+            errorMessage=message;
+            return this;
+        }
+
+        public ActionToDo withHeader(final String key, final String value) {
+            this.headers.put(key, value);
+            return this;
+        }
+
+        public ActionToDo isCreate(final AuthorEntity author) {
+            actionName = "CREATE";
+            authorEntityToActOn = author;
+            return this;
+        }
+
+        public ActionToDo isAmend(final AuthorEntity author) {
+            actionName = "AMEND";
+            authorEntityToActOn = author;
+            return this;
+        }
+    }
+
     public EntityResponse createAmendAuthor(final String body, final String contentType, final String accept) {
+
         final EntityResponse response = new EntityResponse();
 
-        if(contentType==null || (!contentType.endsWith("json"))){
-            response.setErrorStatus(400, String.format("Cannot process content-type %s", contentType));
-            return response;
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
         }
 
         String errorMessage = "";
@@ -214,70 +260,141 @@ public class PulpEntities {
 
         try {
             author = new Gson().fromJson(body, AuthorEntity.class);
-        }catch (Exception e){
+        }catch (Exception e) {
             // ok, it isn't an author, is it a list of authors?
             errorMessage = e.getMessage();
-            try {
-                authorList = new Gson().fromJson(body, AuthorListEntity.class);
-            }catch (Exception e2){
-                // nope - can't accept this then
-                errorMessage = errorMessage + " , " + e2.getMessage();
-            }
+        }
+
+        try {
+            authorList = new Gson().fromJson(body, AuthorListEntity.class);
+        }catch (Exception e2){
+            // nope - can't accept this then
+            errorMessage = errorMessage + " , " + e2.getMessage();
         }
 
         if(errorMessage.length()>0){
-            response.setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
+            response.setErrorStatus(400, String.format("Cannot process content as Authors %s", errorMessage));
             return response;
         }
 
-        PulpAuthor actualAuthor=null;
 
         // did we get an author?
-        if(author!=null){
+        if(author!=null && (author.id!=null && author.name!=null)){
 
-            if(author.name == null || author.name.length()==0){
-                response.setErrorStatus(400, String.format("Author name cannot be empty", errorMessage));
-                return response;
+            ActionToDo authorAction = identifyCreateAmendActionForAuthorEntity(author);
+            return processCreateAmendAction(authorAction);
+
+        }else{
+
+            // assume it was an author list
+
+            List<ActionToDo> actions = new ArrayList();
+
+            // process author list
+            for( AuthorEntity anAuthor : authorList.authors){
+                actions.add(identifyCreateAmendActionForAuthorEntity(anAuthor));
             }
 
-            // does it have an id?
-            if(author.id ==null || author.id.length()==0){
+            List<EntityResponse> responses = new ArrayList<>();
+            for(ActionToDo action : actions){
 
-                PulpAuthor existingAuthor = bookdata.authors().findByName(author.name);
-                if(existingAuthor!=PulpAuthor.UNKNOWN_AUTHOR){
-                    response.setErrorStatus(409, String.format("Cannot create author. Author '%s' already exists with id %s.", existingAuthor.getName(), existingAuthor.getId()));
-                    addLocationHeaderFor(response, existingAuthor);
-                    return response;
-                }
-
-                // we need to allocate an id and treat this as a create
-                actualAuthor = bookdata.authors().add(author.name);
-                response.setSuccessStatus(201, convertor.toJson(actualAuthor));
-                addLocationHeaderFor(response, actualAuthor);
-
-            }else{
-                // treat this as an amend
-                actualAuthor = bookdata.authors().get(author.id);
-                if(actualAuthor== PulpAuthor.UNKNOWN_AUTHOR){
-                    response.setErrorStatus(404, String.format("Unknown Author %s", author.id));
-                    return response;
-                }
-
-                actualAuthor.amendName(author.name);
-                response.setSuccessStatus(200, convertor.toJson(actualAuthor));
+                responses.add(processCreateAmendAction(action));
             }
+
+            // TODO - fix this egregious hack and create a proper bulk report entity
+            response.setSuccessStatus(200, new Gson().toJson(responses));
 
         }
 
         return response;
     }
 
-    private void addLocationHeaderFor(final EntityResponse response, final PulpAuthor theAuthor) {
-        response.addHeader("location", rooturl + "/authors/" + theAuthor.getId());
+    private EntityResponse processCreateAmendAction(final ActionToDo action) {
+
+        if(action.errorMessage!=null){
+            EntityResponse response = new EntityResponse().setErrorStatus(action.errorStatus, action.errorMessage);
+            for(String headerKey : action.headers.keySet()){
+                response.addHeader(headerKey, action.headers.get(headerKey));
+            }
+            return response;
+        }
+
+        if(action.actionName.contentEquals("CREATE")){
+            if(action.authorEntityToActOn!=null){
+                final PulpAuthor actualAuthor = bookdata.authors().add(action.authorEntityToActOn.name);
+                EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(actualAuthor));
+                response.addHeader("location", getLocationHeaderFor(actualAuthor));
+                return response;
+            }
+        }
+        if(action.actionName.contentEquals("AMEND")){
+            if(action.authorEntityToActOn!=null){
+                final PulpAuthor actualAuthor = bookdata.authors().get(action.authorEntityToActOn.id);
+                actualAuthor.amendName(action.authorEntityToActOn.name);
+                EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actualAuthor));
+                return response;
+            }
+        }
+
+        return new EntityResponse().setErrorStatus(500, "Could not process action : " + new Gson().toJson(action));
+
+    }
+
+    private ActionToDo identifyCreateAmendActionForAuthorEntity(final AuthorEntity author) {
+
+        final ActionToDo action = new ActionToDo();
+
+        // ACTION: ERROR, 400, message
+        if(author.name == null || author.name.length()==0){
+            return action.isError(400, String.format("Author name cannot be empty"));
+        }
+
+        // ACTION: ERROR, 409, message, headers
+        // ACTION: ERROR, 404, message
+        // ACTION: CREATE, AuthorEntity
+        // ACTION: AMEND, AuthorEntity
+
+        // does it have an id?
+        if(author.id ==null || author.id.length()==0){
+
+            PulpAuthor existingAuthor = bookdata.authors().findByName(author.name);
+
+            if(existingAuthor!=PulpAuthor.UNKNOWN_AUTHOR){
+                return action.isError(409, String.format("Cannot create author. Author '%s' already exists with id %s.", existingAuthor.getName(), existingAuthor.getId())).
+                        withHeader("location", getLocationHeaderFor(existingAuthor));
+            }
+
+            // OK, we will create this
+            return action.isCreate(author);
+
+        }else{
+            // treat this as an amend
+            if(bookdata.authors().get(author.id) == PulpAuthor.UNKNOWN_AUTHOR){
+                return action.isError(404, String.format("Unknown Author %s", author.id));
+            }
+
+            return action.isAmend(author);
+        }
+    }
+
+    public EntityResponse createAmendSeries(final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        return null;
+    }
+
+    private String getLocationHeaderFor(final PulpAuthor theAuthor) {
+        return rooturl + "/authors/" + theAuthor.getId();
     }
 
     public PulpEntities setRootUrl(final String rootUrl) {
         this.rooturl = rootUrl;
         return this;
     }
+
+
 }
