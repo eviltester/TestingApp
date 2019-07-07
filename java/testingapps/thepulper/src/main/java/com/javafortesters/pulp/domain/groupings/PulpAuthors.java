@@ -29,7 +29,7 @@ public class PulpAuthors {
 
 
     private PulpAuthor getNextAuthor(String authorName) {
-        return new PulpAuthor(String.valueOf(key++), authorName);
+        return new PulpAuthor(getNextAuthorId(), authorName);
     }
 
     public PulpAuthor get(String key) {
@@ -94,5 +94,9 @@ public class PulpAuthors {
         }
 
         return authors.remove(get(id));
+    }
+
+    public String getNextAuthorId() {
+        return String.valueOf(key++);
     }
 }

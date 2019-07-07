@@ -3,6 +3,10 @@ package com.javafortesters.pulp.api;
 import com.google.gson.Gson;
 import com.javafortesters.pulp.api.entities.EntityResponseErrorMessage;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class EntityResponse {
 
     private int statusCode;
@@ -10,12 +14,14 @@ public class EntityResponse {
     private boolean errorResponse;
     private String responseBody;
     private String format = "application/json";
+    private Map<String, String> headers;
 
     public EntityResponse(){
         statusCode = 200;
         errorMessage = "";
         errorResponse=false;
         responseBody="{}";
+        headers = new HashMap<>();
     }
 
     private void setStatus(final int statusCode) {
@@ -68,5 +74,17 @@ public class EntityResponse {
 
     public String getContentType() {
         return format;
+    }
+
+    public void addHeader(final String key, final String value) {
+        headers.put(key, value);
+    }
+
+    public Set<String> getHeaderNames() {
+        return headers.keySet();
+    }
+
+    public String getHeaderValue(final String headerkey) {
+        return headers.get(headerkey);
     }
 }

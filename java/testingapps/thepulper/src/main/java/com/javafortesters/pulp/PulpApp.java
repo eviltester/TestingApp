@@ -20,6 +20,7 @@ public class PulpApp {
 
 
     HtmlReports reports;
+    private String apiRootUrl;
 
     public PulpApp() {
 
@@ -75,5 +76,11 @@ public class PulpApp {
 
     public String getAPISecret() {
         return apisecret;
+    }
+
+    public PulpApp setApiRootUrl(final String rootUrl) {
+        this.apiRootUrl = rootUrl;
+        entities.setRootUrl(rootUrl);
+        return this;
     }
 }

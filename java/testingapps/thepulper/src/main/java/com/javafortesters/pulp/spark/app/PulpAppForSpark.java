@@ -107,6 +107,7 @@ public class PulpAppForSpark {
             session.maxInactiveInterval(MAX_SESSION_LENGTH);
 
             sessionPulpApp = new PulpApp();
+            sessionPulpApp.setApiRootUrl("/apps/pulp/api");
             sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
             sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
             sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
@@ -159,6 +160,9 @@ public class PulpAppForSpark {
     public String apiEntityResponse(Response res, final EntityResponse response){
         res.status(response.getStatusCode());
         res.header("content-type", response.getContentType());
+        for(String headerkey : response.getHeaderNames()){
+            res.header(headerkey, response.getHeaderValue(headerkey));
+        }
         if(response.isError()){
             return response.getErrorMessage();
         }else{
@@ -247,8 +251,11 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
+            post("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createAmendAuthor(req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            });
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
