@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO Refactor this for common elements
+
 public class PulpEntities {
     private final PulpData bookdata;
     private final DomainToEntityConvertor convertor;;
