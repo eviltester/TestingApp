@@ -147,10 +147,15 @@ public class PulpAppForSpark {
 
             hackGuiSessionToKeepItAliveFromApi(session, System.currentTimeMillis());
 
+
         }catch(Exception e){
             // session is not valid
             if(session!=null) {
-                session.invalidate();
+                try {
+                    session.invalidate();
+                }catch(Exception invalidateException){
+
+                }
             }
             api_session_mapping.remove(api_auth_header);
             halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getErrorMessage());
@@ -158,14 +163,33 @@ public class PulpAppForSpark {
         return sessionPulpApp;
     }
 
-    private void hackGuiSessionToKeepItAliveFromApi(final Session session, final long currentTimeMillis){
+    public String getSessionCookieForApi(String api_auth_header){
+        final Session session = api_session_mapping.get(api_auth_header);
+        PulpApp sessionPulpApp=null;
+        try{
+            // access session to see if it is still alive
+            sessionPulpApp = session.attribute(SESSION_APP);
+
+            return hackGuiSessionToKeepItAliveFromApi(session, System.currentTimeMillis());
+
+        }catch(Exception e){
+        }
+        return "";
+    }
+
+    private String hackGuiSessionToKeepItAliveFromApi(final Session session, final long currentTimeMillis){
+        // with code below the session lasted 10 minutes
+        // which is about the same as normal - so this doesn't extend the time
+        // could I send the JSESSION cookie back?
+        // sharing the cookie seemed to work
+
         try{
 
             // trying to access session via api to keep it alive
             // accessing the session from the API does not keep it alive so
             // use reflection to allow me to bump the 'last accessed time' and
             // keep it alive so long as it is being used by the API
-            System.out.println(session.lastAccessedTime());
+            //System.out.println(session.lastAccessedTime());
             // keep session alive by hacking its last accessed time
             Field subsession = session.getClass().getDeclaredField("session"); //NoSuchFieldException
             subsession.setAccessible(true);
@@ -173,10 +197,12 @@ public class PulpAppForSpark {
             Field theData = theSessionWithData.getClass().getDeclaredField("_sessionData"); //NoSuchFieldException
             theData.setAccessible(true);
             final org.eclipse.jetty.server.session.SessionData theSessionData = (org.eclipse.jetty.server.session.SessionData) theData.get(theSessionWithData);
-            theSessionData.setAccessed(System.currentTimeMillis());
-            theSessionData.setLastAccessed(System.currentTimeMillis());
-            System.out.println(session.lastAccessedTime());
+//            theSessionData.setAccessed(System.currentTimeMillis());
+//            theSessionData.setLastAccessed(System.currentTimeMillis());
+            //System.out.println(session.lastAccessedTime());
 
+            //theSessionData.
+            return theSessionData.getId();
 
         }catch(NoSuchFieldException e){
             // couldn't do it
@@ -185,6 +211,8 @@ public class PulpAppForSpark {
             System.out.println("Could not keep session alive - illegal access");
             e.printStackTrace();
         }
+
+        return "";
 
     }
 
@@ -239,6 +267,10 @@ public class PulpAppForSpark {
             // delete any expired sessions for tidy up
             deleteExpiredAPISessions();
 
+            final String jsessionid = getSessionCookieForApi(request.headers("X-API-AUTH"));
+            if(jsessionid!=null && jsessionid.length()>0){
+                response.header("Set-Cookie", "JSESSIONID="+jsessionid);
+            }
 
         });
 
