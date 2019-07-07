@@ -9,11 +9,13 @@ import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.spark.app.crudhandling.AmendFlowsHandler;
 import com.javafortesters.pulp.spark.app.crudhandling.CreateFlowsHandler;
+import org.eclipse.jetty.server.session.SessionData;
 import spark.Request;
 import spark.Response;
 import spark.Session;
 
 
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -140,7 +142,11 @@ public class PulpAppForSpark {
         final Session session = api_session_mapping.get(api_auth_header);
         PulpApp sessionPulpApp=null;
         try{
+            // access session to see if it is still alive
             sessionPulpApp = session.attribute(SESSION_APP);
+
+            hackGuiSessionToKeepItAliveFromApi(session, System.currentTimeMillis());
+
         }catch(Exception e){
             // session is not valid
             if(session!=null) {
@@ -150,6 +156,36 @@ public class PulpAppForSpark {
             halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getErrorMessage());
         }
         return sessionPulpApp;
+    }
+
+    private void hackGuiSessionToKeepItAliveFromApi(final Session session, final long currentTimeMillis){
+        try{
+
+            // trying to access session via api to keep it alive
+            // accessing the session from the API does not keep it alive so
+            // use reflection to allow me to bump the 'last accessed time' and
+            // keep it alive so long as it is being used by the API
+            System.out.println(session.lastAccessedTime());
+            // keep session alive by hacking its last accessed time
+            Field subsession = session.getClass().getDeclaredField("session"); //NoSuchFieldException
+            subsession.setAccessible(true);
+            org.eclipse.jetty.server.session.Session theSessionWithData = (org.eclipse.jetty.server.session.Session) subsession.get(session);
+            Field theData = theSessionWithData.getClass().getDeclaredField("_sessionData"); //NoSuchFieldException
+            theData.setAccessible(true);
+            final org.eclipse.jetty.server.session.SessionData theSessionData = (org.eclipse.jetty.server.session.SessionData) theData.get(theSessionWithData);
+            theSessionData.setAccessed(System.currentTimeMillis());
+            theSessionData.setLastAccessed(System.currentTimeMillis());
+            System.out.println(session.lastAccessedTime());
+
+
+        }catch(NoSuchFieldException e){
+            // couldn't do it
+            System.out.println("Could not keep session alive");
+        } catch (IllegalAccessException e) {
+            System.out.println("Could not keep session alive - illegal access");
+            e.printStackTrace();
+        }
+
     }
 
     public PulpAppForSpark() {
