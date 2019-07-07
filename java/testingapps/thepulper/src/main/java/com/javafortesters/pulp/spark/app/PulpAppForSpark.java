@@ -433,7 +433,6 @@ public class PulpAppForSpark {
 
 
         // TODO: API Session handling (create from API, use from GUI)
-        // TODO: CxUD interaction [R] is done at this point in todo list
         // TODO: xstream for xml to honour content-type and accept headers
 
         // TODO: Future API End Points
