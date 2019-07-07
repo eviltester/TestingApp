@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SeriesListEntity {
 
-    private final List<SeriesEntity> series;
+    public final List<SeriesEntity> series;
 
     public SeriesListEntity(final PulpSeriesCollection dataseries) {
 

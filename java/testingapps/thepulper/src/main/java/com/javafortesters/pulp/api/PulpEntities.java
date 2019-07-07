@@ -8,6 +8,7 @@ import com.javafortesters.pulp.api.entities.single.*;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
 import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.domain.groupings.PulpSeriesCollection;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
@@ -97,8 +98,8 @@ public class PulpEntities {
                                             bookdata.publishers().get(book.getPublisherIndex())
                                             );
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
-        return response;
+        return response.setSuccessStatus(200,new Gson().toJson(entity));
+
     }
 
     public EntityResponse deleteBook(final String bookid, final String accept) {
@@ -128,10 +129,8 @@ public class PulpEntities {
             return response;
         }
 
-        SeriesEntity entity = new SeriesEntity(series.getId(), series.getName());
+        return response.setSuccessStatus(200, convertor.toJson(series));
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
-        return response;
     }
 
     public EntityResponse getAllSeries(final String acceptformat) {
@@ -218,6 +217,7 @@ public class PulpEntities {
         public String errorMessage=null;
         public Map<String, String> headers = new HashMap<>();
         public AuthorEntity authorEntityToActOn;
+        public SeriesEntity seriesEntityToActOn;
 
         public ActionToDo isError(final int status, final String message) {
             actionName = "ERROR";
@@ -242,11 +242,21 @@ public class PulpEntities {
             authorEntityToActOn = author;
             return this;
         }
+
+        public ActionToDo isCreate(final SeriesEntity series) {
+            actionName = "CREATE";
+            seriesEntityToActOn = series;
+            return this;
+        }
+
+        public ActionToDo isAmend(final SeriesEntity series) {
+            actionName = "AMEND";
+            seriesEntityToActOn = series;
+            return this;
+        }
     }
 
     public EntityResponse createAmendAuthor(final String body, final String contentType, final String accept) {
-
-        final EntityResponse response = new EntityResponse();
 
         EntityResponse errorResponse = canProcessContentType(contentType);
         if(errorResponse!=null){
@@ -273,20 +283,22 @@ public class PulpEntities {
         }
 
         if(errorMessage.length()>0){
-            response.setErrorStatus(400, String.format("Cannot process content as Authors %s", errorMessage));
-            return response;
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Authors %s", errorMessage));
         }
 
 
-        // did we get an author?
-        if(author!=null && (author.id!=null && author.name!=null)){
+        // did we get a single author?
+        if(author!=null && author.name!=null){
 
             ActionToDo authorAction = identifyCreateAmendActionForAuthorEntity(author);
             return processCreateAmendAction(authorAction);
 
         }else{
 
-            // assume it was an author list
+            if(authorList == null || authorList.authors == null){
+                // that was not an authors list
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Authors %s", errorMessage));
+            }
 
             List<ActionToDo> actions = new ArrayList();
 
@@ -302,41 +314,59 @@ public class PulpEntities {
             }
 
             // TODO - fix this egregious hack and create a proper bulk report entity
-            response.setSuccessStatus(200, new Gson().toJson(responses));
+            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
 
         }
 
-        return response;
     }
 
     private EntityResponse processCreateAmendAction(final ActionToDo action) {
 
-        if(action.errorMessage!=null){
-            EntityResponse response = new EntityResponse().setErrorStatus(action.errorStatus, action.errorMessage);
-            for(String headerKey : action.headers.keySet()){
-                response.addHeader(headerKey, action.headers.get(headerKey));
-            }
-            return response;
-        }
+        String exceptionMessage = "";
 
-        if(action.actionName.contentEquals("CREATE")){
-            if(action.authorEntityToActOn!=null){
-                final PulpAuthor actualAuthor = bookdata.authors().add(action.authorEntityToActOn.name);
-                EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(actualAuthor));
-                response.addHeader("location", getLocationHeaderFor(actualAuthor));
+        try{
+            if(action.errorMessage!=null){
+                EntityResponse response = new EntityResponse().setErrorStatus(action.errorStatus, action.errorMessage);
+                for(String headerKey : action.headers.keySet()){
+                    response.addHeader(headerKey, action.headers.get(headerKey));
+                }
                 return response;
             }
-        }
-        if(action.actionName.contentEquals("AMEND")){
-            if(action.authorEntityToActOn!=null){
-                final PulpAuthor actualAuthor = bookdata.authors().get(action.authorEntityToActOn.id);
-                actualAuthor.amendName(action.authorEntityToActOn.name);
-                EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actualAuthor));
-                return response;
+
+            if(action.actionName.contentEquals("CREATE")){
+                if(action.authorEntityToActOn!=null){
+                    final PulpAuthor actualAuthor = bookdata.authors().add(action.authorEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(actualAuthor));
+                    response.addHeader("location", getLocationHeaderFor(actualAuthor));
+                    return response;
+                }
+                if(action.seriesEntityToActOn!=null){
+                    final PulpSeries created = bookdata.series().add(action.seriesEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(created));
+                    response.addHeader("location", getLocationHeaderFor(created));
+                    return response;
+                }
             }
+            if(action.actionName.contentEquals("AMEND")){
+                if(action.authorEntityToActOn!=null){
+                    final PulpAuthor actual = bookdata.authors().get(action.authorEntityToActOn.id);
+                    actual.amendName(action.authorEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
+                    return response;
+                }
+                if(action.seriesEntityToActOn!=null){
+                    final PulpSeries actual = bookdata.series().get(action.seriesEntityToActOn.id);
+                    actual.amendName(action.seriesEntityToActOn.name);
+                    EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
+                    return response;
+                }
+            }
+        }catch(Exception e) {
+            exceptionMessage = e.getMessage();
         }
 
-        return new EntityResponse().setErrorStatus(500, "Could not process action : " + new Gson().toJson(action));
+        return new EntityResponse().setErrorStatus(500, "Could not process action : " + new Gson().toJson(action) + " " + exceptionMessage);
+
 
     }
 
@@ -377,6 +407,44 @@ public class PulpEntities {
         }
     }
 
+    private ActionToDo identifyCreateAmendActionForSeriesEntity(final SeriesEntity series) {
+        final ActionToDo action = new ActionToDo();
+
+        // ACTION: ERROR, 400, message
+        if(series.name == null || series.name.length()==0){
+            return action.isError(400, String.format("Series name cannot be empty"));
+        }
+
+        // ACTION: ERROR, 409, message, headers
+        // ACTION: ERROR, 404, message
+        // ACTION: CREATE, AuthorEntity
+        // ACTION: AMEND, AuthorEntity
+
+        // does it have an id?
+        if(series.id ==null || series.id.length()==0){
+
+            PulpSeries existing = bookdata.series().findByName(series.name);
+
+            if(existing!=PulpSeries.UNKNOWN_SERIES){
+                return action.isError(409, String.format("Cannot create series. Series '%s' already exists with id %s.", existing.getName(), existing.getId())).
+                        withHeader("location", getLocationHeaderFor(existing));
+            }
+
+            // OK, we will create this
+            return action.isCreate(series);
+
+        }else{
+            // treat this as an amend
+            if(bookdata.series().get(series.id) == PulpSeries.UNKNOWN_SERIES){
+                return action.isError(404, String.format("Unknown Series %s", series.id));
+            }
+
+            return action.isAmend(series);
+        }
+    }
+
+
+
     public EntityResponse createAmendSeries(final String body, final String contentType, final String accept) {
 
         EntityResponse errorResponse = canProcessContentType(contentType);
@@ -384,11 +452,69 @@ public class PulpEntities {
             return errorResponse;
         }
 
-        return null;
+        String errorMessage = "";
+
+        SeriesEntity series=null;
+        SeriesListEntity seriesList= new SeriesListEntity(new PulpSeriesCollection());
+
+        try {
+            series = new Gson().fromJson(body, SeriesEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an series, is it a list of series?
+            errorMessage = e.getMessage();
+        }
+
+        try {
+            seriesList = new Gson().fromJson(body, SeriesListEntity.class);
+        }catch (Exception e2){
+            // nope - can't accept this then
+            errorMessage = errorMessage + " , " + e2.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
+
+
+        // did we get a single series?
+        if(series!=null && series.name!=null){
+
+            ActionToDo action = identifyCreateAmendActionForSeriesEntity(series);
+            return processCreateAmendAction(action);
+
+        }else{
+
+            if(seriesList == null || seriesList.series == null){
+                // that was not a Series list
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+            }
+
+            List<ActionToDo> actions = new ArrayList();
+
+            // process author list
+            for( SeriesEntity aSeries : seriesList.series){
+                actions.add(identifyCreateAmendActionForSeriesEntity(aSeries));
+            }
+
+            List<EntityResponse> responses = new ArrayList<>();
+            for(ActionToDo action : actions){
+
+                responses.add(processCreateAmendAction(action));
+            }
+
+            // TODO - fix this egregious hack and create a proper bulk report entity
+            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
+
+        }
     }
+
+
 
     private String getLocationHeaderFor(final PulpAuthor theAuthor) {
         return rooturl + "/authors/" + theAuthor.getId();
+    }
+    private String getLocationHeaderFor(final PulpSeries existing) {
+        return rooturl + "/series/" + existing.getId();
     }
 
     public PulpEntities setRootUrl(final String rootUrl) {

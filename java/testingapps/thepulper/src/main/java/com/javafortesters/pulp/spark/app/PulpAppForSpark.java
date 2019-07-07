@@ -355,7 +355,7 @@ public class PulpAppForSpark {
             });
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD");
+                res.header("Allow", "OPTIONS, GET, HEAD, POST");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
