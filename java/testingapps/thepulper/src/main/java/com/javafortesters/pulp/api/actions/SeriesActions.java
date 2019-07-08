@@ -211,4 +211,58 @@ public class SeriesActions {
     private String getLocationHeaderFor(final PulpSeries existing) {
         return rooturl + "/series/" + existing.getId();
     }
+
+    public EntityResponse patchAmend(final String seriesId, final String body, final String contentType, final String accept) {
+
+        if(contentType==null || (!contentType.endsWith("json"))){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content-type %s", contentType));
+        }
+
+        String errorMessage = "";
+
+        SeriesEntity series=null;
+
+        try {
+            series = new Gson().fromJson(body, SeriesEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an series, is it a list of series?
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
+
+        PulpSeries actualSeries = bookdata.series().get(seriesId);
+        if(actualSeries==null || actualSeries==PulpSeries.UNKNOWN_SERIES){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Series %s", seriesId));
+        }
+
+        // did we get a single series?
+        if(series!=null && series.name!=null){
+
+            if(series.id!=null && series.id.length()>0){
+                // do not allow creation of series with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot change Series ID"));
+            }
+
+            if(series.name.length()<=0){
+                // do not allow creation of series with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Series Name '%s'", series.name));
+            }
+
+            // do not allow amendment to duplicate a series name
+            final PulpSeries existingNamedSeries = bookdata.series().findByName(series.name);
+            if( existingNamedSeries != actualSeries && existingNamedSeries!= PulpSeries.UNKNOWN_SERIES ){
+                return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Series '%s', %s to same name as %s", actualSeries.getName(), actualSeries.getId(), existingNamedSeries.getId()));
+            }
+
+            return new ActionProcessor(bookdata, convertor, rooturl).process(
+                    new ActionToDo().isAmend(
+                            new SeriesEntity(actualSeries.getId(), series.name)));
+
+        }else{
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
+    }
 }

@@ -278,7 +278,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/authors/:authorid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT, PATCH");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -302,8 +302,10 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            patch("",  (req, res) -> {  final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchAuthor(req.params(":authorid"),req.body(),req.headers("content-type"),req.headers("Accept"));
-                return apiEntityResponse(res, response);});
+            patch("",  (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchAuthor(req.params(":authorid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
 
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});  // TODO: POST would be the same as PUT - unless we add other fields to an author e.g. description, DOB, Date of Death
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
@@ -402,7 +404,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/series/:seriesid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT, PATCH");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -423,6 +425,12 @@ public class PulpAppForSpark {
 
             put("",     (req, res) -> {
                 final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createReplaceSeries(req.params(":seriesid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+
+            patch("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchSeries(req.params(":seriesid"),req.body(),req.headers("content-type"),req.headers("Accept"));
                 return apiEntityResponse(res, response);
             });
 
@@ -462,7 +470,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/publishers/:publisherid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT, PATCH");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -487,9 +495,14 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
+            patch("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchPublisher(req.params(":publisherid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);}); // TODO: post would be the same as put, unless it has more fields e.g. description, aliases, founded, closed, etc.
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+
         });
 
         path("/apps/pulp/api/publishers", () -> {
