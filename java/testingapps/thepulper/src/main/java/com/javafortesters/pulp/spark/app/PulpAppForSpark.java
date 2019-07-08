@@ -26,10 +26,10 @@ import static spark.Spark.*;
 
 Basic plan
 
-| Resource   |  GET (read)  | POST (create, amend) | PUT (create, replace)        | DELETE          |
-|------------|--------------|----------------------|------------------------------|-----------------|
-| /plural    | list of X    | create/amend an item | create/replace full payloads | 405 NOT ALLOWED |
-| /plural/id | specific X   | 405 NOT ALLOWED      | replace with full payload    | delete specific |
+| Resource   |  GET (read)  | POST (create, amend)    | PUT (create, replace)        | DELETE          | PATCH                 |
+|------------|--------------|-------------------------|------------------------------|-----------------|-----------------------|
+| /plural    | list of X    | create/amend an item(s) | 405 NOT ALLOWED              | 405 NOT ALLOWED | 405 NOT ALLOWED       |
+| /plural/id | specific X   | 405 NOT ALLOWED         | replace with full payload    | delete specific | partial field replace |
 
 
 TODO: search/filtering by fields for GET lists  /plural?fieldname=value&fieldname2<=value
@@ -39,12 +39,15 @@ TODO: sorting on lists  /plural?sort=
 
 Done:
 
+HEAD plural/id
+HEAD plural
 GET /plural
 GET /plural/id
 DELETE /plural/id
+POST /plural  (single, and multiple items)
+PUT plural/id
 
-
- */
+*/
 
 public class PulpAppForSpark {
 
@@ -563,9 +566,6 @@ public class PulpAppForSpark {
         });
 
         // TODO: API Session handling (create from API, use from GUI)
-
-        // TODO: PATCH book
-
 
         // TODO: xstream for xml to honour content-type and accept headers
 

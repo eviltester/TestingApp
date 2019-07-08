@@ -231,7 +231,7 @@ public class ActionProcessor {
 
             return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
         }
-        
+
         return new EntityResponse().setErrorStatus(500, String.format("Error processing action %s", new Gson().toJson(action)));
     }
 
