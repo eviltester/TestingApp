@@ -9,7 +9,6 @@ import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.spark.app.crudhandling.AmendFlowsHandler;
 import com.javafortesters.pulp.spark.app.crudhandling.CreateFlowsHandler;
-import org.eclipse.jetty.server.session.SessionData;
 import spark.Request;
 import spark.Response;
 import spark.Session;
@@ -495,17 +494,27 @@ public class PulpAppForSpark {
 
 
         // TODO: API Session handling (create from API, use from GUI)
+
+        // TODO: PUT publisher
+        // TODO: PUT series
+        // TODO: PUT book
+        // TODO: PATCH author
+        // TODO: PATCH publisher
+        // TODO: PATCH series
+        // TODO: PATCH book
+
+
         // TODO: xstream for xml to honour content-type and accept headers
 
         // TODO: Future API End Points
 
-        // /apps/pulp/api/books/id/publishers
-        // Amend publishers for a book
-        // /apps/pulp/api/books/id/series
-        // Amend series for a book
-        // /apps/pulp/api/books/id/authors
-        // Amend authors for a book
+        // /apps/pulp/api/heartbeat is the api running? 204 yes
+        // /apps/pulp/api/xapiauth/:auth does it exist? 204, 404
+            // create a /gui link that allows us to set the JSESSION id and see a specific API session i.e. start with API and move to GUI
+            // {"JSESSIONID":"sessionid","guiurl":"url"}  // also add a LOCATION header so can trigger from the browser
+        // /apps/pulp/api/xapiauth get an API session
 
+        // GET
         // /apps/pulp/api/publishers/id/series
         // /apps/pulp/api/publishers/id/authors
         // /apps/pulp/api/publishers/id/books
