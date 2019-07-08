@@ -165,7 +165,9 @@ public class ActionProcessor {
                 actualBook.addCoAuthor(addAuthor.getId());
             }
 
-            return new EntityResponse().setSuccessStatus(201, convertor.toJson(actualBook, bookdata));
+            return new EntityResponse().
+                            setSuccessStatus(201, convertor.toJson(actualBook, bookdata)).
+                            addHeader("location", getLocationHeaderFor(actualBook));
 
         }
 
@@ -210,9 +212,12 @@ public class ActionProcessor {
         return new EntityResponse().setErrorStatus(500, String.format("Error processing action %s", new Gson().toJson(action)));
     }
 
+    private String getLocationHeaderFor(final PulpBook existing) {
+        return rooturl + "/books/" + existing.getId();
+    }
 
-    private String getLocationHeaderFor(final PulpAuthor theAuthor) {
-        return rooturl + "/authors/" + theAuthor.getId();
+    private String getLocationHeaderFor(final PulpAuthor existing) {
+        return rooturl + "/authors/" + existing.getId();
     }
 
     private String getLocationHeaderFor(final PulpSeries existing) {

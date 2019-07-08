@@ -76,8 +76,9 @@ public class EntityResponse {
         return format;
     }
 
-    public void addHeader(final String key, final String value) {
+    public EntityResponse addHeader(final String key, final String value) {
         headers.put(key, value);
+        return this;
     }
 
     public Set<String> getHeaderNames() {
