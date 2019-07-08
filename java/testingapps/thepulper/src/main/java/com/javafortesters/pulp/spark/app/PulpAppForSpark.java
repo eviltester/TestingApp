@@ -302,9 +302,12 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
+            patch("",  (req, res) -> {  final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchAuthor(req.params(":authorid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);});
+
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});  // TODO: POST would be the same as PUT - unless we add other fields to an author e.g. description, DOB, Date of Death
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+
         });
 
         path("/apps/pulp/api/authors", () -> {
@@ -554,7 +557,6 @@ public class PulpAppForSpark {
 
         // TODO: Future API End Points
 
-        // /apps/pulp/api/heartbeat is the api running? 204 yes
         // /apps/pulp/api/xapiauth/:auth does it exist? 204, 404
             // create a /gui link that allows us to set the JSESSION id and see a specific API session i.e. start with API and move to GUI
             // {"JSESSIONID":"sessionid","guiurl":"url"}  // also add a LOCATION header so can trigger from the browser

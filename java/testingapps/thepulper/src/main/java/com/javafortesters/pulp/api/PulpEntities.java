@@ -101,4 +101,7 @@ public class PulpEntities {
         return new BookActions(bookdata, convertor, rooturl).createAmend(body, contentType, accept);
     }
 
+    public EntityResponse patchAuthor(final String authorid, final String body, final String contentType, final String accept) {
+        return new AuthorActions(bookdata, convertor, rooturl).patchAmend(authorid, body, contentType, accept);
+    }
 }

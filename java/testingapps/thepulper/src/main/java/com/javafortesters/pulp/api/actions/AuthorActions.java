@@ -203,7 +203,64 @@ public class AuthorActions {
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Author Name '%s'", author.name));
             }
 
-            // do not allow amendment to duplicate an exising name
+            // do not allow amendment to duplicate an existing name
+            final PulpAuthor existingNamed = bookdata.authors().findByName(author.name);
+            if( existingNamed != actualAuthor && existingNamed!= PulpAuthor.UNKNOWN_AUTHOR ){
+                return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Author '%s', %s to same name as %s", actualAuthor.getName(), actualAuthor.getId(), existingNamed.getId()));
+            }
+
+
+            return new ActionProcessor(bookdata, convertor, rooturl).process(
+                    new ActionToDo().isAmend(
+                            new AuthorEntity(actualAuthor.getId(), author.name)));
+
+        }else{
+
+            // that was not an author
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
+        }
+    }
+
+    public EntityResponse patchAmend(final String authorid, final String body, final String contentType, final String accept) {
+        if (contentType == null || (!contentType.endsWith("json"))) {
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content-type %s", contentType));
+        }
+
+        String errorMessage = "";
+
+        AuthorEntity author = null;
+
+        try {
+            author = new Gson().fromJson(body, AuthorEntity.class);
+        } catch (Exception e) {
+            // ok, it isn't an author, is it a list of authors?
+            errorMessage = e.getMessage();
+        }
+
+        if (errorMessage.length() > 0) {
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
+        }
+
+        PulpAuthor actualAuthor = bookdata.authors().get(authorid);
+        if (actualAuthor == null || actualAuthor == PulpAuthor.UNKNOWN_AUTHOR) {
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Author %s", authorid));
+        }
+
+        // act on fields
+        // did we get a single author?
+        if(author!=null && author.name!=null){
+
+            if(author.id!=null && author.id.length()>0){
+                // do not allow creation of author with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot change Author id"));
+            }
+
+            if(author.name.length()<=0){
+                // do not allow creation of author with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Author Name '%s'", author.name));
+            }
+
+            // do not allow amendment to duplicate an existing name
             final PulpAuthor existingNamed = bookdata.authors().findByName(author.name);
             if( existingNamed != actualAuthor && existingNamed!= PulpAuthor.UNKNOWN_AUTHOR ){
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Author '%s', %s to same name as %s", actualAuthor.getName(), actualAuthor.getId(), existingNamed.getId()));
