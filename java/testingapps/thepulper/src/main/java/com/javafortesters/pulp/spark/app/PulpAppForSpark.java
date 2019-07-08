@@ -178,30 +178,20 @@ public class PulpAppForSpark {
     }
 
     private String hackGuiSessionToKeepItAliveFromApi(final Session session, final long currentTimeMillis){
-        // with code below the session lasted 10 minutes
-        // which is about the same as normal - so this doesn't extend the time
-        // could I send the JSESSION cookie back?
-        // sharing the cookie seemed to work
+        // wanted to have the API keep the session alive
+        // tried to use reflection to change lastaccessedtime on the session byt that didn't extend time
+        // instead, pull out the JSESSIONID and send it back in SET-COOKIE responses
+        // TODO - only send SET-COOKIE if the cookie is not set in the request
 
         try{
 
-            // trying to access session via api to keep it alive
-            // accessing the session from the API does not keep it alive so
-            // use reflection to allow me to bump the 'last accessed time' and
-            // keep it alive so long as it is being used by the API
-            //System.out.println(session.lastAccessedTime());
-            // keep session alive by hacking its last accessed time
-            Field subsession = session.getClass().getDeclaredField("session"); //NoSuchFieldException
+            Field subsession = session.getClass().getDeclaredField("session");
             subsession.setAccessible(true);
             org.eclipse.jetty.server.session.Session theSessionWithData = (org.eclipse.jetty.server.session.Session) subsession.get(session);
-            Field theData = theSessionWithData.getClass().getDeclaredField("_sessionData"); //NoSuchFieldException
+            Field theData = theSessionWithData.getClass().getDeclaredField("_sessionData");
             theData.setAccessible(true);
             final org.eclipse.jetty.server.session.SessionData theSessionData = (org.eclipse.jetty.server.session.SessionData) theData.get(theSessionWithData);
-//            theSessionData.setAccessed(System.currentTimeMillis());
-//            theSessionData.setLastAccessed(System.currentTimeMillis());
-            //System.out.println(session.lastAccessedTime());
 
-            //theSessionData.
             return theSessionData.getId();
 
         }catch(NoSuchFieldException e){

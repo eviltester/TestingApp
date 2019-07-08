@@ -720,7 +720,7 @@ public class PulpEntities {
             if(series!=null) {
                 actualBook.amendSeries(series.getId());
             }
-            actualBook.amendAuthors(authorIds);
+            actualBook.amendPatchAuthors(authorIds);
             actualBook.amendSeriesIdentifier(bookDetails.seriesId);
             return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
         }

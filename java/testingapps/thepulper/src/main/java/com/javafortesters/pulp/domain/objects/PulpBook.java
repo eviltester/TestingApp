@@ -244,6 +244,9 @@ public class PulpBook {
         return this;
     }
 
+    /*
+        This amend replaces the existing authors with the supplied list
+     */
     public boolean amendAuthors(final List<String> authorIds) {
 
         if(authorIds==null){
@@ -256,6 +259,29 @@ public class PulpBook {
 
         authorIndexNames.clear();
         authorIndexNames.addAll(authorIds);
+        return true;
+    }
+
+    /*
+        This amend adds the supplied authors to the list.
+     */
+    public boolean amendPatchAuthors(final List<String> authorIds) {
+
+        if(authorIds==null){
+            return false;
+        }
+
+        if(authorIds.size()==0){
+            return false;
+        }
+
+        // TODO: perhaps authorIndexNames should be a Set instead of a list?
+        for(String authorId : authorIds){
+            if(!authorIndexNames.contains(authorId)){
+                authorIndexNames.add(authorId);
+            }
+        }
+
         return true;
     }
 
