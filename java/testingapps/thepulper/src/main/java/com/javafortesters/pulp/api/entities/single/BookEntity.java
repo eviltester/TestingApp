@@ -34,4 +34,18 @@ public class BookEntity {
 
         this.publisher = new PublisherEntity(pulpPublisher.getId(), pulpPublisher.getName());
     }
+
+    public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
+                      final SeriesEntity pulpSeries, final List<AuthorEntity> allAuthors, final PublisherEntity pulpPublisher) {
+        this.id = id;
+        this.title = title;
+        this.publicationYear = publicationYear;
+        this.seriesId = seriesId;
+
+        this.series = pulpSeries;
+
+        this.authors = allAuthors;
+
+        this.publisher = pulpPublisher;
+    }
 }

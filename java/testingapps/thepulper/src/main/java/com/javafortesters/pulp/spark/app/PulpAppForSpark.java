@@ -327,7 +327,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/books/:bookid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -346,8 +346,12 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createReplaceBook(req.params(":bookid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);}); // TODO: a POST could partially amend a book
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
@@ -374,6 +378,7 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
 
             });
+
             put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});

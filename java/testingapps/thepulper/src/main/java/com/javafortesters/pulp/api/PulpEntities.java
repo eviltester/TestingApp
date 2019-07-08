@@ -96,7 +96,7 @@ public class PulpEntities {
             return response;
         }
 
-        return new EntityResponse().setSuccessStatus(201, convertor.toJson(book, bookdata));
+        return new EntityResponse().setSuccessStatus(200, convertor.toJson(book, bookdata));
 
 
 
@@ -278,6 +278,12 @@ public class PulpEntities {
 
         public ActionToDo isAmend(final BookEntity book) {
             actionName = "AMEND";
+            bookEntityToActOn = book;
+            return this;
+        }
+
+        public ActionToDo isReplace(final BookEntity book) {
+            actionName = "REPLACE";
             bookEntityToActOn = book;
             return this;
         }
@@ -485,7 +491,7 @@ public class PulpEntities {
 
         PulpPublisher actualPublisher = bookdata.publishers().get(publisherid);
         if(actualPublisher==null || actualPublisher==PulpPublisher.UNKNOWN_PUBLISHER){
-            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Publisher %s", publisher));
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Publisher %s", publisherid));
         }
 
         // did we get a single publisher?
@@ -513,6 +519,88 @@ public class PulpEntities {
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publisher %s", errorMessage));
+        }
+    }
+
+    public EntityResponse createReplaceBook(final String bookid, final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        BookEntity book=null;
+
+        try {
+            book = new Gson().fromJson(body, BookEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an publisher
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));
+        }
+
+        PulpBook actualBook = bookdata.books().get(bookid);
+        if(actualBook==null || actualBook==PulpBook.UNKNOWN_BOOK){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Book %s", bookid));
+        }
+
+        // did we get a single book?
+        if(book!=null && book.title!=null){
+
+            if(book.id!=null && book.id.length()>0){
+                // do not allow creation of book with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot create Book '%s' with a defined id %s", book.title, book.id));
+            }
+
+            if(book.title.length()<=0){
+                // do not allow creation of publisher with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
+            }
+
+            if(book.title.length()<=0){
+                // do not allow creation of publisher with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
+            }
+
+            if(book.publicationYear<=0){
+                // do not allow creation of publisher with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Publication Year '%d'", book.publicationYear));
+            }
+
+            if(book.seriesId==null || book.seriesId.length()==0){
+                // do not allow creation of book with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid SeriesId"));
+            }
+
+            if(book.series==null || (book.series.id == null && book.series.name == null)){
+                return new EntityResponse().setErrorStatus(400, String.format("Series cannot be empty"));
+            }
+
+            if((book.series.id + book.series.name).length()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Series must be identifiable"));
+            }
+
+            if(book.publisher==null || (book.publisher.id == null && book.publisher.name == null)){
+                return new EntityResponse().setErrorStatus(400, String.format("Publisher cannot be empty"));
+            }
+            if((book.publisher.id + book.publisher.name).length()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Publisher must be identifiable"));
+            }
+            if(book.authors==null || book.authors.size()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Book must have authors"));
+            }
+
+            return processCreateAmendAction(
+                    new ActionToDo().isReplace(
+                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
+
+        }else{
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));
         }
     }
 
@@ -572,6 +660,11 @@ public class PulpEntities {
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
+                if(action.bookEntityToActOn!=null){
+                    return processCreateAmendBookAction(action);
+                }
+            }
+            if(action.actionName.contentEquals("REPLACE")){
                 if(action.bookEntityToActOn!=null){
                     return processCreateAmendBookAction(action);
                 }
@@ -733,7 +826,6 @@ public class PulpEntities {
         }
 
 
-        // This is too complicated
         // publishers, series and authors must exist
 
         PulpPublisher publisher;
@@ -847,7 +939,7 @@ public class PulpEntities {
 
         }
 
-        if(action.actionName.contentEquals("AMEND")) {
+        if(action.actionName.contentEquals("AMEND") || action.actionName.contentEquals("REPLACE")) {
 
             if(publisher!=null && publisher==PulpPublisher.UNKNOWN_PUBLISHER){
                 return new EntityResponse().setErrorStatus(400, String.format("Cannot find publisher %s named: %s", book.publisher.id, book.publisher.name));
@@ -876,7 +968,11 @@ public class PulpEntities {
             if(series!=null) {
                 actualBook.amendSeries(series.getId());
             }
-            actualBook.amendPatchAuthors(authorIds);
+            if(action.actionName.contentEquals("AMEND")) {
+                actualBook.amendPatchAuthors(authorIds);
+            }else{ //  if action.actionName.contentEquals("REPLACE")
+                actualBook.amendAuthors(authorIds);
+            }
             actualBook.amendSeriesIdentifier(bookDetails.seriesId);
             return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
         }
