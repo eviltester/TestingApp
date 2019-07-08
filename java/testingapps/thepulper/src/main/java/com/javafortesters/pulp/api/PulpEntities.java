@@ -387,6 +387,12 @@ public class PulpEntities {
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Author Name '%s'", author.name));
             }
 
+            // do not allow amendment to duplicate an exising name
+            final PulpAuthor existingNamed = bookdata.authors().findByName(author.name);
+            if( existingNamed != actualAuthor && existingNamed!= PulpAuthor.UNKNOWN_AUTHOR ){
+                return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Author '%s', %s to same name as %s", actualAuthor.getName(), actualAuthor.getId(), existingNamed.getId()));
+            }
+
 
             return processCreateAmendAction(
                             new ActionToDo().isAmend(
@@ -440,6 +446,11 @@ public class PulpEntities {
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Series Name '%s'", series.name));
             }
 
+            // do not allow amendment to duplicate a series name
+            final PulpSeries existingNamedSeries = bookdata.series().findByName(series.name);
+            if( existingNamedSeries != actualSeries && existingNamedSeries!= PulpSeries.UNKNOWN_SERIES ){
+                return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Series '%s', %s to same name as %s", actualSeries.getName(), actualSeries.getId(), existingNamedSeries.getId()));
+            }
 
             return processCreateAmendAction(
                     new ActionToDo().isAmend(
@@ -447,6 +458,61 @@ public class PulpEntities {
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
+    }
+
+    public EntityResponse createReplacePublisher(final String publisherid, final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        PublisherEntity publisher=null;
+
+        try {
+            publisher = new Gson().fromJson(body, PublisherEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an publisher
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publisher %s", errorMessage));
+        }
+
+        PulpPublisher actualPublisher = bookdata.publishers().get(publisherid);
+        if(actualPublisher==null || actualPublisher==PulpPublisher.UNKNOWN_PUBLISHER){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Publisher %s", publisher));
+        }
+
+        // did we get a single publisher?
+        if(publisher!=null && publisher.name!=null){
+
+            if(publisher.id!=null && publisher.id.length()>0){
+                // do not allow creation of series with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot create Publisher '%s' with a defined id %s", publisher.name, publisher.id));
+            }
+
+            if(publisher.name.length()<=0){
+                // do not allow creation of publisher with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Publisher Name '%s'", publisher.name));
+            }
+
+            // do not allow amendment to duplicate an existing name
+            final PulpPublisher existingNamed = bookdata.publishers().findByName(publisher.name);
+            if( existingNamed != actualPublisher && existingNamed!= PulpPublisher.UNKNOWN_PUBLISHER ){
+                return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Publisher '%s', %s to same name as %s", actualPublisher.getName(), actualPublisher.getId(), existingNamed.getId()));
+            }
+
+            return processCreateAmendAction(
+                    new ActionToDo().isAmend(
+                            new PublisherEntity(actualPublisher.getId(), publisher.name)));
+
+        }else{
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publisher %s", errorMessage));
         }
     }
 
