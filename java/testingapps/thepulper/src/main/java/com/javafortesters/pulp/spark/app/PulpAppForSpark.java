@@ -501,9 +501,7 @@ public class PulpAppForSpark {
 
 
         // TODO: API Session handling (create from API, use from GUI)
-
-        // TODO: PUT publisher
-        // TODO: PUT series
+        
         // TODO: PUT book
         // TODO: PATCH author
         // TODO: PATCH publisher
