@@ -100,22 +100,14 @@ public class BookActions {
             }
 
             if(book.title.length()<=0){
-                // do not allow creation of publisher with PUT with invalid name
-                return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
-            }
-
-            if(book.title.length()<=0){
-                // do not allow creation of publisher with PUT with invalid name
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
             }
 
             if(book.publicationYear<=0){
-                // do not allow creation of publisher with PUT with invalid name
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Publication Year '%d'", book.publicationYear));
             }
 
             if(book.seriesId==null || book.seriesId.length()==0){
-                // do not allow creation of book with PUT
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid SeriesId"));
             }
 
@@ -237,7 +229,7 @@ public class BookActions {
 
         // ACTION: ERROR, 400, message
         if(single.title == null || single.title.length()==0){
-            return new ActionToDo().isError(400, String.format("Series title cannot be empty"));
+            return new ActionToDo().isError(400, String.format("Book title cannot be empty"));
         }
         if(single.series==null || (single.series.id == null && single.series.name == null)){
             return new ActionToDo().isError(400, String.format("Series cannot be empty"));
@@ -304,5 +296,75 @@ public class BookActions {
         // OK, we will create this - allow duplicate titles - potentially duplicate books
         return new ActionToDo().isCreate(single);
 
+    }
+
+    public EntityResponse patchAmend(final String bookid, final String body, final String contentType, final String accept) {
+        if(contentType==null || (!contentType.endsWith("json"))){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content-type %s", contentType));
+        }
+
+        String errorMessage = "";
+
+        BookEntity book=null;
+
+        try {
+            book = new Gson().fromJson(body, BookEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an publisher
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));
+        }
+
+        PulpBook actualBook = bookdata.books().get(bookid);
+        if(actualBook==null || actualBook==PulpBook.UNKNOWN_BOOK){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Book %s", bookid));
+        }
+
+        // did we get a single book?
+        if(book!=null){
+
+            if(book.id!=null && book.id.length()>0){
+                // do not allow creation of book with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot change book id"));
+            }
+
+            if(book.title!=null && book.title.trim().length()<=0){
+                // do not allow creation of publisher with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
+            }
+
+            if(book.seriesId!=null && book.seriesId.length()==0){
+                // do not allow creation of book with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid SeriesId"));
+            }
+
+            if(book.series!=null && (book.series.id == null && book.series.name == null)){
+                return new EntityResponse().setErrorStatus(400, String.format("Series cannot be empty"));
+            }
+
+            if(book.series!=null && (book.series.id + book.series.name).trim().length()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Series must be identifiable"));
+            }
+
+            if(book.publisher!=null && (book.publisher.id == null && book.publisher.name == null)){
+                return new EntityResponse().setErrorStatus(400, String.format("Publisher cannot be empty"));
+            }
+            if(book.publisher!=null && (book.publisher.id + book.publisher.name).trim().length()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Publisher must be identifiable"));
+            }
+            if(book.authors!=null && book.authors.size()==0){
+                return new EntityResponse().setErrorStatus(400, String.format("Book must have authors"));
+            }
+
+            return new ActionProcessor(bookdata, convertor, rooturl).process(
+                    new ActionToDo().isPatch(
+                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
+
+        }else{
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));
+        }
     }
 }

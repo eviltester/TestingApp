@@ -85,4 +85,10 @@ public class ActionToDo {
         bookEntityToActOn = book;
         return this;
     }
+
+    public ActionToDo isPatch(final BookEntity book) {
+        actionName = "PATCH";
+        bookEntityToActOn = book;
+        return this;
+    }
 }

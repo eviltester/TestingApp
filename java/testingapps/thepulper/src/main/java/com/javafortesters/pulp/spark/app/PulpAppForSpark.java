@@ -343,7 +343,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/books/:bookid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT, PATCH");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -367,9 +367,13 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
+            patch("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().patchBook(req.params(":bookid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
             post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);}); // TODO: a POST could partially amend a book
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
         path("/apps/pulp/api/books", () -> {
@@ -560,9 +564,6 @@ public class PulpAppForSpark {
 
         // TODO: API Session handling (create from API, use from GUI)
 
-        // TODO: PATCH author
-        // TODO: PATCH publisher
-        // TODO: PATCH series
         // TODO: PATCH book
 
 

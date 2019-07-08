@@ -91,6 +91,11 @@ public class ActionProcessor {
                     return processCreateAmendBookAction(action);
                 }
             }
+            if(action.actionName.contentEquals("PATCH")){
+                if(action.bookEntityToActOn!=null){
+                    return processCreateAmendBookAction(action);
+                }
+            }
         }catch(Exception e) {
             exceptionMessage = e.getMessage();
         }
@@ -111,6 +116,12 @@ public class ActionProcessor {
             } else {
                 publisher = bookdata.publishers().get(book.publisher.id);
             }
+
+            if(action.actionName.contentEquals("PATCH")){
+                if (publisher == null || publisher == PulpPublisher.UNKNOWN_PUBLISHER) {
+                    return new EntityResponse().setErrorStatus(404, String.format("Cannot find publisher %s named: %s", book.publisher.id, book.publisher.name));
+                }
+            }
         }
 
         PulpSeries series=null;
@@ -120,6 +131,13 @@ public class ActionProcessor {
             } else {
                 series = bookdata.series().get(book.series.id);
             }
+
+            if(action.actionName.contentEquals("PATCH")){
+                if (series == null || series == PulpSeries.UNKNOWN_SERIES) {
+                    return new EntityResponse().setErrorStatus(404, String.format("Cannot find series %s named: %s", book.series.id, book.series.name));
+                }
+            }
+
         }
 
 
@@ -171,7 +189,7 @@ public class ActionProcessor {
 
         }
 
-        if(action.actionName.contentEquals("AMEND") || action.actionName.contentEquals("REPLACE")) {
+        if(action.actionName.contentEquals("AMEND") || action.actionName.contentEquals("REPLACE") || action.actionName.contentEquals("PATCH")) {
 
             if(publisher!=null && publisher==PulpPublisher.UNKNOWN_PUBLISHER){
                 return new EntityResponse().setErrorStatus(400, String.format("Cannot find publisher %s named: %s", book.publisher.id, book.publisher.name));
@@ -187,9 +205,10 @@ public class ActionProcessor {
                 return new EntityResponse().setErrorStatus(400, String.format("Cannot remove all authors"));
             }
 
-
             final PulpBook actualBook = bookdata.books().get(action.bookEntityToActOn.id);
+
             actualBook.amendTitle(bookDetails.title);
+
             if(bookDetails.publicationYear>0) {
                 actualBook.amendPublicationYear(String.valueOf(bookDetails.publicationYear));
             }
@@ -197,18 +216,22 @@ public class ActionProcessor {
             if(publisher!=null) {
                 actualBook.amendPublisher(publisher.getId());
             }
+
             if(series!=null) {
                 actualBook.amendSeries(series.getId());
             }
+
             if(action.actionName.contentEquals("AMEND")) {
                 actualBook.amendPatchAuthors(authorIds);
             }else{ //  if action.actionName.contentEquals("REPLACE")
                 actualBook.amendAuthors(authorIds);
             }
+
             actualBook.amendSeriesIdentifier(bookDetails.seriesId);
+
             return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
         }
-
+        
         return new EntityResponse().setErrorStatus(500, String.format("Error processing action %s", new Gson().toJson(action)));
     }
 
