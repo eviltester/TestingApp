@@ -32,9 +32,10 @@ Basic plan
 | /plural/id | specific X   | 405 NOT ALLOWED      | replace with full payload    | delete specific |
 
 
-filtering of fields in response  /plural?fields=fieldname1,fieldname2
-sorting on lists  /plural?sort=
-search/filtering by fields for GET lists  /plural?fieldname=value&fieldname2<=value
+TODO: search/filtering by fields for GET lists  /plural?fieldname=value&fieldname2<=value
+TODO: filtering of fields in response  /plural?fields=fieldname1,fieldname2
+TODO: sorting on lists  /plural?sort=
+
 
 Done:
 
@@ -501,7 +502,7 @@ public class PulpAppForSpark {
 
 
         // TODO: API Session handling (create from API, use from GUI)
-        
+
         // TODO: PUT book
         // TODO: PATCH author
         // TODO: PATCH publisher
@@ -527,6 +528,8 @@ public class PulpAppForSpark {
         // /apps/pulp/api/series/id/authors
         // /apps/pulp/api/authors/id/books
         // /apps/pulp/api/authors/id/publishers
+
+        // TODOL paging
 
 
         // End API processing with unknown end points
