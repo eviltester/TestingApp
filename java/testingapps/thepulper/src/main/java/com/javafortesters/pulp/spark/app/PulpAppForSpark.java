@@ -244,24 +244,35 @@ public class PulpAppForSpark {
         before("/apps/pulp/api/*", (request, response) -> {
             // before any API request, check for an X-API-AUTH header
             // the value of the X-API-AUTH header must match the value displayed on the GUI
-            if(request.headers("X-API-AUTH")==null) {
-                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "You need to add the X-API-AUTH header with the secret key shown in the GUI")));
+
+            boolean authNeeded = true;
+
+            if(request.pathInfo().contentEquals("/apps/pulp/api/heartbeat")){
+                // does not require auth
+                authNeeded = false;
             }
 
-            // check if the API AUTH is known to us
-            Session session = api_session_mapping.get(request.headers("X-API-AUTH"));
-            if(session==null){
-                halt(401, apiEntityResponse(response,new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI")));
+            if(authNeeded) {
+                if (request.headers("X-API-AUTH") == null) {
+                    halt(401, apiEntityResponse(response, new EntityResponse().setErrorStatus(401, "You need to add the X-API-AUTH header with the secret key shown in the GUI")));
+                }
+
+                // check if the API AUTH is known to us
+                Session session = api_session_mapping.get(request.headers("X-API-AUTH"));
+                if (session == null) {
+                    halt(401, apiEntityResponse(response, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI")));
+                }
             }
 
             // delete any expired sessions for tidy up
             deleteExpiredAPISessions();
 
-            final String jsessionid = getSessionCookieForApi(request.headers("X-API-AUTH"));
-            if(jsessionid!=null && jsessionid.length()>0){
-                response.header("Set-Cookie", "JSESSIONID="+jsessionid);
+            if(authNeeded) {
+                final String jsessionid = getSessionCookieForApi(request.headers("X-API-AUTH"));
+                if (jsessionid != null && jsessionid.length() > 0) {
+                    response.header("Set-Cookie", "JSESSIONID=" + jsessionid);
+                }
             }
-
         });
 
         path("/apps/pulp/api/authors/:authorid", () -> {
@@ -505,10 +516,34 @@ public class PulpAppForSpark {
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
+        path("/apps/pulp/api/heartbeat", () -> {
+
+            head("", (req, res) -> {
+                res.status(200);
+                return "";
+            });
+
+            get("", (req, res) -> {
+                res.status(204);
+                return "";
+            });
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, GET, HEAD");
+                res.status(204);
+                return "";
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+
+        });
 
         // TODO: API Session handling (create from API, use from GUI)
 
-        // TODO: PUT book
         // TODO: PATCH author
         // TODO: PATCH publisher
         // TODO: PATCH series
