@@ -357,7 +357,6 @@ public class PulpEntities {
         String errorMessage = "";
 
         AuthorEntity author=null;
-        AuthorListEntity authorList= new AuthorListEntity(new PulpAuthors());
 
         try {
             author = new Gson().fromJson(body, AuthorEntity.class);
@@ -399,6 +398,56 @@ public class PulpEntities {
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
         }
 
+    }
+
+    public EntityResponse createReplaceSeries(final String seriesId, final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        SeriesEntity series=null;
+
+        try {
+            series = new Gson().fromJson(body, SeriesEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an series, is it a list of series?
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
+
+        PulpSeries actualSeries = bookdata.series().get(seriesId);
+        if(actualSeries==null || actualSeries==PulpSeries.UNKNOWN_SERIES){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Series %s", seriesId));
+        }
+
+        // did we get a single series?
+        if(series!=null && series.name!=null){
+
+            if(series.id!=null && series.id.length()>0){
+                // do not allow creation of series with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot create Series '%s' with a defined id %s", series.name, series.id));
+            }
+
+            if(series.name.length()<=0){
+                // do not allow creation of series with PUT with invalid name
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Series Name '%s'", series.name));
+            }
+
+
+            return processCreateAmendAction(
+                    new ActionToDo().isAmend(
+                            new SeriesEntity(actualSeries.getId(), series.name)));
+
+        }else{
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
+        }
     }
 
     private EntityResponse processCreateAmendAction(final ActionToDo action) {
@@ -481,11 +530,6 @@ public class PulpEntities {
             return action.isError(400, String.format("Author name cannot be empty"));
         }
 
-        // ACTION: ERROR, 409, message, headers
-        // ACTION: ERROR, 404, message
-        // ACTION: CREATE, AuthorEntity
-        // ACTION: AMEND, AuthorEntity
-
         // does it have an id?
         if(author.id ==null || author.id.length()==0){
 
@@ -517,11 +561,6 @@ public class PulpEntities {
             return action.isError(400, String.format("Series name cannot be empty"));
         }
 
-        // ACTION: ERROR, 409, message, headers
-        // ACTION: ERROR, 404, message
-        // ACTION: CREATE, AuthorEntity
-        // ACTION: AMEND, AuthorEntity
-
         // does it have an id?
         if(series.id ==null || series.id.length()==0){
 
@@ -552,11 +591,6 @@ public class PulpEntities {
         if(single.name == null || single.name.length()==0){
             return action.isError(400, String.format("Publisher name cannot be empty"));
         }
-
-        // ACTION: ERROR, 409, message, headers
-        // ACTION: ERROR, 404, message
-        // ACTION: CREATE, AuthorEntity
-        // ACTION: AMEND, AuthorEntity
 
         // does it have an id?
         if(single.id ==null || single.id.length()==0){
@@ -847,6 +881,8 @@ public class PulpEntities {
 
         }
     }
+
+
 
     public EntityResponse createAmendPublisher(final String body, final String contentType, final String accept) {
 

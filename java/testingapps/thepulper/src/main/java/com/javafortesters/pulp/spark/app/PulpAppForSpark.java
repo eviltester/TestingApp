@@ -290,7 +290,7 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});  // TODO: POST would be the same as PUT - unless we add other fields to an author e.g. description, DOB, Date of Death
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
@@ -382,7 +382,7 @@ public class PulpAppForSpark {
         path("/apps/pulp/api/series/:seriesid", () -> {
 
             options("", (req, res) -> {
-                res.header("Allow", "OPTIONS, GET, HEAD, DELETE");
+                res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
             });
 
@@ -401,8 +401,12 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, response);
             });
 
-            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
-            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {
+                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().createReplaceSeries(req.params(":seriesid"),req.body(),req.headers("content-type"),req.headers("Accept"));
+                return apiEntityResponse(res, response);
+            });
+
+            post("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);}); // TODO: POST would be the same as PUT - unless we add other fields to a series e.g. description
             trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
             patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
