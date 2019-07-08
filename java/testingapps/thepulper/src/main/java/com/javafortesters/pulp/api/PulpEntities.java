@@ -210,6 +210,7 @@ public class PulpEntities {
 
 
 
+
     private class ActionToDo{
 
         public String actionName;
@@ -342,6 +343,60 @@ public class PulpEntities {
             // TODO - fix this egregious hack and create a proper bulk report entity
             return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
 
+        }
+
+    }
+
+    public EntityResponse createReplaceAuthor(final String authorid, final String body, final String contentType, final String accept) {
+
+        EntityResponse errorResponse = canProcessContentType(contentType);
+        if(errorResponse!=null){
+            return errorResponse;
+        }
+
+        String errorMessage = "";
+
+        AuthorEntity author=null;
+        AuthorListEntity authorList= new AuthorListEntity(new PulpAuthors());
+
+        try {
+            author = new Gson().fromJson(body, AuthorEntity.class);
+        }catch (Exception e) {
+            // ok, it isn't an author, is it a list of authors?
+            errorMessage = e.getMessage();
+        }
+
+        if(errorMessage.length()>0){
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
+        }
+
+        PulpAuthor actualAuthor = bookdata.authors().get(authorid);
+        if(actualAuthor==null || actualAuthor==PulpAuthor.UNKNOWN_AUTHOR){
+            return new EntityResponse().setErrorStatus(404, String.format("Cannot find Author %s", authorid));
+        }
+
+        // did we get a single author?
+        if(author!=null && author.name!=null){
+
+            if(author.id!=null && author.id.length()>0){
+                // do not allow creation of author with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Cannot create Author '%s' with a defined id %s", author.name, author.id));
+            }
+
+            if(author.name.length()<=0){
+                // do not allow creation of author with PUT
+                return new EntityResponse().setErrorStatus(400, String.format("Invalid Author Name '%s'", author.name));
+            }
+
+
+            return processCreateAmendAction(
+                            new ActionToDo().isAmend(
+                                        new AuthorEntity(actualAuthor.getId(), author.name)));
+
+        }else{
+
+            // that was not an author
+            return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Author %s", errorMessage));
         }
 
     }
@@ -508,6 +563,7 @@ public class PulpEntities {
 
             PulpPublisher existing = bookdata.publishers().findByName(single.name);
 
+            // check for duplicate name
             if(existing!=PulpPublisher.UNKNOWN_PUBLISHER){
                 return action.isError(409, String.format("Cannot create publisher. Publisher '%s' already exists with id %s.", existing.getName(), existing.getId())).
                         withHeader("location", getLocationHeaderFor(existing));
