@@ -21,11 +21,12 @@ security:
 paths:
   /books:
     get:
+      summary: Return an array of all the book objects
       produces:
         - application/json
       responses:
         '200':
-          description: 'returns an array of book objects'
+          description: 'returns an array of all the book objects'
           schema:
             type: object
             properties:
@@ -68,15 +69,146 @@ paths:
               }
         '401':
           $ref: '#/responses/APIUnauthorizedError'
+    post:
+      summary: Create or amend a single or multiple books
+      description: |
+        Given a single book object, a POST call will create or amend the book. The object must be valid.
+
+        ```
+        {"title": "The Land of Little People Terror",
+          "publicationYear": 1980,
+          "seriesId": "Issue 1",
+          "authors": [
+            {
+              "id": "4"
+            }
+          ],
+          "series": {
+            "id": "1"
+          },
+          "publisher": {
+            "id": "1"
+          }
+         }
+        ```
+
+        To Create a list of books then the individual book objects must be contained in a 'books' array. For the Series, Publisher and Author, either the name or the id can be supplied as the identifier.
+
+        ```
+        {
+        	"books":[
+        		{
+        			"title": "The Land of Little People Terror",
+        			"publicationYear": 1980,
+        			"seriesId": "Issue 1",
+        			"authors": [
+        				{
+        					"id": "4"
+        				}
+        			],
+        			"series": {
+        				"id": "1"
+        			},
+        			"publisher": {
+        				"id": "1"
+        			}
+        		}
+        	]
+        }
+        ```
+
+        To Amend a book you only need to add the fields which identify the book (id), and the fields which you want to amend:
+
+        ```
+        {
+          "id": "1",
+          "authors":[{"id":"1"}]
+        }
+        ```
+
+        Authors, Series and Publisher can be specified with either the "id" or the "name", name will be used to lookup the Author, Series or Publisher to ensure cross referencing to the correct entity.
+
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: books
+          description:
+            The list of books to create, note - do not include an id, that will be allocated for you. All fields (except id) must be present for create, but for amend only the id and the fields you wish to amend are required.
+          schema:
+            $ref: '#/definitions/BookItems'
+
+      responses:
+        '200':
+          description: |
+            The response for an amendment.
+
+            For an individual book, the body of the message will contain the full details of the book e.g.
+
+            ```
+            {
+               "id": "1",
+               "title": "The Man of Bronze",
+               "publicationYear": 1933,
+               "seriesId": "Mar, 1933",
+               "authors": [
+                 {
+                   "id": "4",
+                   "name": "Lester Dent"
+                 },
+                 {
+                   "id": "1",
+                   "name": "Philip Jose Farmer"
+                 }
+               ],
+               "series": {
+                 "id": "1",
+                 "name": "Doc Savage"
+               },
+               "publisher": {
+                 "id": "1",
+                 "name": "Street And Smith"
+               }
+            }
+            ```
+            For a list of books the response will be a list of status response items e.g.
+
+            ```
+            [
+             {
+               "statusCode": 200,
+               "errorMessage": "",
+               "errorResponse": false,
+               "responseBody": "{\"id\":\"364\",\"title\":\"bob marches\",\"publicationYear\":1975,\"seriesId\":\"42 (36) May\",\"authors\":[{\"id\":\"23\",\"name\":\"Ron Goulart\"},{\"id\":\"10\",\"name\":\"Kenneth Robeson\"}],\"series\":{\"id\":\"3\",\"name\":\"The Avenger\"},\"publisher\":{\"id\":\"3\",\"name\":\"Warner Paperback Library\"}}",
+               "format": "application/json",
+               "headers": {}
+             }
+            ]
+            ```
+        '201':
+          description: |
+
+
 responses:
   APIUnauthorizedError:
-    description: X-API-AUTH header is missing or invalid
+    description: |
+
+      X-API-AUTH header is missing or invalid
+
+      Description of the error, i.e. was the header missing, or was it invalid
+
+      ```
+      {
+       "errorMessage": "X-API-AUTH header is invalid - check in the GUI"
+      }
+      ```
     schema:
       type: object
       properties:
         errorMessage:
           type: string
-          description: 'description of the error, i.e. was the header missing, or was it invalid'
       required:
         - errorMessage
     examples:
@@ -85,6 +217,10 @@ responses:
           "errorMessage": "X-API-AUTH header is invalid - check in the GUI"
         }
 definitions:
+  BookItems:
+    type: array
+    items:
+      $ref: '#/definitions/BookItem'
   BookItem:
     type: object
     properties:
