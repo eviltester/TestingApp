@@ -11,7 +11,7 @@ public class PulpEntities {
 
     public PulpEntities(final PulpData books) {
         this.bookdata = books;
-        convertor = new DomainToEntityConvertor();
+        convertor = new DomainToEntityConvertor(books);
         rooturl = "";
     }
 

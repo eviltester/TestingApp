@@ -220,11 +220,9 @@ public class PulpAppForSpark {
         for(String headerkey : response.getHeaderNames()){
             res.header(headerkey, response.getHeaderValue(headerkey));
         }
-        if(response.isError()){
-            return response.getErrorMessage();
-        }else{
-            return response.getResponseBody();
-        }
+
+        return response.getResponseBody();
+
     }
 
     private String apiEmptyEntityResponse(final Response res, final EntityResponse response) {

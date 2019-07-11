@@ -165,15 +165,15 @@ public class SeriesActions {
                 actions.add(identifyCreateAmendActionForSeriesEntity(aSeries));
             }
 
-            List<EntityResponse> responses = new ArrayList<>();
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
 
-                responses.add(new ActionProcessor(bookdata, convertor, rooturl).process(action));
+                responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
 
-            // TODO - fix this egregious hack and create a proper bulk report entity
-            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
-
+            return new BulkResponse(responses, bookdata).asEntityResponse();
         }
     }
 
@@ -182,7 +182,7 @@ public class SeriesActions {
 
         // ACTION: ERROR, 400, message
         if(series.name == null || series.name.length()==0){
-            return action.isError(400, String.format("Series name cannot be empty"));
+            return action.isError(400, String.format("Series name cannot be empty")).withSeries(series);
         }
 
         // does it have an id?
@@ -192,7 +192,7 @@ public class SeriesActions {
 
             if(existing!=PulpSeries.UNKNOWN_SERIES){
                 return action.isError(409, String.format("Cannot create series. Series '%s' already exists with id %s.", existing.getName(), existing.getId())).
-                        withHeader("location", getLocationHeaderFor(existing));
+                        withHeader("location", getLocationHeaderFor(existing)).withSeries(series);
             }
 
             // OK, we will create this
@@ -201,7 +201,7 @@ public class SeriesActions {
         }else{
             // treat this as an amend
             if(bookdata.series().get(series.id) == PulpSeries.UNKNOWN_SERIES){
-                return action.isError(404, String.format("Unknown Series %s", series.id));
+                return action.isError(404, String.format("Unknown Series %s", series.id)).withSeries(series);
             }
 
             return action.isAmend(series);

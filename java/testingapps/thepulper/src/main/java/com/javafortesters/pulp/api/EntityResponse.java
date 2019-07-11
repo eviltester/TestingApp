@@ -69,7 +69,11 @@ public class EntityResponse {
     }
 
     public String getResponseBody() {
-        return responseBody;
+        if(isError()){
+            return getErrorMessage();
+        }else{
+            return responseBody;
+        }
     }
 
     public String getContentType() {

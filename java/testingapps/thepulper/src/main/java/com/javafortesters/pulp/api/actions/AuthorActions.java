@@ -117,14 +117,14 @@ public class AuthorActions {
 
             ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
 
-            List<EntityResponse> responses = new ArrayList<>();
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
 
-                responses.add(actioner.process(action));
+                responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
 
-            // TODO - fix this egregious hack and create a proper bulk report entity
-            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
+            //return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
 
         }
     }
@@ -135,7 +135,8 @@ public class AuthorActions {
 
         // ACTION: ERROR, 400, message
         if(author.name == null || author.name.length()==0){
-            return action.isError(400, String.format("Author name cannot be empty"));
+            return action.isError(400, String.format("Author name cannot be empty")).withAuthor(author);
+
         }
 
         // does it have an id?
@@ -145,7 +146,7 @@ public class AuthorActions {
 
             if(existingAuthor!=PulpAuthor.UNKNOWN_AUTHOR){
                 return action.isError(409, String.format("Cannot create author. Author '%s' already exists with id %s.", existingAuthor.getName(), existingAuthor.getId())).
-                        withHeader("location", getLocationHeaderFor(existingAuthor));
+                        withHeader("location", getLocationHeaderFor(existingAuthor)).withAuthor(author);
             }
 
             // OK, we will create this
@@ -154,7 +155,7 @@ public class AuthorActions {
         }else{
             // treat this as an amend
             if(bookdata.authors().get(author.id) == PulpAuthor.UNKNOWN_AUTHOR){
-                return action.isError(404, String.format("Unknown Author %s", author.id));
+                return action.isError(404, String.format("Unknown Author %s", author.id)).withAuthor(author);
             }
 
             return action.isAmend(author);

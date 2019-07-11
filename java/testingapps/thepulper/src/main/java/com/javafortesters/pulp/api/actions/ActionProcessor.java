@@ -42,18 +42,21 @@ public class ActionProcessor {
             if(action.actionName.contentEquals("CREATE")){
                 if(action.authorEntityToActOn!=null){
                     final PulpAuthor actualAuthor = bookdata.authors().add(action.authorEntityToActOn.name);
+                    action.actualAuthor = actualAuthor;
                     EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(actualAuthor));
                     response.addHeader("location", getLocationHeaderFor(actualAuthor));
                     return response;
                 }
                 if(action.seriesEntityToActOn!=null){
                     final PulpSeries created = bookdata.series().add(action.seriesEntityToActOn.name);
+                    action.actualSeries = created;
                     EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(created));
                     response.addHeader("location", getLocationHeaderFor(created));
                     return response;
                 }
                 if(action.publisherEntityToActOn!=null){
                     final PulpPublisher created = bookdata.publishers().add(action.publisherEntityToActOn.name);
+                    action.actualPublisher = created;
                     EntityResponse response = new EntityResponse().setSuccessStatus(201, convertor.toJson(created));
                     response.addHeader("location", getLocationHeaderFor(created));
                     return response;
@@ -67,18 +70,21 @@ public class ActionProcessor {
                 if(action.authorEntityToActOn!=null){
                     final PulpAuthor actual = bookdata.authors().get(action.authorEntityToActOn.id);
                     actual.amendName(action.authorEntityToActOn.name);
+                    action.actualAuthor=actual;
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
                 if(action.seriesEntityToActOn!=null){
                     final PulpSeries actual = bookdata.series().get(action.seriesEntityToActOn.id);
                     actual.amendName(action.seriesEntityToActOn.name);
+                    action.actualSeries=actual;
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
                 if(action.publisherEntityToActOn!=null){
                     final PulpPublisher actual = bookdata.publishers().get(action.publisherEntityToActOn.id);
                     actual.amendName(action.publisherEntityToActOn.name);
+                    action.actualPublisher=actual;
                     EntityResponse response = new EntityResponse().setSuccessStatus(200, convertor.toJson(actual));
                     return response;
                 }
@@ -183,8 +189,9 @@ public class ActionProcessor {
                 actualBook.addCoAuthor(addAuthor.getId());
             }
 
+            action.actualBook = actualBook;
             return new EntityResponse().
-                            setSuccessStatus(201, convertor.toJson(actualBook, bookdata)).
+                            setSuccessStatus(201, convertor.toJson(actualBook)).
                             addHeader("location", getLocationHeaderFor(actualBook));
 
         }
@@ -229,7 +236,8 @@ public class ActionProcessor {
 
             actualBook.amendSeriesIdentifier(bookDetails.seriesId);
 
-            return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook, bookdata));
+            action.actualBook = actualBook;
+            return new EntityResponse().setSuccessStatus(200, convertor.toJson(actualBook));
         }
 
         return new EntityResponse().setErrorStatus(500, String.format("Error processing action %s", new Gson().toJson(action)));

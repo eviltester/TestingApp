@@ -13,32 +13,50 @@ import com.javafortesters.pulp.domain.objects.PulpSeries;
 
 public class DomainToEntityConvertor {
 
-    public String toJson(final PulpAuthor author) {
+    private final PulpData bookdata;
 
-        AuthorEntity entity = new AuthorEntity(author.getId(), author.getName());
+    public DomainToEntityConvertor(final PulpData bookdata){
+        this.bookdata = bookdata;
+    }
+
+    public String toJson(final PulpAuthor author) {
+        AuthorEntity entity = toEntity(author);
         return new Gson().toJson(entity);
 
     }
 
     public String toJson(final PulpSeries series) {
-
-        SeriesEntity entity = new SeriesEntity(series.getId(), series.getName());
+        SeriesEntity entity = toEntity(series);
         return new Gson().toJson(entity);
     }
 
     public String toJson(final PulpPublisher publisher) {
-
-        PublisherEntity entity = new PublisherEntity(publisher.getId(), publisher.getName());
+        PublisherEntity entity = toEntity(publisher);
         return new Gson().toJson(entity);
     }
 
-    public String toJson(final PulpBook book, final PulpData bookdata) {
-        BookEntity entity = new BookEntity(book.getId(), book.getTitle(), book.getPublicationYear(), book.getSeriesId(),
+    public String toJson(final PulpBook book) {
+        BookEntity entity = toEntity(book);
+        return new Gson().toJson(entity);
+    }
+
+    public BookEntity toEntity(final PulpBook book) {
+        return new BookEntity(book.getId(), book.getTitle(), book.getPublicationYear(), book.getSeriesId(),
                 bookdata.series().get(book.getSeriesIndex()),
                 bookdata.authors().getAll(book.getAuthorIndexes()),
                 bookdata.publishers().get(book.getPublisherIndex())
         );
+    }
 
-        return new Gson().toJson(entity);
+    public AuthorEntity toEntity(final PulpAuthor author) {
+        return new AuthorEntity(author.getId(), author.getName());
+    }
+
+    public SeriesEntity toEntity(final PulpSeries series) {
+        return new SeriesEntity(series.getId(), series.getName());
+    }
+
+    public PublisherEntity toEntity(final PulpPublisher publisher) {
+        return new PublisherEntity(publisher.getId(), publisher.getName());
     }
 }

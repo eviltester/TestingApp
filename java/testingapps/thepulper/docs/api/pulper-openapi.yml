@@ -72,27 +72,11 @@ paths:
     post:
       summary: Create or amend a single or multiple books
       description: |
-        Given a single book object, a POST call will create or amend the book. The object must be valid.
+        Given an array of book objects, a POST call will create or amend the books. The object must be valid.
 
-        ```
-        {"title": "The Land of Little People Terror",
-          "publicationYear": 1980,
-          "seriesId": "Issue 1",
-          "authors": [
-            {
-              "id": "4"
-            }
-          ],
-          "series": {
-            "id": "1"
-          },
-          "publisher": {
-            "id": "1"
-          }
-         }
-        ```
+        To Create a list of books then the individual book objects must be contained in a 'books' array.
 
-        To Create a list of books then the individual book objects must be contained in a 'books' array. For the Series, Publisher and Author, either the name or the id can be supplied as the identifier.
+        For the Series, Publisher and Author, either the name or the id can be supplied as the identifier.
 
         ```
         {
@@ -120,9 +104,16 @@ paths:
         To Amend a book you only need to add the fields which identify the book (id), and the fields which you want to amend:
 
         ```
-        {
-          "id": "1",
-          "authors":[{"id":"1"}]
+        { "books":[
+            {
+              "id": "1",
+              "authors":[{"id":"1"}]
+            }
+            {
+              "id": "2",
+              "authors":[{"name":"Lester Dent"}]
+            }
+          ]
         }
         ```
 

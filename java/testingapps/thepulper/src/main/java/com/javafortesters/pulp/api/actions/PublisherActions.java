@@ -164,15 +164,15 @@ public class PublisherActions {
                 actions.add(identifyCreateAmendActionForPublisherEntity(aSingleItem));
             }
 
-            List<EntityResponse> responses = new ArrayList<>();
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
 
-                responses.add(new ActionProcessor(bookdata, convertor, rooturl).process(action));
+                responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
 
-            // TODO - fix this egregious hack and create a proper bulk report entity
-            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
-
+            return new BulkResponse(responses, bookdata).asEntityResponse();
         }
     }
 
@@ -181,7 +181,7 @@ public class PublisherActions {
 
         // ACTION: ERROR, 400, message
         if(single.name == null || single.name.length()==0){
-            return action.isError(400, String.format("Publisher name cannot be empty"));
+            return action.isError(400, String.format("Publisher name cannot be empty")).withPublisher(single);
         }
 
         // does it have an id?
@@ -192,7 +192,7 @@ public class PublisherActions {
             // check for duplicate name
             if(existing!=PulpPublisher.UNKNOWN_PUBLISHER){
                 return action.isError(409, String.format("Cannot create publisher. Publisher '%s' already exists with id %s.", existing.getName(), existing.getId())).
-                        withHeader("location", getLocationHeaderFor(existing));
+                        withHeader("location", getLocationHeaderFor(existing)).withPublisher(single);
             }
 
             // OK, we will create this
@@ -201,7 +201,7 @@ public class PublisherActions {
         }else{
             // treat this as an amend
             if(bookdata.publishers().get(single.id) == PulpPublisher.UNKNOWN_PUBLISHER){
-                return action.isError(404, String.format("Unknown Publisher %s", single.id));
+                return action.isError(404, String.format("Unknown Publisher %s", single.id)).withPublisher(single);
             }
 
             return action.isAmend(single);

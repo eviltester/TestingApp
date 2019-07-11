@@ -45,7 +45,7 @@ public class BookActions {
             return response;
         }
 
-        return new EntityResponse().setSuccessStatus(200, convertor.toJson(book, bookdata));
+        return new EntityResponse().setSuccessStatus(200, convertor.toJson(book));
     }
 
     public EntityResponse deleteSingle(final String bookid, final String accept) {
