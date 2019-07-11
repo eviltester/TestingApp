@@ -161,7 +161,7 @@ public class PulpAppForSpark {
                 }
             }
             api_session_mapping.remove(api_auth_header);
-            halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getErrorMessage());
+            halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getResponseBody());
         }
         return sessionPulpApp;
     }

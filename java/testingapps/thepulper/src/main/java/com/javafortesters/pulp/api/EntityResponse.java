@@ -35,7 +35,20 @@ public class EntityResponse {
     }
 
     private void setErrorMessage(final String errorMessage) {
+
+        final ArrayList<ActionEntityResponsePair> errorResponses = new ArrayList<ActionEntityResponsePair>();
+        errorResponses.add(new ActionEntityResponsePair(new ActionToDo().isError(statusCode, errorMessage),
+                new EntityResponse().asError()));
+
+        final BulkResponse bulkResponse = new BulkResponse(errorResponses, new PulpData());
+
         this.errorMessage = errorMessage;
+        this.responseBody = bulkResponse.asEntityResponse().responseBody;
+    }
+
+    private EntityResponse asError() {
+        errorResponse=true;
+        return this;
     }
 
     public EntityResponse setErrorStatus(final int statusCode, final String errorMessage) {
@@ -64,32 +77,9 @@ public class EntityResponse {
         return errorResponse;
     }
 
-    public String getErrorMessage() {
-
-        if(format.endsWith("json")){
-            // quick hack to put all individual error messages into new format
-            // TODO: use proper API error message reporting throughout
-            
-            final ArrayList<ActionEntityResponsePair> errorResponses = new ArrayList<ActionEntityResponsePair>();
-            errorResponses.add(new ActionEntityResponsePair(new ActionToDo().isError(statusCode, errorMessage),
-                                new EntityResponse().setErrorStatus(statusCode, errorMessage)));
-
-            final BulkResponse bulkResponse = new BulkResponse(errorResponses, new PulpData());
-            return bulkResponse.asEntityResponse().responseBody;
-
-            //return new Gson().toJson(new EntityResponseErrorMessage(errorMessage));
-        }else{
-            return errorMessage;
-        }
-
-    }
 
     public String getResponseBody() {
-        if(isError()){
-            return getErrorMessage();
-        }else{
             return responseBody;
-        }
     }
 
     public String getContentType() {
