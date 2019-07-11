@@ -20,10 +20,6 @@ public class BulkResponse {
         apiResponse = new ApiResponseBuilder(bookdata);
     }
 
-    public static BulkResponse forErrorMessagesOnly() {
-        return new BulkResponse(new ArrayList<>(), new PulpData());
-    }
-
 
     public EntityResponse asEntityResponse() {
 

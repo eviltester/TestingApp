@@ -28,6 +28,13 @@ public class ApiResponseBuilder {
         return response;
     }
 
+    public ApiResponseBuilder addData(final PulpAuthor author) {
+        ensureDataAuthorListExists();
+        response.data.authors.add(convertor.toEntity(author));
+        return this;
+    }
+
+
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
         response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
@@ -38,8 +45,7 @@ public class ApiResponseBuilder {
     public void addCreated(final PulpAuthor actualAuthor) {
         ensureCreatedAuthorListExists();
         response.created.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
-        ensureDataAuthorListExists();
-        response.data.authors.add(convertor.toEntity(actualAuthor));
+        addData(actualAuthor);
     }
 
 
@@ -205,4 +211,5 @@ public class ApiResponseBuilder {
         }
         response.errors.report.add(errorMessage);
     }
+
 }

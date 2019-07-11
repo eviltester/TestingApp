@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.api.entities.lists.AuthorListEntity;
+import com.javafortesters.pulp.api.entities.payloads.ApiResponseBuilder;
 import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpData;
@@ -32,7 +33,11 @@ public class AuthorActions {
             return response;
         }
 
-        response.setSuccessStatus(200,convertor.toJson(author));
+
+        response.setSuccessStatus(200,
+                        new Gson().toJson(
+                            new ApiResponseBuilder(bookdata).addData(author).getApiResponse())
+                        );
 
         return response;
     }
