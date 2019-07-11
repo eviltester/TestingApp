@@ -45,11 +45,6 @@ public class AuthorActions {
     public EntityResponse getAll(final String acceptformat) {
         final EntityResponse response = new EntityResponse();
 
-        //AuthorListEntity entity = new AuthorListEntity(bookdata.authors());
-
-        //response.setSuccessStatus(200,new Gson().toJson(entity));
-
-
         response.setSuccessStatus(200,
                 new Gson().toJson(
                         new ApiResponseBuilder(bookdata).addData(bookdata.authors()).getApiResponse())
@@ -106,12 +101,14 @@ public class AuthorActions {
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Authors %s", errorMessage));
         }
 
+        ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+        List<ActionEntityResponsePair> responses = new ArrayList<>();
 
         // did we get a single author?
         if(author!=null && author.name!=null){
 
-            ActionToDo authorAction = identifyCreateAmendActionForAuthorEntity(author);
-            return new ActionProcessor(bookdata, convertor, rooturl).process(authorAction);
+            ActionToDo action = identifyCreateAmendActionForAuthorEntity(author);
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
 
         }else{
 
@@ -127,18 +124,12 @@ public class AuthorActions {
                 actions.add(identifyCreateAmendActionForAuthorEntity(anAuthor));
             }
 
-            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
-
-            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
-
                 responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
-
-            return new BulkResponse(responses, bookdata).asEntityResponse();
-            //return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
-
         }
+
+        return new BulkResponse(responses, bookdata).asEntityResponse();
     }
 
     private ActionToDo identifyCreateAmendActionForAuthorEntity(final AuthorEntity author) {
