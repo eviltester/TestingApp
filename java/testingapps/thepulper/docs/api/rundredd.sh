@@ -1,1 +1,1 @@
-dredd pulper-openapi.yml http://localhost:4567 --header="X-API-AUTH: 2a982807-15b1-4824-a25c-6de88e337600" > exec.txt
+dredd pulper-openapi.yml http://localhost:4567 --header="X-API-AUTH: 6908d113-64b7-4050-86bf-47b3935cc2cb" > exec.txt

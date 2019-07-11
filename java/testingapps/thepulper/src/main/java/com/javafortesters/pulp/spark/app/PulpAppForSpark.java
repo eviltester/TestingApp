@@ -161,6 +161,7 @@ public class PulpAppForSpark {
                 }
             }
             api_session_mapping.remove(api_auth_header);
+
             halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getResponseBody());
         }
         return sessionPulpApp;
@@ -247,6 +248,9 @@ public class PulpAppForSpark {
             // the value of the X-API-AUTH header must match the value displayed on the GUI
 
             boolean authNeeded = true;
+
+            // by default return json - just in case there is an error
+            response.header("content-type", "application/json");
 
             if(request.pathInfo().contentEquals("/apps/pulp/api/heartbeat")){
                 // does not require auth

@@ -19,6 +19,15 @@ securityDefinitions:
 security:
   - APIKeyHeader: []
 paths:
+  /heartbeat:
+    get:
+      summary: Check if the API is running
+      produces:
+        - application/json
+      responses:
+        '204':
+          description: 'OK The Application is running'
+
   /books:
     get:
       summary: Return an array of all the book objects
@@ -26,46 +35,40 @@ paths:
         - application/json
       responses:
         '200':
-          description: 'returns an array of all the book objects'
+          description: 'returns an array of all the book objects, will be empty if there are no books'
           schema:
-            type: object
-            properties:
-              books:
-                type: array
-                items:
-                  $ref: '#/definitions/BookItem'
-                description: 'An array of books, will be empty if there are no books'
-            required:
-              - books
+            $ref: '#/definitions/databooks'
           examples:
             application/json:
               {
-                "books": [
-                {
-                  "id": "1",
-                  "title": "The Man of Bronze",
-                  "publicationYear": 1933,
-                  "seriesId": "Mar, 1933",
-                  "authors": [
+                "data": {
+                  "books": [
                   {
-                    "id": "4",
-                    "name": "Lester Dent"
-                  },
-                  {
-                    "id": "10",
-                    "name": "Kenneth Robeson"
-                  }
-                  ],
-                  "series": {
                     "id": "1",
-                    "name": "Doc Savage"
-                  },
-                  "publisher": {
-                    "id": "1",
-                    "name": "Street And Smith"
+                    "title": "The Man of Bronze",
+                    "publicationYear": 1933,
+                    "seriesId": "Mar, 1933",
+                    "authors": [
+                    {
+                      "id": "4",
+                      "name": "Lester Dent"
+                    },
+                    {
+                      "id": "10",
+                      "name": "Kenneth Robeson"
+                    }
+                    ],
+                    "series": {
+                      "id": "1",
+                      "name": "Doc Savage"
+                    },
+                    "publisher": {
+                      "id": "1",
+                      "name": "Street And Smith"
+                    }
                   }
+                  ]
                 }
-                ]
               }
         '401':
           $ref: '#/responses/APIUnauthorizedError'
@@ -125,61 +128,22 @@ paths:
         - application/json
       parameters:
         - in: body
-          name: books
+          name: body
+          required: true
           description:
             The list of books to create, note - do not include an id, that will be allocated for you. All fields (except id) must be present for create, but for amend only the id and the fields you wish to amend are required.
           schema:
             $ref: '#/definitions/BookItems'
-
       responses:
         '200':
           description: |
             The response for an amendment or for a bulk amend/create request that was successful.
-
-            For an individual book, the body of the message will contain the full details of the book e.g.
-
-            ```
-            {
-               "id": "1",
-               "title": "The Man of Bronze",
-               "publicationYear": 1933,
-               "seriesId": "Mar, 1933",
-               "authors": [
-                 {
-                   "id": "4",
-                   "name": "Lester Dent"
-                 },
-                 {
-                   "id": "1",
-                   "name": "Philip Jose Farmer"
-                 }
-               ],
-               "series": {
-                 "id": "1",
-                 "name": "Doc Savage"
-               },
-               "publisher": {
-                 "id": "1",
-                 "name": "Street And Smith"
-               }
-            }
-            ```
-            For a list of books the response will be a list of status response items e.g.
-
-            ```
-            [
-             {
-               "statusCode": 200,
-               "errorMessage": "",
-               "errorResponse": false,
-               "responseBody": "{\"id\":\"364\",\"title\":\"bob marches\",\"publicationYear\":1975,\"seriesId\":\"42 (36) May\",\"authors\":[{\"id\":\"23\",\"name\":\"Ron Goulart\"},{\"id\":\"10\",\"name\":\"Kenneth Robeson\"}],\"series\":{\"id\":\"3\",\"name\":\"The Avenger\"},\"publisher\":{\"id\":\"3\",\"name\":\"Warner Paperback Library\"}}",
-               "format": "application/json",
-               "headers": {}
-             }
-            ]
-            ```
         '201':
           description: |
+            The response for a bulk create request that was successful.
+        '400':
+          description: |
+            The response for a bulk create request that had errors when process, some of the entities may have been processed successfully, process the response to check.
 
 
 responses:
@@ -192,27 +156,73 @@ responses:
 
       ```
       {
-       "errorMessage": "X-API-AUTH header is invalid - check in the GUI"
+        "errors": {
+          "report": [
+          {
+            "messages": [
+              "Cannot process content as Books"
+            ]
+          }
+          ]
+        }
       }
       ```
     schema:
       type: object
       properties:
-        errorMessage:
-          type: string
-      required:
-        - errorMessage
+        errors:
+          $ref: '#/definitions/ErrorsReportMessages'
     examples:
       application/json:
         {
-          "errorMessage": "X-API-AUTH header is invalid - check in the GUI"
+          "errors": {
+            "report": [
+            {
+              "messages": [
+                "Cannot process content as Books"
+              ]
+            }
+            ]
+          }
         }
 definitions:
+  databooks:
+    type: object
+    properties:
+      data:
+        type: object
+        properties:
+          books:
+            type: array
+            items:
+              $ref: '#/definitions/BookItem'
+  ErrorsReportMessages:
+    type: object
+    properties:
+      report:
+        type: array
+        items:
+          type: object
+          properties:
+            messages:
+              type: array
+              items:
+                type: string
   BookItems:
-    type: array
-    items:
-      $ref: '#/definitions/BookItem'
+    type: object
+    properties:
+      books:
+        type: array
+        items:
+          $ref: '#/definitions/BookItem'
+
   BookItem:
+    description: |
+      the book item
+
+      - item
+      - tim
+
     type: object
     properties:
       id:
@@ -231,22 +241,6 @@ definitions:
         $ref: '#/definitions/SeriesItem'
       publisher:
         $ref: '#/definitions/PublisherItem'
-    example:
-      id: "2"
-      title: "The Land of Terror"
-      publicationYear: 1933
-      seriesId: "Apr, 1933"
-      authors:
-        - id: "4"
-          name: "Lester Dent"
-        - id: "5"
-          name: "Someone Else"
-      series:
-        id: "1"
-        name: "Doc Savage"
-      publisher:
-        id: "1"
-        name: "Street And Smith"
   AuthorItem:
     type: object
     properties:
