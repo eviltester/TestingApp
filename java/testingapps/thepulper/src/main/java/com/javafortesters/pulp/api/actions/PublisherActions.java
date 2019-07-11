@@ -5,6 +5,7 @@ import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.api.entities.lists.PublisherListEntity;
 import com.javafortesters.pulp.api.entities.payloads.ApiResponseBuilder;
+import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.single.PublisherEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.groupings.PulpPublishers;
@@ -114,9 +115,11 @@ public class PublisherActions {
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Publisher '%s', %s to same name as %s", actualPublisher.getName(), actualPublisher.getId(), existingNamed.getId()));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new PublisherEntity(actualPublisher.getId(), publisher.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new PublisherEntity(actualPublisher.getId(), publisher.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publisher %s", errorMessage));
@@ -150,12 +153,14 @@ public class PublisherActions {
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publishers %s", errorMessage));
         }
 
+        ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+        List<ActionEntityResponsePair> responses = new ArrayList<>();
 
         // did we get a single item?
         if(single!=null && single.name!=null){
 
             ActionToDo action = identifyCreateAmendActionForPublisherEntity(single);
-            return new ActionProcessor(bookdata, convertor, rooturl).process(action);
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
 
         }else{
 
@@ -171,16 +176,12 @@ public class PublisherActions {
                 actions.add(identifyCreateAmendActionForPublisherEntity(aSingleItem));
             }
 
-            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
-
-            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
-
                 responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
-
-            return new BulkResponse(responses, bookdata).asEntityResponse();
         }
+
+        return new BulkResponse(responses, bookdata).asEntityResponse();
     }
 
     private ActionToDo identifyCreateAmendActionForPublisherEntity(final PublisherEntity single) {
@@ -263,9 +264,11 @@ public class PublisherActions {
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Publisher '%s', %s to same name as %s", actualPublisher.getName(), actualPublisher.getId(), existingNamed.getId()));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new PublisherEntity(actualPublisher.getId(), publisher.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new PublisherEntity(actualPublisher.getId(), publisher.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Publisher %s", errorMessage));
