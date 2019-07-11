@@ -106,4 +106,8 @@ public class EntityResponse {
     public void setHeaders(final Map<String, String> headers) {
         this.headers.putAll(headers);
     }
+
+    public void setStatusCode(final int statusCode) {
+        this.statusCode = statusCode;
+    }
 }

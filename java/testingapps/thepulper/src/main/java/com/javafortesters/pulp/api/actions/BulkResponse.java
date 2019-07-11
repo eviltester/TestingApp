@@ -62,6 +62,7 @@ public class BulkResponse {
         if(responses.size()==1){
             // if there is only one then copy in the headers
             returnedResponse.setHeaders(responses.get(0).response.getHeaders());
+            returnedResponse.setStatusCode(responses.get(0).response.getStatusCode());
         }
 
         return returnedResponse;
