@@ -28,18 +28,16 @@ public class ApiResponseBuilder {
         return response;
     }
 
-    // TODO: the amended and created lists could just include the id of the entity since the values are in data
-
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
-        response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id", "title")));
+        response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
         ensureDataBookListExists();
         response.data.books.add(convertor.toEntity(actualBook));
     }
 
     public void addCreated(final PulpAuthor actualAuthor) {
         ensureCreatedAuthorListExists();
-        response.created.authors.add(convertor.toEntity(actualAuthor));
+        response.created.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
         ensureDataAuthorListExists();
         response.data.authors.add(convertor.toEntity(actualAuthor));
     }
@@ -47,42 +45,42 @@ public class ApiResponseBuilder {
 
     public void addCreated(final PulpSeries actualSeries) {
         ensureCreatedSeriesListExists();
-        response.created.series.add(convertor.toEntity(actualSeries));
+        response.created.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
         ensureDataSeriesListExists();
         response.data.series.add(convertor.toEntity(actualSeries));
     }
 
     public void addCreated(final PulpPublisher actualPublisher) {
         ensureCreatedPublisherListExists();
-        response.created.publishers.add(convertor.toEntity(actualPublisher));
+        response.created.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
         ensureDataPublisherListExists();
         response.data.publishers.add(convertor.toEntity(actualPublisher));
     }
 
     public void addAmended(final PulpAuthor actualAuthor) {
         ensureAmendedAuthorListExists();
-        response.amended.authors.add(convertor.toEntity(actualAuthor));
+        response.amended.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
         ensureDataAuthorListExists();
         response.data.authors.add(convertor.toEntity(actualAuthor));
     }
 
     public void addAmended(final PulpSeries actualSeries) {
         ensureAmendedSeriesListExists();
-        response.amended.series.add(convertor.toEntity(actualSeries));
+        response.amended.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
         ensureDataSeriesListExists();
         response.data.series.add(convertor.toEntity(actualSeries));
     }
 
     public void addAmended(final PulpPublisher actualPublisher) {
         ensureAmendedPublisherListExists();
-        response.amended.publishers.add(convertor.toEntity(actualPublisher));
+        response.amended.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
         ensureDataPublisherListExists();
         response.data.publishers.add(convertor.toEntity(actualPublisher));
     }
 
     public void addAmended(final PulpBook actualBook) {
         ensureAmendedBookListExists();
-        response.amended.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id", "title")));
+        response.amended.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
         ensureDataBookListExists();
         response.data.books.add(convertor.toEntity(actualBook));
     }

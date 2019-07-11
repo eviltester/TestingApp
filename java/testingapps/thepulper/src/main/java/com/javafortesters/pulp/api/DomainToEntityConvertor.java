@@ -66,4 +66,23 @@ public class DomainToEntityConvertor {
         entity.includeOnlyFields(includeFieldNames);
         return entity;
     }
+
+    public AuthorEntity toEntity(final PulpAuthor author, final IncludeFieldNames includeFieldNames) {
+        final AuthorEntity entity = toEntity(author);
+        entity.includeOnlyFields(includeFieldNames);
+        return entity;
+    }
+
+    public SeriesEntity toEntity(final PulpSeries series, final IncludeFieldNames includeFieldNames) {
+        final SeriesEntity entity = toEntity(series);
+        entity.includeOnlyFields(includeFieldNames);
+        return entity;
+    }
+
+    public PublisherEntity toEntity(final PulpPublisher publisher, final IncludeFieldNames includeFieldNames) {
+        final PublisherEntity entity = toEntity(publisher);
+        entity.includeOnlyFields(includeFieldNames);
+        return entity;
+    }
+
 }

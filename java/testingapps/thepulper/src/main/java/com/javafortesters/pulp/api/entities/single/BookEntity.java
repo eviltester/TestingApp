@@ -80,7 +80,5 @@ public class BookEntity {
         if(!fieldNames.contains("publisher")){
             this.publisher=null;
         }
-
-
     }
 }
