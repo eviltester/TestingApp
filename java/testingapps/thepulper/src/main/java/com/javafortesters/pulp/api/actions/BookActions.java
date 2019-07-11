@@ -191,14 +191,16 @@ public class BookActions {
                 actions.add(identifyCreateAmendActionForBookEntity(aSingleItem));
             }
 
-            List<EntityResponse> responses = new ArrayList<>();
+
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
 
-                responses.add(new ActionProcessor(bookdata, convertor, rooturl).process(action));
+                responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
 
-            // TODO - fix this egregious hack and create a proper bulk report entity
-            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(responses));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }
     }
@@ -213,7 +215,7 @@ public class BookActions {
                 // OK, we will amend this - allow duplicate titles - potentially duplicate books
                 return new ActionToDo().isAmend(single);
             }else{
-                return new ActionToDo().isError(404, String.format("Unknown Book %s %s", single.id, single.title));
+                return new ActionToDo().isError(404, String.format("Unknown Book %s %s", single.id, single.title)).withBook(single);
             }
         }
 
@@ -229,28 +231,28 @@ public class BookActions {
 
         // ACTION: ERROR, 400, message
         if(single.title == null || single.title.length()==0){
-            return new ActionToDo().isError(400, String.format("Book title cannot be empty"));
+            return new ActionToDo().isError(400, String.format("Book title cannot be empty")).withBook(single);
         }
         if(single.series==null || (single.series.id == null && single.series.name == null)){
-            return new ActionToDo().isError(400, String.format("Series cannot be empty"));
+            return new ActionToDo().isError(400, String.format("Series cannot be empty")).withBook(single);
         }
         if((single.series.id + single.series.name).length()==0){
-            return new ActionToDo().isError(400, String.format("Series must be identifiable"));
+            return new ActionToDo().isError(400, String.format("Series must be identifiable")).withBook(single);
         }
         if(single.publisher==null || (single.publisher.id == null && single.publisher.name == null)){
-            return new ActionToDo().isError(400, String.format("Publisher cannot be empty"));
+            return new ActionToDo().isError(400, String.format("Publisher cannot be empty")).withBook(single);
         }
         if((single.publisher.id + single.publisher.name).length()==0){
-            return new ActionToDo().isError(400, String.format("Publisher must be identifiable"));
+            return new ActionToDo().isError(400, String.format("Publisher must be identifiable")).withBook(single);
         }
         if(single.authors==null || single.authors.size()==0){
-            return new ActionToDo().isError(400, String.format("Book must have authors"));
+            return new ActionToDo().isError(400, String.format("Book must have authors")).withBook(single);
         }
         if(single.seriesId == null || single.seriesId.length()==0){
-            return new ActionToDo().isError(400, String.format("Book must have a series id"));
+            return new ActionToDo().isError(400, String.format("Book must have a series id")).withBook(single);
         }
         if(single.publicationYear<=0){
-            return new ActionToDo().isError(400, String.format("Book must have a publication year"));
+            return new ActionToDo().isError(400, String.format("Book must have a publication year")).withBook(single);
         }
 
 
@@ -264,7 +266,7 @@ public class BookActions {
         }
 
         if(publisher==null || publisher==PulpPublisher.UNKNOWN_PUBLISHER){
-            return new ActionToDo().isError(404, String.format("Cannot find publisher %s named: %s", single.publisher.id, single.publisher.name));
+            return new ActionToDo().isError(404, String.format("Cannot find publisher %s named: %s", single.publisher.id, single.publisher.name)).withBook(single);
         }
 
         PulpSeries series;
@@ -275,7 +277,7 @@ public class BookActions {
         }
 
         if(series==null || series==PulpSeries.UNKNOWN_SERIES){
-            return new ActionToDo().isError(404, String.format("Cannot find series %s named: %s", single.series.id, single.series.name));
+            return new ActionToDo().isError(404, String.format("Cannot find series %s named: %s", single.series.id, single.series.name)).withBook(single);
         }
 
 
@@ -289,7 +291,7 @@ public class BookActions {
             }
 
             if(author==null || author==PulpAuthor.UNKNOWN_AUTHOR){
-                return new ActionToDo().isError(404, String.format("Cannot find author %s named: %s", anAuthor.id, anAuthor.name));
+                return new ActionToDo().isError(404, String.format("Cannot find author %s named: %s", anAuthor.id, anAuthor.name)).withBook(single);
             }
         }
 

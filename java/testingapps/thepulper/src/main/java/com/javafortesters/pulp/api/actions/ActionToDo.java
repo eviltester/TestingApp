@@ -114,4 +114,10 @@ public class ActionToDo {
         seriesEntityToActOn=series;
         return this;
     }
+
+    public ActionToDo withBook(final BookEntity book) {
+        bookEntityToActOn=book;
+        return this;
+
+    }
 }
