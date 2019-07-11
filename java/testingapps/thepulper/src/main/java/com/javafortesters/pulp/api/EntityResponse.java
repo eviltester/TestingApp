@@ -1,8 +1,14 @@
 package com.javafortesters.pulp.api;
 
 import com.google.gson.Gson;
+import com.javafortesters.pulp.api.actions.ActionEntityResponsePair;
+import com.javafortesters.pulp.api.actions.ActionToDo;
+import com.javafortesters.pulp.api.actions.BulkResponse;
 import com.javafortesters.pulp.api.entities.EntityResponseErrorMessage;
+import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
+import com.javafortesters.pulp.domain.groupings.PulpData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -61,7 +67,17 @@ public class EntityResponse {
     public String getErrorMessage() {
 
         if(format.endsWith("json")){
-            return new Gson().toJson(new EntityResponseErrorMessage(errorMessage));
+            // quick hack to put all individual error messages into new format
+            // TODO: use proper API error message reporting throughout
+            
+            final ArrayList<ActionEntityResponsePair> errorResponses = new ArrayList<ActionEntityResponsePair>();
+            errorResponses.add(new ActionEntityResponsePair(new ActionToDo().isError(statusCode, errorMessage),
+                                new EntityResponse().setErrorStatus(statusCode, errorMessage)));
+
+            final BulkResponse bulkResponse = new BulkResponse(errorResponses, new PulpData());
+            return bulkResponse.asEntityResponse().responseBody;
+
+            //return new Gson().toJson(new EntityResponseErrorMessage(errorMessage));
         }else{
             return errorMessage;
         }

@@ -7,6 +7,7 @@ import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiResponse;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BulkResponse {
@@ -18,6 +19,11 @@ public class BulkResponse {
         this.responses = responses;
         apiResponse = new ApiResponseBuilder(bookdata);
     }
+
+    public static BulkResponse forErrorMessagesOnly() {
+        return new BulkResponse(new ArrayList<>(), new PulpData());
+    }
+
 
     public EntityResponse asEntityResponse() {
 
@@ -115,4 +121,6 @@ public class BulkResponse {
 
         apiResponse.addError(errorMessage);
     }
+
+
 }
