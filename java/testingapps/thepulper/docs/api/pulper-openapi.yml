@@ -134,7 +134,7 @@ paths:
       responses:
         '200':
           description: |
-            The response for an amendment.
+            The response for an amendment or for a bulk amend/create request that was successful.
 
             For an individual book, the body of the message will contain the full details of the book e.g.
 

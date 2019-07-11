@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.api;
 
 import com.google.gson.Gson;
+import com.javafortesters.pulp.api.entities.IncludeFieldNames;
 import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.single.BookEntity;
 import com.javafortesters.pulp.api.entities.single.PublisherEntity;
@@ -58,5 +59,11 @@ public class DomainToEntityConvertor {
 
     public PublisherEntity toEntity(final PulpPublisher publisher) {
         return new PublisherEntity(publisher.getId(), publisher.getName());
+    }
+
+    public BookEntity toEntity(final PulpBook book, final IncludeFieldNames includeFieldNames) {
+        final BookEntity entity = toEntity(book);
+        entity.includeOnlyFields(includeFieldNames);
+        return entity;
     }
 }

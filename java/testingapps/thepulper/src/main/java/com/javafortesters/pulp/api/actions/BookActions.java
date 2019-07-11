@@ -103,7 +103,7 @@ public class BookActions {
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Title '%s'", book.title));
             }
 
-            if(book.publicationYear<=0){
+            if(book.publicationYear == null || book.publicationYear<=0){
                 return new EntityResponse().setErrorStatus(400, String.format("Invalid Book Publication Year '%d'", book.publicationYear));
             }
 
@@ -172,10 +172,17 @@ public class BookActions {
 
         // did we get a single item?
         if(single!=null && (single.title!=null || single.id!=null || single.seriesId!=null || single.authors!=null ||
-                single.series!=null || single.publisher!=null || single.publicationYear>0)){
+                single.series!=null || single.publisher!=null || (single.publicationYear!=null && single.publicationYear>0))){
 
+            // treat single POST as bulk action for a bulk action response
+            //ActionToDo action = identifyCreateAmendActionForBookEntity(single);
+            //return new ActionProcessor(bookdata, convertor, rooturl).process(action);
+
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
             ActionToDo action = identifyCreateAmendActionForBookEntity(single);
-            return new ActionProcessor(bookdata, convertor, rooturl).process(action);
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
 
@@ -190,7 +197,6 @@ public class BookActions {
             for( BookEntity aSingleItem : list.books){
                 actions.add(identifyCreateAmendActionForBookEntity(aSingleItem));
             }
-
 
             ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
 
@@ -251,7 +257,7 @@ public class BookActions {
         if(single.seriesId == null || single.seriesId.length()==0){
             return new ActionToDo().isError(400, String.format("Book must have a series id")).withBook(single);
         }
-        if(single.publicationYear<=0){
+        if(single.publicationYear!=null && single.publicationYear<=0){
             return new ActionToDo().isError(400, String.format("Book must have a publication year")).withBook(single);
         }
 

@@ -92,4 +92,12 @@ public class EntityResponse {
     public String getHeaderValue(final String headerkey) {
         return headers.get(headerkey);
     }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(final Map<String, String> headers) {
+        this.headers.putAll(headers);
+    }
 }

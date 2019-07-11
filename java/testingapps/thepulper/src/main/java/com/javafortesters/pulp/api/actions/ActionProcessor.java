@@ -216,7 +216,7 @@ public class ActionProcessor {
 
             actualBook.amendTitle(bookDetails.title);
 
-            if(bookDetails.publicationYear>0) {
+            if(bookDetails.publicationYear!=null && bookDetails.publicationYear>0) {
                 actualBook.amendPublicationYear(String.valueOf(bookDetails.publicationYear));
             }
 

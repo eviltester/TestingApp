@@ -1,5 +1,6 @@
 package com.javafortesters.pulp.api.entities.single;
 
+import com.javafortesters.pulp.api.entities.IncludeFieldNames;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
@@ -9,13 +10,13 @@ import java.util.Collection;
 import java.util.List;
 
 public class BookEntity {
-    public final String id;
-    public final String title;
-    public final int publicationYear;
-    public final String seriesId;
-    public final List<AuthorEntity> authors;
-    public final SeriesEntity series;
-    public final PublisherEntity publisher;
+    public String id;
+    public String title;
+    public Integer publicationYear;
+    public String seriesId;
+    public List<AuthorEntity> authors;
+    public SeriesEntity series;
+    public PublisherEntity publisher;
 
     public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
                       final PulpSeries pulpSeries, final Collection<PulpAuthor> allAuthors, final PulpPublisher pulpPublisher) {
@@ -47,5 +48,39 @@ public class BookEntity {
         this.authors = allAuthors;
 
         this.publisher = pulpPublisher;
+    }
+
+    public void includeOnlyFields(final IncludeFieldNames includeFieldNames) {
+        List<String> fieldNames = includeFieldNames.getNames();
+
+        if(!fieldNames.contains("id")){
+            this.id=null;
+        }
+
+        if(!fieldNames.contains("title")){
+            this.title=null;
+        }
+
+        if(!fieldNames.contains("publicationYear")){
+            this.publicationYear=null;
+        }
+
+        if(!fieldNames.contains("seriesId")){
+            this.seriesId=null;
+        }
+
+        if(!fieldNames.contains("series")){
+            this.series=null;
+        }
+
+        if(!fieldNames.contains("authors")){
+            this.authors=null;
+        }
+
+        if(!fieldNames.contains("publisher")){
+            this.publisher=null;
+        }
+
+
     }
 }

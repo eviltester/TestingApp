@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.api.entities.payloads;
 
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
+import com.javafortesters.pulp.api.entities.IncludeFieldNames;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiResponse;
 import com.javafortesters.pulp.api.entities.payloads.responses.EntityLists;
@@ -31,7 +32,7 @@ public class ApiResponseBuilder {
 
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
-        response.created.books.add(convertor.toEntity(actualBook));
+        response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id", "title")));
         ensureDataBookListExists();
         response.data.books.add(convertor.toEntity(actualBook));
     }
@@ -81,7 +82,7 @@ public class ApiResponseBuilder {
 
     public void addAmended(final PulpBook actualBook) {
         ensureAmendedBookListExists();
-        response.amended.books.add(convertor.toEntity(actualBook));
+        response.amended.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id", "title")));
         ensureDataBookListExists();
         response.data.books.add(convertor.toEntity(actualBook));
     }

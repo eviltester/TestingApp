@@ -21,21 +21,44 @@ public class BulkResponse {
 
     public EntityResponse asEntityResponse() {
 
+        boolean have_201=false;
+        boolean have_200=false;
+
         for(ActionEntityResponsePair entityResponse : responses){
             if(entityResponse.response.isError()){
                 addErrorResponse(entityResponse);
             }else{
+                if(entityResponse.response.getStatusCode()==201){
+                    have_201=true;
+                }
+                if(entityResponse.response.getStatusCode()==200){
+                    have_200=true;
+                }
+
                 addSuccessResponse(entityResponse);
             }
         }
 
         final ApiResponse response = apiResponse.getApiResponse();
+        EntityResponse returnedResponse;
+
         if(response.errors==null) {
-            return new EntityResponse().setSuccessStatus(200, new Gson().toJson(response));
+            int statusCode = 200;  // 200 is more generic than 201, so if we have a mix then return 200
+            if(have_201 && !have_200){
+                statusCode=201;
+            }
+            returnedResponse = new EntityResponse().setSuccessStatus(statusCode, new Gson().toJson(response));
         }else{
             // use success status because we are midway through a refactoring and we want to set the response and status here
-            return new EntityResponse().setSuccessStatus(400, new Gson().toJson(response));
+            returnedResponse = new EntityResponse().setSuccessStatus(400, new Gson().toJson(response));
         }
+
+        if(responses.size()==1){
+            // if there is only one then copy in the headers
+            returnedResponse.setHeaders(responses.get(0).response.getHeaders());
+        }
+
+        return returnedResponse;
     }
 
     private void addSuccessResponse(final ActionEntityResponsePair entityResponse) {
