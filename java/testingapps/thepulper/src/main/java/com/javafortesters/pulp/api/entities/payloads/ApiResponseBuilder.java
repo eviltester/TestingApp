@@ -2,14 +2,13 @@ package com.javafortesters.pulp.api.entities.payloads;
 
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.entities.IncludeFieldNames;
+import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
 import com.javafortesters.pulp.api.entities.lists.ListPopulator;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiResponse;
 import com.javafortesters.pulp.api.entities.payloads.responses.EntityLists;
 import com.javafortesters.pulp.api.entities.payloads.responses.ErrorList;
-import com.javafortesters.pulp.domain.groupings.PulpAuthors;
-import com.javafortesters.pulp.domain.groupings.PulpData;
-import com.javafortesters.pulp.domain.groupings.PulpPublishers;
+import com.javafortesters.pulp.domain.groupings.*;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
@@ -20,9 +19,11 @@ import java.util.ArrayList;
 public class ApiResponseBuilder {
 
     private final DomainToEntityConvertor convertor;
+    private final PulpData bookData;
     private ApiResponse response;
 
     public ApiResponseBuilder(final PulpData bookdata){
+        this.bookData = bookdata;
         convertor = new DomainToEntityConvertor(bookdata);
         response = new ApiResponse();
     }
@@ -55,13 +56,35 @@ public class ApiResponseBuilder {
         return this;
     }
 
+    public ApiResponseBuilder addData(final PulpSeries series) {
+        ensureDataSeriesListExists();
+        response.data.series.add(convertor.toEntity(series));
+        return this;
+    }
+
+    public ApiResponseBuilder addData(final PulpSeriesCollection series) {
+        ensureDataSeriesListExists();
+        new ListPopulator().populate(response.data.series, series);
+        return this;
+    }
+
+    public ApiResponseBuilder addData(final PulpBook book) {
+        ensureDataBookListExists();
+        response.data.books.add(convertor.toEntity(book));
+        return this;
+    }
+
+    public ApiResponseBuilder addData(final PulpBooks books) {
+        ensureDataBookListExists();
+        new ListPopulator().populate(response.data.books, books, bookData);
+        return this;
+    }
 
 
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
         response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
-        ensureDataBookListExists();
-        response.data.books.add(convertor.toEntity(actualBook));
+        addData(actualBook);
     }
 
     public void addCreated(final PulpAuthor actualAuthor) {
@@ -73,8 +96,7 @@ public class ApiResponseBuilder {
     public void addCreated(final PulpSeries actualSeries) {
         ensureCreatedSeriesListExists();
         response.created.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
-        ensureDataSeriesListExists();
-        response.data.series.add(convertor.toEntity(actualSeries));
+        addData(actualSeries);
     }
 
     public void addCreated(final PulpPublisher actualPublisher) {
@@ -92,8 +114,7 @@ public class ApiResponseBuilder {
     public void addAmended(final PulpSeries actualSeries) {
         ensureAmendedSeriesListExists();
         response.amended.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
-        ensureDataSeriesListExists();
-        response.data.series.add(convertor.toEntity(actualSeries));
+        addData(actualSeries);
     }
 
     public void addAmended(final PulpPublisher actualPublisher) {
@@ -229,6 +250,7 @@ public class ApiResponseBuilder {
         }
         response.errors.report.add(errorMessage);
     }
+
 
 
 }

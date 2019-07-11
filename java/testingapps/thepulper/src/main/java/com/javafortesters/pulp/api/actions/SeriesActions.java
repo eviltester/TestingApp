@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.api.entities.lists.SeriesListEntity;
+import com.javafortesters.pulp.api.entities.payloads.ApiResponseBuilder;
+import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.single.SeriesEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.groupings.PulpSeriesCollection;
@@ -33,15 +35,21 @@ public class SeriesActions {
             return response;
         }
 
-        return response.setSuccessStatus(200, convertor.toJson(series));
+        return response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(series).getApiResponse())
+        );
+
     }
 
     public EntityResponse getAll(final String acceptformat) {
         final EntityResponse response = new EntityResponse();
 
-        SeriesListEntity entity = new SeriesListEntity(bookdata.series());
+        response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(bookdata.series()).getApiResponse())
+        );
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
     }
 
@@ -107,9 +115,11 @@ public class SeriesActions {
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Series '%s', %s to same name as %s", actualSeries.getName(), actualSeries.getId(), existingNamedSeries.getId()));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new SeriesEntity(actualSeries.getId(), series.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new SeriesEntity(actualSeries.getId(), series.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
@@ -144,12 +154,15 @@ public class SeriesActions {
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));
         }
 
+        ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+        List<ActionEntityResponsePair> responses = new ArrayList<>();
+
 
         // did we get a single series?
         if(series!=null && series.name!=null){
 
             ActionToDo action = identifyCreateAmendActionForSeriesEntity(series);
-            return new ActionProcessor(bookdata, convertor, rooturl).process(action);
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
 
         }else{
 
@@ -165,16 +178,12 @@ public class SeriesActions {
                 actions.add(identifyCreateAmendActionForSeriesEntity(aSeries));
             }
 
-            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
-
-            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
-
                 responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
-
-            return new BulkResponse(responses, bookdata).asEntityResponse();
         }
+
+        return new BulkResponse(responses, bookdata).asEntityResponse();
     }
 
     private ActionToDo identifyCreateAmendActionForSeriesEntity(final SeriesEntity series) {
@@ -257,9 +266,11 @@ public class SeriesActions {
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Series '%s', %s to same name as %s", actualSeries.getName(), actualSeries.getId(), existingNamedSeries.getId()));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new SeriesEntity(actualSeries.getId(), series.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new SeriesEntity(actualSeries.getId(), series.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Series %s", errorMessage));

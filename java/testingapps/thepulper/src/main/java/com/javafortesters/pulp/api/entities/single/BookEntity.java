@@ -25,18 +25,25 @@ public class BookEntity {
         this.publicationYear = publicationYear;
         this.seriesId = seriesId;
 
-        this.series = new SeriesEntity(pulpSeries.getId(), pulpSeries.getName());
-
-        this.authors = new ArrayList();
-
-        for(PulpAuthor author : allAuthors){
-            authors.add(new AuthorEntity(author.getId(), author.getName()));
+        // the objects might be null if it is a patch, so double check
+        if(pulpSeries!=null) {
+            this.series = new SeriesEntity(pulpSeries.getId(), pulpSeries.getName());
         }
 
-        this.publisher = new PublisherEntity(pulpPublisher.getId(), pulpPublisher.getName());
+        if(allAuthors!=null) {
+            this.authors = new ArrayList();
+
+            for (PulpAuthor author : allAuthors) {
+                authors.add(new AuthorEntity(author.getId(), author.getName()));
+            }
+        }
+
+        if(pulpPublisher!=null) {
+            this.publisher = new PublisherEntity(pulpPublisher.getId(), pulpPublisher.getName());
+        }
     }
 
-    public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
+    public BookEntity(final String id, final String title, final Integer publicationYear, final String seriesId,
                       final SeriesEntity pulpSeries, final List<AuthorEntity> allAuthors, final PublisherEntity pulpPublisher) {
         this.id = id;
         this.title = title;

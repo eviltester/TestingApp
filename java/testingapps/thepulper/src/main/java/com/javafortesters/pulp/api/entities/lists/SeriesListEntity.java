@@ -17,8 +17,6 @@ public class SeriesListEntity {
     public SeriesListEntity(final PulpSeriesCollection dataseries) {
 
         this.series = new ArrayList();
-        for(PulpSeries aseries : dataseries.getAll()){
-            series.add(new SeriesEntity(aseries.getId(), aseries.getName()));
-        }
+        new ListPopulator().populate(series, dataseries);
     }
 }

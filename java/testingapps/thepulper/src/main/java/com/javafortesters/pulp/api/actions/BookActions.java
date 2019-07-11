@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
+import com.javafortesters.pulp.api.entities.payloads.ApiResponseBuilder;
 import com.javafortesters.pulp.api.entities.single.AuthorEntity;
 import com.javafortesters.pulp.api.entities.single.BookEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
@@ -32,7 +33,12 @@ public class BookActions {
 
         BooksListEntity entity = new BooksListEntity(bookdata);
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
+        response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(bookdata.books()).getApiResponse())
+        );
+
+        //response.setSuccessStatus(200,new Gson().toJson(entity));
         return response;
     }
 
@@ -45,7 +51,12 @@ public class BookActions {
             return response;
         }
 
-        return new EntityResponse().setSuccessStatus(200, convertor.toJson(book));
+        return response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(book).getApiResponse())
+                );
+
+        //return new EntityResponse().setSuccessStatus(200, convertor.toJson(book));
     }
 
     public EntityResponse deleteSingle(final String bookid, final String accept) {
@@ -129,9 +140,17 @@ public class BookActions {
                 return new EntityResponse().setErrorStatus(400, String.format("Book must have authors"));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isReplace(
-                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
+
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isReplace(
+                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
+
+//            return new ActionProcessor(bookdata, convertor, rooturl).process(
+//                    new ActionToDo().isReplace(
+//                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));
@@ -170,6 +189,9 @@ public class BookActions {
 
         // Minimum for a book
 
+        ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+        List<ActionEntityResponsePair> responses = new ArrayList<>();
+
         // did we get a single item?
         if(single!=null && (single.title!=null || single.id!=null || single.seriesId!=null || single.authors!=null ||
                 single.series!=null || single.publisher!=null || (single.publicationYear!=null && single.publicationYear>0))){
@@ -178,11 +200,8 @@ public class BookActions {
             //ActionToDo action = identifyCreateAmendActionForBookEntity(single);
             //return new ActionProcessor(bookdata, convertor, rooturl).process(action);
 
-            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
-            List<ActionEntityResponsePair> responses = new ArrayList<>();
             ActionToDo action = identifyCreateAmendActionForBookEntity(single);
             responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
-            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
 
@@ -198,17 +217,12 @@ public class BookActions {
                 actions.add(identifyCreateAmendActionForBookEntity(aSingleItem));
             }
 
-            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
-
-            List<ActionEntityResponsePair> responses = new ArrayList<>();
             for(ActionToDo action : actions){
-
                 responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             }
-
-            return new BulkResponse(responses, bookdata).asEntityResponse();
-
         }
+
+        return new BulkResponse(responses, bookdata).asEntityResponse();
     }
 
     private ActionToDo identifyCreateAmendActionForBookEntity(final BookEntity single) {
@@ -367,9 +381,18 @@ public class BookActions {
                 return new EntityResponse().setErrorStatus(400, String.format("Book must have authors"));
             }
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isPatch(
-                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
+
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isPatch(
+                    new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
+
+
+//            return new ActionProcessor(bookdata, convertor, rooturl).process(
+//                    new ActionToDo().isPatch(
+//                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher)));
 
         }else{
             return new EntityResponse().setErrorStatus(400, String.format("Cannot process content as Book %s", errorMessage));

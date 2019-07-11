@@ -14,15 +14,7 @@ public class BooksListEntity {
     public BooksListEntity(final PulpData allData) {
         this.books = new ArrayList();
 
-        for(PulpBook book : allData.books().getAll()){
-            books.add(new BookEntity(   book.getId(),
-                                        book.getTitle(),
-                                        book.getPublicationYear(),
-                                        book.getSeriesId(),
-                                        allData.series().get(book.getSeriesIndex()),
-                                        allData.authors().getAll(book.getAllAuthorIndexes()),
-                                        allData.publishers().get(book.getPublisherIndex())
-                    ));
-        }
+        new ListPopulator().populate(books, allData.books(), allData);
+
     }
 }
