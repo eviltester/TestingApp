@@ -45,9 +45,16 @@ public class AuthorActions {
     public EntityResponse getAll(final String acceptformat) {
         final EntityResponse response = new EntityResponse();
 
-        AuthorListEntity entity = new AuthorListEntity(bookdata.authors());
+        //AuthorListEntity entity = new AuthorListEntity(bookdata.authors());
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
+        //response.setSuccessStatus(200,new Gson().toJson(entity));
+
+
+        response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(bookdata.authors()).getApiResponse())
+        );
+
         return response;
 
     }

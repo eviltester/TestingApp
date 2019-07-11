@@ -2,10 +2,12 @@ package com.javafortesters.pulp.api.entities.payloads;
 
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.entities.IncludeFieldNames;
+import com.javafortesters.pulp.api.entities.lists.ListPopulator;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
 import com.javafortesters.pulp.api.entities.payloads.responses.ApiResponse;
 import com.javafortesters.pulp.api.entities.payloads.responses.EntityLists;
 import com.javafortesters.pulp.api.entities.payloads.responses.ErrorList;
+import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
@@ -34,6 +36,11 @@ public class ApiResponseBuilder {
         return this;
     }
 
+    public ApiResponseBuilder addData(final PulpAuthors authors) {
+        ensureDataAuthorListExists();
+        new ListPopulator().populate(response.data.authors, authors);
+        return this;
+    }
 
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
@@ -211,5 +218,6 @@ public class ApiResponseBuilder {
         }
         response.errors.report.add(errorMessage);
     }
+
 
 }

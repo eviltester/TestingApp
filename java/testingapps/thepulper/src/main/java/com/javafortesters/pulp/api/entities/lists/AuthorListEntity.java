@@ -14,8 +14,8 @@ public class AuthorListEntity {
     public AuthorListEntity(final PulpAuthors dataauthors) {
         this.authors = new ArrayList();
 
-        for(PulpAuthor author : dataauthors.getAll()){
-            authors.add(new AuthorEntity(author.getId(), author.getName()));
-        }
+        new ListPopulator().populate(this.authors, dataauthors);
+
+
     }
 }
