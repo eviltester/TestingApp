@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.api.entities.lists.PublisherListEntity;
+import com.javafortesters.pulp.api.entities.payloads.ApiResponseBuilder;
 import com.javafortesters.pulp.api.entities.single.PublisherEntity;
 import com.javafortesters.pulp.domain.groupings.PulpData;
 import com.javafortesters.pulp.domain.groupings.PulpPublishers;
@@ -32,7 +33,11 @@ public class PublisherActions {
             return response;
         }
 
-        return response.setSuccessStatus(200, convertor.toJson(publisher));
+        return response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(publisher).getApiResponse())
+        );
+
     }
 
     public EntityResponse getAll(final String accept) {
@@ -40,8 +45,10 @@ public class PublisherActions {
 
         PublisherListEntity entity = new PublisherListEntity(bookdata.publishers());
 
-        response.setSuccessStatus(200,new Gson().toJson(entity));
-        return response;
+        return response.setSuccessStatus(200,
+                new Gson().toJson(
+                        new ApiResponseBuilder(bookdata).addData(bookdata.publishers()).getApiResponse())
+        );
 
     }
 

@@ -213,10 +213,11 @@ public class AuthorActions {
                 return new EntityResponse().setErrorStatus(409, String.format("Cannot rename Author '%s', %s to same name as %s", actualAuthor.getName(), actualAuthor.getId(), existingNamed.getId()));
             }
 
-
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new AuthorEntity(actualAuthor.getId(), author.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new AuthorEntity(actualAuthor.getId(), author.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
 
         }else{
 
@@ -271,9 +272,12 @@ public class AuthorActions {
             }
 
 
-            return new ActionProcessor(bookdata, convertor, rooturl).process(
-                    new ActionToDo().isAmend(
-                            new AuthorEntity(actualAuthor.getId(), author.name)));
+            ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
+            List<ActionEntityResponsePair> responses = new ArrayList<>();
+            ActionToDo action = new ActionToDo().isAmend(new AuthorEntity(actualAuthor.getId(), author.name));
+            responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
+            return new BulkResponse(responses, bookdata).asEntityResponse();
+
 
         }else{
 

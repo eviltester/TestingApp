@@ -14,8 +14,8 @@ public class PublisherListEntity {
 
     public PublisherListEntity(final PulpPublishers datapublishers) {
         this.publishers = new ArrayList();
-        for(PulpPublisher publisher : datapublishers.getAll()){
-            publishers.add(new PublisherEntity(publisher.getId(), publisher.getName()));
-        }
+
+        new ListPopulator().populate(this.publishers, datapublishers);
+
     }
 }

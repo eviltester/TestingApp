@@ -9,6 +9,7 @@ import com.javafortesters.pulp.api.entities.payloads.responses.EntityLists;
 import com.javafortesters.pulp.api.entities.payloads.responses.ErrorList;
 import com.javafortesters.pulp.domain.groupings.PulpAuthors;
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.domain.groupings.PulpPublishers;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
@@ -42,6 +43,20 @@ public class ApiResponseBuilder {
         return this;
     }
 
+    public ApiResponseBuilder addData(final PulpPublisher publisher) {
+        ensureDataPublisherListExists();
+        response.data.publishers.add(convertor.toEntity(publisher));
+        return this;
+    }
+
+    public ApiResponseBuilder addData(final PulpPublishers publishers) {
+        ensureDataPublisherListExists();
+        new ListPopulator().populate(response.data.publishers, publishers);
+        return this;
+    }
+
+
+
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
         response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
@@ -55,7 +70,6 @@ public class ApiResponseBuilder {
         addData(actualAuthor);
     }
 
-
     public void addCreated(final PulpSeries actualSeries) {
         ensureCreatedSeriesListExists();
         response.created.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
@@ -66,15 +80,13 @@ public class ApiResponseBuilder {
     public void addCreated(final PulpPublisher actualPublisher) {
         ensureCreatedPublisherListExists();
         response.created.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
-        ensureDataPublisherListExists();
-        response.data.publishers.add(convertor.toEntity(actualPublisher));
+        addData(actualPublisher);
     }
 
     public void addAmended(final PulpAuthor actualAuthor) {
         ensureAmendedAuthorListExists();
         response.amended.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
-        ensureDataAuthorListExists();
-        response.data.authors.add(convertor.toEntity(actualAuthor));
+        addData(actualAuthor);
     }
 
     public void addAmended(final PulpSeries actualSeries) {
@@ -87,8 +99,7 @@ public class ApiResponseBuilder {
     public void addAmended(final PulpPublisher actualPublisher) {
         ensureAmendedPublisherListExists();
         response.amended.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
-        ensureDataPublisherListExists();
-        response.data.publishers.add(convertor.toEntity(actualPublisher));
+        addData(actualPublisher);
     }
 
     public void addAmended(final PulpBook actualBook) {
