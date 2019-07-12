@@ -8,7 +8,6 @@ import com.javafortesters.pulp.domain.objects.PulpBook;
 public class ApiResponse {
 
     public EntityLists data;     // entities returned and impacted by your request
-    public EntityLists created;  // entities created in response to your message
-    public EntityLists amended;  // entities created in response to your message
+    public EntityListsLog logs;
     public ErrorList errors;     // any errors
 }

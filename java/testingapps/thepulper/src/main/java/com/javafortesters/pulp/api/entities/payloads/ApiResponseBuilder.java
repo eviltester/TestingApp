@@ -4,10 +4,7 @@ import com.javafortesters.pulp.api.DomainToEntityConvertor;
 import com.javafortesters.pulp.api.entities.IncludeFieldNames;
 import com.javafortesters.pulp.api.entities.lists.BooksListEntity;
 import com.javafortesters.pulp.api.entities.lists.ListPopulator;
-import com.javafortesters.pulp.api.entities.payloads.responses.ApiErrorMessage;
-import com.javafortesters.pulp.api.entities.payloads.responses.ApiResponse;
-import com.javafortesters.pulp.api.entities.payloads.responses.EntityLists;
-import com.javafortesters.pulp.api.entities.payloads.responses.ErrorList;
+import com.javafortesters.pulp.api.entities.payloads.responses.*;
 import com.javafortesters.pulp.domain.groupings.*;
 import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
@@ -83,49 +80,49 @@ public class ApiResponseBuilder {
 
     public void addCreated(final PulpBook actualBook) {
         ensureCreatedBookListExists();
-        response.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
+        response.logs.created.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
         addData(actualBook);
     }
 
     public void addCreated(final PulpAuthor actualAuthor) {
         ensureCreatedAuthorListExists();
-        response.created.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
+        response.logs.created.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
         addData(actualAuthor);
     }
 
     public void addCreated(final PulpSeries actualSeries) {
         ensureCreatedSeriesListExists();
-        response.created.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
+        response.logs.created.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
         addData(actualSeries);
     }
 
     public void addCreated(final PulpPublisher actualPublisher) {
         ensureCreatedPublisherListExists();
-        response.created.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
+        response.logs.created.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
         addData(actualPublisher);
     }
 
     public void addAmended(final PulpAuthor actualAuthor) {
         ensureAmendedAuthorListExists();
-        response.amended.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
+        response.logs.amended.authors.add(convertor.toEntity(actualAuthor, new IncludeFieldNames("id")));
         addData(actualAuthor);
     }
 
     public void addAmended(final PulpSeries actualSeries) {
         ensureAmendedSeriesListExists();
-        response.amended.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
+        response.logs.amended.series.add(convertor.toEntity(actualSeries, new IncludeFieldNames("id")));
         addData(actualSeries);
     }
 
     public void addAmended(final PulpPublisher actualPublisher) {
         ensureAmendedPublisherListExists();
-        response.amended.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
+        response.logs.amended.publishers.add(convertor.toEntity(actualPublisher, new IncludeFieldNames("id")));
         addData(actualPublisher);
     }
 
     public void addAmended(final PulpBook actualBook) {
         ensureAmendedBookListExists();
-        response.amended.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
+        response.logs.amended.books.add(convertor.toEntity(actualBook, new IncludeFieldNames("id")));
         ensureDataBookListExists();
         response.data.books.add(convertor.toEntity(actualBook));
     }
@@ -170,72 +167,80 @@ public class ApiResponseBuilder {
 
 
     private void ensureCreatedListExists() {
-        if(response.created==null){
-            response.created = new EntityLists();
+        ensureLogsExists();
+        if(response.logs.created==null){
+            response.logs.created = new EntityLists();
         }
     }
 
     private void ensureCreatedBookListExists() {
         ensureCreatedListExists();
-        if(response.created.books==null){
-            response.created.books = new ArrayList<>();
+        if(response.logs.created.books==null){
+            response.logs.created.books = new ArrayList<>();
+        }
+    }
+
+    private void ensureLogsExists() {
+        if(response.logs==null){
+            response.logs = new EntityListsLog();
         }
     }
 
     private void ensureCreatedAuthorListExists() {
         ensureCreatedListExists();
-        if(response.created.authors==null){
-            response.created.authors = new ArrayList<>();
+        if(response.logs.created.authors==null){
+            response.logs.created.authors = new ArrayList<>();
         }
     }
 
     private void ensureCreatedSeriesListExists() {
         ensureCreatedListExists();
-        if(response.created.series==null){
-            response.created.series = new ArrayList<>();
+        if(response.logs.created.series==null){
+            response.logs.created.series = new ArrayList<>();
         }
     }
 
     private void ensureCreatedPublisherListExists() {
         ensureCreatedListExists();
-        if(response.created.publishers==null){
-            response.created.publishers = new ArrayList<>();
+        if(response.logs.created.publishers==null){
+            response.logs.created.publishers = new ArrayList<>();
         }
     }
 
 
 
     private void ensureAmendedListExists() {
-        if(response.amended==null){
-            response.amended = new EntityLists();
+        ensureLogsExists();
+        if(response.logs.amended==null){
+            response.logs.amended = new EntityLists();
         }
     }
 
     private void ensureAmendedBookListExists() {
         ensureAmendedListExists();
-        if(response.amended.books==null){
-            response.amended.books = new ArrayList<>();
+        if(response.logs.amended.books==null){
+            response.logs.amended.books = new ArrayList<>();
         }
     }
 
     private void ensureAmendedAuthorListExists() {
         ensureAmendedListExists();
-        if(response.amended.authors==null){
-            response.amended.authors = new ArrayList<>();
+        if(response.logs.amended.authors==null){
+            response.logs.amended.authors = new ArrayList<>();
         }
     }
 
     private void ensureAmendedSeriesListExists() {
         ensureAmendedListExists();
-        if(response.amended.series==null){
-            response.amended.series = new ArrayList<>();
+        if(response.logs.amended.series==null){
+            response.logs.amended.series = new ArrayList<>();
         }
     }
 
     private void ensureAmendedPublisherListExists() {
         ensureAmendedListExists();
-        if(response.amended.publishers==null){
-            response.amended.publishers = new ArrayList<>();
+        if(response.logs.amended.publishers==null){
+            response.logs.amended.publishers = new ArrayList<>();
         }
 
     }

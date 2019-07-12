@@ -83,24 +83,24 @@ paths:
 
         ```
         {
-        	"books":[
-        		{
-        			"title": "The Land of Little People Terror",
-        			"publicationYear": 1980,
-        			"seriesId": "Issue 1",
-        			"authors": [
-        				{
-        					"id": "4"
-        				}
-        			],
-        			"series": {
-        				"id": "1"
-        			},
-        			"publisher": {
-        				"id": "1"
-        			}
-        		}
-        	]
+          "books":[
+            {
+              "title": "The Land of Little People Terror",
+              "publicationYear": 1980,
+              "seriesId": "Issue 1",
+              "authors": [
+                {
+                  "id": "4"
+                }
+              ],
+              "series": {
+                "id": "1"
+              },
+              "publisher": {
+                "id": "1"
+              }
+            }
+          ]
         }
         ```
 
@@ -196,6 +196,27 @@ definitions:
             type: array
             items:
               $ref: '#/definitions/BookItem'
+      logs:
+        $ref: '#/definitions/bookslogs'
+  bookslogs:
+    type: object
+    properties:
+      created:
+        $ref: '#/definitions/BooksIdArray'
+      amended:
+        $ref: '#/definitions/BooksIdArray'
+  BooksIdArray:
+    type: object
+    properties:
+      books:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+
+
   ErrorsReportMessages:
     type: object
     properties:
