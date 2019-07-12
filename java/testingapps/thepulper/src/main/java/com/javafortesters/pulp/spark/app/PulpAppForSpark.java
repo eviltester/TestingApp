@@ -1,5 +1,6 @@
 package com.javafortesters.pulp.spark.app;
 
+import com.google.gson.Gson;
 import com.javafortesters.pulp.PulpApp;
 import com.javafortesters.pulp.api.EntityResponse;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
@@ -242,6 +243,18 @@ public class PulpAppForSpark {
         final EntityResponse notAllowed = new EntityResponse().setErrorStatus(405, "Not allowed, sorry");
         final EntityResponse unknown = new EntityResponse().setErrorStatus(404, "Unknown API EndPoint");
 
+        // enable for debugging to see all requests and responses
+        /*
+        before("*", (request, response) -> {
+            System.out.println(request.requestMethod());
+            System.out.println(request.pathInfo());
+            System.out.println(request.body());
+        });
+        after((request, response) -> {
+            System.out.println(response.status());
+            System.out.println(response.body());
+        });
+        */
 
         before("/apps/pulp/api/*", (request, response) -> {
             // before any API request, check for an X-API-AUTH header

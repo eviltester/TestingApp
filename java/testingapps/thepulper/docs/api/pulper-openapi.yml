@@ -1,5 +1,6 @@
 # http://editor.swagger.io
 # https://swagger.io/docs/specification/about/
+# https://next.stoplight.io/eviltester-1/thepulper
 swagger: '2.0'
 info:
   version: '1.0'

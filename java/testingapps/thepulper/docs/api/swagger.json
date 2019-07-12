@@ -1,0 +1,290 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "The Pulper API"
+  },
+  "host": "localhost:4567",
+  "basePath": "/apps/pulp/api/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "APIKeyHeader": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-AUTH",
+      "description": "The X-API-AUTH value can be found listed in the Admin page on the GUI"
+    }
+  },
+  "security": [
+    {
+      "APIKeyHeader": []
+    }
+  ],
+  "paths": {
+    "/heartbeat": {
+      "get": {
+        "summary": "Check if the API is running",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "204": {
+            "description": "OK The Application is running"
+          }
+        }
+      }
+    },
+    "/books": {
+      "get": {
+        "summary": "Return an array of all the book objects",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "returns an array of all the book objects, will be empty if there are no books",
+            "schema": {
+              "$ref": "#/definitions/databooks"
+            },
+            "examples": {
+              "application/json": {
+                "data": {
+                  "books": [
+                    {
+                      "id": "1",
+                      "title": "The Man of Bronze",
+                      "publicationYear": 1933,
+                      "seriesId": "Mar, 1933",
+                      "authors": [
+                        {
+                          "id": "4",
+                          "name": "Lester Dent"
+                        },
+                        {
+                          "id": "10",
+                          "name": "Kenneth Robeson"
+                        }
+                      ],
+                      "series": {
+                        "id": "1",
+                        "name": "Doc Savage"
+                      },
+                      "publisher": {
+                        "id": "1",
+                        "name": "Street And Smith"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/responses/APIUnauthorizedError"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create or amend a single or multiple books",
+        "description": "Given an array of book objects, a POST call will create or amend the books. The object must be valid.\n\nTo Create a list of books then the individual book objects must be contained in a 'books' array.\n\nFor the Series, Publisher and Author, either the name or the id can be supplied as the identifier.\n\n```\n{\n  \"books\":[\n    {\n      \"title\": \"The Land of Little People Terror\",\n      \"publicationYear\": 1980,\n      \"seriesId\": \"Issue 1\",\n      \"authors\": [\n        {\n          \"id\": \"4\"\n        }\n      ],\n      \"series\": {\n        \"id\": \"1\"\n      },\n      \"publisher\": {\n        \"id\": \"1\"\n      }\n    }\n  ]\n}\n```\n\nTo Amend a book you only need to add the fields which identify the book (id), and the fields which you want to amend:\n\n```\n{ \"books\":[\n    {\n      \"id\": \"1\",\n      \"authors\":[{\"id\":\"1\"}]\n    }\n    {\n      \"id\": \"2\",\n      \"authors\":[{\"name\":\"Lester Dent\"}]\n    }\n  ]\n}\n```\n\nAuthors, Series and Publisher can be specified with either the \"id\" or the \"name\", name will be used to lookup the Author, Series or Publisher to ensure cross referencing to the correct entity.\n",
+        "produces": [
+          "application/json"
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "The list of books to create, note - do not include an id, that will be allocated for you. All fields (except id) must be present for create, but for amend only the id and the fields you wish to amend are required.",
+            "schema": {
+              "$ref": "#/definitions/BookItems"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The response for an amendment or for a bulk amend/create request that was successful.\n"
+          },
+          "201": {
+            "description": "The response for a bulk create request that was successful.\n"
+          },
+          "400": {
+            "description": "The response for a bulk create request that had errors when process, some of the entities may have been processed successfully, process the response to check.\n"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "APIUnauthorizedError": {
+      "description": "\nX-API-AUTH header is missing or invalid\n\nDescription of the error, i.e. was the header missing, or was it invalid\n\n```\n{\n  \"errors\": {\n    \"report\": [\n    {\n      \"messages\": [\n        \"Cannot process content as Books\"\n      ]\n    }\n    ]\n  }\n}\n```\n",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "errors": {
+            "$ref": "#/definitions/ErrorsReportMessages"
+          }
+        }
+      },
+      "examples": {
+        "application/json": {
+          "errors": {
+            "report": [
+              {
+                "messages": [
+                  "Cannot process content as Books"
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "databooks": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "object",
+          "properties": {
+            "books": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/BookItem"
+              }
+            }
+          }
+        },
+        "logs": {
+          "$ref": "#/definitions/bookslogs"
+        }
+      }
+    },
+    "bookslogs": {
+      "type": "object",
+      "properties": {
+        "created": {
+          "$ref": "#/definitions/BooksIdArray"
+        },
+        "amended": {
+          "$ref": "#/definitions/BooksIdArray"
+        }
+      }
+    },
+    "BooksIdArray": {
+      "type": "object",
+      "properties": {
+        "books": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ErrorsReportMessages": {
+      "type": "object",
+      "properties": {
+        "report": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "messages": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "BookItems": {
+      "type": "object",
+      "properties": {
+        "books": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BookItem"
+          }
+        }
+      }
+    },
+    "BookItem": {
+      "description": "the book item\n\n- item\n- tim\n",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "publicationYear": {
+          "type": "integer"
+        },
+        "seriesId": {
+          "type": "string"
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuthorItem"
+          }
+        },
+        "series": {
+          "$ref": "#/definitions/SeriesItem"
+        },
+        "publisher": {
+          "$ref": "#/definitions/PublisherItem"
+        }
+      }
+    },
+    "AuthorItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "SeriesItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "PublisherItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
