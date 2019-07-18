@@ -401,6 +401,7 @@ public class PulpAppForSpark {
 
         path("/apps/pulp/api/session", () -> {
 
+            // shhh secret don't tell anyone about this end point
             options("", (req, res) -> {
                 res.header("Allow", "OPTIONS, POST");
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(201, "{}"));
@@ -426,6 +427,12 @@ public class PulpAppForSpark {
 
                 return "";
             });
+
+            get("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            put("",     (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            delete("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            trace("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
+            patch("",  (req, res) -> {  return apiEntityResponse(res, notAllowed);});
         });
 
         path("/apps/pulp/api/authors/:authorid", () -> {
