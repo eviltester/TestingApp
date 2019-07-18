@@ -15,7 +15,7 @@ public class PulpApp {
 
     private final PulpData books;
     private final PulpEntities entities;
-    private final String apisecret;
+    private String apisecret;
     private AppVersion appVersion;
 
 
@@ -78,9 +78,16 @@ public class PulpApp {
         return apisecret;
     }
 
+    public void setApiSecret(final String xapiauth_sessionid) {
+        apisecret = xapiauth_sessionid;
+        reports = new HtmlReports(books, appVersion, apisecret);
+    }
+
     public PulpApp setApiRootUrl(final String rootUrl) {
         this.apiRootUrl = rootUrl;
         entities.setRootUrl(rootUrl);
         return this;
     }
+
+
 }

@@ -101,48 +101,121 @@ public class PulpAppForSpark {
         }
     }
 
-    // TODO: add facility to create an API session /app/api/session
-    // TODO: add facility to input an API session id into GUI to switch GUI to that session
+    // TODO: add official GUI facility to input an API session id into GUI to switch GUI to that session
+
+    private PulpApp createSessionFor(Request req, final String xapiauth_sessionid) {
+        PulpApp sessionPulpApp;
+
+        Session session=null;
+
+        session = req.session();
+        session.maxInactiveInterval(MAX_SESSION_LENGTH);
+
+        sessionPulpApp = new PulpApp();
+        sessionPulpApp.setApiRootUrl("/apps/pulp/api");
+        sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
+        sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
+        sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
+        sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
+
+        session.attribute(SESSION_APP, sessionPulpApp);
+
+        // For an API to be valid you have to access the GUI first
+        String appApiKey = xapiauth_sessionid;
+        if(xapiauth_sessionid.length()==0) {
+            appApiKey = sessionPulpApp.getAPISecret();
+        }else{
+            sessionPulpApp.setApiSecret(xapiauth_sessionid);
+        }
+
+        session.attribute(SESSION_API_SECRET, appApiKey);
+
+        System.out.println(appApiKey);
+        api_session_mapping.put(appApiKey, session);
+
+        System.out.println("Session count " + api_session_mapping.size());
+
+        return sessionPulpApp;
+    }
+
 
     public PulpApp getPulpApp(Request req){
 
         PulpApp sessionPulpApp;
-        // create a session based set of app data that is deleted after 5 minutes of inactivity
-        Session session = req.session(false);
 
-        if (session == null) {
-            // user does not have a session create it
-            session = req.session();
-            session.maxInactiveInterval(MAX_SESSION_LENGTH);
+        Session session=null;
 
-            sessionPulpApp = new PulpApp();
-            sessionPulpApp.setApiRootUrl("/apps/pulp/api");
-            sessionPulpApp.getAppVersion().willAllowShutdown(this.allowsShutdown);
-            sessionPulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
-            sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
-            sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
-
-            session.attribute(SESSION_APP, sessionPulpApp);
-
-            // For an API to be valid you have to access the GUI first
-            String appApiKey = sessionPulpApp.getAPISecret();
-
-            session.attribute(SESSION_API_SECRET, appApiKey);
-
-            // System.out.println(appApiKey);
-            api_session_mapping.put(appApiKey, session);
-
-            // System.out.println("Session count " + api_session_mapping.size());
-
-        } else {
-            sessionPulpApp = session.attribute(SESSION_APP);
-            // a GUI request was made, is the API still valid? or has it been removed?
-            if(api_session_mapping.get(sessionPulpApp.getAPISecret())==null){
-                api_session_mapping.put(sessionPulpApp.getAPISecret(), session);
+        // if the request contains a cookie or header of X-API-AUTH then try to find that session
+        final Collection<String> cookieValues = getCookieValueFromRequest(req, "X-API-AUTH");
+        for(String authcode : cookieValues){
+            session = api_session_mapping.get(authcode);
+            if(session!=null){
+                break;
             }
         }
 
-        return sessionPulpApp;
+        // if there is an X-API-AUTH header then find that session
+        if(session==null){
+            final String header = req.headers("X-API-AUTH");
+            if(header!=null) {
+                session = api_session_mapping.get(header);
+            }
+        }
+
+
+        // do we have a gui session?
+        Session guiSession = req.session(false);
+
+        if(guiSession==null && session!=null){
+            // could not find aGUI session but we found an API session
+            // create the GUI session and associate it with the App from the API session
+            guiSession = req.session();
+            guiSession.maxInactiveInterval(MAX_SESSION_LENGTH);
+            sessionPulpApp = session.attribute(SESSION_APP);
+            guiSession.attribute(SESSION_APP, sessionPulpApp);
+
+            // a GUI request was made, is the API still valid? or has it been removed?
+            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
+                api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSession);
+            }
+
+            return sessionPulpApp;
+
+        }
+
+        if(guiSession==null && session==null){
+            // no GUI session, and no API session, create default GUI Session
+            return createSessionFor(req, "");
+        }
+
+        if(guiSession!=null && session==null){
+            // we have a gui session, and no api session so return the app
+            // no GUI session, and no API session, create default GUI Session
+            sessionPulpApp = guiSession.attribute(SESSION_APP);
+            // a GUI request was made, is the API still valid? or has it been removed?
+            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
+                api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSession);
+            }
+
+            return sessionPulpApp;
+        }
+
+        if(guiSession!=null && session!=null){
+            // we have a gui session, and an api session
+            // replace the gui session app with the api session app
+            // no GUI session, and no API session, create default GUI Session
+            sessionPulpApp = session.attribute(SESSION_APP);
+            guiSession.attribute(SESSION_APP, sessionPulpApp);
+            // a GUI request was made, is the API still valid? or has it been removed?
+            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
+                api_session_mapping.put(sessionPulpApp.getAPISecret(), session);
+            }
+
+            return sessionPulpApp;
+        }
+
+        halt(500, new EntityResponse().setErrorStatus(500, "Error finding associated pulp app").getResponseBody());
+        return null;
     }
 
     public PulpApp getPulpAppForApi(String api_auth_header){
@@ -211,7 +284,6 @@ public class PulpAppForSpark {
         // wanted to have the API keep the session alive
         // tried to use reflection to change lastaccessedtime on the session byt that didn't extend time
         // instead, pull out the JSESSIONID and send it back in SET-COOKIE responses
-        // TODO - only send SET-COOKIE if the cookie is not set in the request
 
         try{
 
@@ -295,6 +367,12 @@ public class PulpAppForSpark {
                 authNeeded = false;
             }
 
+
+            if(request.pathInfo().contentEquals("/apps/pulp/api/session")){
+                // does not require auth... but probably should need an admin password or summat!
+                authNeeded = false;
+            }
+
             if(authNeeded) {
                 if (request.headers("X-API-AUTH") == null) {
                     halt(401, apiEntityResponse(response, new EntityResponse().setErrorStatus(401, "You need to add the X-API-AUTH header with the secret key shown in the GUI")));
@@ -321,11 +399,40 @@ public class PulpAppForSpark {
             }
         });
 
+        path("/apps/pulp/api/session", () -> {
+
+            options("", (req, res) -> {
+                res.header("Allow", "OPTIONS, POST");
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(201, "{}"));
+            });
+
+            post("", (req, res) -> {
+                String authCode = req.headers("X-API-AUTH");
+                if(authCode==null || authCode.length()==0){
+                    halt(401, apiEntityResponse(res, new EntityResponse().setErrorStatus(401, "Invalid X-API-AUTH header")));
+                }
+                Session session = null;
+                session = api_session_mapping.get(authCode);
+                if(session!=null){
+                    // session exists
+                    halt(204, "");
+                }
+
+                if(createSessionFor(req, authCode)!=null){
+                    return apiEntityResponse(res, new EntityResponse().setSuccessStatus(201, ""));
+                }else{
+                    halt(500, apiEntityResponse(res, new EntityResponse().setErrorStatus(500, "Could not create session for " + authCode)));
+                }
+
+                return "";
+            });
+        });
+
         path("/apps/pulp/api/authors/:authorid", () -> {
 
             options("", (req, res) -> {
                 res.header("Allow", "OPTIONS, GET, HEAD, DELETE, PUT, PATCH");
-                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(200, "{}"));
+                return apiEntityResponse(res, new EntityResponse().setSuccessStatus(201, "{}"));
             });
 
             head("", (req, res) -> {
@@ -656,112 +763,134 @@ public class PulpAppForSpark {
         get("/apps/pulp", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
 
         get("/apps/pulp/gui/view/author", (req, res) -> {
-            return getPulpApp(req).page().viewAuthorPage(req.queryParams("author")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().viewAuthorPage(req.queryParams("author")).asHTMLString();
         });
 
         get("/apps/pulp/gui/create/author", (req, res) -> {
-            return getPulpApp(req).page().createAuthorPage().asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().createAuthorPage().asHTMLString();
         });
 
         post("/apps/pulp/gui/create/author", (req, res) -> {
-            return new CreateFlowsHandler(getPulpApp(req)).authorCreate(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new CreateFlowsHandler(pulpApp).authorCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/author?author=id
         get("/apps/pulp/gui/amend/author", (req, res) -> {
-            return getPulpApp(req).page().amendAuthorPage(req.queryParams("author")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().amendAuthorPage(req.queryParams("author")).asHTMLString();
         });
 
         post("/apps/pulp/gui/amend/author", (req, res) -> {
-            return new AmendFlowsHandler(getPulpApp(req)).authorAmend(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new AmendFlowsHandler(pulpApp).authorAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deleteauthor", (req, res) -> {
-
-            getPulpApp(req).books().deleteAuthor(req.queryParams("authorid"));
+            final PulpApp pulpApp = getPulpApp(req);
+            pulpApp.books().deleteAuthor(req.queryParams("authorid"));
             res.redirect("/apps/pulp/gui/reports/authors/list/navigation");
             return "";
         });
 
         get("/apps/pulp/gui/view/series", (req, res) -> {
-            return getPulpApp(req).page().viewSeriesPage(req.queryParams("series")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().viewSeriesPage(req.queryParams("series")).asHTMLString();
         });
 
         get("/apps/pulp/gui/create/series", (req, res) -> {
-            return getPulpApp(req).page().createSeriesPage().asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().createSeriesPage().asHTMLString();
         });
 
         post("/apps/pulp/gui/create/series", (req, res) -> {
-            return new CreateFlowsHandler(getPulpApp(req)).seriesCreate(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new CreateFlowsHandler(pulpApp).seriesCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/series?series=id
         get("/apps/pulp/gui/amend/series", (req, res) -> {
-            return getPulpApp(req).page().amendSeriesPage(req.queryParams("series")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().amendSeriesPage(req.queryParams("series")).asHTMLString();
         });
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {
-            return new AmendFlowsHandler(getPulpApp(req)).seriesAmend(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new AmendFlowsHandler(pulpApp).seriesAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deleteseries", (req, res) -> {
-            getPulpApp(req).books().deleteSeries(req.queryParams("seriesid"));
+            final PulpApp pulpApp = getPulpApp(req);
+            pulpApp.books().deleteSeries(req.queryParams("seriesid"));
             res.redirect("/apps/pulp/gui/reports/series/list/navigation");
             return "";
         });
 
         get("/apps/pulp/gui/view/publisher", (req, res) -> {
-            return getPulpApp(req).page().viewPublisherPage(req.queryParams("publisher")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().viewPublisherPage(req.queryParams("publisher")).asHTMLString();
         });
 
         get("/apps/pulp/gui/create/publisher", (req, res) -> {
-            return getPulpApp(req).page().createPublisherPage().asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().createPublisherPage().asHTMLString();
         });
 
         post("/apps/pulp/gui/create/publisher", (req, res) -> {
-            return new CreateFlowsHandler(getPulpApp(req)).publisherCreate(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new CreateFlowsHandler(pulpApp).publisherCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/publisher?publisher=id
         get("/apps/pulp/gui/amend/publisher", (req, res) -> {
-            return getPulpApp(req).page().amendPublisherPage(req.queryParams("publisher")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().amendPublisherPage(req.queryParams("publisher")).asHTMLString();
         });
 
         post("/apps/pulp/gui/amend/publisher", (req, res) -> {
-            return new AmendFlowsHandler(getPulpApp(req)).publisherAmend(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new AmendFlowsHandler(pulpApp).publisherAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deletepublisher", (req, res) -> {
-            getPulpApp(req).books().deletePublisher(req.queryParams("publisherid"));
+            final PulpApp pulpApp = getPulpApp(req);
+            pulpApp.books().deletePublisher(req.queryParams("publisherid"));
             res.redirect("/apps/pulp/gui/reports/publishers/list/navigation");
             return "";
         });
 
         get("/apps/pulp/gui/view/book", (req, res) -> {
-            return getPulpApp(req).page().viewBookPage(req.queryParams("book")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().viewBookPage(req.queryParams("book")).asHTMLString();
         });
 
 
         get("/apps/pulp/gui/create/book", (req, res) -> {
-            return getPulpApp(req).page().createBookPage().asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().createBookPage().asHTMLString();
         });
 
         post("/apps/pulp/gui/create/book", (req, res) -> {
-            return new CreateFlowsHandler(getPulpApp(req)).bookCreate(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new CreateFlowsHandler(pulpApp).bookCreate(req, res);
         });
 
         ///apps/pulp/gui/amend/book?book=id
         get("/apps/pulp/gui/amend/book", (req, res) -> {
-            return getPulpApp(req).page().amendBookPage(req.queryParams("book")).asHTMLString();
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.page().amendBookPage(req.queryParams("book")).asHTMLString();
         });
 
         post("/apps/pulp/gui/amend/book", (req, res) -> {
-            return new AmendFlowsHandler(getPulpApp(req)).bookAmend(req, res);
+            final PulpApp pulpApp = getPulpApp(req);
+            return new AmendFlowsHandler(pulpApp).bookAmend(req, res);
         });
 
         post("/apps/pulp/gui/amend/deletebook", (req, res) -> {
-
-            getPulpApp(req).books().deleteBook(req.queryParams("bookid"));
+            final PulpApp pulpApp = getPulpApp(req);
+            pulpApp.books().deleteBook(req.queryParams("bookid"));
             res.redirect("/apps/pulp/gui/reports/books/table/navigation");
             return "";
         });
@@ -769,7 +898,8 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports/books/list/navigation", (req, res) -> {
 
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 config.setIncludeFaqLinks(true);
@@ -780,10 +910,10 @@ public class PulpAppForSpark {
             config.showAmendLinks(false);
             config.allowDelete(false);
 
-            if(getPulpApp(req).getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+            if(pulpApp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
                 config.showBookAmendLink(true);
             }
-            if(getPulpApp(req).getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 // list doesn't have enough room - only show in table
                 // config.setAllowDeleteBook(true);
             }
@@ -793,38 +923,41 @@ public class PulpAppForSpark {
 
             config.setTitlesAreLinks(true);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
 
         get("/apps/pulp/gui/reports/books/list/navigation/faqs", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
 
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
             config.setTitlesAreLinks(false);
             config.allowDelete(false);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getBooksAsHtmlList(filter);
         });
 
         get("/apps/pulp/gui/reports/books/list/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return getPulpApp(req).stringReports().getBooksAsHtmlList(filter);
+            return pulpApp.stringReports().getBooksAsHtmlList(filter);
         });
 
         get("/apps/pulp/gui/reports/books/table/navigation", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.showAmendLinks(false);
 
-            if(getPulpApp(req).getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)){
                 config.showBookAmendLink(true);
             }
-            if(getPulpApp(req).getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 // table has enough space to allow delete button rendering
                 config.setAllowDeleteBook(true);
             }
@@ -832,16 +965,18 @@ public class PulpAppForSpark {
             config.setTitlesAreLinks(true);
             config.allowDelete(false);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
+            return pulpApp.reports(config).configurePostFixPath("/table/navigation").getBooksAsHtmlTable(filter);
         });
 
         get("/apps/pulp/gui/reports/books/table/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return getPulpApp(req).stringReports().getBooksAsHtmlTable(filter);
+            return pulpApp.stringReports().getBooksAsHtmlTable(filter);
         });
 
         get("/apps/pulp/gui/reports/:type/faqs", (req, res) -> {
 
+            final PulpApp pulpApp = getPulpApp(req);
             String typeOfFaq = req.params(":type");
             String forTerm="";
             boolean showiframe=false;
@@ -853,7 +988,7 @@ public class PulpAppForSpark {
                 showiframe=true;
             }
 
-            return getPulpApp(req).page().getFaqRenderPage(typeOfFaq, forTerm, showiframe).asHTMLString();
+            return pulpApp.page().getFaqRenderPage(typeOfFaq, forTerm, showiframe).asHTMLString();
 
         });
 
@@ -885,7 +1020,9 @@ public class PulpAppForSpark {
                 confirmSearch=true;
             }
 
-            ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+
+            ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
             config.setPostFixPath("/list/navigation");
             config.showAmendLinks(false);
             config.allowDelete(false);
@@ -897,7 +1034,7 @@ public class PulpAppForSpark {
 
             // TODO should be able to configure links to author, series, publisher to the Amend screen rather than a list filter
 
-            return getPulpApp(req).page().getAlertSearchPage().setConfirmSearch(confirmSearch)
+            return pulpApp.page().getAlertSearchPage().setConfirmSearch(confirmSearch)
                     .setSearchTerms(what, how, forTerm)
                     .asHTMLString(config);
 
@@ -932,8 +1069,10 @@ public class PulpAppForSpark {
             boolean isList = listOrTable.equalsIgnoreCase("list");
             boolean navigation = navigationOrStatic.equalsIgnoreCase("navigation");
 
+            final PulpApp pulpApp = getPulpApp(req);
+
             BookFilter filter = BookFilterFromQueryMap.getBookFilter(req.queryMap());
-            return getPulpApp(req).page().getFilterTestPage(isList, navigation, canSearch, isPaginated).setFilter(filter).setShowData(req.queryMap().hasKeys()).
+            return pulpApp.page().getFilterTestPage(isList, navigation, canSearch, isPaginated).setFilter(filter).setShowData(req.queryMap().hasKeys()).
                     setShowThese(templateElements).
                     asHTMLString();
         });
@@ -943,7 +1082,8 @@ public class PulpAppForSpark {
             //request.splat()[0] is version
             try {
                 int version = Integer.parseInt(req.splat()[0]);
-                getPulpApp(req).setAppVersion(version);
+                final PulpApp pulpApp = getPulpApp(req);
+                pulpApp.setAppVersion(version);
             }catch(Exception e){
                 res.status(400);
                 // todo need an error page, handle 404, exceptions etc.
@@ -957,7 +1097,9 @@ public class PulpAppForSpark {
 
         get("/apps/pulp/gui/reports/authors/list/navigation", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 config.setIncludeFaqLinks(true);
@@ -969,10 +1111,10 @@ public class PulpAppForSpark {
             config.setAuthorNamesLinks(true);
             config.allowDelete(false);
 
-            if(getPulpApp(req).getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+            if(pulpApp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
                 config.showAmendLinks(true);
             }
-            if(getPulpApp(req).getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 config.setAllowDeleteAuthor(true);
             }
 
@@ -980,23 +1122,26 @@ public class PulpAppForSpark {
             // possibly if filtered then allow delete etc..
 
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/authors/list/navigation/faqs", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
             config.setTitlesAreLinks(false);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getAuthorsAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/publishers/list/navigation", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 config.setIncludeFaqLinks(true);
@@ -1008,31 +1153,33 @@ public class PulpAppForSpark {
             config.setPublisherNamesLinks(true);
             config.allowDelete(false);
 
-            if(getPulpApp(req).getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+            if(pulpApp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
                 config.showAmendLinks(true);
             }
-            if(getPulpApp(req).getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 config.setAllowDeletePublisher(true);
             }
 
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/publishers/list/navigation/faqs", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
             config.setTitlesAreLinks(false);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getPublishersAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/years/list/navigation", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 config.setIncludeFaqLinks(true);
@@ -1043,22 +1190,24 @@ public class PulpAppForSpark {
             config.showAmendLinks(false);
             config.setYearsAsLinks(true);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/years/list/navigation/faqs", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
             config.setTitlesAreLinks(false);
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getYearsAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/series/list/navigation", (req, res) -> {
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             if(req.queryMap().hasKeys() && req.queryMap().value("faqs")!=null){
                 config.setIncludeFaqLinks(true);
@@ -1070,52 +1219,84 @@ public class PulpAppForSpark {
             config.setSeriesNamesLinks(true);
             config.allowDelete(false);
 
-            if(getPulpApp(req).getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
+            if(pulpApp.getAppVersion().are(AMEND_LINKS_SHOWN_IN_LIST)) {
                 config.showAmendLinks(true);
             }
-            if(getPulpApp(req).getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
+            if(pulpApp.getAppVersion().are(DELETE_LINKS_SHOWN_IN_LIST)){
                 config.setAllowDeleteSeries(true);
             }
 
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
         });
 
         get("/apps/pulp/gui/reports/series/list/navigation/faqs", (req, res) -> {
 
-            final ReportConfig config = new ReportConfig(getPulpApp(req).reports().getReportConfig());
+            final PulpApp pulpApp = getPulpApp(req);
+            final ReportConfig config = new ReportConfig(pulpApp.reports().getReportConfig());
 
             config.setIncludeFaqLinks(true);
             config.showAmendLinks(false);
 
             config.setTitlesAreLinks(false);
-            return getPulpApp(req).reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
+            return pulpApp.reports(config).configurePostFixPath("/list/navigation").getSeriesNamesAsHtmlList();
         });
 
-        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> { return getPulpApp(req).stringReports().getAuthorsAsHtmlList();});
-        get("/apps/pulp/gui/reports/publishers/list/static", (req, res) -> { return getPulpApp(req).stringReports().getPublishersAsHtmlList();});
-        get("/apps/pulp/gui/reports/years/list/static", (req, res) -> { return getPulpApp(req).stringReports().getYearsAsHtmlList();});
-        get("/apps/pulp/gui/reports/series/list/static", (req, res) -> { return getPulpApp(req).stringReports().getSeriesNamesAsHtmlList();});
+        get("/apps/pulp/gui/reports/authors/list/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.stringReports().getAuthorsAsHtmlList();});
+        get("/apps/pulp/gui/reports/publishers/list/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.stringReports().getPublishersAsHtmlList();});
+        get("/apps/pulp/gui/reports/years/list/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.stringReports().getYearsAsHtmlList();});
+        get("/apps/pulp/gui/reports/series/list/static", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.stringReports().getSeriesNamesAsHtmlList();});
 
 
-        get("/apps/pulp/", (req, res) -> { return getPulpApp(req).reports().getIndexPage();});
+        get("/apps/pulp/", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getIndexPage();});
         get("/apps/pulp/gui", (req, res) -> { res.redirect("/apps/pulp/gui/"); return "";});
-        get("/apps/pulp/gui/", (req, res) -> { return getPulpApp(req).reports().getIndexPage();});
-        get("/apps/pulp/gui/help", (req, res) -> { return getPulpApp(req).reports().getHelpPage();});
-        get("/apps/pulp/gui/menu/books", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Books Menu", "menu-screen-books-reports-list.html");});
-        get("/apps/pulp/gui/menu/authors", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Authors Menu", "menu-screen-authors-reports-list.html");});
-        get("/apps/pulp/gui/menu/publishers", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Publishers Menu", "menu-screen-publishers-reports-list.html");});
-        get("/apps/pulp/gui/menu/series", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Series Menu", "menu-screen-series-reports-list.html");});
-        get("/apps/pulp/gui/menu/years", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Years Menu", "menu-screen-years-reports-list.html");});
-        get("/apps/pulp/gui/menu/create", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Create Menu", "menu-screen-create.html");});
-        get("/apps/pulp/gui/menu/reports", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Reports Menu", "menu-screen-static-reports.html");});
-        get("/apps/pulp/gui/menu/admin", (req, res) -> { return getPulpApp(req).reports().getSnippetPage("Admin Menu", "menu-screen-admin.html");});
+        get("/apps/pulp/gui/", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getIndexPage();});
+        get("/apps/pulp/gui/help", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getHelpPage();});
+        get("/apps/pulp/gui/menu/books", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Books Menu", "menu-screen-books-reports-list.html");});
+        get("/apps/pulp/gui/menu/authors", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Authors Menu", "menu-screen-authors-reports-list.html");});
+        get("/apps/pulp/gui/menu/publishers", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Publishers Menu", "menu-screen-publishers-reports-list.html");});
+        get("/apps/pulp/gui/menu/series", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Series Menu", "menu-screen-series-reports-list.html");});
+        get("/apps/pulp/gui/menu/years", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Years Menu", "menu-screen-years-reports-list.html");});
+        get("/apps/pulp/gui/menu/create", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Create Menu", "menu-screen-create.html");});
+        get("/apps/pulp/gui/menu/reports", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Reports Menu", "menu-screen-static-reports.html");});
+        get("/apps/pulp/gui/menu/admin", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getSnippetPage("Admin Menu", "menu-screen-admin.html");});
 
 
         get("/apps/pulp/gui/reports", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
-        get("/apps/pulp/gui/reports/", (req, res) -> { return getPulpApp(req).reports().getIndexPage();});
+        get("/apps/pulp/gui/reports/", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            return pulpApp.reports().getIndexPage();});
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
     }
-
 
 
 
