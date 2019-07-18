@@ -16,6 +16,9 @@ import spark.Session;
 
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -168,6 +171,28 @@ public class PulpAppForSpark {
         return sessionPulpApp;
     }
 
+    private Collection<String> getCookieValueFromRequest(final Request request, final String cookieName) {
+        final String header = request.headers("Cookie");
+        final List<String> cookieValues = new ArrayList();
+
+        if(header==null || header.length()==0){
+            return cookieValues;
+        }
+
+        final String[] cookies = header.split(";");
+
+        for(String cookie : cookies){
+            final String[] nameValue = cookie.split("=");
+            if(nameValue.length>=2) {
+                if (nameValue[0].toLowerCase().contentEquals(cookieName.toLowerCase())) {
+                    cookieValues.add(nameValue[1]);
+                }
+            }
+        }
+
+        return cookieValues;
+    }
+
     public String getSessionCookieForApi(String api_auth_header){
         final Session session = api_session_mapping.get(api_auth_header);
         PulpApp sessionPulpApp=null;
@@ -288,7 +313,10 @@ public class PulpAppForSpark {
             if(authNeeded) {
                 final String jsessionid = getSessionCookieForApi(request.headers("X-API-AUTH"));
                 if (jsessionid != null && jsessionid.length() > 0) {
-                    response.header("Set-Cookie", "JSESSIONID=" + jsessionid);
+                    Collection<String> cookieValues = getCookieValueFromRequest(request,"JSESSIONID");
+                    if(!cookieValues.contains(jsessionid)) {
+                        response.header("Set-Cookie", "JSESSIONID=" + jsessionid);
+                    }
                 }
             }
         });
@@ -1087,6 +1115,7 @@ public class PulpAppForSpark {
         get("/apps/pulp/gui/reports/", (req, res) -> { return getPulpApp(req).reports().getIndexPage();});
         get("/apps/pulp/gui/reports/books", (req, res) -> { res.redirect("/apps/pulp/gui/reports/"); return "";});
     }
+
 
 
 
