@@ -257,8 +257,8 @@ public class PulpAppForSpark {
         for(String cookie : cookies){
             final String[] nameValue = cookie.split("=");
             if(nameValue.length>=2) {
-                if (nameValue[0].toLowerCase().contentEquals(cookieName.toLowerCase())) {
-                    cookieValues.add(nameValue[1]);
+                if (nameValue[0].trim().equalsIgnoreCase(cookieName.trim())) {
+                    cookieValues.add(nameValue[1].trim());
                 }
             }
         }
@@ -341,10 +341,12 @@ public class PulpAppForSpark {
         final EntityResponse unknown = new EntityResponse().setErrorStatus(404, "Unknown API EndPoint");
 
         // enable for debugging to see all requests and responses
+
         /*
         before("*", (request, response) -> {
             System.out.println(request.requestMethod());
             System.out.println(request.pathInfo());
+            // be careful, this will consume the body and params won't work
             System.out.println(request.body());
         });
         after((request, response) -> {
@@ -352,6 +354,9 @@ public class PulpAppForSpark {
             System.out.println(response.body());
         });
         */
+
+
+
 
         before("/apps/pulp/api/*", (request, response) -> {
             // before any API request, check for an X-API-AUTH header
@@ -767,11 +772,25 @@ public class PulpAppForSpark {
 
          */
 
+
+
         get("/apps/pulp", (req, res) -> { res.redirect("/apps/pulp/"); return "";});
 
         get("/apps/pulp/gui/view/author", (req, res) -> {
             final PulpApp pulpApp = getPulpApp(req);
             return pulpApp.page().viewAuthorPage(req.queryParams("author")).asHTMLString();
+        });
+
+        before("/apps/pulp/gui/*", (request, response) -> {
+
+            final PulpApp pulpApp = getPulpApp(request);
+
+            // make sure the session id is added as an x-api-auth cookie to allow api usage
+            final String secret = pulpApp.getAPISecret();
+            final Collection<String> x_api_auth = getCookieValueFromRequest(request, "X-API-AUTH");
+            if(!x_api_auth.contains(secret)){
+                response.header("Set-Cookie", "X-API-AUTH=" + secret + "; PATH=/");
+            }
         });
 
         get("/apps/pulp/gui/create/author", (req, res) -> {
