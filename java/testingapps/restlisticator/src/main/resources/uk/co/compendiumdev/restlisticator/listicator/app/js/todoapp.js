@@ -301,17 +301,22 @@ function TodoApp(){
     }
 
     this.showListView = function () {
-        var data = this.storage.listStores();
+        var self=this;
+        var data = this.storage.listStores(function(data){self.renderListViewData(data)});
+        this.renderListViewData(data);
+    };
+
+    this.renderListViewData = function(data){
         var lists = [];
         data.forEach(
             function(element){
-                        if(element.startsWith("todos-")){
-                            lists.push(element.substring("todos-".length));
-                        }
+                if(element.startsWith("todos-")){
+                    lists.push(element.substring("todos-".length));
+                }
             }
-            );
+        );
         this.view.render('showEntries', lists);
-    };
+    }
 
     this.addListItem = function (title) {
 

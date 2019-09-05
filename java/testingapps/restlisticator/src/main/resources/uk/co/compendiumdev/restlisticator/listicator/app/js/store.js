@@ -20,6 +20,35 @@ function Storage(){
         return stores;
     }
 
+    // javascript to rest api initial hack version
+    /*
+    this.listStores = function(callback){
+
+        callback = callback || function () {};
+
+        var stores = [];
+
+        var request = new XMLHttpRequest();
+        request.open('GET', '../lists', false, "user","password")
+        request.onreadystatechange = function() {
+            // D some business logics here if you receive return
+            if(request.readyState === 4 && request.status === 200) {
+                console.log(request.responseText);
+                var responseData = JSON.parse(request.responseText);
+                for (let i=0; i< responseData.lists.length; i++) {
+                    stores.push(responseData.lists[i].title);
+                }
+
+                callback.call(this, stores);
+            }
+        }
+        request.send()
+
+
+        return stores;
+    }
+    */
+
     /**
      * Creates a new client side storage object and will create an empty
      * collection if no collection already exists.
