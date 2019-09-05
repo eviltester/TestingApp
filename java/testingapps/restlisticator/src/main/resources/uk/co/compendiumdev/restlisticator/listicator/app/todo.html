@@ -1,0 +1,125 @@
+<html>
+<head><title>Todo (based on TodoMVC)</title>
+    <link rel="stylesheet" type="text/css" href="css/todo.css">
+</head>
+<body>
+
+<!--
+    A simpler custom version of the - todomvc app to allow editing for testing and custom automating
+    Much of the DOM is hte same and ids and classes to allow automating from here to work (mostly unchanged)
+    on the todomvc site.
+
+    https://github.com/tastejs/todomvc
+    Todomvc is MIT licensed
+    This was based on code at 20190830
+    https://github.com/tastejs/todomvc/commit/f9196709d03323000a468df405c51c0d842c98b5
+
+-->
+
+<section class="todoapp">
+    <header class="header">
+        <nav>[<a href="todolists.html">lists</a>]</nav>
+        <h1>todos</h1>
+        <input class="new-todo" placeholder="Enter todo text here" autofocus="">
+    </header>
+    <section class="main" style="display: block;">
+        <input id="toggle-all" class="toggle-all" type="checkbox">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list">
+       </ul>
+    </section>
+    <footer class="footer" style="display: block;">
+        <span class="todo-count"><strong>1</strong> item left</span>
+        <ul class="filters">
+            <li>
+                <a href="#/" class="selected">All</a>
+            </li>
+            <li>
+                <a href="#/active">Active</a>
+            </li>
+            <li>
+                <a href="#/completed">Completed</a>
+            </li>
+        </ul>
+        <button class="clear-completed" style="display: block;">Clear completed</button>
+    </footer>
+</section>
+
+<script src="js/store.js"></script>
+<script src="js/template.js"></script>
+<script src="js/view.js"></script>
+<script src="js/todoapp.js"></script>
+
+<script>
+
+// replicating as much of todomvc as is necessary for simple console and web automating
+window.app = window.app || {};
+
+
+
+function Todo(name) {
+
+    this.app = new TodoApp();
+
+    this.storage = new Storage();
+    this.storage.createStore(name);
+    this.app.storage = this.storage;
+
+    this.template = new Template();
+    this.app.Template = this.template;
+
+    this.view = new View(this.template);
+    this.app.view = this.view;
+
+}
+
+// get the list name 'eviltester' from a param, and if not exist then use default list 'eviltester'
+var params = document.location.hash.split("&");
+var filter = params[0] || "";
+var todoListName = params[1] || "eviltester";
+
+var todo = new Todo('todos-' + todoListName);
+window.app = todo.app;
+
+
+setView = function() {
+    var params = document.location.hash.split("&");
+    var filter = params[0] || "";
+    todo.app.setView(filter);
+}
+
+window.addEventListener('load', setView);
+window.addEventListener('hashchange', setView);
+
+todo.app.bindGuiEvents();
+
+
+// convert vanillaJS to a local simpler and maintainable version
+// implement local storage abstraction
+// render items from local storage on screen
+// create todos from GUI
+// delete todos from GUI
+// edit todos from GUI
+// mark done/not done from GUI
+// valid count on GUI
+// clear completed on GUI
+// filters and navigation on GUI
+// can load a list from storage by adding &listname to the hash
+// add ability to 'name' todo lists
+// create a page of todo lists - create, delete, rename lists
+// list of todo lists page should allow choosing a list of todos to work with
+// TODO: style with CSS
+// TODO: add a backbone compatible local storage format - to allow page object code to run
+// TODO: download list as text file - using javascript https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+// TODO: add a REST API to manage todo lists and todo items - rest listicator?
+// TODO: add different css versions - gui and server controlled https://stackoverflow.com/questions/574944/how-to-load-up-css-files-using-javascript
+// TODO: create a mock api in php for the compendiumdev.co.uk hosted version
+// TODO: download lists using server - may need server?
+// TODO: add toggleable bugs
+
+
+
+
+</script>
+</body>
+</html>

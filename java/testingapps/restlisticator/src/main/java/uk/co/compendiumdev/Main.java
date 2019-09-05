@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static spark.Spark.get;
+import static spark.Spark.staticFiles;
 
 /**
  * Created by Alan on 04/07/2017.
@@ -85,12 +86,16 @@ public class Main {
 
         String []newargs = argsAsList.toArray(new String[argsAsList.size()]);
 
+        staticFiles.location("/uk/co/compendiumdev/restlisticator");
+        // allows loading gui from http://localhost:4567/listicator/app/todo.html
+
         // redirects for documentation when running as own app
         get("/", (req, res) -> { res.redirect("/listicator/"); return "";});
         get("", (req, res) -> { res.redirect("/listicator/"); return "";});
 
         RestServer restServer = new RestServer(newargs, "/listicator"); // added /listicator to make standalone same as main
         restServer.documentationDetails(proxyport);
+
 
 
         System.out.println("Running on " + Spark.port());

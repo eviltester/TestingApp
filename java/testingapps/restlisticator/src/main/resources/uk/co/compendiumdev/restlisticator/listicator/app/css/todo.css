@@ -1,0 +1,23 @@
+/* button based on https://stackoverflow.com/questions/18920542/draw-an-x-in-css */
+
+ button.destroy {
+     height: 1.5em;
+     width: 2em;
+     background-color: #ffffff;
+     border-radius: 5px;
+     position: relative;
+     margin: 0.5em;
+ }
+
+button.destroy:after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\274c";
+    font-size: 1em;
+    color: #FFF;
+    line-height: 1.5em;
+    text-align: center;
+}
