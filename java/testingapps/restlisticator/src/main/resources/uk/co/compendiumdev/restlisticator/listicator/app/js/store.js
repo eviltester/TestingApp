@@ -6,6 +6,12 @@ function Storage(){
 
     dbName = "mylocalstorage"; // by default
 
+    // TODO - match the LIST storage in the GUI and local storage match the API storage
+    // TODO - have generic local Storage class (because it isn't really generic, it is just for the todo app)
+    // TODO - create a TodosStorage which handles the additional responsibility of todos e.g. add todos- to the front of the names if not existing and filter out those which don't etc.
+    // TODO - create a separate API storage class
+    // TODO - create the API storage to match the TODO storage in the GUI and local storage
+
     this.listStores = function(callback){
 
         callback = callback || function () {};
@@ -20,8 +26,8 @@ function Storage(){
         return stores;
     }
 
-    // javascript to rest api initial hack version
-    /*
+    // javascript for rest api initial hack version GET lists
+/*
     this.listStores = function(callback){
 
         callback = callback || function () {};
@@ -31,8 +37,9 @@ function Storage(){
         var request = new XMLHttpRequest();
         request.open('GET', '../lists', false, "user","password")
         request.onreadystatechange = function() {
-            // D some business logics here if you receive return
+
             if(request.readyState === 4 && request.status === 200) {
+
                 console.log(request.responseText);
                 var responseData = JSON.parse(request.responseText);
                 for (let i=0; i< responseData.lists.length; i++) {
@@ -47,7 +54,7 @@ function Storage(){
 
         return stores;
     }
-    */
+*/
 
     /**
      * Creates a new client side storage object and will create an empty
@@ -71,6 +78,36 @@ function Storage(){
         callback.call(this, JSON.parse(localStorage.getItem(name)));
     }
 
+    // javascript for rest api initial hack version POST lists
+/*
+    this.createStore = function(name, callback){
+
+        callback = callback || function () {};
+
+        this.dbName = name;
+
+        var request = new XMLHttpRequest();
+        request.open('POST', '../lists', false, "user","password");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onreadystatechange = function() {
+
+            if (request.readyState === 4 && request.status === 201) {
+
+                var responseData = JSON.parse(request.responseText);
+
+                console.log(request.responseText);
+                callback.call(this, responseData.lists[0].title);
+            }
+        }
+
+        request.send(JSON.stringify({"title":name}));
+
+        return name;
+    }
+*/
+
+
+    // TODO ITEMS ONLY
     /**
      * Finds items based on a query given as a JS object
      *
@@ -102,6 +139,7 @@ function Storage(){
         }));
     };
 
+    // TODO ITEMS ONLY
     /**
      * Will retrieve all data from the collection
      *
@@ -111,6 +149,8 @@ function Storage(){
         callback = callback || function () {};
         callback.call(this, JSON.parse(localStorage.getItem(this.dbName)));
     };
+
+
 
     /**
      * Will save the given data to the DB. If no item exists it will create a new
@@ -172,7 +212,7 @@ function Storage(){
     };
 
     /**
-     * Will drop all storage and start fresh
+     * Will drop all storage and start fresh - delete everything but keep storage db
      *
      * @param {function} callback The callback to fire after dropping the data
      */
@@ -182,6 +222,7 @@ function Storage(){
         localStorage.setItem(this.dbName, JSON.stringify(todos));
         callback.call(this, todos);
     };
+
     this.dropNamed = function(named, callback) {
         callback = callback || function() {};
         var todos = [];
