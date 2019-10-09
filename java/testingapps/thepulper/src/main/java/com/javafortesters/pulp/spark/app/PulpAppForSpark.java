@@ -154,6 +154,8 @@ public class PulpAppForSpark {
             }
         }
 
+        session = nullifyIfNotValid(session);
+
         // if there is an X-API-AUTH header then find that session
         if(session==null){
             final String header = req.headers("X-API-AUTH");
@@ -162,6 +164,7 @@ public class PulpAppForSpark {
             }
         }
 
+        session = nullifyIfNotValid(session);
 
         // do we have a gui session?
         Session guiSession = req.session(false);
@@ -216,6 +219,19 @@ public class PulpAppForSpark {
 
         halt(500, new EntityResponse().setErrorStatus(500, "Error finding associated pulp app").getResponseBody());
         return null;
+    }
+
+    private Session nullifyIfNotValid(final Session session) {
+        if(session!=null){
+            // check if the session is valid by trying to use it
+            try{
+                session.attribute(SESSION_APP);
+            }catch(Exception e){
+                // session is invalid, do not use it
+                return null;
+            }
+        }
+        return session;
     }
 
     public PulpApp getPulpAppForApi(String api_auth_header){
