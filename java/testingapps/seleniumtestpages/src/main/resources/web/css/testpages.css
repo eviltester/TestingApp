@@ -1,0 +1,51 @@
+body {
+    margin: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1000px;
+    font-size:1.2em;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-style: normal;
+    font-variant: normal;
+}
+
+h1{
+    text-align: center;
+}
+
+input, p{
+    font-size: 1.2em;
+}
+
+div.centered{
+    text-align: center;
+}
+
+div.page_footer:before{
+    padding-top: 10em;
+    margin-top: 10em;
+}
+
+div.page_footer{
+    text-align: center;
+    margin: 10em;
+}
+
+div.page_footer p{
+    padding-top: 1em;
+    border-top: 1px solid black;
+    font-size: 0.6em;
+    width: 50%;
+    margin: 0 auto;
+}
+
+div.explanation{
+    margin: 10px;
+    background-color: aliceblue;
+    padding: 20px;
+    font-style: italic;
+}
+
+.inline_explanation{
+    font-style: italic;
+}

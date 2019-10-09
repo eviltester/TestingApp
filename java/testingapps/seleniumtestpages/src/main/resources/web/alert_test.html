@@ -1,0 +1,89 @@
+<html>
+<head>
+    <link rel="stylesheet" href="css/testpages.css">
+
+    <script type="text/javascript">
+        function show_alert() {
+            alert("I am an alert box!");
+        }
+
+        function show_confirm() {
+            if (confirm("I am a confirm alert")) {
+                document.getElementById('confirmreturn').innerHTML = "true";
+                document.getElementById('confirmexplanation').innerHTML = "You clicked OK, confirm returned true.";
+            } else {
+                document.getElementById('confirmreturn').innerHTML = "false";
+                document.getElementById('confirmexplanation').innerHTML = "You clicked Cancel, confirm returned false.";
+            }
+        }
+
+        function show_prompt() {
+            var promptRet = prompt("I prompt you", "change me");
+
+            document.getElementById('promptreturn').innerHTML = promptRet;
+            if (promptRet == null) {
+                document.getElementById('promptexplanation').innerHTML = "You clicked Cancel. 'prompt' returned null";
+            }else{
+                document.getElementById('promptexplanation').innerHTML = "You clicked OK. 'prompt' returned " + promptRet;
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="page_body">
+
+
+    <div class="page_navigation">
+        <a href="..">Index</a>
+    </div>
+
+    <h1>Alert Box Examples</h1>
+
+    <div class="explanation">
+        <p>There are three main JavaScript methods which show alert dialogs: alert, confirm and prompt. This page has
+        examples of each.</p>
+    </div>
+
+    <p>The following button will display an alert when clicked.</p>
+
+    <div class="centered">
+
+        <input id="alertexamples" type="button" onclick="show_alert()" value="Show alert box"/>
+
+    </div>
+
+    <p>&nbsp;</p>
+    <hr>
+
+    <p>The following button will display a confirm dialog when clicked.</p>
+
+    <div class="centered">
+        <input id="confirmexample" type="button" onclick="show_confirm()" value="Show confirm box"/>
+        <br/>
+        <p id='confirmreturn'></p>
+        <p class="inline_explanation" id='confirmexplanation'></p>
+    </div>
+
+    <p>&nbsp;</p>
+    <hr>
+
+    <p>The following button will display a prompt dialog when clicked.</p>
+
+    <div class="centered">
+        <input id="promptexample" type="button" onclick="show_prompt()" value="Show prompt box"/>
+        <p id='promptreturn'></p>
+        <p class="inline_explanation" id='promptexplanation'></p>
+    </div>
+
+
+    <div class="page_footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+
+</div>
+
+</body>
+</html>
