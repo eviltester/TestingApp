@@ -98,11 +98,22 @@ public class HtmlTemplates {
     }
 
     public MyTemplate getUlTag() {
-        String templateString = "<ul>";  // don't actually output the span
+        return getUlTag("");
+    }
+
+    public MyTemplate getUlTag(String styleClass) {
+        String className="";
+        String idincluded = "";
+
+        if(styleClass!=null && styleClass.trim().length()>0){
+            className = " class='" + styleClass + "'";
+        }
 
         if(appversion.are(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE)){
-            templateString = "<ul id='!!ID!!'>";
+            idincluded = " id='!!ID!!'";
         }
+
+        String templateString = String.format("<ul%s%s>",className, idincluded);  // don't actually output the span
 
         return new MyTemplate(templateString);
     }

@@ -64,17 +64,17 @@ Or you could read easier to get hold of reprints e.g. HP Lovecraft, or Robert E 
 
 ## Written By
 
-This application has been written by Alan Richardson, [Compendium Developments Ltd]((http://www.compendiumdev.co.uk)) | [EvilTester.com](http://www.eviltester.com).
+This application has been written by Alan Richardson, [Compendium Developments Ltd](https://www.compendiumdev.co.uk) | [EvilTester.com](https://www.eviltester.com).
 
 [Contact Alan](https://compendiumdev.co.uk/contact)
 
 ---
 
-* [www.eviltester.com](http://www.eviltester.com)
-* [www.compendiumdev.co.uk](http://www.compendiumdev.co.uk)
+* [www.eviltester.com](https://www.eviltester.com)
+* [www.compendiumdev.co.uk](https://www.compendiumdev.co.uk)
 * [@eviltester](https://twitter.com/eviltester)
 * [www.youtube.com/user/EviltesterVideos](https://www.youtube.com/user/EviltesterVideos)
-* [uk.linkedin.com/in/eviltester](http://uk.linkedin.com/in/eviltester)
+* [uk.linkedin.com/in/eviltester](https://uk.linkedin.com/in/eviltester)
 
 
 ---
@@ -88,10 +88,10 @@ This application has been written by Alan Richardson, [Compendium Developments L
 - Youtube - [EvilTesterVideos](https://www.youtube.com/user/EviltesterVideos)
 - Pinterest - [@eviltester](https://uk.pinterest.com/eviltester/)
 - Github - [@eviltester](https://github.com/eviltester/)
-- Slideshare - [@eviltester](www.slideshare.net/eviltester)
+- Slideshare - [@eviltester](https://www.slideshare.net/eviltester)
 
 ---
 
 ### BIO
  
-Alan is a test consultant who enjoys testing at a technical level using techniques from psychotherapy and computer science. In his spare time Alan is currently programming a [multi-user text adventure game](http://compendiumdev.co.uk/page/restmud) and some [buggy JavaScript games](http://compendiumdev.co.uk/games/buggygames/) in the style of the Cascade Cassette 50. Alan is the author of the books "[Dear Evil Tester](http://www.eviltester.com/page/dearEvilTester/)", "[Java For Testers](http://javafortesters.com/page/about/)" and "[Automating and Testing a REST API](http://compendiumdev.co.uk/page/tracksrestapibook)". Alan's main website is [compendiumdev.co.uk](http://compendiumdev.co.uk) and he blogs at [blog.eviltester.com](http://blog.eviltester.com)
+Alan is a Software Development consultant helping people improve their Agile Software Development approaches and Technical Testing Processes incorporating Automation. When testing and programing Alan enjoys working at a technical level using techniques from psychotherapy and computer science. In his spare time Alan has programmed a variety of games, tools utilities and libraries: [tools and apps list](https://www.eviltester.com/page/tools/) . Alan is the author of the books "[Dear Evil Tester](https://www.eviltester.com/page/dearEvilTester/)", "[Java For Testers](https://www.eviltester.com/page/books/java-for-testers/)" and "[Automating and Testing a REST API](https://www.eviltester.com/page/books/automating-testing-api-casestudy/)". Alan's main website is [eviltester.com](https://eviltester.com)  and he blogs at [blog.eviltester.com](https://blog.eviltester.com). His company trading site with full brand portfolio is at [compendiumdev.co.uk](https://compendiumdev.co.uk)

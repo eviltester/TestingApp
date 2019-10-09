@@ -64,6 +64,12 @@ public class FilledHTMLTemplate {
         return template.toString();
     }
 
+    public String ul(final String id, final String styleclass) {
+        MyTemplate template = new HtmlTemplates(appversion).getUlTag(styleclass);
+        template.replace("!!ID!!", id);
+        return template.toString();
+    }
+
     public String deleteAuthorButton(String authorId, String deleteButtonText, String authorName) {
         return deleteButton("delete-author.html", authorId, deleteButtonText, authorName);
     }

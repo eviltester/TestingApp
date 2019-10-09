@@ -16,12 +16,12 @@ public class AppVersion {
 
 
      */
-    public static final int MAX_VERSION = 6;
-    public static final int DEFAULT_VERSION = 2;
+    public static final int MAX_VERSION = 7;
+    public static final int DEFAULT_VERSION = 5;
 
     AppVersionConfig settings = new AppVersionConfig();
 
-    int appVersion = 1; // default starting app version
+    int appVersion = DEFAULT_VERSION; // default starting app version
     private boolean versionAllowsShutdown=false;
 
     public AppVersion(final int version) {

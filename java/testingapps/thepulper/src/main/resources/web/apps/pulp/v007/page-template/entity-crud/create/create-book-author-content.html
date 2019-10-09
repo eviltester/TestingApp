@@ -1,0 +1,84 @@
+
+<h2>Create Author</h2>
+
+<div id="createobjectsection">
+
+
+    <script>
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function postApi(url = "", data = {}) {
+            // Default options are marked with *
+            return fetch(url, {
+                method: "POST", // *GET, POST, PUT, DELETE, etc.
+                mode: "cors", // no-cors, cors, *same-origin
+                cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: "same-origin", // include, same-origin, *omit
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-API-AUTH": getCookie("X-API-AUTH")
+                    // "Content-Type": "application/x-www-form-urlencoded",
+                },
+                redirect: "follow", // manual, *follow, error
+                referrer: "no-referrer", // no-referrer, *client
+                body: JSON.stringify(data), // body data type must match "Content-Type" header
+            })
+                .then(response => response.json()); // parses response to JSON
+        };
+
+        function postapidata(authorName){
+            var obj = {"name":authorName};
+            postApi("/apps/pulp/api/authors", obj)
+                .then(
+                    function(response) {
+                        if(response.data) {
+                            document.getElementById("outputmessage").innerHTML = "Added Author";
+                            return false;
+                        }
+                        throw new Error(response.errors.report[0].messages[0]);
+                    }
+                )
+                .catch(
+                    function(error){
+                        document.getElementById("outputmessage").innerHTML = error;
+                        return false;
+                    });
+            // whatever happens do not submit the form
+            return false;
+        }
+
+    </script>
+
+
+    <div>
+        <form id="createform" onsubmit="return(postapidata(document.getElementById('authorname').value))">
+            <label for="authorname">Enter name of author to create</label>
+            <input type="text" id="authorname" name="name" value="" required="required" pattern=".{1,}">
+            <br/>
+            <input id="createauthorbutton" type="submit" value="Create"/>
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

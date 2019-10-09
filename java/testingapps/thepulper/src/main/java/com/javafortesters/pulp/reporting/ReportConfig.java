@@ -24,7 +24,7 @@ public class ReportConfig {
     private boolean allowDeleteSeries = false;
     private boolean allowDeletePublisher = false;
 
-    // TODO need to set this more granually to configure Name display, title display, series display more idividually e.g. isLink, hasAmend, hasDelete etc.
+    // TODO need to set this more granually to configure Name display, title display, series display more individually e.g. isLink, hasAmend, hasDelete etc.
     public ReportConfig(AppVersion appversion, boolean areAuthorNamesLinks, boolean areYearsLinks, boolean arePublisherNamesLinks, boolean areSeriesNamesLinks, boolean areTitlesLinks) {
         this.appversion = appversion;
         this.areAuthorNamesLinks = areAuthorNamesLinks;
@@ -37,8 +37,8 @@ public class ReportConfig {
     public ReportConfig(ReportConfig reportConfig) {
         this.appversion = reportConfig.getAppVersion();
         this.areAuthorNamesLinks = reportConfig.areAuthorNamesLinks();
-        this. areYearsLinks = reportConfig.areYearsLinks();
-        this. arePublisherNamesLinks = reportConfig.arePublishersLinks();
+        this.areYearsLinks = reportConfig.areYearsLinks();
+        this.arePublisherNamesLinks = reportConfig.arePublishersLinks();
         this.areSeriesNamesLinks = reportConfig.areSeriesNamesLinks();
         this.reportPath = reportConfig.getReportPath();
         this.linksPostFix = reportConfig.getLinksPostFix();

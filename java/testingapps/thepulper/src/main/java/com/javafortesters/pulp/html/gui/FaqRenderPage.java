@@ -44,7 +44,7 @@ public class FaqRenderPage {
         pageTemplate.replace("<!-- TITLE GOES HERE -->", String.format("<h1>List of FAQs for %s: %s</h1>", faqsForType, searchFaqTerm));
 
         List<String> faqs = asSearchEngineAnchors(Faqs.getFaqsFor(faqsForType, searchFaqTerm));
-        pageTemplate.replace("<!-- LIST OF FAQS GO HERE -->", new HTMLReporter(appversion).getAsUl(faqs, faqsForType+"-faq-list"));
+        pageTemplate.replace("<!-- LIST OF FAQS GO HERE -->", new HTMLReporter(appversion).getAsUl(faqs, faqsForType+"-faq-list", "menu"));
 
         if(showiframe) {
             MyTemplate iframeTemplate = new MyTemplate(iframeSection);

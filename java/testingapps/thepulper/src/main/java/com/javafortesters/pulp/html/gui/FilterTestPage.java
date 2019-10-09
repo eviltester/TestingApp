@@ -92,14 +92,16 @@ public class FilterTestPage {
         if(data!=null){
             ReportConfig config = ReportConfig.justStrings(appversion);
 
+            String ulmenuclass="";
             if(fieldsAreNavigable){
                 config = new ReportConfig(appversion, true, true, true, true, true);
+                ulmenuclass="menu";
             }
 
             BookReporter reporter = new BookReporter(config, data.authors(), data.publishers(), data.series());
             books = reporter.getBooksAsLines(data.books().filteredBy(filter));
             if(showAsList){
-                booksOutput = new HTMLReporter(appversion).getAsUl(books, "filtered-bookslist");
+                booksOutput = new HTMLReporter(appversion).getAsUl(books, "filtered-bookslist", ulmenuclass);
             }else{
                 booksOutput = reporter.getBooksAsTable(data.books().filteredBy(filter));
             }

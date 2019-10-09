@@ -10,7 +10,7 @@ import java.util.Map;
 public class AppVersionConfig {
 
     private Map<String, AppVersionConfigValue> configSettings = new HashMap();
-    private int displayedVersionNumber = 1;
+    int displayedVersionNumber=1;
 
     public boolean getSettingAsBoolean(final AppVersionSettings appVersionSetting) {
 
@@ -24,11 +24,9 @@ public class AppVersionConfig {
         for(AppVersionSettings setting : EnumSet.allOf(AppVersionSettings.class)){
 
             config.setSetting(setting, setting.getDefault());
-        //
         }
 
-        int displayedVersionNumber = 1;
-
+        config.setDisplayedVersionNumber(1);
         return config;
     }
 
@@ -73,14 +71,39 @@ public class AppVersionConfig {
                 retConfig.setDisplayedVersionNumber(4);
                 break;
             case 5:
-                // specific version 4 config here
+                // specific version 5 config here
+                // basically the bug fixed 'complete' app using form submissions
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
-                retConfig.setDisplayedVersionNumber(4);
+                retConfig.setDisplayedVersionNumber(5);
                 break;
+            case 6:
+                // specific version 6 config here
+                // this is going to use the fetch approach to issue form requests via JavaScript
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setDisplayedVersionNumber(6);
+                break;
+            case 7:
+                // specific version 7 config here
+                // this is going to use the API requests via JavaScript
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setDisplayedVersionNumber(7);
+                break;
+            default:
+                // use all the defaults - careful now
+                // this is because we didn't configure the versino
+                retConfig.setDisplayedVersionNumber(-1);
 
         }
 
