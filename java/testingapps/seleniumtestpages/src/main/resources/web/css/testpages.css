@@ -9,7 +9,7 @@ body {
     font-variant: normal;
 }
 
-.page_body{
+.page-body{
     margin-left: 1em;
     margin-right: 1em;
 }
@@ -46,17 +46,17 @@ div.centered{
     text-align: center;
 }
 
-div.page_footer:before{
+div.page-footer:before{
     padding-top: 10em;
     margin-top: 10em;
 }
 
-div.page_footer{
+div.page-footer{
     text-align: center;
     margin: 10em;
 }
 
-div.page_footer p{
+div.page-footer p{
     padding-top: 1em;
     border-top: 1px solid black;
     font-size: 0.6em;
@@ -71,6 +71,6 @@ div.explanation{
     font-style: italic;
 }
 
-.inline_explanation{
+.inline-explanation{
     font-style: italic;
 }
