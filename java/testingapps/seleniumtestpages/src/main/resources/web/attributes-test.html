@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Page For Element Attributes</title>
+    <link rel="stylesheet" href="css/testpages.css">
+</head>
+
+<body>
+
+<div class="page_body">
+
+
+    <div class="page_navigation">
+        <a href="..">Index</a>
+    </div>
+
+    <h1>Element Attributes Examples</h1>
+
+    <div class="explanation">
+        <p>Elements can have attributes. This test page has sample paragraphs with attributes to explore.
+        </p>
+    </div>
+
+    <h2>Custom Attribute and JavaScript Added</h2>
+
+    <p class="inline_explanation">The next paragraph has attributes. Some are custom attributes, and one "original-title" was added using JavaScript.</p>
+
+    <div class="centered">
+        <p id="domattributes" class="class-attribute" custom-attrib="attrib in source at load" title="a paragraph to test attributes on">This paragraph has attributes</p>
+    </div>
+
+    <br/>
+
+    <script>
+    document.getElementById("domattributes").setAttribute('original-title','This used to be the title');
+    </script>
+
+    <h2>Dynamic JavaScript Added</h2>
+
+    <script>
+        function setNewAttrib(){
+            var pelem = document.getElementById("jsattributes");
+            var nextid = parseInt(pelem.getAttribute("nextid"));
+            pelem.setAttribute('custom-'+nextid,'value-'+nextid);
+            pelem.setAttribute("nextid", (nextid+1).toString());
+        }
+    </script>
+
+    <p class="inline_explanation">The next paragraph has an id, and a custom attribute called "nextid" which is used when adding additional attributes via JavaScript when the button is clicked e.g. "custom-{nextid}.</p>
+
+    <br/>
+
+    <div class="centered">
+        <p id="jsattributes" nextid="1">This paragraph has dynamic attributes</p>
+        <button class="styled-click-button" onclick="setNewAttrib()">Add Another Attribute</button>
+    </div>
+
+
+
+    <div class="page_footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>

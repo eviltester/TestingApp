@@ -9,6 +9,31 @@ body {
     font-variant: normal;
 }
 
+.page_body{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.styled-click-button {
+    padding: 0.5em 1em;
+    font-size: 1.4em;
+    text-align: center;
+    cursor: pointer;
+    color: #ffffff;
+    outline: none;
+    background-color: green;
+    border-radius: 0.5em;
+    box-shadow: 0 0.3em #999999;
+}
+
+.styled-click-button:hover {background-color: darkgreen}
+
+.styled-click-button:active {
+    background-color: darkgreen;
+    box-shadow: 0 0.2em #666666;
+    transform: translateY(0.1em);
+}
+
 h1{
     text-align: center;
 }
