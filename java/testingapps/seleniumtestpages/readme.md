@@ -1,6 +1,29 @@
+## Current Version
+
+Released as part of v 1.3.6 of the compendium:
+
+Download the `.jar` from the releases page
+
+- [releases](https://github.com/eviltester/TestingApp/releases/tag/v1.3.6)
+
+Run with:
+
+`java -jar seleniumtestpages-1-3-2-jar-with-dependencies.jar`
+
+## Configuration
+
+You can switch off the "/shutdown" by creating an environment variable:
+
+- `SELENIUM_TEST_PAGES_DISALLOW_SHUTDOWN`
+
+And you can switch off the file upload processing by creating an environment variable:
+
+- `SELENIUM_TEST_PAGES_DISALLOW_UPLOAD`
+
+The environment variables can have any value, I usually use 'disallow'
+
+
 ## Self contained localhost version of test pages
-
-
 
 This `java` folder contains a localhost version of the selenium test pages.
 
@@ -64,8 +87,3 @@ This will allow most of the tests to run locally against the java app.
 
 * At the moment the screenshot tests still use `seleniumsimplified.com` and there is some navigation on the internet with the frames tests - these will be amended later.
 
-## Now Supports Technical and Exploratory Testing
-
-I have created a few JavaScript games and apps for teaching exploratory technical testing.
-
-These are now included in this application, you can find a link at the bottom of the main page.
