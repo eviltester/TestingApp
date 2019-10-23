@@ -8,14 +8,28 @@ import java.nio.file.Paths;
 
 import static spark.Spark.*;
 
-/**
- * Created by Alan on 15/06/2016.
- */
 public class MainTestPages {
+
+    static boolean hasHerokuAssignedPort(){
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        return (processBuilder.environment().get("PORT") != null);
+    }
+
+    static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (hasHerokuAssignedPort()) {
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return -1; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
 
     public static void main(String[] args) {
 
         Integer proxyport = 4567;    // default for spark
+
+        if(hasHerokuAssignedPort()) {
+            proxyport = getHerokuAssignedPort();
+        }
 
         for(String arg : args){
             if(arg.startsWith("-port")){
@@ -35,7 +49,15 @@ public class MainTestPages {
 
 
         // add a shutdown url in case left running on port 4567
-        get("/shutdown", (req, res) -> {System.exit(0); return "";});
+        String envVar = System.getenv("SELENIUM_TEST_PAGES_DISALLOW_SHUTDOWN");
+        if(envVar != null && envVar.length()>0) {
+            // shutdown is not enabled
+        }else{
+            get("/shutdown", (req, res) -> {
+                System.exit(0);
+                return "";
+            });
+        }
 
 
         // because Spark is a singleton - these just have to register their routings, they don't need to do anything else

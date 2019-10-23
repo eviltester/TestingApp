@@ -1,7 +1,5 @@
 package com.seleniumsimplified.seleniumtestpages.spark.app;
 
-import org.eclipse.jetty.util.MultiMap;
-import org.eclipse.jetty.util.UrlEncoded;
 import spark.Request;
 import spark.Response;
 
@@ -18,27 +16,31 @@ public class FileUploadProcessor {
 
     private final Request req;
     private final Response res;
+    private final Boolean allowupload;
     private StringBuilder html;
 
-    public FileUploadProcessor(Request req, Response res) {
+    public FileUploadProcessor(Request req, Response res, Boolean allowupload) {
         this.req = req;
         this.res = res;
+        this.allowupload = allowupload; // need to configure not uploading when deployed to server
     }
 
     public String post() {
         html = new StringBuilder();
 
+        File uploadDir;
+        Path tempFile=null;
 
-        File uploadDir = new File("upload");
-        // create the upload directory if it does not exist
-        uploadDir.mkdir();
+        if(allowupload) {
+            uploadDir = new File("upload");
+            // create the upload directory if it does not exist
+            uploadDir.mkdir();
 
-
-        Path tempFile = null;
-        try {
-            tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/temp"));
@@ -47,30 +49,35 @@ public class FileUploadProcessor {
         File uploadedFile=null;
         boolean isImage = false;
 
-        try (InputStream input = req.raw().getPart("filename").getInputStream()) { // getPart needs to use same "name" as input field in form
+        String reportedName = "NoFileUploadsAllowed.txt";
 
-            Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+        if(allowupload) {
+            try (InputStream input = req.raw().getPart("filename").getInputStream()) { // getPart needs to use same "name" as input field in form
 
-            uploadedFile = new File(tempFile.toFile().getPath() + "_" + req.raw().getPart("filename").getSubmittedFileName());
-            tempFile.toFile().renameTo(uploadedFile);
+                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
 
-            if(req.raw().getPart("filename").getContentType().contains("image")){
-                isImage=true;
+                uploadedFile = new File(tempFile.toFile().getPath() + "_" + req.raw().getPart("filename").getSubmittedFileName());
+                tempFile.toFile().renameTo(uploadedFile);
+
+                if (req.raw().getPart("filename").getContentType().contains("image")) {
+                    isImage = true;
+                }
+
+                reportedName = uploadedFile.getName();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ServletException e) {
+                e.printStackTrace();
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServletException e) {
-            e.printStackTrace();
         }
 
 
 
-
         if(isImage) {
-            html.append("<h2>You uploaded this image:</h2><img src='/upload/" + uploadedFile.getName() + "'>\n");
+            html.append("<h2>You uploaded this image:</h2><img src='/upload/" + reportedName + "'>\n");
         }else{
-            html.append("<h2>You uploaded this file:</h2><a href='/upload/" + uploadedFile.getName() + "'/>" + uploadedFile.getName() + "</a>\n");
+            html.append("<h2>You uploaded this file:</h2><a href='/upload/" + reportedName + "'/>" + reportedName + "</a>\n");
         }
 
         return html.toString();
