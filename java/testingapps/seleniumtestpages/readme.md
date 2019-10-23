@@ -10,6 +10,14 @@ Run with:
 
 `java -jar seleniumtestpages-1-3-2-jar-with-dependencies.jar`
 
+## Hosted Version
+
+There is a deployed version of the application on heroku:
+
+- https://testpages.herokuapp.com
+
+The file upload, and shutdown functionality have been disabled on the heroku version.
+
 ## Configuration
 
 You can switch off the "/shutdown" by creating an environment variable:
