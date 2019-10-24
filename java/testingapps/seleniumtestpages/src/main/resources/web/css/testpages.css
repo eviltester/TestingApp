@@ -46,6 +46,11 @@ div.centered{
     text-align: center;
 }
 
+.form-label{
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
 div.page-footer:before{
     padding-top: 10em;
     margin-top: 10em;

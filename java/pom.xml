@@ -7,7 +7,7 @@
 <groupId>uk.co.compendiumdev.testing</groupId>
 <artifactId>testapp</artifactId>
 <packaging>pom</packaging>
-<version>1-3-6</version>
+<version>1-3-7-snapshot</version>
 <!-- <version>1.3</version>-->
 
 <!--
@@ -24,6 +24,7 @@ v1.4 - split into multiple pom.xnl
         <xstream.version>1.4.10</xstream.version>
         <org.json.version>20160212</org.json.version>
         <flexmark-all.version>0.26.4</flexmark-all.version>
+        <slf4j.version>1.7.21</slf4j.version>
 
         <!-- Current versions of our internal libraries -->
         <testingindexpage.version>1-0-0</testingindexpage.version>
@@ -44,7 +45,7 @@ v1.4 - split into multiple pom.xnl
         1.3.1 has a fix for search engine page because the javascript for cookies was not loaded
         1.3.2 fixed find_by_playground, and updated for heroku release
         -->
-        <seleniumtestpages.version>1-3-2</seleniumtestpages.version>
+        <seleniumtestpages.version>1-3-3-snapshot</seleniumtestpages.version>
         <testingappsroot.version>1-1-0</testingappsroot.version>
 
         <!-- Last release was...

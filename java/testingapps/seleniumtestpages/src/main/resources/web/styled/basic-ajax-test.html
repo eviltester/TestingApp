@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Page For Basic Ajax Example</title>
+    <link rel="stylesheet" href="../css/testpages.css">
+
+    <script type="text/javascript" charset="utf-8">
+
+        function changeCombo1(){
+
+            document.getElementById("ajaxBusy").style.display = "block";
+
+            var combo1 = document.getElementById("combo1");
+
+            var request = new XMLHttpRequest();
+            request.open('GET', '../ajaxselect.php?id='+combo1.value, true);
+
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 400) {
+                    var data = JSON.parse(request.responseText);
+                    var options = '';
+                    for (var i = 0; i < data.length; i++) {
+                        options += '<option value="' + data[i].optionValue + '">' + data[i].optionDisplay + '</option>';
+                    }
+
+                    var combo2 = document.getElementById("combo2");
+                    combo2.innerHTML = options;
+                    combo2.getElementsByTagName("option")[0].setAttribute("selected", "selected");
+
+                    document.getElementById("ajaxBusy").style.display = "none";
+
+                } else {
+                    // We reached our target server, but it returned an error
+                    console.log("error reading option json");
+                    document.getElementById("ajaxBusy").style.display = "none";
+                }
+            };
+
+            request.onerror = function() {
+                console.log("connection error reading option json");
+                document.getElementById("ajaxBusy").style.display = "none";
+            };
+
+            request.send();
+
+        }
+
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../..">Index</a>
+    </div>
+
+    <h1>Basic Ajax Example</h1>
+
+    <div class="explanation">
+        <p>JavaScript can be added a form so that the form is populated dynamically. In this example, when you select something from the Category, a call is made to the server to populate the second combo. This can be hard to automate because we have to synchronise and wait till the drop down is ready.
+        </p>
+    </div>
+
+    <div class="centered">
+        <form method="post" action="../the_form_processor.php?ajax=1">
+            <div class="form-label">
+                <label for="combo1">Category:</label>
+                <select name="id" id="combo1">
+                    <option value="1">Web</option>
+                    <option value="2">Desktop</option>
+                    <option value="3">Server</option>
+                </select>
+            </div>
+            <noscript>
+                <input type="submit" name="submitbutton" value="Load Individuals" />
+            </noscript>
+            <div class="form-label">
+                <label for="combo2">Language:</label>
+                <select name="language_id" id="combo2">
+                    <option value="1">Javascript</option>
+                    <option value="2">VBScript</option>
+                    <option value="3">Flash</option>
+                </select>
+            </div>
+            <div class="form-label">
+                <span id="ajaxBusy" style="display: none;"><img src="../ajax-loader.gif"/></span>
+            </div>
+
+            <input class="styled-click-button" type="submit" name="submitbutton" value="Code In It" />
+            <input hidden type="text" name="form_return" value="/styled/basic-ajax-test.html" />
+        </form>
+    </div>
+
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<script>
+window.onload = function() {
+    document.getElementById("combo1").addEventListener("change", changeCombo1);
+}
+</script>
+
+</body>
+</html>

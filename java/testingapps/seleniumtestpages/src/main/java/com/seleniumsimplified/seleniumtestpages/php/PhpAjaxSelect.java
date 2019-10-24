@@ -21,19 +21,19 @@ public class PhpAjaxSelect {
     public String get() {
 
         List<String> jsonResponses = new ArrayList<>();
-        jsonResponses.add("[ {optionValue: 0, optionDisplay: 'Javascript'}, \n" +
-                "  {optionValue:1, optionDisplay: 'VBScript'}, \n" +
-                "  {optionValue:2, optionDisplay: 'Flash'}]");
+        jsonResponses.add(("[ {'optionValue': 0, 'optionDisplay': 'Javascript'}, \n" +
+                "  {'optionValue':1, 'optionDisplay': 'VBScript'}, \n" +
+                "  {'optionValue':2, 'optionDisplay': 'Flash'}]").replaceAll("\'","\""));
 
-        jsonResponses.add("[{optionValue:10, optionDisplay: 'C++'}, \n" +
-                "  {optionValue:11, optionDisplay: 'Assembler'}, \n" +
-                "  {optionValue:12, optionDisplay: 'C'},\n" +
-                "  {optionValue:13, optionDisplay: 'Visual Basic'}]");
+        jsonResponses.add(("[{'optionValue':10, 'optionDisplay': 'C++'}, \n" +
+                "  {'optionValue':11, 'optionDisplay': 'Assembler'}, \n" +
+                "  {'optionValue':12, 'optionDisplay': 'C'},\n" +
+                "  {'optionValue':13, 'optionDisplay': 'Visual Basic'}]").replaceAll("\'","\""));
 
-        jsonResponses.add("[{optionValue:20, optionDisplay: 'Cobol'}, \n" +
-                "{optionValue:21, optionDisplay:'Fortran'},\n" +
-                "{optionValue:22, optionDisplay:'C++'},\n" +
-                "{optionValue:23, optionDisplay:'Java'}]");
+        jsonResponses.add(("[{'optionValue':20, 'optionDisplay': 'Cobol'}, \n" +
+                "{'optionValue':21, 'optionDisplay':'Fortran'},\n" +
+                "{'optionValue':22, 'optionDisplay':'C++'},\n" +
+                "{'optionValue':23, 'optionDisplay':'Java'}]").replaceAll("\'","\""));
 
         String theId = req.queryParams("id");
 

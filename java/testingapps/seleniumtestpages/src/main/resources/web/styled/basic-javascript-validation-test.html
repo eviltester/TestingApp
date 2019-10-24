@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Page For Basic JavaScript Validation Example</title>
+    <link rel="stylesheet" href="../css/testpages.css">
+
+    <script type="text/javascript" charset="utf-8">
+
+        function checkGT30(value) {
+            if (value>30)
+                alert("Enter a value less than 30");
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../..">Index</a>
+    </div>
+
+    <h1>Basic Ajax Example</h1>
+
+    <div class="explanation">
+        <p>JavaScript can be added to input fields for validation. In this example, when you finish typing in a value to the input it will be validated.
+        </p>
+    </div>
+
+    <div class="centered">
+        <form method="post" action="../the_form_processor.php?ajax=1">
+            <div class="form-label">
+            Values Less Than 30 please : <input type="text" id="lteq30" name="value" onBlur="checkGT30(this.value)">
+            </div>
+            <input class="styled-click-button" type="submit" name="submitbutton" value="Submit Value" />
+            <input hidden type="text" name="form_return" value="/styled/basic-javascript-validation-test.html" />
+        </form>
+    </div>
+
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>
