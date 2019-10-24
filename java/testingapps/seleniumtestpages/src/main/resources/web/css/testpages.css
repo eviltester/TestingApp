@@ -88,3 +88,25 @@ div.explanation{
 .centered table{
     margin:auto;
 }
+
+.drags{
+    width:300px;
+    height:150px;
+    margin:auto;
+    overflow:hidden;
+}
+.drag{
+    width: 150px;
+    display: inline;
+    min-width: 150px;
+}
+
+.left{
+    float:left;
+}
+.right{
+    float:right;
+}
+
+.draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; background-color:yellow;}
+.droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:red;}

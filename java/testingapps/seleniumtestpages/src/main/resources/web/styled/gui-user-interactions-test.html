@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+    <title>GUI User Interactions</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+
+    <h1>Drag And Drop Examples</h1>
+
+    <div class="explanation">
+        <p>You can move the yellow squares to drag them on the red drop points.
+            You can also draw in the plain canvas. And keyboard events will be displayed as events.
+            There are some secret keyboard combinations that render different text.
+        </p>
+    </div>
+
+
+
+
+    <div class="draganddrops">
+        <div class="drags">
+            <div class="drag left">
+                <div id="draggable1" class="draggable">
+                    <p>Drag me</p>
+                </div>
+            </div>
+            <div class="drag right">
+                <div id="draggable2" class="draggable">
+                    <p>Drag me</p>
+                </div>
+            </div>
+        </div>
+        <div class="drops">
+
+            <div id="droppable1" class="droppable">
+                <p>Drop here</p>
+            </div>
+
+            <div id="droppable2" class="droppable">
+                <p>No Drop here</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <canvas style="border:solid 1px #000000" id="canvas" width="300" height="300"></canvas>
+    </div>
+
+    <div id="keyevents">
+        <p>Events:</p>
+        <ul id="keyeventslist">
+        </ul>
+    </div>
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+
+<script>
+
+        // references
+        // https://www.w3schools.com/howto/howto_js_draggable.asp
+        // https://javascript.info/mouse-drag-and-drop
+        function draggable(element) {
+            var shiftX, shiftY;
+            var elemBelow;
+
+            element.onmousedown = dragMouseDown;
+
+            function moveAt(pageX, pageY) {
+                element.style.left = pageX - shiftX + 'px';
+                element.style.top = pageY - shiftY + 'px';
+
+            }
+
+            function dragMouseDown(e) {
+                shiftX = e.clientX - element.getBoundingClientRect().left;
+                shiftY = e.clientY - element.getBoundingClientRect().top;
+
+                element.style.position = 'absolute';
+                element.style.zIndex = 1000;
+                document.body.append(element);
+                moveAt(e.pageX, e.pageY);
+
+                document.addEventListener("mouseup", closeDragElement);
+                document.addEventListener("mousemove", elementDrag);
+            }
+
+            function elementDrag(e) {
+
+                element.hidden = true;
+                elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                element.hidden = false;
+
+                moveAt(e.pageX, e.pageY);
+            }
+
+            function closeDragElement() {
+
+                dropped(element, elemBelow);
+
+                document.removeEventListener('mousemove', elementDrag);
+                document.removeEventListener('mouseup', closeDragElement);
+            }
+        }
+
+        function dropped(droppee, onto) {
+            try {
+                if (onto.getAttribute("id") == "droppable1") {
+                    if (droppee.getAttribute("id") == "draggable1") {
+                        onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                    } else {
+                        onto.getElementsByTagName("p")[0].innerHTML = "Get Off Me!";
+                    }
+                } else {
+                    if (onto.getAttribute("class").includes("droppable")) {
+                        onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                    }
+                }
+            } catch (err) {
+
+            }
+        }
+
+        draggable(document.getElementById("draggable1"));
+        draggable(document.getElementById("draggable2"));
+
+        document.addEventListener("keydown", function (event) {
+
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode("down " + event.which));
+            document.getElementById("keyeventslist").append(li);
+
+            if (event.which == 17) cntrlPressed = true;
+
+            if (event.which == 32 && cntrlPressed) {
+                // ctrl space
+                document.getElementById("droppable1").getElementsByTagName("p")[0].innerHTML = "Let GO!!!";
+                document.getElementById("droppable2").getElementsByTagName("p")[0].innerHTML = "Let GO!!!";
+            }
+
+            if (event.which != 17) {
+                if (event.which == 66 && cntrlPressed) {
+                    // ctrl B
+                    document.getElementById("draggable1").getElementsByTagName("p")[0].innerHTML = "Bwa! Ha! Ha!";
+                }
+            }
+        });
+
+        // change text on droppables to "Drop Here"
+        document.addEventListener("keyup", function (event) {
+            if (event.which == 17) cntrlPressed = false;
+            document.getElementById("droppable1").getElementsByTagName("p")[0].innerHTML = "Drop Here";
+            document.getElementById("droppable2").getElementsByTagName("p")[0].innerHTML = "Drop Here";
+        });
+
+        var drawcanvas = false;
+
+
+        document.getElementById("canvas").addEventListener("mouseup", function () {
+            drawcanvas = false;
+        });
+
+        document.getElementById("canvas").addEventListener("mousedown", function () {
+            drawcanvas = true;
+        });
+
+        document.getElementById("canvas").addEventListener("mousemove", function (event) {
+            if (drawcanvas == true) {
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
+                document.getElementById("keyeventslist").appendChild(li);
+                canvas = document.getElementById("canvas");
+                var canvasrect = canvas.getBoundingClientRect();
+                mycanvas2d = canvas.getContext("2d");
+                mycanvas2d.fillStyle = "#000000";
+                mycanvas2d.beginPath();
+                mycanvas2d.rect(event.clientX - canvasrect.left, event.clientY - canvasrect.top, 2, 2);
+                mycanvas2d.closePath();
+                mycanvas2d.fill();
+            }
+        });
+
+
+</script>
+</body>
+</html>

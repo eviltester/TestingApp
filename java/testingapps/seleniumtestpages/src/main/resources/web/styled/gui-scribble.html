@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+    <title>GUI Canvas Scribble User Interactions</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+
+    <h1>Canvas Scribble Examples</h1>
+
+    <div class="explanation">
+        <p>
+            You can also draw in the plain canvas.
+        </p>
+    </div>
+
+
+
+    <div>
+        <canvas style="border:solid 1px #000000" id="canvas" width="300" height="300"></canvas>
+    </div>
+
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+
+<script>
+
+        var drawcanvas = false;
+
+
+        document.getElementById("canvas").addEventListener("mouseup", function () {
+            drawcanvas = false;
+        });
+
+        document.getElementById("canvas").addEventListener("mousedown", function () {
+            drawcanvas = true;
+        });
+
+        document.getElementById("canvas").addEventListener("mousemove", function (event) {
+            if (drawcanvas == true) {
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
+                document.getElementById("keyeventslist").appendChild(li);
+                canvas = document.getElementById("canvas");
+                var canvasrect = canvas.getBoundingClientRect();
+                mycanvas2d = canvas.getContext("2d");
+                mycanvas2d.fillStyle = "#000000";
+                mycanvas2d.beginPath();
+                mycanvas2d.rect(event.clientX - canvasrect.left, event.clientY - canvasrect.top, 2, 2);
+                mycanvas2d.closePath();
+                mycanvas2d.fill();
+            }
+        });
+
+
+</script>
+</body>
+</html>
