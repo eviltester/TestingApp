@@ -95,10 +95,18 @@ div.explanation{
     margin:auto;
     overflow:hidden;
 }
+
 .drag{
     width: 150px;
     display: inline;
     min-width: 150px;
+}
+
+.drops{
+    width:400px;
+    height:150px;
+    margin:auto;
+    overflow:hidden;
 }
 
 .left{

@@ -53,10 +53,7 @@
         </div>
     </div>
 
-
-    <div>
-        <canvas style="border:solid 1px #000000" id="canvas" width="300" height="300"></canvas>
-    </div>
+    <br/>
 
     <div id="keyevents">
         <p>Events:</p>
@@ -107,7 +104,7 @@
             function elementDrag(e) {
 
                 element.hidden = true;
-                elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+                elemBelow = document.elementsFromPoint(e.clientX, e.clientY);
                 element.hidden = false;
 
                 moveAt(e.pageX, e.pageY);
@@ -122,17 +119,20 @@
             }
         }
 
-        function dropped(droppee, onto) {
+        function dropped(droppee, ontoa) {
             try {
-                if (onto.getAttribute("id") == "droppable1") {
-                    if (droppee.getAttribute("id") == "draggable1") {
-                        onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                for(var x=0; x<ontoa.length; x++) {
+                    var onto = ontoa[x];
+                    if (onto.getAttribute("id") == "droppable1") {
+                        if (droppee.getAttribute("id") == "draggable1") {
+                            onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                        } else {
+                            onto.getElementsByTagName("p")[0].innerHTML = "Get Off Me!";
+                        }
                     } else {
-                        onto.getElementsByTagName("p")[0].innerHTML = "Get Off Me!";
-                    }
-                } else {
-                    if (onto.getAttribute("class").includes("droppable")) {
-                        onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                        if (onto.getAttribute("class").includes("droppable")) {
+                            onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                        }
                     }
                 }
             } catch (err) {
@@ -170,33 +170,6 @@
             if (event.which == 17) cntrlPressed = false;
             document.getElementById("droppable1").getElementsByTagName("p")[0].innerHTML = "Drop Here";
             document.getElementById("droppable2").getElementsByTagName("p")[0].innerHTML = "Drop Here";
-        });
-
-        var drawcanvas = false;
-
-
-        document.getElementById("canvas").addEventListener("mouseup", function () {
-            drawcanvas = false;
-        });
-
-        document.getElementById("canvas").addEventListener("mousedown", function () {
-            drawcanvas = true;
-        });
-
-        document.getElementById("canvas").addEventListener("mousemove", function (event) {
-            if (drawcanvas == true) {
-                var li = document.createElement("li");
-                li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
-                document.getElementById("keyeventslist").appendChild(li);
-                canvas = document.getElementById("canvas");
-                var canvasrect = canvas.getBoundingClientRect();
-                mycanvas2d = canvas.getContext("2d");
-                mycanvas2d.fillStyle = "#000000";
-                mycanvas2d.beginPath();
-                mycanvas2d.rect(event.clientX - canvasrect.left, event.clientY - canvasrect.top, 2, 2);
-                mycanvas2d.closePath();
-                mycanvas2d.fill();
-            }
         });
 
 
