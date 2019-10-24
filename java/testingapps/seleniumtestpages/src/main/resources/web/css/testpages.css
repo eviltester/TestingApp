@@ -79,3 +79,7 @@ div.explanation{
 .inline-explanation{
     font-style: italic;
 }
+
+.centered table{
+    margin:auto;
+}

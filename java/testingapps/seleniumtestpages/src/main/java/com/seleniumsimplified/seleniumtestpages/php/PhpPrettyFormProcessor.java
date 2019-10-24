@@ -33,6 +33,14 @@ public class PhpPrettyFormProcessor {
 
         html =new StringBuilder();
 
+        html.append("    <h1>Processed Form Details</h1>\n" +
+                "\n" +
+                "    <div class=\"explanation\">\n" +
+                "        <p>You submitted a form. The details below show the values you entered for processing.\n" +
+                "        </p>\n" +
+                "    </div>");
+
+
         // for backwards compatibility with PHP we should process the form fields in the order they are submitted
         String[] paramKeys = req.body().split("&");
         Set<String> theParamKeys = new LinkedHashSet<>();
