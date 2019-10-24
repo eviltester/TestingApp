@@ -63,7 +63,6 @@ public class PhpPrettyCalculate {
             double a = Double.parseDouble(number1);
             double b = Double.parseDouble(number2);
 
-
             double val=0;
 
             if (function.equalsIgnoreCase("plus")) {
