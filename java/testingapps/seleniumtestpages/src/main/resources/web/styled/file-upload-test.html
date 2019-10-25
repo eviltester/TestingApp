@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <title>Upload a File</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Upload a File</h1>
+
+    <div class="explanation">
+        <p>This page allows you to upload a file.
+            Note: this will only perform an actual upload if you are running the app from your
+            local machine. Uploading will have been disabled on the server deploy.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <!-- not really a jsp page -->
+        <form action="/uploads/fileprocessor" method="post" enctype="multipart/form-data">
+
+            <div class="form-label">
+                <input type="file" id="fileinput" name="filename"/>
+            </div>
+
+            <h2>What type is it?</h2>
+
+            <div class="form-label">
+                <input type="radio" id="itsanimage"
+                       name="filetype" value="image">
+                <label for="itsanimage">Image</label>
+
+                <input type="radio" id="itsafile"
+                       name="filetype" value="text">
+                <label for="itsafile">A General File</label>
+            </div>
+
+            <div class="form-label">
+                <input type="submit" class="styled-click-button" name="upload" value="Upload">
+            </div>
+        </form>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>

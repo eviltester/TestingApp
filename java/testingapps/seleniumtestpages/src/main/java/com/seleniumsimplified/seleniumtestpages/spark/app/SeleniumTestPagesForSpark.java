@@ -66,7 +66,7 @@ public class SeleniumTestPagesForSpark {
             if(envVar != null && envVar.length()>0){
                 allowUploads = false;
             }
-            return new FileUploadProcessor(req,res, allowUploads).post();
+            return new FileUploadProcessor(req,res, allowUploads).prettyOutput().post();
         });
         get("/upload/NoFileUploadsAllowed.txt", (req, res) -> {return new ResourceReader().asString("/web/NoFileUploadsAllowed.txt");});
         get("/upload/*", (req, res) -> {return new UploadedFile(req,res).get("upload/"+req.splat()[0]);});
