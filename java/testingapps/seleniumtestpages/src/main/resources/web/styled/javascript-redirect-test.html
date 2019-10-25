@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>JavaScript Redirect Test Page</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <script type="text/javascript" src="countdown.js"></script>
+
+    <script  type="text/javascript">
+        function gotoRedirect(){
+            window.location = "redirected.html"
+        }
+        function startRedirection(millis){
+            document.getElementById("countdown-render").style.display="block";
+            var javascript_countdown = new CountDown();
+            javascript_countdown.setTimeoutMessage("Redirecting Now")
+            javascript_countdown.start(millis/1000);
+            setTimeout('gotoRedirect()', millis);
+        }
+    </script>
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>JavaScript Redirects</h1>
+
+    <div class="explanation">
+        <p>The items below, when clicked, will trigger a redirect.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <p><button class="styled-click-button" id='delaygotobasic' onClick="startRedirection(5000)">Click to be transported in 5 seconds</button></p>
+        <p><button class="styled-click-button" id='delaygotobounce' onClick="startRedirection(2000)">Click to be transported in 2 seconds</button></p>
+
+        <div id="countdown-render" style="display:none">
+            <p id="javascript_countdown_time"></p>
+        </div>
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+
+
+</body>
+</html>
