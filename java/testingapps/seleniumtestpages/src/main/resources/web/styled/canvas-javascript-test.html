@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+    <title>Javascript Canvas Example</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <script type="text/javascript">
+
+        var ctx;
+        // useful links:
+        //https://developer.mozilla.org/en-US/docs/Canvas_tutorial
+        //http://www.w3schools.com/html/html_colors.asp
+
+        window.onload = function() {
+            ctx = document.getElementById("canvas").getContext("2d");
+            draw(1, 75, 75, 10, "#00A308");
+            draw(0, 150, 150, 30, "#FF1C0A");
+        }
+
+        function addCommandToHistory(text){
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(text));
+            document.getElementById("commandlist").append(li);
+        }
+
+        function draw(shape, x, y, size, colour) {
+            //ctx.clearRect(0,0,300,300);
+            ctx.fillStyle = colour;
+            ctx.beginPath();
+            if(shape==1){
+                ctx.arc(x, y, size, 0, Math.PI*2, true);
+            }else{
+                ctx.rect(x, y, size, size);
+            }
+            ctx.closePath();
+            ctx.fill();
+
+            addCommandToHistory('draw(' + shape + ',' + x + ',' + y + ',' + size + ',' + colour + ')');
+        }
+
+        function clearCanvas(){
+            ctx.clearRect(0,0,300,300);
+            addCommandToHistory('clear()');
+        }
+
+        function handleUserShape(){
+            var xval = parseInt(document.getElementById("xnum").value);
+            var yval = parseInt(document.getElementById("ynum").value);
+            var shapesize = parseInt(document.getElementById("shapesize").value);
+            var shapeselect = document.getElementById("shapeselect").value;
+            var colourselect = document.getElementById("colourselect").value;
+            draw(shapeselect, xval, yval, shapesize , colourselect);
+        }
+    </script>
+
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Canvas JavaScript Example</h1>
+
+    <div class="explanation">
+        <p>A canvas drawing tool, with a basic GUI interface.
+            The 'commands history' is shown on the right.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <div id="commands" style="float:right">
+            <p>Actions:</p>
+            <ul id="commandlist" style="display:table">
+            </ul>
+        </div>
+
+        <div id="thecanvas">
+            <canvas style="border:2px solid #000000;" id="canvas" width="300" height="300"></canvas>
+        </div>
+
+        <form name="userchanges">
+
+            <div class="form-label">
+                <label for="xnum">X</label>
+                <input type="number" name="xnum" id="xnum" value="20" style="width:60px"/>
+                <label for="ynum">Y</label>
+                <input type="number" name="ynum" id="ynum" value="30" style="width:60px"/>
+                <label for="shapesize">Size</label>
+                <input type="number" name="shapesize" id="shapesize" value="65" style="width:60px"/>
+            </div>
+
+            <div class="form-label">
+                <label for="colourselect">Colour</label>
+
+                <select id="colourselect" name="colour">
+                    <option value="#000000">Black</option>
+                    <option value="#FF0000">Red</option>
+                    <option value="#00FF00">Green</option>
+                    <option value="#0000FF">Blue</option>
+                    <option value="#C0C0C0">Grey</option>
+                </select>
+
+                <label for="shapeselect">Shape</label>
+                <select id="shapeselect" name="shape">
+                    <option value="1">Circle</option>
+                    <option value="0">Square</option>
+                </select>
+            </div>
+
+            <div class="form-label">
+                <input name="gobutton" type="button" value="Show" onClick="handleUserShape()"/>
+                <input name="clearbutton" type="button" onClick="clearCanvas()" value="Clear"/>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="explanation">
+        <p>Instructions:</p>
+        <ul>
+            <li>command: draw(shape, x, y, size, colour)</li>
+            <li>command: clear()</li>
+        </ul>
+        <p>Note:</p>
+        <ul>
+            <li>shape is 1 for circle, 0 for square</li>
+            <li>colour is an rgb string e.g. "#FF1C0A"</li>
+            <li>size is in pixels</li>
+            <li>canvas is 300 x 300</li>
+        </ul>
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>

@@ -1,47 +1,54 @@
 <html>
 <head><title>Javascript Canvas Example</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    
+    <script type="text/javascript">
 
-<script type="text/javascript">
+        var ctx;
+        // useful links:
+        //https://developer.mozilla.org/en-US/docs/Canvas_tutorial
+        //http://www.w3schools.com/html/html_colors.asp
 
-var ctx;
-// useful links:
-//https://developer.mozilla.org/en-US/docs/Canvas_tutorial
-//http://www.w3schools.com/html/html_colors.asp
+        window.onload = function() {
+            ctx = document.getElementById("canvas").getContext("2d");
+            draw(1, 75, 75, 10, "#00A308");
+            draw(0, 150, 150, 30, "#FF1C0A");
+        }
 
-$(document).ready(function() {
+        function addCommandToHistory(text){
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(text));
+            document.getElementById("commandlist").append(li);
+        }
 
-//get a reference to the canvas
-ctx = $('#canvas')[0].getContext("2d");
-draw(1, 75, 75, 10, "#00A308");
-draw(0, 150, 150, 30, "#FF1C0A");
+        function draw(shape, x, y, size, colour) {
+            //ctx.clearRect(0,0,300,300);
+            ctx.fillStyle = colour;
+            ctx.beginPath();
+            if(shape==1){
+                ctx.arc(x, y, size, 0, Math.PI*2, true);
+            }else{
+                ctx.rect(x, y, size, size);
+            }
+            ctx.closePath();
+            ctx.fill();
 
-});
+            addCommandToHistory('draw(' + shape + ',' + x + ',' + y + ',' + size + ',' + colour + ')');
+        }
 
-function draw(shape, x, y, size, colour) {
-  //ctx.clearRect(0,0,300,300);
-  ctx.fillStyle = colour;
-  ctx.beginPath();
-  if(shape==1){
-	ctx.arc(x, y, size, 0, Math.PI*2, true); 
-  }else{
-	ctx.rect(x, y, size, size);
-  }
-  ctx.closePath();
-  ctx.fill();
-  
-  $("#commandlist").append('<li>draw(' + shape + ',' + x + ',' + y + ',' + size + ',' + colour + ')</li>');
-}
+        function clearCanvas(){
+            ctx.clearRect(0,0,300,300);
+            addCommandToHistory('clear()');
+        }
 
-function clearCanvas(){
-	ctx.clearRect(0,0,300,300);
-	  $("#commandlist").append('<li>clear()</li>');
-}
-
-function handleUserShape(){
-	draw($('#shapeselect').val(),$('#xnum').val(),$('#ynum').val(),$('#shapesize').val(),$('#colourselect').val());
-}
-</script>
+        function handleUserShape(){
+            var xval = parseInt(document.getElementById("xnum").value);
+            var yval = parseInt(document.getElementById("ynum").value);
+            var shapesize = parseInt(document.getElementById("shapesize").value);
+            var shapeselect = document.getElementById("shapeselect").value;
+            var colourselect = document.getElementById("colourselect").value;
+            draw(shapeselect, xval, yval, shapesize , colourselect);
+        }
+    </script>
 
 
 </head>
