@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+    <title>Keys and Clicks</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<script>
+
+    function displayEventText(text){
+        var elem = document.createElement("p");
+        elem.appendChild(document.createTextNode(text));
+        document.getElementById("events").appendChild(elem);
+    }
+
+    window.onload = function() {
+        document.getElementById("button").addEventListener("click", function(){displayEventText("click")});
+        document.addEventListener("keydown", function(event){displayEventText(" down " + event.which)});
+        document.addEventListener("keyup", function(event){displayEventText(" up " + event.which)});
+    }
+
+</script>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Keys and Click Event Display</h1>
+
+    <div class="explanation">
+        <p>Click the button or press keys and the events are displayed below.
+        </p>
+    </div>
+
+    <div class="centered">
+
+
+    <div id="events">
+        <input id="button" type="button" value="click me" class="styled-click-button">
+    </div>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>
