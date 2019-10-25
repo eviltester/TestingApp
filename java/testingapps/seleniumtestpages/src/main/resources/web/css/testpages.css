@@ -118,3 +118,23 @@ div.explanation{
 
 .draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; background-color:yellow;}
 .droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:red;}
+
+
+#javascript_countdown_time{
+    font-family: Courier New;
+    font-size:30px;
+    text-align:center;
+}
+
+.timer-reset{
+    border-top: black;
+    border-top-style: solid;
+    margin-top: 1em;
+    height: 4em;
+    padding-top: 1em;
+}
+.timer-reset button{
+    display: block;
+    margin: auto;
+    margin-top: 1em;
+}
