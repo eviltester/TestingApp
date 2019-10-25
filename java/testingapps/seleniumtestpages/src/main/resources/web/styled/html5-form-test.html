@@ -34,54 +34,35 @@
         <form name="HTMLFormElements" action=
                 "../the_form_processor.php"
               method="post" id="HTMLFormElements">
-            <table border="1" cellpadding="5">
-                <!-- ...in a big HTML table. -->
-                <tr>
-                    <td>
-                        Colour:<br />
-                        <input type="color" name="colour"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Date:<br />
-                        <input type="date" name="date">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        Local date time:<br />
-                        <input type="datetime-local" name="datetime" value="2018-01-01T01:01"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Email:<br />
-                        <input type="email" name="email" value="bob@mailinator.com" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Month:<br />
-                        <input type="month" name="month"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Number:<br />
-                        <input type="number" name="number" min="1" value="42"/>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <input type="reset"/>
-                        <input type="submit" name="submitbutton"
+            <div class="form-label">
+                <label for="colour-picker">Colour: </label>
+                <input id="colour-picker" type="color" name="colour"/>
+            </div>
+            <div class="form-label">
+                <label for="date-picker">Date: </label>
+                <input id="date-picker" type="date" name="date">
+            </div>
+            <div class="form-label">
+                <label for="date-time-picker">Local date time: </label>
+                <input id="date-time-picker" type="datetime-local" name="datetime" value="2018-01-01T01:01"/>
+            </div>
+            <div class="form-label">
+                <label for="email-field">Email: </label>
+                <input id="email-field" type="email" name="email" value="bob@mailinator.com" />
+            </div>
+            <div class="form-label">
+                <label for="month-field">Month: </label>
+                        <input id="month-field" type="month" name="month"/>
+            </div>
+            <div class="form-label">
+                <label for="number-field">Number: </label>
+                <input id="number-field" type="number" name="number" min="1" value="42"/>
+            </div>
+            <div class="form-label">
+                        <input class="styled-click-button" type="reset"/>
+                        <input class="styled-click-button" type="submit" name="submitbutton"
                                value="submit" />
-                    </td>
-                </tr>
-            </table>
+            </div>
         </form>
 
 

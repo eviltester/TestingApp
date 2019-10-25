@@ -41,6 +41,8 @@ public class PhpPrettyFormProcessor {
                 "    </div>");
 
 
+        addLine("<div class='centered form-results'>");
+
         // for backwards compatibility with PHP we should process the form fields in the order they are submitted
         String[] paramKeys = req.body().split("&");
         Set<String> theParamKeys = new LinkedHashSet<>();
@@ -62,10 +64,22 @@ public class PhpPrettyFormProcessor {
             addLine("<p id='_valuesubmitbutton'>You did not click the submit button</p>");
         }
 
-        addLine("<p>Submitted Values</p>");
+        addLine("<h2>Submitted Values</h2>");
 
+
+        /**
+         *
+         * Hidden stuff in the form that we don't report
+         * because it is just for our use
+         *
+         */
         List<String> skipKeys = new ArrayList();
         skipKeys.add("form_return");
+        skipKeys.add("reportmissingparams");
+
+
+
+
 
         for(String param : theParamKeys){
             if(skipKeys.contains(param)){
@@ -106,24 +120,32 @@ public class PhpPrettyFormProcessor {
 
         }
 
-        if(params.get("checkboxes[]")==null) {
-            addLine("<p><strong>No Value for checkboxes</strong></p>");
+        // the following controlled by a hidden field because this is only used for one form
+        // reportmissingparams
+
+        if(params.get("reportmissingparams")!=null) {
+
+            System.out.println(params.get("reportmissingparams"));
+            String[] splitnames = params.get("reportmissingparams").get(0).split(",");
+
+            for(String paramname : splitnames){
+                String checkName = paramname.trim();
+                if (params.get(checkName) == null) {
+                    addLine(String.format("<p><strong>No Value for %s</strong></p>", checkName.replace("[","").replace("]","")));
+                }
+            }
         }
 
-        if(params.get("multipleselect[]")==null) {
-            addLine("<p><strong>No Value for multipleselect</strong></p>");
-        }
-
-        if(params.get("filename")==null) {
-            addLine("<p><strong>No Value for filename</strong></p>");
-        }
-
-
+        addLine("<div class='form-label'>");
         if(params.get("form_return")!=null){
-            addLine(String.format("<a href='%s' id='back_to_form'>Go back to the form</a>", params.get("form_return").get(0)));
+            addLine(String.format("<a href='%s' class='styled-click-button' id='back_to_form'>Go back to the form</a>", params.get("form_return").get(0)));
         }else{
-            addLine("<a href='#' id='back_to_form' onclick='window.history.back()'>Go back</a>");
+            // if no url provided then have generic back button
+            addLine("<a class='styled-click-button' href='#' id='back_to_form' onclick='window.history.back()'>Go back</a>");
         }
+        addLine("</div>");
+
+        addLine("</div>");
 
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", html.toString());
 
