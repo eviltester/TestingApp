@@ -43,6 +43,10 @@ public class SeleniumTestPagesForSpark {
         post("/styled/calculator", (req, res) -> {return new PhpPrettyCalculate(req,res).post();});
         post("/the_form_processor.php", (req, res) -> {return new PhpPrettyFormProcessor(req,res).post();}); // pretty template version
         get("/styled/refresh", (req, res) -> {return new PhpPrettyRefresh(req,res).get();});
+        get("/styled/frames/get-list", (req, res) -> {return new PhpGetList(req,res).get();});
+
+        post("/styled/search", (req, res) -> {return new PhpPrettySearch(req,res).post();});
+        get("/styled/search", (req, res) -> {return new PhpPrettySearch(req,res).get();});
 
         //search.php  - do not use a search engine, just have a set of random urls that we put up so it looks like a search
         // testing, java, related

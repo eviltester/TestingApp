@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title>Nested Frames Simple Example</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+</head>
+
+        <frameset rows="40%,*,30%" frameborder="1">
+
+            <frame name="top" src="frames-top.html" scrolling="auto"/>
+
+            <frameset cols="30%,30%,30%" frameborder="1">
+                <frame name="left" src="get-list?name=Left&list=30" noresize/>
+                <frame name="middle" src="get-list?name=Middle&list=40" scrolling="yes"/>
+                <frame name="right" src="get-list?name=Right&list=50" scrolling="no"/>
+            </frameset>
+
+            <frame name="footer" src="frames-footer.html"/>
+
+            <noframes>
+                <p>No frames is only used on very very old browsers. But you might see this in the DOM if you forget to leave out the 'body' on the page.</p>
+            </noframes>
+        </frameset>
+
+
+</html>
