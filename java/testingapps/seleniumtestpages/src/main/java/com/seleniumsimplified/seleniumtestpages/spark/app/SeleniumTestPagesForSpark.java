@@ -48,6 +48,21 @@ public class SeleniumTestPagesForSpark {
         post("/styled/search", (req, res) -> {return new PhpPrettySearch(req,res).post();});
         get("/styled/search", (req, res) -> {return new PhpPrettySearch(req,res).get();});
 
+        get("/styled/redirect/user-agent-redirect-test", (req, res) -> {
+            if(req.userAgent()!=null && req.userAgent().length()>0){
+                // this is actually better than I thought "(?i:.*(mobile|blackberry|mini).*)"
+                // so using "(.*(Mobile).*)" misses more
+                if(req.userAgent().matches(("(.*(Mobile).*)"))){
+                    res.redirect("/styled/redirect/mobile/user-agent-mobile-test"); return "";
+                }
+            }
+            return new ResourceReader().asString("/web/styled/redirect/user-agent-redirect-test.html");
+        });
+
+        get("/styled/redirect/mobile/user-agent-mobile-test", (req, res) -> {
+            return new ResourceReader().asString("/web/styled/redirect/mobile/user-agent-mobile-test.html").replace("<!-- USERAGENT -->", req.userAgent());
+        });
+
         //search.php  - do not use a search engine, just have a set of random urls that we put up so it looks like a search
         // testing, java, related
         post("/selenium/search.php", (req, res) -> {return new PhpSearch(req,res).post();});

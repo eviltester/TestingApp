@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <title>User Agent Based Redirection Test</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+<!-- BODY CONTENT -->
+
+    <h1>User Agent Based Redirection</h1>
+
+    <div class="explanation">
+        <p>If you hit this page with a browser, that the server thinks is a mobile browser then you will be
+            redirected to the mobile version of this page. The detection of the redirection is done by looking
+            at the user-agent header in the request.
+        </p>
+        <p>Note: the server does not have particularly good user agent detection so it will not work for all mobile
+        user agents. It is deliberately buggy.</p>
+        <p>The user agent page is at <a href="/styled/redirect/mobile/user-agent-mobile-test">/styled/redirect/mobile/user-agent-mobile-test</a> </p>
+        <p>If you are automating, then you can either detect you were redirect by looking at the title, or the url.</p>
+        <ul>
+            <li>If the title contains "Mobile" then you were redirected.</li>
+            <li>If the url contains "/mobile" or "/mobile/" then you were redirected</li>
+        </ul>
+    </div>
+
+    <div class="centered">
+
+
+        <p>In the real world, you will normally find a subdomain being used
+            e.g. instead of https://eviltester.com it would be https://m.eviltester.com</p>
+        <p class="inline-explanation">Note: This is a pretty old fashioned way of handling mobile devices.
+            Most websites now are responsive, and will work on both desktop and mobile, and so no separate
+            mobile pages, or subdomain would be used.</p>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
