@@ -1,14 +1,14 @@
 ## Current Version
 
-Released as part of v 1.3.6 of the compendium:
+Released as part of v 1.3.7 of the compendium:
 
 Download the `.jar` from the releases page
 
-- [releases](https://github.com/eviltester/TestingApp/releases/tag/v1.3.6)
+- [releases](https://github.com/eviltester/TestingApp/releases/tag/v1.3.7)
 
 Run with:
 
-`java -jar seleniumtestpages-1-3-2-jar-with-dependencies.jar`
+`java -jar seleniumtestpages-1-3-4-jar-with-dependencies.jar`
 
 ## Hosted Version
 
