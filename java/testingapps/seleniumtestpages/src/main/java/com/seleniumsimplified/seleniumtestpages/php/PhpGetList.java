@@ -20,9 +20,6 @@ public class PhpGetList {
 
     public String get() {
 
-        StringBuilder html = new StringBuilder();
-        html.append("<html><head></head><body>");
-
 
         String theName = req.queryParams("name");
         String theListCount = req.queryParams("list");
@@ -30,6 +27,9 @@ public class PhpGetList {
         if(theName==null || theName.length()==0){
             theName="Heading";
         }
+
+        StringBuilder html = new StringBuilder();
+        html.append(String.format("<html><head><title>%s Nested Page</title></head><body>", theName));
 
         html.append("<h1>" + theName + "</h1>");
 
