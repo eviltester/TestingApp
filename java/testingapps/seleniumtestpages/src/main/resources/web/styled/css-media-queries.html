@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>CSS Media Query Sizing Test</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+<style>
+    .csshidden{
+        visibility: hidden;
+    }
+    @media only screen and (min-width: 1800px) {
+        h2.s1800{
+            visibility: visible;
+        }
+    }
+
+    @media only screen and (min-width: 1600px) {
+        h2.s1600{
+            visibility: visible;
+        }
+    }
+
+    @media only screen and (min-width: 1400px) {
+        h2.s1400{
+            visibility: visible;
+        }
+    }
+    @media only screen and (min-width: 1200px) {
+        h2.s1200{
+            visibility: visible;
+        }
+    }
+    @media only screen and (min-width: 1000px) {
+        h2.s1000{
+            visibility: visible;
+        }
+    }
+    @media only screen and (min-width: 800px) {
+        h2.s800{
+            visibility: visible;
+        }
+    }
+    @media only screen and (min-width: 600px) {
+        h2.s600{
+            visibility: visible;
+        }
+    }
+    @media only screen and (min-width: 400px) {
+        h2.s400{
+            visibility: visible;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>CSS Media Queries Sizing</h1>
+
+    <div class="explanation">
+        <p>This page has CSS media query sizing formatting, so as you resize the page.
+            You should notice visible differences in the page content.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <h2 class="csshidden s1800">1800 Min Width</h2>
+        <h2 class="csshidden s1600">1600 Min Width</h2>
+        <h2 class="csshidden s1400">1400 Min Width</h2>
+        <h2 class="csshidden s1200">1200 Min Width</h2>
+        <h2 class="csshidden s1000">1000 Min Width</h2>
+        <h2 class="csshidden s800">800 Min Width</h2>
+        <h2 class="csshidden s600">600 Min Width</h2>
+        <h2 class="csshidden s400">400 Min Width</h2>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
