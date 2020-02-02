@@ -1,0 +1,36 @@
+div.noticeme{
+    background: #f9efb5;
+    padding: 1em;
+    border: black;
+    border-width: 2px;
+
+}
+div.expand {
+    max-height: 100px;
+    overflow: hidden;
+    position: relative;
+    -webkit-transition: max-height 0.75s ease 0s;
+    -moz-transition: max-height 0.75s ease 0s;
+    -ms-transition: max-height 0.75s ease 0s;
+    -o-transition: max-height 0.75s ease 0s;
+    transition: max-height 0.75s ease 0s;
+}
+div.expand:hover {
+    max-height: 999px;
+}
+div.expand:after {
+    content: ">";
+    width: 30px;
+    height: 45px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+div.expand:hover:after {
+    content: "V";
+    width: 30px;
+    height: 45px;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}

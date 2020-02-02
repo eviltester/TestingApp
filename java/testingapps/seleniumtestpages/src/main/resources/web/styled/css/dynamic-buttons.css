@@ -1,0 +1,25 @@
+#buttons > button {
+    padding: 0.5em 1em;
+    font-size: 1.4em;
+    text-align: center;
+    cursor: pointer;
+    color: #ffffff;
+    outline: none;
+    background-color: green;
+    border-radius: 0.5em;
+    box-shadow: 0 0.3em #999999;
+}
+
+#buttons > button:hover {background-color: darkgreen}
+
+#buttons > button:active {
+    background-color: darkgreen;
+    box-shadow: 0 0.2em #666666;
+    transform: translateY(0.1em);
+}
+
+#buttons > button:disabled {
+    background-color: rgba(0, 0, 0, 0.24);
+    box-shadow: 0 0.2em #666666;
+    transform: translateY(0.1em);
+}

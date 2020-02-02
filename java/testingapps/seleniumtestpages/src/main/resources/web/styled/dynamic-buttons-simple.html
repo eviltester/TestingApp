@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dynamic Buttons</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <link rel="stylesheet" href="/styled/css/dynamic-buttons.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Simple Dynamic Buttons</h1>
+
+    <div class="explanation">
+        <p>This page has dynamic buttons. They are relatively easy to automate. The first button is added by JavaScript automatically and the others are added when you click on the button. There is a delay before the next button appears.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <p id="buttonmessage">Click all 4 buttons.</p>
+
+        <div id="buttons">
+
+        </div>
+
+        <p id="waitmessage"></p>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+<script>
+
+    window.onload = function() {
+
+
+        function createButton(anId, text, where, atend) {
+            var button = document.createElement("button");
+            button.innerHTML = text;
+            button.setAttribute("id", anId);
+            var body = document.getElementById(where);
+            if (atend) {
+                body.appendChild(button);
+            } else {
+                body.prepend(button);
+            }
+            return button;
+        }
+
+        function wait(shouldI){
+            if(shouldI){
+                document.getElementById("waitmessage").innerText="Wait...";
+            }else{
+                document.getElementById("waitmessage").innerText="";
+            }
+        }
+
+        function fullyCreateButton(id){
+            buttonnames = ["Start", "One", "Two", "Three"];
+            button = createButton("button0" + id, buttonnames[id], "buttons", true);
+            if(id<(buttonnames.length-1)) {
+                button.onclick = function () {
+                    wait(true);
+                    setTimeout(fullyCreateButton, id * 2000, id+1);
+                }
+            }else{
+                button.onclick = function(){
+                    document.getElementById("buttonmessage").innerText = "All Buttons Clicked";
+                }
+            }
+            wait(false);
+        }
+
+        createButton("button00", "start", "buttons", false);
+
+        document.getElementById("button00").onclick = function() {
+            fullyCreateButton(1);
+        }
+    }
+
+</script>
+</body>
+</html>

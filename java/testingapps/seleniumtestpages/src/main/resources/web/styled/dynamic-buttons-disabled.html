@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dynamic Buttons - Disabled Challenge</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <link rel="stylesheet" href="/styled/css/dynamic-buttons.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Disabled Dynamic Buttons</h1>
+
+    <div class="explanation">
+        <p>This page has dynamic buttons. They are slightly harder to automate. The first button is added by JavaScript automatically and the others are in the DOM when the page loads. When you click on a button. There is a delay before the next button is enabled.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <p id="buttonmessage">Click all 4 buttons.</p>
+
+        <div id="buttons">
+
+            <button id="button01" disabled>One</button>
+            <button id="button02" disabled>Two</button>
+            <button id="button03" disabled>Three</button>
+
+        </div>
+
+        <p id="waitmessage"></p>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+<script>
+
+    window.onload = function() {
+
+
+        function createButton(anId, text, where, atend){
+            var button = document.createElement("button");
+            button.innerHTML = text;
+            button.setAttribute("id", anId);
+            var body = document.getElementById(where);
+            if(atend){
+                body.appendChild(button);
+            }else{
+                body.prepend(button);
+            }
+            return button;
+        }
+
+        function wait(shouldI){
+            if(shouldI){
+                document.getElementById("waitmessage").innerText="Wait...";
+            }else{
+                document.getElementById("waitmessage").innerText="";
+            }
+        }
+
+        function enableButton(anId) {
+            document.getElementById(anId).disabled = false;
+            wait(false);
+        }
+
+        function disableButton(anId) {
+            document.getElementById(anId).disabled = true;
+        }
+
+        function setButtonMessage(text) {
+            document.getElementById("buttonmessage").innerText = text;
+        }
+
+        setButtonMessage("Click Buttons In Order");
+
+        setTimeout(function(){
+            button=createButton("button00", "start", "buttons", false);
+            button.onclick = function () {
+                setTimeout(enableButton, 1000, "button01");
+            }
+        },1000);
+
+        document.getElementById("button01").onclick = function () {
+            wait(true);
+            setTimeout(enableButton, 3000, "button02");
+        }
+        document.getElementById("button02").onclick = function () {
+            wait(true);
+            setTimeout(enableButton, 6000, "button03");
+        }
+        document.getElementById("button03").onclick = function () {
+            setButtonMessage("All Buttons Clicked");
+            setTimeout(disableButton, 1000, "button01");
+            setTimeout(disableButton, 1000, "button02");
+            setTimeout(disableButton, 1000, "button03");
+            setTimeout(setButtonMessage, 2000, "Clickable Buttons");
+            setTimeout(setButtonMessage, 4000, "Click Buttons In Order");
+        }
+    }
+
+</script>
+</body>
+</html>
