@@ -1,0 +1,6 @@
+[
+  {"message": "notification message"},
+  {"message": "notified of completion"},
+  {"message": "request processed"},
+  {"message": "processing succeeded"}
+]

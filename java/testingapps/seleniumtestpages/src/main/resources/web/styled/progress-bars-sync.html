@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+    <title>Dynamic Buttons - Disabled Challenge</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="/index.html">Index</a>
+    </div>
+
+    <h1>Progress Bars</h1>
+
+    <div class="explanation">
+        <p>This page has progress bars buttons representing some 'behind the scenes' processing. Which progress points can you synchronise on?
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <h2>A Progress Display</h2>
+
+        <div id="progressrendering">
+            <p id="status" status="">status:</p>
+            <p id="progress0"><span id="progresstext0">Task</span> <progress id = "progressbar0" value="0" max="100"></progress></p>
+            <p id="progress1"><span id="progresstext1">Task</span> <progress id = "progressbar1" value="0" max="100"></progress></p>
+            <p id="progress2"><span id="progresstext2">Task</span> <progress id = "progressbar2" value="0" max="100"></progress></p>
+        </div>
+
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+<script>
+
+    var tasks = [
+        {id:0, name:"Task 1", duration:2000, markers:4, current:0, delay:0, status:0, inc:0, interval:null},
+        {id:1, name:"Task 2", duration:5000, markers:4, current:0, delay:0, status:0, inc:0, interval:null},
+        {id:2, name:"Task 3", duration:10000, markers:8, current:0, delay:500, status:0, inc:0, interval:null},
+    ];
+
+    var statusMonitor;
+
+    function start(){
+        tasks.forEach(startTask);
+        statusMonitor = setInterval(monitorStatus, 200);
+    }
+
+    function monitorStatus(){
+
+        document.getElementById("status").innerText="Running";
+
+        var running=false;
+        tasks.forEach(function(task){
+            if(task.status!=0){
+                running=true;
+            }
+        });
+
+        if(!running){
+            clearInterval(statusMonitor);
+            document.getElementById("status").innerText="Stopped";
+        }
+
+    }
+
+    function startTask(task, index){
+
+        if(task.status===0){
+            task.status=1;
+            task.current=0;
+            task.inc = task.duration/task.markers;
+            renderProgress(task);
+            task.interval = setTimeout(updateProgress, task.delay, task);
+        }
+    }
+
+    function renderProgress(task){
+        document.getElementById("progresstext"+task.id).innerText=task.name;
+        document.getElementById("progressbar"+task.id).setAttribute("value", (100/task.markers)*task.current);
+    }
+
+    function updateProgress(task){
+        task.current++;
+        if(task.current>task.markers){
+            // stop task
+            task.status=0;
+            task.interval=null;
+        }else{
+            // keep going
+            renderProgress(task);
+            task.interval = setTimeout(updateProgress, task.inc, task);
+        }
+    }
+
+
+    // add a slight delay to the start
+    if(window.location.hash) {
+        if(window.location.hash.substring(1).includes("delay")) {
+            console.log("delayed startup")
+            setTimeout(start, 100);
+        }
+    }else{
+        start();
+    }
+
+</script>
+
+</body>
+</html>
