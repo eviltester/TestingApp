@@ -51,6 +51,7 @@
 
 <script>
 
+    // todo create a configurable one for, internal/external, direct, blob/uri, a attached to dom or not, data type octect - utf8, filename
 const defaultStatusMessage = "Click a button to download a file.";
 
 function updateStatus(withText){
@@ -71,6 +72,7 @@ function downloadViaDataObjectUrl(fileContents, fileName){
 }
 
 function downloadViaDataUrl(fileContents, fileName){
+    // could be application/octet-stream
     var url = 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents);
     triggerUrlDownloadOnHiddenAnchor(url, fileName);
 }
@@ -99,7 +101,7 @@ function triggerUrlDownloadOnHiddenAnchor(url, fileName){
     a.href = url;
     console.log(url);
     a.download = fileName;
-    document.body.appendChild(a);
+    document.body.appendChild(a);  // we don't need to add it to the dom and then remove it, but this could be useful for synchronisation
     a.click();
     a.parentNode.removeChild(a);
 }
@@ -111,6 +113,7 @@ function internallyGenerate(download){
 
     var fileContents = new Blob([fileContentsText], {
         type: "text/plain;charset=utf-8"
+        //type: "application/octet-stream"
     });
 
     var fileName = "textfile" + Date.now() + ".txt";
