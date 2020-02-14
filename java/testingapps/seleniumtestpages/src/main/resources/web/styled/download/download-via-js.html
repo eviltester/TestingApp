@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+    <title>Download File Via JavaScript</title>
+    <link rel="stylesheet" href="../../css/testpages.css">
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../../..">Index</a>
+    </div>
+
+    <h1>Download a File via JavaScript</h1>
+
+    <div class="explanation">
+        <p>Each of the following buttons implements a File Download in different ways using JavaScript. This might be a risk for cross browser testing, are there any other risks?
+        </p>
+    </div>
+
+    <div class="centered">
+        <p id="status-display" data-lastfilename=""></p>
+
+        <p>
+            <button class="styled-click-button" id="server-fetch-data-object" onclick="serverFetch(downloadViaDataObjectUrl)">Fetch From Server as Data Object</button>
+        </p>
+
+        <p>
+            <button class="styled-click-button" id="server-fetch-uri-encoded" onclick="serverFetch(downloadViaDataUrl)">Fetch From Server and URI Encode</button>
+        </p>
+
+        <p>
+            <button class="styled-click-button" id="generate-data-object" onclick="internallyGenerate(downloadViaDataObjectUrl)">Generate and save as Data Object</button>
+        </p>
+
+        <p>
+            <button class="styled-click-button" id="generate-uri-encoded" onclick="internallyGenerate(downloadViaDataUrl)">Generate and Uri Encode</button>
+        </p>
+
+        <p>
+            <button class="styled-click-button" id="direct-download" onclick="directDownload()">Controlled Direct Download</button>
+        </p>
+
+
+    </div>
+
+    <br/>
+
+<script>
+
+const defaultStatusMessage = "Click a button to download a file.";
+
+function updateStatus(withText){
+    document.getElementById("status-display").innerText=withText;
+    setTimeout(function(){document.getElementById("status-display").innerText=defaultStatusMessage;}, 2000);
+}
+
+updateStatus(defaultStatusMessage);
+
+function updateLastFileNameTo(aFileName){
+    document.getElementById("status-display").setAttribute("data-lastfilename", aFileName);
+}
+
+function downloadViaDataObjectUrl(fileContents, fileName){
+    var url = window.URL.createObjectURL(fileContents);
+    triggerUrlDownloadOnHiddenAnchor(url, fileName);
+    window.URL.revokeObjectURL(url);
+}
+
+function downloadViaDataUrl(fileContents, fileName){
+    var url = 'data:text/plain;charset=utf-8,' + encodeURIComponent(fileContents);
+    triggerUrlDownloadOnHiddenAnchor(url, fileName);
+}
+
+function downloadViaDirectUrl(fileUrl, fileName){
+    var url = fileUrl;
+    triggerUrlDownloadOnHiddenAnchor(url, fileName);
+}
+
+function directDownload(){
+
+    var fileName = "textfile.txt";
+    updateStatus("File Downloading: " + fileName);
+
+    downloadViaDirectUrl('/files/textfile.txt', fileName);
+
+    updateLastFileNameTo(fileName);
+    updateStatus("File Downloaded: " + fileName);
+
+}
+
+
+function triggerUrlDownloadOnHiddenAnchor(url, fileName){
+    var a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    console.log(url);
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    a.parentNode.removeChild(a);
+}
+
+function internallyGenerate(download){
+
+    var fileContentsText = "This is an internally generated text file." + "\n\n" +
+        "Downloaded from https://testapps.heroku.com" + "\n\n" + "Remember to visit https://EvilTester.com for all your testing edufication.";
+
+    var fileContents = new Blob([fileContentsText], {
+        type: "text/plain;charset=utf-8"
+    });
+
+    var fileName = "textfile" + Date.now() + ".txt";
+    updateStatus("File Downloading: " + fileName);
+
+    if(download===downloadViaDataUrl){
+        fileContents.text().then(function(text) {download(text, fileName)});
+    }else{
+        download(fileContents, fileName);
+    }
+
+    updateLastFileNameTo(fileName);
+    updateStatus("File Downloaded: " + fileName);
+
+}
+
+function serverFetch(download)
+{
+    fetch('/files/textfile.txt')
+    .then((response) => response.blob())
+    .then((fileContents) => {
+
+        var fileName = "textfile" + Date.now() + ".txt";
+        updateStatus("File Downloading: " + fileName);
+        if(download===downloadViaDataUrl){
+            fileContents.text().then(function(text) {download(text, fileName)});
+        }else{
+            download(fileContents, fileName);
+        }
+        updateLastFileNameTo(fileName);
+        updateStatus("File Downloaded: " + fileName);
+    })
+    .catch((error) => updateStatus("Error downloading file " + error));
+}
+</script>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>
