@@ -86,6 +86,9 @@ public class SeleniumTestPagesForSpark {
         get("/upload/NoFileUploadsAllowed.txt", (req, res) -> {return new ResourceReader().asString("/web/NoFileUploadsAllowed.txt");});
         get("/upload/*", (req, res) -> {return new UploadedFile(req,res).get("upload/"+req.splat()[0]);});
 
+        get("/download/*", (req, res) -> {return new FileDownloadProcessor(req, res).get(req.splat()[0]);});
+        post("/download/*", (req, res) -> {res.redirect("/download/"+req.splat()[0]); return "";});
+
         // everything else just redirect
         get("/selenium/testpages/*", (req, res) -> {res.redirect("/" + req.splat()[0]); return "";});
         get("/selenium/*", (req, res) -> {res.redirect("/" + req.splat()[0]); return "";});
