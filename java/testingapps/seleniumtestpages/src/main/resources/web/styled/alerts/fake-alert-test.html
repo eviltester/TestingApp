@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+    <title>Fake Alerts</title>
+    <link rel="stylesheet" href="../../css/testpages.css">
+
+    <style>
+        .faded-background {
+            position: absolute;
+            z-index: 9998;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .faded-background {
+            display: none;
+        }
+
+        .faded-background.active{
+             display: block;
+         }
+
+        .dialog {
+            position: absolute;
+            text-align: center;
+            z-index: 9999;
+            left: 25%;
+            top: 25%;
+            height: 10%;
+            width: 50%;
+            background-color: #fff;
+            padding: 45px;
+        }
+        .dialog {
+            display: none;
+        }
+
+        .dialog.active{
+             display: inline-block;
+         }
+
+        .dialog-button{
+            display:inline-block;
+            padding:0.2em 1.45em;
+            margin:0.1em;
+            border:0.15em solid #CCCCCC;
+            box-sizing: border-box;
+            text-decoration:none;
+            font-family:sans-serif;
+            font-weight:500;
+            font-size: x-large;
+            color:#000000;
+            background-color:#CCCCCC;
+            text-align:center;
+            position:relative;
+        }
+        .dialog-button:hover{
+            border-color: #343434;
+        }
+    </style>
+</head>
+<body>
+
+<div id="dialog">
+
+    <div class="faded-background">
+    </div>
+    <div role="dialog" aria-modal="true" class="dialog">
+        <h2 id="dialog-text">I am an alert box!</h2>
+        <div class="dialog-actions">
+            <button id="dialog-ok" class="dialog-button">OK</button>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../..">Index</a>
+    </div>
+
+    <h1>Fake Alert Box Examples</h1>
+
+    <div class="explanation">
+        <p>The buttons on this page create modal dialogs using a Div. The dialog is not an alert.
+            Alerts are triggered by three main JavaScript methods which show alert dialogs: alert, confirm and prompt.
+            You can find examples of JavaScript alerts on the <a href="alert-test.html">Alerts Page</a>
+        </p>
+    </div>
+
+    <p>The following button will display a fake alert when clicked.</p>
+
+    <div class="centered">
+
+        <input class="styled-click-button" id="fakealert" type="button" onclick="show_alert()" value="Show alert box"/>
+
+    </div>
+
+    <p>&nbsp;</p>
+    <hr>
+
+    <p>The following button will display a modal dialog when clicked. So you can also exit by clicking on the background.</p>
+
+    <div class="centered">
+        <input class="styled-click-button" id="modaldialog" type="button" onclick="show_modal()" value="Show modal dialog"/>
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+
+</div>
+
+<script type="text/javascript">
+
+    function hideAlert(){
+        document.querySelector(".faded-background").classList.remove("active");
+        document.querySelector(".dialog").classList.remove("active");
+    }
+
+    function show_modal() {
+        show_alert();
+        document.getElementById("dialog-text").innerText="I am a modal div!";
+        document.querySelector(".faded-background").onclick=hideAlert;
+        // todo add an esc close
+    }
+
+    function show_alert() {
+        background = document.querySelector(".faded-background");
+        dialog = document.querySelector(".dialog");
+        document.getElementById("dialog-text").innerText="I am a fake alert box!";
+        background.classList.add('active');
+        dialog.classList.add('active');
+        document.querySelector(".dialog-button").onclick=hideAlert;
+        document.querySelector(".faded-background").onclick="";
+    }
+
+</script>
+</body>
+</html>
