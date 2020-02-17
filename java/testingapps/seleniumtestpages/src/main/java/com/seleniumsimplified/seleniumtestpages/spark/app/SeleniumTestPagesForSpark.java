@@ -81,8 +81,10 @@ public class SeleniumTestPagesForSpark {
             if(envVar != null && envVar.length()>0){
                 allowUploads = false;
             }
+            // add configuration to allow saving which is currently not enabled
             return new FileUploadProcessor(req,res, allowUploads).prettyOutput().post();
         });
+        get("/uploads/fileprocessor", (req, res) -> {res.redirect("/styled/file-upload-test.html"); return "";});
         get("/upload/NoFileUploadsAllowed.txt", (req, res) -> {return new ResourceReader().asString("/web/NoFileUploadsAllowed.txt");});
         get("/upload/*", (req, res) -> {return new UploadedFile(req,res).get("upload/"+req.splat()[0]);});
 

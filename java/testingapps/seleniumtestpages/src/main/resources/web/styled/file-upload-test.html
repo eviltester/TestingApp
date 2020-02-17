@@ -21,12 +21,13 @@
 
     <div class="explanation">
         <p>This page allows you to upload a file.
-            Note: this will only perform an actual upload if you are running the app from your
-            local machine. Uploading will have been disabled on the server deploy.
+            Note: this will not save the file to the server. And there may be a file upload size limit.
         </p>
     </div>
 
     <div class="centered">
+
+        <p id="statusmessage"></p>
 
         <!-- not really a jsp page -->
         <form action="/uploads/fileprocessor" method="post" enctype="multipart/form-data">
@@ -62,6 +63,17 @@
 
 </div>
 
+<script>
+    // check file size on client side
+    document.getElementById("fileinput").onchange = function() {
+        var maxmegabytes = 2;
+        document.getElementById("statusmessage").innerText = "";
+        if(this.files[0].size > (maxmegabytes * 1024 * 1024)){
+            document.getElementById("statusmessage").innerText = "File exceeds maximum upload size";
+            this.value = "";
+        };
+    };
+</script>
 <!-- BODY END -->
 
 </body>

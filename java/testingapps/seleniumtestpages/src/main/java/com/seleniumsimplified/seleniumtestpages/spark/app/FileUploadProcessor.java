@@ -19,6 +19,7 @@ public class FileUploadProcessor {
     private final Response res;
     private final Boolean allowupload;
     private boolean prettyHtml;
+    private boolean allowSave = false;
 
 
     public FileUploadProcessor(Request req, Response res, Boolean allowupload) {
@@ -40,14 +41,16 @@ public class FileUploadProcessor {
         Path tempFile=null;
 
         if(allowupload) {
-            uploadDir = new File("upload");
-            // create the upload directory if it does not exist
-            uploadDir.mkdir();
+            if(allowSave) {
+                uploadDir = new File("upload");
+                // create the upload directory if it does not exist
+                uploadDir.mkdir();
 
-            try {
-                tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
-            } catch (IOException e) {
-                e.printStackTrace();
+                try {
+                    tempFile = Files.createTempFile(uploadDir.toPath(), "", "");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -60,21 +63,31 @@ public class FileUploadProcessor {
         String reportedName = "NoFileUploadsAllowed.txt";
 
         if(allowupload) {
-            try (InputStream input = req.raw().getPart("filename").getInputStream()) { // getPart needs to use same "name" as input field in form
 
-                Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
-
-                uploadedFile = new File(tempFile.toFile().getPath() + "_" + req.raw().getPart("filename").getSubmittedFileName());
-                tempFile.toFile().renameTo(uploadedFile);
+            try{
+                reportedName = req.raw().getPart("filename").getSubmittedFileName();
 
                 if (req.raw().getPart("filename").getContentType().contains("image")) {
                     isImage = true;
                 }
 
-                reportedName = uploadedFile.getName();
+                if(allowSave) {
+                    InputStream input = req.raw().getPart("filename").getInputStream(); // getPart needs to use same "name" as input field in form
 
+                        if (allowSave) {
+                            Files.copy(input, tempFile, StandardCopyOption.REPLACE_EXISTING);
+
+                            uploadedFile = new File(tempFile.toFile().getPath() + "_" + req.raw().getPart("filename").getSubmittedFileName());
+                            tempFile.toFile().renameTo(uploadedFile);
+
+
+                            reportedName = uploadedFile.getName();
+                        }
+
+                }
             } catch (IOException e) {
                 e.printStackTrace();
+
             } catch (ServletException e) {
                 e.printStackTrace();
             }
@@ -126,10 +139,17 @@ public class FileUploadProcessor {
 
         if (isImage) {
             fileType = "image";
-            fileLink = String.format("<img style='max-width: 50%%' src='/upload/%s'>", reportedName);
+            if(allowSave) {
+                fileLink = String.format("<img style='max-width: 50%%' src='/upload/%s'>", reportedName);
+            }
         } else {
-            fileLink = String.format("<a href='/upload/%s'>%s</a>", reportedName, reportedName);
+            if(allowSave) {
+                fileLink = String.format("<a href='/upload/%s'>%s</a>", reportedName, reportedName);
+            }
         }
+
+        fileLink += String.format("<p id='uploadedfilename'>%s</p>",reportedName);
+
 
         String bodyContent = "<h1>Uploaded File</h1>\n" +
                 "\n" +
