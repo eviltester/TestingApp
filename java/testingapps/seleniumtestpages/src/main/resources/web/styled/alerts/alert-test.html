@@ -12,10 +12,10 @@
         function show_confirm() {
             if (confirm("I am a confirm alert")) {
                 document.getElementById('confirmreturn').innerHTML = "true";
-                document.getElementById('confirmexplanation').innerHTML = "You clicked OK, confirm returned true.";
+                document.getElementById('confirmexplanation').innerHTML = "You clicked OK, confirm returned <span id='confirmretval'>true</span>.";
             } else {
                 document.getElementById('confirmreturn').innerHTML = "false";
-                document.getElementById('confirmexplanation').innerHTML = "You clicked Cancel, confirm returned false.";
+                document.getElementById('confirmexplanation').innerHTML = "You clicked Cancel, confirm returned <span id='confirmretval'>false</span>.";
             }
         }
 
@@ -24,9 +24,9 @@
 
             document.getElementById('promptreturn').innerHTML = promptRet;
             if (promptRet == null) {
-                document.getElementById('promptexplanation').innerHTML = "You clicked Cancel. 'prompt' returned null";
+                document.getElementById('promptexplanation').innerHTML = "You clicked Cancel. 'prompt' returned <span id='promptretval'>null</span>";
             }else{
-                document.getElementById('promptexplanation').innerHTML = "You clicked OK. 'prompt' returned " + promptRet;
+                document.getElementById('promptexplanation').innerHTML = "You clicked OK. 'prompt' returned  <span id='promptretval'>" + promptRet + "</span>";
             }
         }
     </script>
