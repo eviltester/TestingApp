@@ -128,7 +128,6 @@
         show_alert();
         document.getElementById("dialog-text").innerText="I am a modal div!";
         document.querySelector(".faded-background").onclick=hideAlert;
-        // todo add an esc close
     }
 
     function show_alert() {
@@ -140,6 +139,12 @@
         document.querySelector(".dialog-button").onclick=hideAlert;
         document.querySelector(".faded-background").onclick="";
     }
+
+    document.onkeydown = function(e) {
+        if(e.key === "Escape" || e.key === "Esc"){
+            hideAlert();
+        }
+    };
 
 </script>
 </body>
