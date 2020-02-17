@@ -22,11 +22,12 @@ public class FileUploadProcessor {
     private boolean allowSave = false;
 
 
-    public FileUploadProcessor(Request req, Response res, Boolean allowupload) {
+    public FileUploadProcessor(Request req, Response res, Boolean allowupload, final Boolean allowSaving) {
         this.req = req;
         this.res = res;
         this.allowupload = allowupload; // need to configure not uploading when deployed to server
         this.prettyHtml=false;
+        this.allowSave = allowSaving; // need to configure to allow saving when deployed to server
     }
 
     public FileUploadProcessor prettyOutput(){

@@ -76,13 +76,20 @@ public class SeleniumTestPagesForSpark {
         // the upload functionality makes this insecure for external sites - do not release with this active
         post("/uploads/fileprocessor", (req, res) -> {
             Boolean allowUploads = true; // assume working locally
+            Boolean allowSaving = false; // assume care about security
 
             String envVar = System.getenv("SELENIUM_TEST_PAGES_DISALLOW_UPLOAD");
             if(envVar != null && envVar.length()>0){
                 allowUploads = false;
             }
+            String envSaveVar = System.getenv("SELENIUM_TEST_PAGES_ALLOW_UPLOAD_FILE_SAVING");
+            if(envSaveVar != null && envSaveVar.length()>0){
+                if(envSaveVar.equalsIgnoreCase("TRUE")) {
+                    allowSaving = true;
+                }
+            }
             // add configuration to allow saving which is currently not enabled
-            return new FileUploadProcessor(req,res, allowUploads).prettyOutput().post();
+            return new FileUploadProcessor(req,res, allowUploads, allowSaving).prettyOutput().post();
         });
         get("/uploads/fileprocessor", (req, res) -> {res.redirect("/styled/file-upload-test.html"); return "";});
         get("/upload/NoFileUploadsAllowed.txt", (req, res) -> {return new ResourceReader().asString("/web/NoFileUploadsAllowed.txt");});
