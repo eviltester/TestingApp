@@ -16,7 +16,7 @@ public class AppVersion {
 
 
      */
-    public static final int MAX_VERSION = 7;
+    public static final int MAX_VERSION = 8;
     public static final int DEFAULT_VERSION = 5;
 
     AppVersionConfig settings = new AppVersionConfig();

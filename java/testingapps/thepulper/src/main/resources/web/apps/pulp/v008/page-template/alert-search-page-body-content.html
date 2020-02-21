@@ -1,0 +1,108 @@
+
+
+<div>
+
+    <div>
+        <form id="searchform" onsubmit="return getapidata(document.getElementById('searchterminput').value);">
+            <!-- value="!!searchterm!!" to have a default search term -->
+            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!">
+            <input type="hidden" name="what" value="title"/>
+            <input type="hidden" name="how" value="contains"/>
+            <input type="hidden" name="mode" value="form"/>
+            <label for="searchterminput">Search for What Book Title?</label>
+            <br/>
+            <input id="searchbutton" type="submit" value="Search" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<div name='output'>
+<!-- OUTPUT GOES HERE -->
+</div>
+
+<script>
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function getApi(url = "") {
+        // Default options are marked with *
+        return fetch(url, {
+            method: "GET", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, cors, *same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, same-origin, *omit
+            headers: {
+                "Content-Type": "application/json",
+                "X-API-AUTH": getCookie("X-API-AUTH")
+                // "Content-Type": "application/x-www-form-urlencoded",
+            },
+            redirect: "follow", // manual, *follow, error
+            referrer: "no-referrer", // no-referrer, *client
+            // body: JSON.stringify(data), // body data type must match "Content-Type" header
+        })
+            .then(response => response.json()); // parses response to JSON
+    };
+
+    function getapidata(searchterm){
+        var aUrl = "/apps/pulp/api/books?searchterm="+encodeURIComponent(searchterm)
+        //window.history.replaceState(statedata, document.title, aUrl + "&what=title&how=contains&mode=form")
+        getApi(aUrl)
+            .then(
+                function(response) {
+                    if(response.data) {
+                        renderResults(response.data);
+                        console.table(response.data.books);
+                        return false;
+                    }
+                    throw new Error(response.errors.report[0].messages[0]);
+                }
+            )
+            .catch(
+                function(error){
+                    document.getElementById("outputmessage").innerHTML = error;
+                    return false;
+                });
+        // whatever happens do not submit the form
+        return false;
+    }
+
+    function renderResults(data){
+
+        if(data.books.length===0){
+            document.getElementById("outputmessage").innerHTML = "No results found."
+        }
+        row ="";
+        for (i = 0; i < data.books.length; i++) {
+            row += "<a href='/apps/pulp/gui/view/book?book=" + data.books[i].id + "'>"
+            row += data.books[i].title;
+            row += "</a>"
+            row += "<br>";
+        }
+        var aUrl = "/apps/pulp/gui/reports/books/search?searchterm="+encodeURIComponent(document.getElementById('searchterminput').value);
+        aUrl +="&what=title&how=contains&mode=form";
+
+        row+="<br><a href='" + aUrl + "'>[Full Search]</a>";
+        document.querySelector("[name='output']").innerHTML=row;
+    }
+
+</script>
+<!-- FOOTER GOES HERE -->
