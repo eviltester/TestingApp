@@ -43,6 +43,28 @@
         return "";
     }
 
+    function writeCookie(cname, value) {
+        var name = cname + "=";
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        var found=false;
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                ca[i]=name+value;
+                found=true;
+            }
+        }
+        if(found===false){
+            ca.push(name+value);
+        }
+        document.cookie = encodeURIComponent(ca.join(";"));
+    }
+
     function getApi(url = "") {
         // Default options are marked with *
         return fetch(url, {
@@ -64,6 +86,15 @@
 
     function getapidata(searchterm){
         var aUrl = "/apps/pulp/api/books?searchterm="+encodeURIComponent(searchterm)
+        var searchhistory = window.localStorage.getItem('searchhistory');
+        if(searchhistory==null){
+            searchhistory="";
+        }
+        if(!searchhistory.includes("["+searchterm+"]")){
+            searchhistory += ",[" + searchterm + "]";
+            window.localStorage.setItem('searchhistory',searchhistory);
+        }
+
         //window.history.replaceState(statedata, document.title, aUrl + "&what=title&how=contains&mode=form")
         getApi(aUrl)
             .then(
@@ -97,11 +128,29 @@
             row += "</a>"
             row += "<br>";
         }
-        var aUrl = "/apps/pulp/gui/reports/books/search?searchterm="+encodeURIComponent(document.getElementById('searchterminput').value);
-        aUrl +="&what=title&how=contains&mode=form";
+        var pre = "/apps/pulp/gui/reports/books/search?searchterm=";
+        var post = "&what=title&how=contains&mode=form";
+        var aUrl = pre + encodeURIComponent(document.getElementById('searchterminput').value) + post;
 
         row+="<br><a href='" + aUrl + "'>[Full Search]</a>";
+
+
+        // the previous searches
+        row+="<br><br>History:<br>";
+
+        var searchhistory = window.localStorage.getItem('searchhistory');
+        if(searchhistory==null){
+            searchhistory="";
+        }
+        searches = searchhistory.split(",");
+        for (i = 0; i < searches.length; i++) {
+            if(searches[i].trim().length>0) {
+                row += "<br><a href='" + pre + encodeURIComponent(searches[i].substring(1, searches[i].length - 1)) + post + "'>" + searches[i] + "</a>";
+            }
+        }
+
         document.querySelector("[name='output']").innerHTML=row;
+
     }
 
 </script>
