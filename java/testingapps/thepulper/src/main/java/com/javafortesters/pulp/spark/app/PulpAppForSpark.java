@@ -570,7 +570,28 @@ public class PulpAppForSpark {
             });
 
             get("", (req, res) -> {
-                final EntityResponse response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBooks(req.headers("Accept"));
+
+                String how= "contains";
+                String what="title";
+                String forTerm="";
+
+                if(req.queryMap().hasKeys() && req.queryMap().value("searchterm")!=null){
+                    forTerm=req.queryMap().value("searchterm");
+                }
+                if(req.queryMap().hasKeys() && req.queryMap().value("what")!=null){
+                    what=req.queryMap().value("what");
+                }
+                if(req.queryMap().hasKeys() && req.queryMap().value("how")!=null){
+                    how=req.queryMap().value("how");
+                }
+
+                EntityResponse response;
+
+                if(forTerm!=null && forTerm.length()>0){
+                    response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBooks(req.headers("Accept"), what, how, forTerm);
+                }else {
+                    response = getPulpAppForApi(req.headers("X-API-AUTH")).entities().getBooks(req.headers("Accept"));
+                }
                 return apiEntityResponse(res, response);
             });
 
@@ -755,6 +776,7 @@ public class PulpAppForSpark {
         // /apps/pulp/api/xapiauth get an API session
 
         // GET
+        // /apps/pulp/api/search
         // /apps/pulp/api/publishers/id/series
         // /apps/pulp/api/publishers/id/authors
         // /apps/pulp/api/publishers/id/books
@@ -763,7 +785,7 @@ public class PulpAppForSpark {
         // /apps/pulp/api/authors/id/books
         // /apps/pulp/api/authors/id/publishers
 
-        // TODOL paging
+        // TODO paging
 
 
         // End API processing with unknown end points

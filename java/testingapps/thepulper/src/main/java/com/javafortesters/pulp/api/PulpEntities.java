@@ -2,6 +2,7 @@ package com.javafortesters.pulp.api;
 
 import com.javafortesters.pulp.api.actions.*;
 import com.javafortesters.pulp.domain.groupings.PulpData;
+import com.javafortesters.pulp.reporting.filtering.BookFilter;
 
 
 public class PulpEntities {
@@ -34,7 +35,20 @@ public class PulpEntities {
     }
 
     public EntityResponse getBooks(final String acceptFormat) {
-        return new BookActions(bookdata, convertor, rooturl).getAll(acceptFormat);
+        return new BookActions(bookdata, convertor, rooturl).getAll(acceptFormat, new BookFilter());
+    }
+
+    public EntityResponse getBooks(final String acceptFormat, String searchWhat, String searchHow, String searchTerm) {
+
+        BookFilter filter = new BookFilter();
+
+        if(searchWhat!=null && searchHow!=null) {
+            if (searchWhat.equalsIgnoreCase("title") && searchHow.equalsIgnoreCase("contains")) {
+                filter.titleContains(searchTerm);
+            }
+        }
+
+        return new BookActions(bookdata, convertor, rooturl).getAll(acceptFormat, filter);
     }
 
     public EntityResponse getBook(final String bookid, final String acceptformat) {

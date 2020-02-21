@@ -12,6 +12,7 @@ import com.javafortesters.pulp.domain.objects.PulpAuthor;
 import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
+import com.javafortesters.pulp.reporting.filtering.BookFilter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +29,14 @@ public class BookActions {
         this.rooturl = rooturl;
     }
 
-    public EntityResponse getAll(final String acceptFormat) {
+    public EntityResponse getAll(final String acceptFormat, final BookFilter filter) {
         final EntityResponse response = new EntityResponse();
 
         BooksListEntity entity = new BooksListEntity(bookdata);
 
         response.setSuccessStatus(200,
                 new Gson().toJson(
-                        new ApiResponseBuilder(bookdata).addData(bookdata.books()).getApiResponse())
+                        new ApiResponseBuilder(bookdata).addData(bookdata.books().filteredBy(filter)).getApiResponse())
         );
 
         //response.setSuccessStatus(200,new Gson().toJson(entity));

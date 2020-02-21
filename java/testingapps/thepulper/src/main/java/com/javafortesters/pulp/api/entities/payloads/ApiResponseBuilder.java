@@ -12,6 +12,7 @@ import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.domain.objects.PulpSeries;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApiResponseBuilder {
 
@@ -74,6 +75,14 @@ public class ApiResponseBuilder {
     public ApiResponseBuilder addData(final PulpBooks books) {
         ensureDataBookListExists();
         new ListPopulator().populate(response.data.books, books, bookData);
+        return this;
+    }
+
+    public ApiResponseBuilder addData(final List<PulpBook> books) {
+        ensureDataBookListExists();
+        for(PulpBook aBook : books){
+            response.data.books.add(convertor.toEntity(aBook));
+        }
         return this;
     }
 
