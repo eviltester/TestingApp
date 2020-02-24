@@ -92,6 +92,7 @@ public class AmendBookPage {
 
 
         //<!-- HOUSE_AUTHOR-ID-OPTIONS -->
+        options= new StringBuilder();
         for(PulpAuthor author : books.authors().getAllOrderedByName()){
             selected = false;
             if(author.getId() == book.getHouseAuthorIndex()) {

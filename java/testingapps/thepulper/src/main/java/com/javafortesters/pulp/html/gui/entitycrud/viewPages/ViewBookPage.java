@@ -94,12 +94,19 @@ public class ViewBookPage {
         }
 
         //<!-- HOUSE_AUTHOR-ID-OPTIONS -->
+        boolean replacedHouseAuthor = false;
         for(PulpAuthor author : books.authors().getAllOrderedByName()){
             if(author.getId() == book.getHouseAuthorIndex()) {
                 template.replace("!!HOUSEAUTHORID!!",author.getId());
                 template.replace("!!HOUSEAUTHORNAME!!",author.getName());
+                replacedHouseAuthor = true;
                 break;
             }
+        }
+
+        if(!replacedHouseAuthor){
+            template.replace("!!HOUSEAUTHORID!!","-1");
+            template.replace("!!HOUSEAUTHORNAME!!","No House Author Assigned");
         }
 
         template.replace("<!-- OUTPUT GOES HERE -->", output);
