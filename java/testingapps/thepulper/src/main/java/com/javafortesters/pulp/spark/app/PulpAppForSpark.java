@@ -831,6 +831,16 @@ public class PulpAppForSpark {
             }
         });
 
+        get("/apps/pulp/gui/clean/session", (req, res) -> {
+            final PulpApp pulpApp = getPulpApp(req);
+            pulpApp.reset();
+            pulpApp.readData(new SavageReader("/data/pulp/doc_savage.csv"));
+            pulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
+            pulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
+            res.redirect("/apps/pulp/");
+            return "";
+        });
+
         get("/apps/pulp/gui/create/author", (req, res) -> {
             final PulpApp pulpApp = getPulpApp(req);
             return pulpApp.page().createAuthorPage().asHTMLString();

@@ -1,8 +1,6 @@
 package com.javafortesters.pulp.spark.app.versioning;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A specific config where AppVersionSettings have values e.g. true / false
@@ -11,6 +9,7 @@ public class AppVersionConfig {
 
     private Map<String, AppVersionConfigValue> configSettings = new HashMap();
     int displayedVersionNumber=1;
+    private Map<String, String> configVariables = new HashMap();
 
     public boolean getSettingAsBoolean(final AppVersionSettings appVersionSetting) {
 
@@ -26,6 +25,7 @@ public class AppVersionConfig {
             config.setSetting(setting, setting.getDefault());
         }
 
+        config.setVariable("COPYRIGHTDATE", String.valueOf(Calendar.getInstance().get(Calendar.YEAR)));
         config.setDisplayedVersionNumber(1);
         return config;
     }
@@ -34,14 +34,20 @@ public class AppVersionConfig {
         configSettings.put(setting.getKey(), new AppVersionConfigValue(setting, aBoolean));
     }
 
+    private void setVariable(final String variableName, final String value) {
+        configVariables.put(variableName, value);
+    }
+
     public static AppVersionConfig getVersionConfigFor(int version){
 
         final AppVersionConfig retConfig = defaultConfig();
+
 
         switch(version){
             case 1:
                 // use all the defaults - careful now
                 retConfig.setDisplayedVersionNumber(1);
+                retConfig.setVariable("COPYRIGHTDATE","2018");
                 break;
 
             case 2:
@@ -49,6 +55,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, false);
+                retConfig.setVariable("COPYRIGHTDATE","2018");
                 retConfig.setDisplayedVersionNumber(2);
 
                 break;
@@ -58,6 +65,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setVariable("COPYRIGHTDATE","2018");
                 retConfig.setDisplayedVersionNumber(3);
 
                 break;
@@ -68,6 +76,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setVariable("COPYRIGHTDATE","2018");
                 retConfig.setDisplayedVersionNumber(4);
                 break;
             case 5:
@@ -78,6 +87,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2019");
                 retConfig.setDisplayedVersionNumber(5);
                 break;
             case 6:
@@ -88,6 +98,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2019");
                 retConfig.setDisplayedVersionNumber(6);
                 break;
             case 7:
@@ -98,6 +109,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2019");
                 retConfig.setDisplayedVersionNumber(7);
                 break;
             case 8:
@@ -108,6 +120,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2020");
                 retConfig.setDisplayedVersionNumber(8);
                 break;
             case 9:
@@ -118,6 +131,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2020");
                 retConfig.setDisplayedVersionNumber(9);
                 break;
             case 10:
@@ -128,6 +142,7 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2020");
                 retConfig.setDisplayedVersionNumber(10);
                 break;
             default:
@@ -141,6 +156,13 @@ public class AppVersionConfig {
 
     private void setDisplayedVersionNumber(final int version) {
         displayedVersionNumber = version;
+    }
+
+    public String getVariableValue(final String name) {
+        if(configVariables.containsKey(name)){
+            return configVariables.get(name);
+        }
+        return "";
     }
 }
 

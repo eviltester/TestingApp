@@ -13,8 +13,8 @@ import java.util.UUID;
 
 public class PulpApp {
 
-    private final PulpData books;
-    private final PulpEntities entities;
+    private PulpData books;
+    private PulpEntities entities;
     private String apisecret;
     private AppVersion appVersion;
 
@@ -25,12 +25,7 @@ public class PulpApp {
     public PulpApp() {
 
         apisecret = UUID.randomUUID().toString();
-        books = new PulpData();
-        //reports = new HtmlReports(books, this.appversion);
-        appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
-        reports = new HtmlReports(books, appVersion, apisecret);
-        entities = new PulpEntities(books);
-
+        reset();
     }
 
 
@@ -90,4 +85,12 @@ public class PulpApp {
     }
 
 
+    public void reset() {
+        // reset the data, keep the sessions and api secret the same
+        books = new PulpData();
+        //reports = new HtmlReports(books, this.appversion);
+        appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
+        reports = new HtmlReports(books, appVersion, apisecret);
+        entities = new PulpEntities(books);
+    }
 }

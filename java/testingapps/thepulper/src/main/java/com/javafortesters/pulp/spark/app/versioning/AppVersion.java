@@ -99,4 +99,8 @@ public class AppVersion {
     public void willAllowShutdown(final boolean allowsShutdown) {
         this.versionAllowsShutdown=allowsShutdown;
     }
+
+    public String getVariable(final String name) {
+        return settings.getVariableValue(name);
+    }
 }

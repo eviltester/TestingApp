@@ -1,4 +1,4 @@
-v009
+## v009
 
 * delete on the amend forms should probably remove the update buttons or redirect to the list
 * we lost the confirm that you want to delete a book, author, series, etc. in the amend form for delete
@@ -8,3 +8,17 @@ v009
 * did not add the amend book via javascript so the form uses a post
 * series amend form via api amends a publisher, not a series
 * list totals do not update when removing a list item
+
+## v010
+
+fixed
+
+* delete on the amend forms removes the form details after deletion
+* confirm deletion from form - that you want to delete a book, author, series, etc.
+* publisher list insitu delete works
+* series amend form via api amends series
+* update number in list when delete an item
+* amend book via javascript
+
+
+* there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does

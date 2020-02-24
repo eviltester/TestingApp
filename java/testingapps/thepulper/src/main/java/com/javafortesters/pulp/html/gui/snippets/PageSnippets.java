@@ -63,6 +63,7 @@ public class PageSnippets {
 //        String pageToRender = new ResourceReader().asString(snippetsPathPrefix + "page-footer.html");
         MyTemplate template = new MyTemplate(pageToRender);
         template.replace("<!-- VERSION -->", appversion.getAppVersion());
+        template.replace("<!-- COPYRIGHTDATE -->", appversion.getVariable("COPYRIGHTDATE"));
         report.append(template.toString());
         return report.toString();
     }
