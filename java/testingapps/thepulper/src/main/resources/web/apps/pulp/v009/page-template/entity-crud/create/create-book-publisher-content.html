@@ -1,0 +1,46 @@
+
+<h1>Create Publisher</h1>
+
+<div id="createobjectsection">
+
+    <script>
+
+        function createPublisher(name){
+
+            var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+            api.createPublisherNamed(name, renderCreateSuccess, renderErrorMessage);
+
+            // whatever happens do not submit the form
+            return false;
+        }
+
+        function renderCreateSuccess(){
+            document.getElementById("outputmessage").innerHTML = "Added Publisher";
+        }
+
+        function renderErrorMessage(message){
+            document.getElementById("outputmessage").innerHTML = message;
+        }
+
+    </script>
+
+    <div>
+        <form id="createform" onsubmit="return(createPublisher(document.getElementById('publishername').value))">
+
+            <label for="publishername">Enter name of Publisher to create</label>
+            <input type="text" id="publishername" name="publishername" value="" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="create" type="submit" value="Create" />
+        </form>
+    </div>
+
+</div>
+
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

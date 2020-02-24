@@ -1,0 +1,45 @@
+
+<h2>Create Author</h2>
+
+<div id="createobjectsection">
+
+
+    <script>
+
+        function createAuthorNamed(authorName){
+
+            var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+            api.createAuthorNamed(authorName, renderCreateSuccess, renderErrorMessage);
+
+            // whatever happens do not submit the form
+            return false;
+        }
+
+        function renderCreateSuccess(){
+            document.getElementById("outputmessage").innerHTML = "Added Author";
+        }
+
+        function renderErrorMessage(message){
+            document.getElementById("outputmessage").innerHTML = message;
+        }
+
+    </script>
+
+
+    <div>
+        <form id="createform" onsubmit="return(createAuthorNamed(document.getElementById('authorname').value))">
+            <label for="authorname">Enter name of author to create</label>
+            <input type="text" id="authorname" name="name" value="" required="required" pattern=".{1,}">
+            <br/>
+            <input id="createauthorbutton" type="submit" value="Create"/>
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

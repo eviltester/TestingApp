@@ -1,0 +1,95 @@
+
+<h1>Create Book</h1>
+
+<div id="createobjectsection">
+
+    <script>
+
+
+
+        function createBook(title, authorid, publisherid, seriesid, serieslabel, year){
+
+            var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+            api.createBook(title, authorid, publisherid, seriesid, serieslabel, year, renderCreateSuccess, renderErrorMessage);
+
+            // whatever happens do not submit the form
+            return false;
+        }
+
+        function renderCreateSuccess(){
+            document.getElementById("outputmessage").innerHTML = "Added Book";
+        }
+
+        function renderErrorMessage(message){
+            document.getElementById("outputmessage").innerHTML = message;
+        }
+
+        function createBookFromForm(){
+
+            return createBook(
+                document.getElementById("booktitle").value,
+                document.getElementById("authoridselect").value,
+                document.getElementById("publisheridselect").value,
+                document.getElementById("seriesidselect").value,
+                document.getElementById("seriesidentifierid").value,
+                document.getElementById("yearofPub").value
+            );
+
+        }
+    </script>
+
+    <div>
+        <form id="createform" onsubmit="return createBookFromForm()">
+
+            <label for="booktitle">Enter title of book to create</label>
+            <input type="text" id="booktitle" name="title" value="" required="required" pattern=".{1,}">
+
+            <br/>
+
+            <label for="authoridselect">Author</label>
+            <select id="authoridselect" name="authorid" required="required">
+                <!-- AUTHOR-ID-OPTIONS -->
+                <option value="unknown">Author</option>
+                <!-- AUTHOR-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="publisheridselect">Publisher</label>
+            <select id="publisheridselect" name="publisherid" required="required">
+                <!-- PUBLISHER-ID-OPTIONS -->
+                <option value="unknown">Publisher</option>
+                <!-- PUBLISHER-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidselect">Series</label>
+            <select id="seriesidselect" name="seriesid" required="required">
+                <!-- SERIES-ID-OPTIONS -->
+                <option value="unknown">Series</option>
+                <!-- SERIES-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidentifierid">Series Identifier e.g. "March, 1933"</label>
+            <input type="text" id="seriesidentifierid" name="seriesidentifier" value="" required="required" pattern=".{1,}">
+            <br/>
+
+            <label for="yearofPub">Year of publication e.g. 1933</label>
+            <input type="number" id="yearofPub" name="yearofpub" value="" required="required" pattern=".{1,}">
+            <br/>
+
+
+            <input id="create" type="submit" value="Create" />
+        </form>
+    </div>
+
+    <p>Amend the book later to have a house author if necessary.</p>
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

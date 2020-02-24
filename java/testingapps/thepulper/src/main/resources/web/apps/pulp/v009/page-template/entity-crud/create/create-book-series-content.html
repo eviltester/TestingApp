@@ -1,0 +1,46 @@
+
+<h1>Create Series</h1>
+
+<div id="createobjectsection">
+
+    <script>
+
+        function createSeries(name){
+
+            var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+            api.createSeriesNamed(name, renderCreateSuccess, renderErrorMessage);
+
+            // whatever happens do not submit the form
+            return false;
+        }
+
+        function renderCreateSuccess(){
+            document.getElementById("outputmessage").innerHTML = "Added Publisher";
+        }
+
+        function renderErrorMessage(message){
+            document.getElementById("outputmessage").innerHTML = message;
+        }
+
+    </script>
+
+    <div>
+        <form id="createform" onsubmit="return(createSeries(document.getElementById('seriesname').value))">
+
+            <label for="seriesname">Enter name of Series to create</label>
+            <input type="text" id="seriesname" name="seriesname" value="" required="required" pattern=".{1,}">
+
+            <br/>
+            <input id="create" type="submit" value="Create" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

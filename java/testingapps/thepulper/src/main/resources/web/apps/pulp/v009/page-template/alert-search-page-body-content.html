@@ -1,0 +1,97 @@
+
+
+<div>
+
+    <div>
+        <form id="searchform" onsubmit="return searchFor(document.getElementById('searchterminput').value);">
+            <!-- value="!!searchterm!!" to have a default search term -->
+            <input type="text" id="searchterminput" name="searchterm" value="!!searchterm!!">
+            <input type="hidden" name="what" value="title"/>
+            <input type="hidden" name="how" value="contains"/>
+            <input type="hidden" name="mode" value="form"/>
+            <label for="searchterminput">Search for What Book Title?</label>
+            <br/>
+            <input id="searchbutton" type="submit" value="Search" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<div name='output'>
+<!-- OUTPUT GOES HERE -->
+</div>
+
+<script>
+
+
+    function addSearchTermToLocalStorage(searchterm){
+
+        var searchhistory = window.localStorage.getItem('searchhistory');
+        if(searchhistory==null){
+            searchhistory="";
+        }
+        if(!searchhistory.includes("["+searchterm+"]")){
+            searchhistory += ",[" + searchterm + "]";
+            window.localStorage.setItem('searchhistory',searchhistory);
+        }
+    }
+
+    function searchFor(searchterm){
+
+
+        addSearchTermToLocalStorage(searchterm);
+
+        var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+        api.searchFor(searchterm, renderAPIJsonSearchResults, renderErrorMessage);
+
+        // whatever happens do not submit the form
+        return false;
+    }
+
+    function renderErrorMessage(message){
+        document.getElementById("outputmessage").innerHTML = message;
+    }
+
+    function renderAPIJsonSearchResults(data){
+
+        if(data.books.length===0){
+            document.getElementById("outputmessage").innerHTML = "No results found."
+        }
+        row ="";
+        for (i = 0; i < data.books.length; i++) {
+            row += "<a href='/apps/pulp/gui/view/book?book=" + data.books[i].id + "'>"
+            row += data.books[i].title;
+            row += "</a>"
+            row += "<br>";
+        }
+        var pre = "/apps/pulp/gui/reports/books/search?searchterm=";
+        var post = "&what=title&how=contains&mode=form";
+        var aUrl = pre + encodeURIComponent(document.getElementById('searchterminput').value) + post;
+
+        row+="<br><a href='" + aUrl + "'>[Full Search]</a>";
+
+
+        // the previous searches
+        row+="<br><br>History:<br>";
+
+        var searchhistory = window.localStorage.getItem('searchhistory');
+        if(searchhistory==null){
+            searchhistory="";
+        }
+        searches = searchhistory.split(",");
+        for (i = 0; i < searches.length; i++) {
+            if(searches[i].trim().length>0) {
+                row += "<br><a href='" + pre + encodeURIComponent(searches[i].substring(1, searches[i].length - 1)) + post + "'>" + searches[i] + "</a>";
+            }
+        }
+
+        document.querySelector("[name='output']").innerHTML=row;
+
+    }
+
+</script>
+<!-- FOOTER GOES HERE -->
