@@ -24,16 +24,49 @@ function PulperApi(XApiAuthCookieValue){
         this.post(aUrl, obj, renderResults, renderErrorMessage);
     }
 
+    this.amendAuthor = function (authorid, authorName, renderResults, renderErrorMessage){
+        var obj = {"id": authorid, "name":authorName};
+        var aUrl = "/apps/pulp/api/authors";
+        this.post(aUrl, obj, renderResults, renderErrorMessage);
+    }
+
+    this.deleteAuthor = function (authorId, renderResults, renderErrorMessage){
+        var aUrl = "/apps/pulp/api/authors/" + authorId;
+        this.delete(aUrl, renderResults, renderErrorMessage);
+    }
+
     this.createPublisherNamed = function (publisherName, renderResults, renderErrorMessage){
         var obj = {"publishers": [{"name" : publisherName}]};
         var aUrl = "/apps/pulp/api/publishers";
         this.post(aUrl, obj, renderResults, renderErrorMessage);
     }
 
+    this.amendPublisher = function (publisherid, publisherName, renderResults, renderErrorMessage){
+        var obj = {"id": publisherid, "name":publisherName};
+        var aUrl = "/apps/pulp/api/publishers";
+        this.post(aUrl, obj, renderResults, renderErrorMessage);
+    }
+
+    this.deletePublisher = function (publisherId, renderResults, renderErrorMessage){
+        var aUrl = "/apps/pulp/api/publishers/" + publisherId;
+        this.delete(aUrl, renderResults, renderErrorMessage);
+    }
+
     this.createSeriesNamed = function (seriesName, renderResults, renderErrorMessage){
         var obj = {"name" : seriesName};
         var aUrl = "/apps/pulp/api/series";
         this.post(aUrl, obj, renderResults, renderErrorMessage);
+    }
+
+    this.amendSeries = function (seriesid, seriesName, renderResults, renderErrorMessage){
+        var obj = {"id": seriesid, "name":seriesName};
+        var aUrl = "/apps/pulp/api/publishers";
+        this.post(aUrl, obj, renderResults, renderErrorMessage);
+    }
+
+    this.deleteSeries = function (seriesId, renderResults, renderErrorMessage){
+        var aUrl = "/apps/pulp/api/series/" + seriesId;
+        this.delete(aUrl, renderResults, renderErrorMessage);
     }
 
     this.createBook = function (title, authorid, publisherid, seriesid, serieslabel, year,
@@ -49,6 +82,10 @@ function PulperApi(XApiAuthCookieValue){
         this.post(aUrl, obj, renderResults, renderErrorMessage);
     }
 
+    this.deleteBook = function (bookId, renderResults, renderErrorMessage){
+        var aUrl = "/apps/pulp/api/books/" + bookId;
+        this.delete(aUrl, renderResults, renderErrorMessage);
+    }
 
     this.get = function(aUrl, renderResults, renderErrorMessage){
 
@@ -82,6 +119,24 @@ function PulperApi(XApiAuthCookieValue){
                         return false;
                     }
                     throw new Error(response.errors.report[0].messages[0]);
+                }
+            )
+            .catch(
+                function(error){
+                    renderErrorMessage(error);
+                    return false;
+                });
+
+        return true;
+    }
+
+    this.delete = function (aUrl, renderResults, renderErrorMessage){
+
+        this.xhttpapi.deleteRequest(aUrl)
+            .then(
+                function(response) {
+                    renderResults();
+                    return false;
                 }
             )
             .catch(

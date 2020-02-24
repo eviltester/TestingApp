@@ -1,0 +1,75 @@
+<script type="text/javascript">
+function areYouSureYouWantToDeleteAuthor(){
+
+    if(location.hash==="#form"){
+        if(confirm("Are you sure you want to delete !!AUTHORNAME!!?")){
+            document.getElementById("deleteform").setAttribute("action", "deleteauthor");
+            document.getElementById("deleteform").setAttribute("method", "post");
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    document.getElementById("deleteform").setAttribute("action", "");
+    document.getElementById("deleteform").setAttribute("method", "");
+    var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+    api.deleteAuthor(document.querySelector("[name='authorid']").value, renderDeleteSuccess, renderErrorMessage);
+    return false;
+}
+
+function renderDeleteSuccess(){
+    document.getElementById("outputmessage").innerHTML = "Deleted Author";
+}
+
+function renderErrorMessage(message){
+    document.getElementById("outputmessage").innerHTML = message;
+}
+
+function renderAmendSuccess(){
+    document.getElementById("outputmessage").innerHTML = "Amended Author";
+}
+
+function amendAuthor(){
+    var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+    api.amendAuthor(document.querySelector("[name='authorid']").value,
+                    document.getElementById("authorname").value
+                    , renderAmendSuccess, renderErrorMessage);
+    return false;
+}
+
+</script>
+
+<h1>Amend Author</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form id="amendform" onsubmit="return amendAuthor()">
+
+            <input type = "hidden" name="authorid" value="!!ID!!"/>
+            <label for="authorname">Name of author</label>
+            <input type="text" id="authorname" name="name" value="!!AUTHORNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" action="deleteauthor" onsubmit="return areYouSureYouWantToDeleteAuthor()" method="post">
+            <input type="hidden" name="authorid" value="!!ID!!"/>
+            <input type="submit" value="Delete"  />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<script>
+    restoreToSubmitPost("amendform");
+</script>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

@@ -1,0 +1,103 @@
+<script type="text/javascript">
+    function areYouSureYouWantToDeleteBook(){
+
+        if(location.hash==="#form") {
+            if (confirm("Are you sure you want to delete !!BOOKTITLE!!?")) {
+                document.getElementById("deleteform").setAttribute("action", "deletebook");
+                document.getElementById("deleteform").setAttribute("method", "post");
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        document.getElementById("deleteform").setAttribute("action", "");
+        document.getElementById("deleteform").setAttribute("method", "");
+        var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+        api.deleteBook(document.querySelector("[name='bookid']").value, renderDeleteSuccess, renderErrorMessage);
+        return false;
+    }
+
+    function renderDeleteSuccess(){
+        document.getElementById("outputmessage").innerHTML = "Deleted Book";
+    }
+
+    function renderErrorMessage(message){
+        document.getElementById("outputmessage").innerHTML = message;
+    }
+</script>
+
+<h1>Amend Book</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form action="book" method="post">
+
+            <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
+            <label for="booktitle">Title of book</label>
+            <input type="text" id="booktitle" name="title" value="!!BOOKTITLE!!" required="required" pattern=".{1,}">
+
+            <br/>
+
+
+
+             <label for="authoridselect">Author</label>
+             <select id="authoridselect" name="authorid" required="required" multiple required>
+                <!-- AUTHOR-ID-OPTIONS -->
+                <option value="unknown">Author</option>
+                <!-- AUTHOR-ID-OPTIONS -->
+            </select>
+            <br/>
+
+
+            <label for="houseauthoridselect">House Author</label>
+            <select id="houseauthoridselect" name="houseauthorid" required="required">
+                <!-- HOUSE-AUTHOR-ID-OPTIONS -->
+                <option value="UNKNOWN">UNKNOWN</option>
+                <!-- HOUSE-AUTHOR-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="publisheridselect">Publisher</label>
+            <select id="publisheridselect" name="publisherid" required="required">
+                <!-- PUBLISHER-ID-OPTIONS -->
+                <option value="unknown">Publisher</option>
+                <!-- PUBLISHER-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidselect">Series</label>
+            <select id="seriesidselect" name="seriesid" required="required">
+                <!-- SERIES-ID-OPTIONS -->
+                <option value="unknown">Series</option>
+                <!-- SERIES-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidentifierid">Series Identifier e.g. "March, 1933"</label>
+            <input type="text" id="seriesidentifierid" name="seriesidentifier" value="!!SERIESIDENTIFIER!!" required="required" pattern=".{1,}">
+            <br/>
+
+            <label for="yearofPub">Year of publication e.g. 1933</label>
+            <input type="number" id="yearofPub" name="yearofpub" value="!!PUBLICATIONYEAR!!" required="required" pattern=".{1,}">
+            <br/>
+
+
+            <input type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform"  action="deletebook" method="post" onsubmit="return areYouSureYouWantToDeleteBook()">
+            <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
+            <input  type="submit" value="Delete" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->

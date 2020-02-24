@@ -92,7 +92,7 @@ public class AppVersionConfig {
                 break;
             case 7:
                 // specific version 7 config here
-                // this is going to use the API requests via JavaScript
+                // this is going to use some API requests via JavaScript
                 retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
                 retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
                 retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
@@ -100,9 +100,29 @@ public class AppVersionConfig {
                 retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
                 retConfig.setDisplayedVersionNumber(7);
                 break;
+            case 8:
+                // specific version 8 config here
+                // this is going to use API requests via JavaScript for search
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setDisplayedVersionNumber(8);
+                break;
+            case 9:
+                // specific version 9 config here
+                // this is going to use all API requests via JavaScript
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setDisplayedVersionNumber(9);
+                break;
             default:
                 // use all the defaults - careful now
-                // this is because we didn't configure the versino
+                // this is because we didn't configure the version
                 retConfig.setDisplayedVersionNumber(-1);
 
         }

@@ -1,0 +1,5 @@
+<form id="deleteauthorform!!ID!!" onsubmit="return areYouSureYouWantToDeleteAuthor('!!TEXT!!', '!!ID!!', this)" style="display:inline-block;">
+    <!-- action="/apps/pulp/gui/amend/deleteauthor"  method="post" -->
+    <input type = "hidden" name="authorid" value="!!ID!!"/>
+    <input id="delete-author-!!ID!!-button" type="submit" value="!!DELETEBUTTONTEXT!!" title="Delete Author !!TEXT!!"  />
+</form>
