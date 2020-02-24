@@ -1,39 +1,37 @@
 <script type="text/javascript">
-    function areYouSureYouWantToDeleteSeries(){
-        if(location.hash==="#form") {
-            if (confirm("Are you sure you want to delete !!SERIESNAME!!?")) {
-                document.getElementById("deleteform").setAttribute("action", "deleteseries");
-                document.getElementById("deleteform").setAttribute("method", "post");
-                return true;
-            } else {
-                return false;
-            }
-        }
 
-        document.getElementById("deleteform").setAttribute("action", "");
-        document.getElementById("deleteform").setAttribute("method", "");
-        var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
-        api.deleteSeries(document.querySelector("[name='seriesid']").value, renderDeleteSuccess, renderErrorMessage);
-        return false;
+    function confirmDeleteSeries(){
+
+        if(location.hash==="#form"){
+            document.getElementById("deleteform").setAttribute("action", "deleteseries");
+            document.getElementById("deleteform").setAttribute("method", "post");
+            return areYouSureYouWantToDeleteSeries("!!SERIESNAME!!");
+        }else{
+            document.getElementById("deleteform").setAttribute("action", "");
+            document.getElementById("deleteform").setAttribute("method", "");
+            if(deleteSeriesViaApi("!!SERIESNAME!!", document.querySelector("[name='seriesid']").value)){
+                var controls = document.getElementById("amendobjectsection");
+                controls.parentElement.removeChild(controls);
+            }
+            return false;
+        }
     }
 
     function renderDeleteSuccess(){
-        document.getElementById("outputmessage").innerHTML = "Deleted Publisher";
+        document.getElementById("outputmessage").innerHTML = "Deleted Series";
     }
 
     function renderErrorMessage(message) {
-        // clue
         document.getElementById("outputmessage").innerHTML = message;
     }
 
     function renderAmendSuccess(){
-        // clue
-        document.getElementById("outputmessage").innerHTML = "Amended Publisher";
+        document.getElementById("outputmessage").innerHTML = "Amended Series";
     }
 
     function amendSeries(){
         var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
-        api.amendPublisher(document.querySelector("[name='seriesid']").value,
+        api.amendSeries(document.querySelector("[name='seriesid']").value,
             document.getElementById("seriesname").value
             , renderAmendSuccess, renderErrorMessage);
         return false;
@@ -55,12 +53,16 @@
             <input type="submit" value="Update" />
         </form>
         <hr/>
-        <form id="deleteform" action="deleteseries" method="post" onsubmit="return areYouSureYouWantToDeleteSeries()" >
+        <form id="deleteform" action="deleteseries" method="post" onsubmit="return confirmDeleteSeries()" >
             <input type = "hidden" name="seriesid" value="!!ID!!"/>
             <input type="submit" value="Delete" />
         </form>
     </div>
 
+</div>
+
+<div>
+    <p id="outputmessage"></p>
 </div>
 
 <script>

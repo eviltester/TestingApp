@@ -877,7 +877,9 @@ public class PulpAppForSpark {
         ///apps/pulp/gui/amend/series?series=id
         get("/apps/pulp/gui/amend/series", (req, res) -> {
             final PulpApp pulpApp = getPulpApp(req);
-            return pulpApp.page().amendSeriesPage(req.queryParams("series")).asHTMLString();
+            String seriesid ="";
+            seriesid=req.queryParams("series");
+            return pulpApp.page().amendSeriesPage(seriesid).asHTMLString();
         });
 
         post("/apps/pulp/gui/amend/series", (req, res) -> {

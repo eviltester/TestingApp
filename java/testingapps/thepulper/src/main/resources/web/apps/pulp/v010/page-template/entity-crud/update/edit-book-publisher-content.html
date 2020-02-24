@@ -1,0 +1,75 @@
+<script type="text/javascript">
+
+    function confirmDeletePublisher(){
+
+        if(location.hash==="#form"){
+            document.getElementById("deleteform").setAttribute("action", "deletepublisher");
+            document.getElementById("deleteform").setAttribute("method", "post");
+            return areYouSureYouWantToDeletePublisher("!!PUBLISHERNAME!!");
+        }else{
+            document.getElementById("deleteform").setAttribute("action", "");
+            document.getElementById("deleteform").setAttribute("method", "");
+            if(deletePublisherViaApi("!!PUBLISHERNAME!!", document.querySelector("[name='publisherid']").value)){
+                var controls = document.getElementById("amendobjectsection");
+                controls.parentElement.removeChild(controls);
+            }
+            return false;
+        }
+    }
+
+
+    function renderDeleteSuccess(){
+        document.getElementById("outputmessage").innerHTML = "Deleted Publisher";
+    }
+
+    function renderErrorMessage(message){
+        document.getElementById("outputmessage").innerHTML = message;
+    }
+
+    function renderAmendSuccess(){
+        document.getElementById("outputmessage").innerHTML = "Amended Publisher";
+    }
+
+    function amendPublisher(){
+        var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+        api.amendPublisher(document.querySelector("[name='publisherid']").value,
+            document.getElementById("publishername").value
+            , renderAmendSuccess, renderErrorMessage);
+        return false;
+    }
+</script>
+
+<h1>Amend Publisher</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form id="amendform" onsubmit="return amendPublisher()">
+
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
+            <label for="publishername">Name of publisher</label>
+            <input type="text" id="publishername" name="name" value="!!PUBLISHERNAME!!" required="required" pattern=".{1,}">
+
+            <br/>
+            <input type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" action="deletepublisher" method="post" onsubmit="return confirmDeletePublisher()">
+            <input type = "hidden" name="publisherid" value="!!ID!!"/>
+            <input type="submit" value="Delete" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<script>
+    restoreToSubmitPost("amendform");
+</script>
+
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->
