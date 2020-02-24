@@ -1,3 +1,14 @@
+function restoreToSubmitPost(formid = "createform"){
+    // add a workaround in case of any Ajax Issues - add #form and refresh
+    var hashvalue = location.hash;
+    if(hashvalue==="#form"){
+        document.getElementById(formid).onsubmit = null;
+        document.getElementById(formid).setAttribute("onsubmit", "");
+        document.getElementById(formid).setAttribute("action", "#form");
+        document.getElementById(formid).setAttribute("method", "post");
+    }
+}
+
 function PulperApi(XApiAuthCookieValue){
 
     this.xhttpapi = new XhttpApi(XApiAuthCookieValue);
