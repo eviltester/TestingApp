@@ -4,6 +4,10 @@ public class ToDoListTest {
 
     // NEXT:
 
+    // TODO: shutdown enabled by default in standalone mode and allow switching off by environment variable
+    //       - makes it easier for people to close if they accidentally double click on it locally
+    //       - and heroku environment configurations persist so once set, it should be OK
+
     //
     // create a v 5 and add animation to the drop down menu reveal to make it harder to automate
     //

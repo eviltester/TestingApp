@@ -1,3 +1,17 @@
+# Appendix - Known bugs
+
+This section has spoilers. You may want to find these bugs yourself by testing the application first.
+
+\newpage
+
+## v001
+
+- what is the point of the 'link to book as list' from the book entity screen? Would it be better to link to the 'books' list?
+- The list footer text "Showing All X books." does not change based on the list or menu shown e.g. on 'series' it should probably say "Showing All 3 Series", but instead says 'books' and the number of books in memory.
+    - Odd that the number changes, e.g. it is "Showing All 0 books." until the list or table of books is shown, then it becomes "Showing All 364 books." This might imply some 'state' which is bleeding over into the list.
+- 404 page has no information, and no menu e.g. https://thepulper.herokuapp.com/apps/pulp/bob
+
+
 ## v009
 
 * delete on the amend forms should probably remove the update buttons or redirect to the list
