@@ -44,6 +44,18 @@ The different versions may be easier to automate, harder, different stylings, bu
 
 <!-- VERSIONSELECTLIST -->
 
+## API
+
+The Pulper has a 'REST'ish API. This is used by later versions of the application.
+
+You can find the API documentation on Github:
+
+- https://github.com/eviltester/TestingApp/tree/master/java/testingapps/thepulper/docs/api
+
+There is an [Insomnia](https://insomnia.rest/) .json file you can import into Insomnia to use.
+
+There is a [Postman](https://getpostman.com/) .json file you can import into Postman to use.
+
 ## Pulp Magazines
 
 It can be outrageously expensive to collect original pulp magazines and they have a tendency to fall apart when you try to read them.

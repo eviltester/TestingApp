@@ -1,3 +1,13 @@
+The Pulper API documentation is publicly available on, and generated via, Postman.
+
+- https://documenter.getpostman.com/view/27996/SzKWucnk
+
+Postman Collection, and Insomnia Workspaces are available for import in the insomnia and postman folders.
+
+
+---
+
+Below are some links for API documentation research. 
 
 ## API Research
 
@@ -19,11 +29,32 @@ Dredd:
 * validates against 200 requests
     * more work required for other codes
     
+## APIMatic
+
+Convert between different API formats. Also publish as a GUI and generate SDK etc.
+
+- https://www.apimatic.io/transformer
+
+Can read the Insomnia exported file and used the 'documentation' information in Insomnia.
+
+Commercial product - trial plans available.    
+
 ## Swagger
 
 - http://editor.swagger.io/
-    - Swagger editor useful for pinpointing syntax errors and visualing the API
+    - Swagger editor useful for pinpointing syntax errors and visualizing the API
+
+## SWAGGYMNIA
+
+Convert Insomnia output to swagger format:
     
+- https://github.com/mlabouardy/swaggymnia
+
+## Insomnia Documenter
+
+A 'server' for converting insomnia.json to a readable html output.
+
+- https://www.npmjs.com/package/insomnia-documenter
     
 ## Others
 

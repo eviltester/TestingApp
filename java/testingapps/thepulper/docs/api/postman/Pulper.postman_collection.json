@@ -1,0 +1,2613 @@
+{
+	"info": {
+		"_postman_id": "42e5eb6e-8ada-495b-8640-3cb434e06a6b",
+		"name": "Pulper",
+		"description": "The Pulper is an application to support practicing:\n\n- Testing\n- API usage\n- API Automating\n- GUI Automating\n\nIt can be accessed at:\n\n- https://thepulper.herokuapp.com\n\nWith downloads and more detail at:\n\n- https://eviltester.com/thepulper\n\nThe source code is available on Github at:\n\n- https://github.com/eviltester/TestingApp/tree/master/java/testingapps/thepulper\n\nAnd is part of The Evil Tester's Compendium of Testing Apps\n\n- https://github.com/eviltester/TestingApp\n\n\nThe API uses a custom header for authentication:\n\n`X-API-AUTH`\n\nThe value of this is shown in the admin menu of your GUI session:\n\n- https://thepulper.herokuapp.com/apps/pulp/gui/menu/admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "pulper",
+			"item": [
+				{
+					"name": "isrunning",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/heartbeat",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"heartbeat"
+							]
+						},
+						"description": "Check if the application is running"
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/heartbeat",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"heartbeat"
+									]
+								},
+								"description": "Check if the application is running"
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "publisher",
+			"item": [
+				{
+					"name": "all publishers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/publishers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers"
+							]
+						},
+						"description": "Get all publishers\n\nreturns 200 if found.\n\n~~~~~~~~\n{\n  \"data\": {\n    \"publishers\": [\n      {\n        \"id\": \"1\",\n        \"name\": \"Street And Smith\"\n      },\n      {\n        \"id\": \"2\",\n        \"name\": \"Popular Publications\"\n      },\n      {\n        \"id\": \"3\",\n        \"name\": \"Warner Paperback Library\"\n      }\n    ]\n  }\n}\n~~~~~~~~\n\nor 404 if not found"
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/publishers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers"
+									]
+								},
+								"description": "Get all publishers\n\nreturns 200 if found.\n\n~~~~~~~~\n{\n  \"data\": {\n    \"publishers\": [\n      {\n        \"id\": \"1\",\n        \"name\": \"Street And Smith\"\n      },\n      {\n        \"id\": \"2\",\n        \"name\": \"Popular Publications\"\n      },\n      {\n        \"id\": \"3\",\n        \"name\": \"Warner Paperback Library\"\n      }\n    ]\n  }\n}\n~~~~~~~~\n\nor 404 if not found"
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific publisher",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/publishers/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"1"
+							]
+						},
+						"description": "Get a specific publisher based on the publisher id in the URL e.g. `publishers/1` would get publisher with id 1\n\nreturns `200` and publisher data\n\n~~~~~~~~\n{\n  \"data\": {\n    \"publishers\": [\n      {\n        \"id\": \"1\",\n        \"name\": \"Street And Smith\"\n      }\n    ]\n  }\n}\n~~~~~~~~\n\nor `404` if not found"
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/publishers/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers",
+										"1"
+									]
+								},
+								"description": "Get a specific publisher based on the publisher id in the URL e.g. `publishers/1` would get publisher with id 1\n\nreturns `200` and publisher data\n\n~~~~~~~~\n{\n  \"data\": {\n    \"publishers\": [\n      {\n        \"id\": \"1\",\n        \"name\": \"Street And Smith\"\n      }\n    ]\n  }\n}\n~~~~~~~~\n\nor `404` if not found"
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "create publisher",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"publishers\": [\r\n    {\r\n      \"name\": \"Pan Books\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{Server 2}}/publishers",
+							"host": [
+								"{{Server 2}}"
+							],
+							"path": [
+								"publishers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"publishers\": [\r\n    {\r\n      \"name\": \"Pan Books\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{Server 2}}/publishers",
+									"host": [
+										"{{Server 2}}"
+									],
+									"path": [
+										"publishers"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend publisher",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"3\",\r\n  \"name\": \"Arrow Books\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/publishers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"3\",\r\n  \"name\": \"Arrow Books\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/publishers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "bulk create,amend publishers",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"publishers\": [\r\n    {\r\n      \"name\": \"Target Publications\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"name\": \"Genesis Publishing\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/publishers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"publishers\": [\r\n    {\r\n      \"name\": \"Target Publications\"\r\n    },\r\n    {\r\n      \"id\": \"2\",\r\n      \"name\": \"Genesis Publishing\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/publishers",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend replace publisher",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"my publisher\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/publishers/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"my publisher\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/publishers/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers",
+										"2"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "patch amend publisher",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"eviltester publishing\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/publishers/2",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"eviltester publishing\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/publishers/2",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers",
+										"2"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific publisher",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/publishers/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"publishers",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/publishers/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"publishers",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "authors",
+			"item": [
+				{
+					"name": "all authors",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/authors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/authors",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specifc author",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{Server 3}}/authors/2",
+							"host": [
+								"{{Server 3}}"
+							],
+							"path": [
+								"authors",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{Server 3}}/authors/2",
+									"host": [
+										"{{Server 3}}"
+									],
+									"path": [
+										"authors",
+										"2"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "create author",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Bob Dobbs Jr\"\r\n}"
+						},
+						"url": {
+							"raw": "{{Server 3}}/authors",
+							"host": [
+								"{{Server 3}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Bob Dobbs Jr\"\r\n}"
+								},
+								"url": {
+									"raw": "{{Server 3}}/authors",
+									"host": [
+										"{{Server 3}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend author",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"4\",\r\n  \"name\": \"Bob Dobbs\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/authors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"4\",\r\n  \"name\": \"Bob Dobbs\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/authors",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "patch author",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Grant Stockbridge Jr\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/authors/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Grant Stockbridge Jr\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/authors/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend replace author",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"george\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/authors/24",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"24"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"george\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/authors/24",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors",
+										"24"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "bulk create,amend authors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Bob Dobbs Jr\"\r\n    },\r\n    {\r\n      \"name\": \"Bob Dobbs Sr\"\r\n    },\r\n    {\r\n      \"name\": \"Connie Marsh Dobbs\"\r\n    },\r\n    {\r\n      \"name\": \"Jack Parsons\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/authors",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"authors\": [\r\n    {\r\n      \"name\": \"Bob Dobbs Jr\"\r\n    },\r\n    {\r\n      \"name\": \"Bob Dobbs Sr\"\r\n    },\r\n    {\r\n      \"name\": \"Connie Marsh Dobbs\"\r\n    },\r\n    {\r\n      \"name\": \"Jack Parsons\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/authors",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specifc author",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/authors/8",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"authors",
+								"8"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/authors/8",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"authors",
+										"8"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Series",
+			"item": [
+				{
+					"name": "all series",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/series",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/series",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific series",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/series/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/series/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "create series",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Lone Ranger\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/series",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Lone Ranger\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/series",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend series",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"1\",\r\n  \"name\": \"Doc Savage Jr.\"\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/series",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"1\",\r\n  \"name\": \"Doc Savage Jr.\"\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/series",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend replace series",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"my series\"\r\n}"
+						},
+						"url": {
+							"raw": "{{Server 3}}/series/2",
+							"host": [
+								"{{Server 3}}"
+							],
+							"path": [
+								"series",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"my series\"\r\n}"
+								},
+								"url": {
+									"raw": "{{Server 3}}/series/2",
+									"host": [
+										"{{Server 3}}"
+									],
+									"path": [
+										"series",
+										"2"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "patch amend series",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Doc Savaged\"\r\n}"
+						},
+						"url": {
+							"raw": "{{Server 3}}/series/2",
+							"host": [
+								"{{Server 3}}"
+							],
+							"path": [
+								"series",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Doc Savaged\"\r\n}"
+								},
+								"url": {
+									"raw": "{{Server 3}}/series/2",
+									"host": [
+										"{{Server 3}}"
+									],
+									"path": [
+										"series",
+										"2"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "bulk create,amend series",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"series\": [\r\n    {\r\n      \"name\": \"The Destroyer\"\r\n    },\r\n    {\r\n      \"name\": \"Zorro\"\r\n    },\r\n    {\r\n      \"id\": \"1\",\r\n      \"name\": \"Clark Savage Jr.\"\r\n    },\r\n    {\r\n      \"name\": \"Man From Uncle\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/series",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"series\": [\r\n    {\r\n      \"name\": \"The Destroyer\"\r\n    },\r\n    {\r\n      \"name\": \"Zorro\"\r\n    },\r\n    {\r\n      \"id\": \"1\",\r\n      \"name\": \"Clark Savage Jr.\"\r\n    },\r\n    {\r\n      \"name\": \"Man From Uncle\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/series",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific series",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/series/3",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"series",
+								"3"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/series/3",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"series",
+										"3"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "books",
+			"item": [
+				{
+					"name": "all books",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/books?what=tab&searchterm=death",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "what",
+									"value": "tab"
+								},
+								{
+									"key": "searchterm",
+									"value": "death"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/books?what=tab&searchterm=death",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books"
+									],
+									"query": [
+										{
+											"key": "what",
+											"value": "tab"
+										},
+										{
+											"key": "searchterm",
+											"value": "death"
+										}
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific book",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/books/200",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"200"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/books/200",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books",
+										"200"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "create book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"The Land of Little People Terror\",\r\n  \"publicationYear\": 1980,\r\n  \"seriesId\": \"Issue 1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"4\"\r\n    }\r\n  ],\r\n  \"series\": {\r\n    \"id\": \"1\"\r\n  },\r\n  \"publisher\": {\r\n    \"id\": \"1\"\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/books",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"The Land of Little People Terror\",\r\n  \"publicationYear\": 1980,\r\n  \"seriesId\": \"Issue 1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"4\"\r\n    }\r\n  ],\r\n  \"series\": {\r\n    \"id\": \"1\"\r\n  },\r\n  \"publisher\": {\r\n    \"id\": \"1\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "create multiple books",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"books\": [\r\n    {\r\n      \"title\": \"The Land of Little People Terror\",\r\n      \"publicationYear\": 1980,\r\n      \"seriesId\": \"Issue 1\",\r\n      \"authors\": [\r\n        {\r\n          \"id\": \"4\"\r\n        }\r\n      ],\r\n      \"series\": {\r\n        \"id\": \"1\"\r\n      },\r\n      \"publisher\": {\r\n        \"id\": \"1\"\r\n      }\r\n    },\r\n    {\r\n      \"title\": \"The Land of Giants\",\r\n      \"publicationYear\": 1982,\r\n      \"seriesId\": \"Issue 2\",\r\n      \"authors\": [\r\n        {\r\n          \"id\": \"2\"\r\n        }\r\n      ],\r\n      \"series\": {\r\n        \"id\": \"1\"\r\n      },\r\n      \"publisher\": {\r\n        \"id\": \"1\"\r\n      }\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/books",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"books\": [\r\n    {\r\n      \"title\": \"The Land of Little People Terror\",\r\n      \"publicationYear\": 1980,\r\n      \"seriesId\": \"Issue 1\",\r\n      \"authors\": [\r\n        {\r\n          \"id\": \"4\"\r\n        }\r\n      ],\r\n      \"series\": {\r\n        \"id\": \"1\"\r\n      },\r\n      \"publisher\": {\r\n        \"id\": \"1\"\r\n      }\r\n    },\r\n    {\r\n      \"title\": \"The Land of Giants\",\r\n      \"publicationYear\": 1982,\r\n      \"seriesId\": \"Issue 2\",\r\n      \"authors\": [\r\n        {\r\n          \"id\": \"2\"\r\n        }\r\n      ],\r\n      \"series\": {\r\n        \"id\": \"1\"\r\n      },\r\n      \"publisher\": {\r\n        \"id\": \"1\"\r\n      }\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend book",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"1\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/books",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"id\": \"1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"1\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "amend multiple books",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"books\": [\r\n    {\r\n      \"id\": \"364\",\r\n      \"title\": \"bob marches\"\r\n    },\r\n    {\r\n      \"id\": \"366\",\r\n      \"title\": \"bob marches on\"\r\n    }\r\n  ]\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/books",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"books\": [\r\n    {\r\n      \"id\": \"364\",\r\n      \"title\": \"bob marches\"\r\n    },\r\n    {\r\n      \"id\": \"366\",\r\n      \"title\": \"bob marches on\"\r\n    }\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/books",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "replace book",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"The Land of Little People Terror\",\r\n  \"publicationYear\": 1981,\r\n  \"seriesId\": \"Issue 1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"4\"\r\n    },\r\n    {\r\n      \"id\": \"5\"\r\n    }\r\n  ],\r\n  \"series\": {\r\n    \"name\": \"Doc Savage\"\r\n  },\r\n  \"publisher\": {\r\n    \"id\": \"1\"\r\n  }\r\n}"
+						},
+						"url": {
+							"raw": "{{url}}/books/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"The Land of Little People Terror\",\r\n  \"publicationYear\": 1981,\r\n  \"seriesId\": \"Issue 1\",\r\n  \"authors\": [\r\n    {\r\n      \"id\": \"4\"\r\n    },\r\n    {\r\n      \"id\": \"5\"\r\n    }\r\n  ],\r\n  \"series\": {\r\n    \"name\": \"Doc Savage\"\r\n  },\r\n  \"publisher\": {\r\n    \"id\": \"1\"\r\n  }\r\n}"
+								},
+								"url": {
+									"raw": "{{url}}/books/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "patch amend book",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{url}}/books/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{url}}/books/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "specific book",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/books/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"books",
+								"1"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/books/1",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"books",
+										"1"
+									]
+								}
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "create session x-api-auth",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}"
+							},
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/session",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"session"
+							]
+						},
+						"description": "Create a session for the value in the `X-API-AUTH` header if it does not exist already, useful for using the API on its own.\n\nIf you want to then use the GUI for the API session, just amend the JSESSIONID in the browser to the cookie value in the api responses.\n\nThis API call does not require authentication, but is 'unofficial'. No such API call would exist in a 'real' application."
+					},
+					"response": [
+						{
+							"name": "Response_200",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "X-API-AUTH",
+										"value": "{{x-api-auth}}"
+									},
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{url}}/session",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"session"
+									]
+								},
+								"description": "Create a session for the value in the `X-API-AUTH` header if it does not exist already, useful for using the API on its own.\n\nIf you want to then use the GUI for the API session, just amend the JSESSIONID in the browser to the cookie value in the api responses.\n\nThis API call does not require authentication, but is 'unofficial'. No such API call would exist in a 'real' application."
+							},
+							"code": 200,
+							"_postman_previewlanguage": "Text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "53181ba8-eb37-406d-9534-373a49f05f73",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "15873115-912b-4934-b1e2-2fab26256786",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f6c352a1-739b-49a0-9d0b-2b1e8dd43b16",
+			"key": "Server 1",
+			"value": "http://localhost:4567/apps/pulp/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "85a7d4a2-30ec-47b4-b127-de15c329fa16",
+			"key": "Server 2",
+			"value": "localhost:4567/apps/pulp/api/series/1http://localhost:4567/apps/pulp/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "7d35a948-5142-46ee-a380-9c51714354d4",
+			"key": "Server 3",
+			"value": "http://localhost:4567/apps/pulp/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "f7dd7222-9b33-42fd-86af-dc27c3c81014",
+			"key": "Server 11",
+			"value": "https://thepulper.herokuapp.com/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "b6084fad-1741-47e5-b290-3adcaceab417",
+			"key": "Server 21",
+			"value": "localhost:4567/apps/pulp/api/series/1https://thepulper.herokuapp.com/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "050597af-6f79-4754-9511-b5a068501f44",
+			"key": "Server 31",
+			"value": "https://thepulper.herokuapp.com/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "5ac1a756-37c4-4c3c-863c-776ef40eb852",
+			"key": "Server 12",
+			"value": "http://localhost:45657/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "a1d7b5cb-5e16-45dd-9d18-92a67d542eba",
+			"key": "Server 22",
+			"value": "localhost:4567/apps/pulp/api/series/1http://localhost:45657/apps/pulp/api",
+			"type": "string"
+		},
+		{
+			"id": "d32f68c6-a182-450a-8fe0-c8b37ac6c8ed",
+			"key": "Server 32",
+			"value": "http://localhost:45657/apps/pulp/api",
+			"type": "string"
+		}
+	]
+}
