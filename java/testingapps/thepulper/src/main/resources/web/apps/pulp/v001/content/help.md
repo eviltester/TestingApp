@@ -48,7 +48,7 @@ The different versions may be easier to automate, harder, different stylings, bu
 
 It can be outrageously expensive to collect original pulp magazines and they have a tendency to fall apart when you try to read them.
 
-Fortunately Archive.org whave quite a lot of [scanned pulps](https://archive.org/details/pulpmagazinearchive).
+Fortunately Archive.org have quite a lot of [scanned pulps](https://archive.org/search.php?query=subject%3A%22pulp%22&and[]=mediatype%3A%22collection%22&and[]=mediatype%3A%22texts%22).
 
 Sadly, the pulp archive above does not seem to have any issues of The Spider, or Doc Savage but there are companies still [reprinting these today](http://www.thepulp.net/the-hunt/reprints-replicas/).
 
@@ -66,7 +66,7 @@ Or you could read easier to get hold of reprints e.g. HP Lovecraft, or Robert E 
 
 This application has been written by Alan Richardson, [Compendium Developments Ltd](https://www.compendiumdev.co.uk) | [EvilTester.com](https://www.eviltester.com).
 
-[Contact Alan](https://compendiumdev.co.uk/contact)
+[Contact Alan](https://eviltester.com/contact)
 
 ---
 

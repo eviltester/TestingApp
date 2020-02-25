@@ -8,6 +8,8 @@ public class ToDoListTest {
     //       - makes it easier for people to close if they accidentally double click on it locally
     //       - and heroku environment configurations persist so once set, it should be OK
 
+    // TODO: iframe functionality for faqs
+
     //
     // create a v 5 and add animation to the drop down menu reveal to make it harder to automate
     //

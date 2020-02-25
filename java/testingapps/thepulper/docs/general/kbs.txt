@@ -1,3 +1,5 @@
+\newpage
+
 # Appendix - Known bugs
 
 This section has spoilers. You may want to find these bugs yourself by testing the application first.
@@ -10,7 +12,24 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 - The list footer text "Showing All X books." does not change based on the list or menu shown e.g. on 'series' it should probably say "Showing All 3 Series", but instead says 'books' and the number of books in memory.
     - Odd that the number changes, e.g. it is "Showing All 0 books." until the list or table of books is shown, then it becomes "Showing All 364 books." This might imply some 'state' which is bleeding over into the list.
 - 404 page has no information, and no menu e.g. https://thepulper.herokuapp.com/apps/pulp/bob
+- publisher, books, series and years faqs link in list can be triggerd by adding apps/pulp/gui/reports/publishers/list/navigation?faqs (is this intended or should this be inaccessible)
+- the list of books for a year can be converted into a table by changing the url - is that intended?
+- search for "" with confirm searches selected asks "Do you want to search" before responding with 'you must enter a search term' - better to do that check prior to asking if want to search
+- there should be validation on the search term length as it is possible to trigger a 414 - URI too long - from the GUI
+- search results does not show a "Showing X books." message at the bottom of the list, which would be helpful to see how many match
+- the reports do not have a printable CSS to change the formatting so it is not really a 'good' report
+- the reports have the "Showing All 364 books" bug as mentioned earlier
 
+
+## v003
+
+- help file has bug where version change "Books FAQ page accessible from drop down menu" is listed twice
+
+## v004
+
+## v005
+
+- help content seems to have misleading information i.e. "GUI Uses Form Submissions" the [x] delete form submission was added in version 4
 
 ## v009
 
@@ -35,4 +54,5 @@ fixed
 * amend book via javascript
 
 
-* there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does
+* there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does. Might need to use a PUT for this.
+* a book can have multiple authors but the API call does not support this, only a single author is provided.
