@@ -141,6 +141,25 @@ public class PulpAppForSpark {
 
     public PulpApp getPulpApp(Request req){
 
+        final PulpApp app = getPulpAppSession(req);
+
+        if(app==null){
+            return null;
+        }
+
+        if(req.queryParams().contains("v")){
+            // ensure that any pulp app we return has this version
+            try {
+                app.setAppVersion(Integer.parseInt(req.queryParams("v")));
+            }catch(Exception e){
+                // swallow exception
+            }
+        }
+        return getPulpAppSession(req);
+    }
+
+    public PulpApp getPulpAppSession(Request req){
+
         PulpApp sessionPulpApp;
 
         Session session=null;

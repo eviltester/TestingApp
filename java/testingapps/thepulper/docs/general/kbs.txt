@@ -41,6 +41,10 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 * did not add the amend book via javascript so the form uses a post
 * series amend form via api amends a publisher, not a series
 * list totals do not update when removing a list item
+* on the Amend Author screen we lost the 'View Author' and 'List of Books by Author' on the Amend Author screen
+* on the Amend Book screen we lost the "View Book" and "Book As List" links
+* on the Amend Publisher screen we lost the "View Publisher" and "List of Books by Publisher" links
+* on the Amend Series screen we lost the "View Series" and "List of Books in Series" links
 
 ## v010
 
