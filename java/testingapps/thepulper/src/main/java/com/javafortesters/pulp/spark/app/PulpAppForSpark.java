@@ -64,11 +64,13 @@ public class PulpAppForSpark {
     // TODO: make max session configurable through environment variables
     private static final int MAX_SESSION_LENGTH = 60*5;  // set max session without interactivity to 5 minutes
     private static final long CHECK_FOR_EXPIRED_API_SESSIONS_EVERY_MILLIS = 60*3*1000;  // checkfor expired api sessions every 3 minutes
+    private static final long CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS = 60*2*1000;  // checkfor expired GUI sessions every 2 minutes
     private boolean allowsShutdown=false;
 
     private Map<String, Session> api_session_mapping= new ConcurrentHashMap<>();
 
     long lastDeleteExpiredCheck=0;
+    long lastDeleteGUIExpiredCheck=0;
 
     private void deleteExpiredAPISessions() {
 
@@ -98,6 +100,38 @@ public class PulpAppForSpark {
                     api_session_mapping.remove(sessionKey);
                 }
             }
+        }
+    }
+
+    public void deleteAnyInvalidSessions(){
+
+        long currentCheck = System.currentTimeMillis();
+        long timeSinceLastCheck = currentCheck-lastDeleteGUIExpiredCheck;
+        long checkInXMilliseconds = timeSinceLastCheck-CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS;
+
+        if(checkInXMilliseconds<0){
+            System.out.println("Check for expired GUI sessions in milliseconds time " + (checkInXMilliseconds*-1));
+            return;
+        }
+
+        lastDeleteGUIExpiredCheck=currentCheck;
+
+        List<String> deleteThese = new ArrayList<>();
+
+        for(String sessionKey : api_session_mapping.keySet()){
+            try {
+                Session session = api_session_mapping.get(sessionKey);
+                PulpApp sessionPulpApp=session.attribute(SESSION_APP);
+            }catch (Exception e){
+                System.out.println("Delete invalid session " + sessionKey);
+                System.out.println(e.getMessage());
+                deleteThese.add(sessionKey);
+            }
+        }
+
+        for(String sessionKey :  deleteThese){
+            api_session_mapping.remove(sessionKey);
+            System.out.println("Deleted session " + sessionKey);
         }
     }
 
@@ -256,25 +290,7 @@ public class PulpAppForSpark {
         return session;
     }
 
-    public void deleteAnyInvalidSessions(){
-        List<String> deleteThese = new ArrayList<>();
 
-        for(String sessionKey : api_session_mapping.keySet()){
-            try {
-                Session session = api_session_mapping.get(sessionKey);
-                PulpApp sessionPulpApp=session.attribute(SESSION_APP);
-            }catch (Exception e){
-                System.out.println("Delete invalid session " + sessionKey);
-                System.out.println(e.getMessage());
-                deleteThese.add(sessionKey);
-            }
-        }
-
-        for(String sessionKey :  deleteThese){
-            api_session_mapping.remove(sessionKey);
-            System.out.println("Deleted session " + sessionKey);
-        }
-    }
 
     public PulpApp getPulpAppForApi(String api_auth_header){
         final Session session = api_session_mapping.get(api_auth_header);
