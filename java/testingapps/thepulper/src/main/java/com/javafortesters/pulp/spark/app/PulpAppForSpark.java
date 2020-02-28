@@ -133,6 +133,7 @@ public class PulpAppForSpark {
         System.out.println(appApiKey);
         api_session_mapping.put(appApiKey, session);
 
+
         System.out.println("Session count " + api_session_mapping.size());
 
         return sessionPulpApp;
@@ -163,6 +164,8 @@ public class PulpAppForSpark {
         PulpApp sessionPulpApp;
 
         Session session=null;
+
+        deleteAnyInvalidSessions();
 
         // if the request contains a cookie or header of X-API-AUTH then try to find that session
         final Collection<String> cookieValues = getCookieValueFromRequest(req, "X-API-AUTH");
@@ -251,6 +254,26 @@ public class PulpAppForSpark {
             }
         }
         return session;
+    }
+
+    public void deleteAnyInvalidSessions(){
+        List<String> deleteThese = new ArrayList<>();
+
+        for(String sessionKey : api_session_mapping.keySet()){
+            try {
+                Session session = api_session_mapping.get(sessionKey);
+                PulpApp sessionPulpApp=session.attribute(SESSION_APP);
+            }catch (Exception e){
+                System.out.println("Delete invalid session " + sessionKey);
+                System.out.println(e.getMessage());
+                deleteThese.add(sessionKey);
+            }
+        }
+
+        for(String sessionKey :  deleteThese){
+            api_session_mapping.remove(sessionKey);
+            System.out.println("Deleted session " + sessionKey);
+        }
     }
 
     public PulpApp getPulpAppForApi(String api_auth_header){
