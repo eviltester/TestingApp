@@ -175,6 +175,17 @@ public class AppVersionConfig {
             default:
                 // leave knownBugs at default level
         }
+
+        if(appVersion<=3){
+            // series faqs has a template error in v3 and below
+            knownBugs.setBugPresenceTo(KnownBugs.Bug.TEMPLATE_ERROR_IN_SERIES_FAQ, true);
+        }
+
+        if(appVersion<5){
+            // did not fix page title bug until version 5
+            knownBugs.setBugPresenceTo(KnownBugs.Bug.FAQ_PAGE_TITLE_ALWAYS_AUTHORS, true);
+        }
+
     }
 
     private void setDisplayedVersionNumber(final int version) {

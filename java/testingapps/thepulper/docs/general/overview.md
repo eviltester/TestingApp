@@ -102,7 +102,7 @@ There is an 'admin' function to experiment with the prototype filtering and pagi
 
 ## Version 003
 
-Version 003 has automation hooks and responsive GUI features.
+Version 003 has automation hooks, responsive GUI features and more FAQs.
 
 Released in 2018.
 
@@ -259,6 +259,24 @@ Acceptance Criteria:
 - No duplicates should be allowed
 - Delete should be possible from the 'amend' screens
 - Link to amend/update screen from the 'read' screens
+
+### Additional FAQs Functionality
+
+As a user I want to be able to see FAQs for Publishers, Series, Years, and on book details.
+
+Entities:
+
+- year
+- series
+- publishers
+- authors
+- books
+
+Acceptance Criteria:
+
+- There should be a an FAQ menu with clickable FAQ links for each entity
+- The Books FAQs should show FAQs for each of the fields in the book i.e. title, each author, year, publisher, and series  
+
 
 ### Experimental Admin Functionality
 

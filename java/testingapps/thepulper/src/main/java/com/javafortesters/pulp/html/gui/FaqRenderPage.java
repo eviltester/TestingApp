@@ -9,6 +9,7 @@ import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.html.templates.MyUrlEncoder;
 import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 
 import java.util.ArrayList;
@@ -31,7 +32,13 @@ public class FaqRenderPage {
 
     public String asHTMLString() {
 
-        AppPageBuilder page = new AppPageBuilder("Authors with FAQs", appversion);
+        String pageTitle = "Authors with FAQs";
+
+        if(!appversion.bugs().bugIsPresent(KnownBugs.Bug.FAQ_PAGE_TITLE_ALWAYS_AUTHORS)){
+            pageTitle = String.format("List of FAQs for %s", faqsForType);
+        }
+
+        AppPageBuilder page = new AppPageBuilder(pageTitle, appversion);
 
 
         final VersionedResourceReader versionedReader = new VersionedResourceReader(appversion);
@@ -43,7 +50,7 @@ public class FaqRenderPage {
         MyTemplate pageTemplate = new MyTemplate(pageToRender);
         pageTemplate.replace("<!-- TITLE GOES HERE -->", String.format("<h1>List of FAQs for %s: %s</h1>", faqsForType, searchFaqTerm));
 
-        List<String> faqs = asSearchEngineAnchors(Faqs.getFaqsFor(faqsForType, searchFaqTerm));
+        List<String> faqs = asSearchEngineAnchors(Faqs.getFaqsFor(faqsForType, searchFaqTerm, appversion));
         pageTemplate.replace("<!-- LIST OF FAQS GO HERE -->", new HTMLReporter(appversion).getAsUl(faqs, faqsForType+"-faq-list", "menu"));
 
         if(showiframe) {

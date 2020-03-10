@@ -1,6 +1,8 @@
 package com.javafortesters.pulp.domain.faq;
 
 import com.javafortesters.pulp.html.templates.MyTemplate;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 
 import java.util.ArrayList;
@@ -33,7 +35,6 @@ public class Faqs {
             "Who wrote pulp series \"!!name!!\"?",
             "Who created pulp series \"!!name!!\"?",
             "Comics for pulp series \"!!name!!\"?",
-            "Is \"!!name!\"! pulp available to download as pdf?",
             "Download scanned \"!!name!!\" magazines?",
             "Pulp \"!!name!!\" covers",
             "Buy reprints of \"!!name!!\" magazines?",
@@ -51,7 +52,7 @@ public class Faqs {
             "What pulp authors were writing in year \"!!name!!\"?"
     };
 
-    public static List<String> getFaqsFor(String faqsFor, String searchTerm) {
+    public static List<String> getFaqsFor(String faqsFor, String searchTerm, AppVersion version) {
         List<String> faqs = new ArrayList<>();
 
         // adding all into the list and using contains makes it much more hackable e.g. series+author
@@ -62,10 +63,20 @@ public class Faqs {
             faqs.addAll(Arrays.asList(Faqs.publisherFaqs));
         }
         if(faqsFor.toLowerCase().contains("series")){
-            faqs.addAll(Arrays.asList(Faqs.seriesFaqs));
+
+            List<String>faqsList = new ArrayList<>(Arrays.asList(Faqs.seriesFaqs));
+
+            if(version.bugs().bugIsPresent(KnownBugs.Bug.TEMPLATE_ERROR_IN_SERIES_FAQ)){
+                faqsList.add("Is \"!!name!\"! pulp available to download as pdf?");
+            }else{
+                faqsList.add("Is \"!!name!!\" pulp available to download as pdf?");
+            }
+
+            faqs.addAll(faqsList);
         }
         if(faqsFor.toLowerCase().contains("book")){
-            faqs.addAll(Arrays.asList(Faqs.booksFaqs));
+            List<String>faqsList = new ArrayList<>(Arrays.asList(Faqs.booksFaqs));
+            faqs.addAll(faqsList);
         }
         if(faqsFor.toLowerCase().contains("year")){
             faqs.addAll(Arrays.asList(Faqs.yearFaqs));

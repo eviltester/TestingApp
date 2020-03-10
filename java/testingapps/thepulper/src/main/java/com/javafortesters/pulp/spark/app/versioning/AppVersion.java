@@ -7,8 +7,8 @@ import java.util.List;
 public class AppVersion {
 
     /*
-        TODO: have a 'bugs' list with the bugs on or off
-        Bugs should be independent of versions so we can have the bug across different versions of the app
+        TODO:
+        Bugs could be independent of versions so we can have the bug across different versions of the app
         Have bugs toggleable in an admin interface
         Have collections of bugs so that we can associate them with versions of the app if we want to
         e.g. release 1, release 2, etc.

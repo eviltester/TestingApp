@@ -12,7 +12,9 @@ public class KnownBugs {
     }
 
     public enum Bug{
-        DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR
+        DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR,
+        TEMPLATE_ERROR_IN_SERIES_FAQ,
+        FAQ_PAGE_TITLE_ALWAYS_AUTHORS;
     }
 
     public boolean bugIsPresent(final Bug bugKey) {
@@ -27,6 +29,8 @@ public class KnownBugs {
     public void setDefault() {
         // by default
         knownBugs.put(Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR, false);
+        knownBugs.put(Bug.TEMPLATE_ERROR_IN_SERIES_FAQ, false);
+        knownBugs.put(Bug.FAQ_PAGE_TITLE_ALWAYS_AUTHORS, false);
     }
 
     public void setBugPresenceTo(final Bug bugKey, final boolean presence) {
