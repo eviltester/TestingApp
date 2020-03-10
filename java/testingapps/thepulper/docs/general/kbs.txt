@@ -19,7 +19,15 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 - search results does not show a "Showing X books." message at the bottom of the list, which would be helpful to see how many match
 - the reports do not have a printable CSS to change the formatting so it is not really a 'good' report
 - the reports have the "Showing All 364 books" bug as mentioned earlier
+- the drop down menus overlap and don't show properly on a small screen, the app needs to be more responsive in its layout.
 
+## v002
+
+- after adding a book, it could be useful to have a link to amend the book to allow adding a house author
+- after deleting an author and going 'back' I see "Cannot amend an unknown author"
+- amending an author, but not changing details says "Author name amended", but no changes took place
+- after creating a book, and viewing the book details is says "No House Author Assigned" but this is a clickable link to author -1, suspect this should not be a clickable link
+- when I amend a book with no house author, the house athors list shows 'all' the authors, it should only show house authors
 
 ## v003
 
@@ -27,11 +35,33 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 
 ## v004
 
-- delete house author, deletes all books for author, even if other authors on book
+- deleting a house author, deletes all books for author, even if other authors on the book, I don't think we should be doing this, we are allowed to have no house author on a book, but we are not allowed to create a book with no authors.
+- cannot delete book from list or table, only on author, publisher and series (book might have been a copy and past error in the story)
 
 ## v005
 
 - help content seems to have misleading information i.e. "GUI Uses Form Submissions" the [x] delete form submission was added in version 4
+
+## v006
+
+* user experience has changed, previously the "Added Author" was styled as an h2, now it is text `p` with an id of `outputmessage` - story says "no change to user experience"
+
+## v007
+
+* error message when adding a duplicate author from GUI has changed, i.e. it used to be "Could not add author" now it is "Error: Cannot create author. Author 'bob' already exists with id 25." - story says "should be no change to user experience on GUI"
+
+## v008
+
+* the history links on search result in a form based GET search, not the API search so the results look very different and the history is not shown
+* same with the full search link on the Ajax search results, this does a GET search, there is no way to do a GET search from the GUI other than this route.
+* the search results rendering from the Ajax search is different from the GET Search i.e. only title is shown, but GET search had links for author, series etc.
+* local storage is a CSV list but the csv list starts with a ','
+* the search history is only shown after doing a search, surely it should be shown when we visit the page to allow us to repeat a search at the point we want to do a search
+* if I search for "[null],death" then it is possible to break the rendering of the search history because this is shown as two separate searches "[[null]" and "death]"
+* why are so many cookies created? when I do a search there are JSESSIONID created for "/", "/apps/pulp/api", and "/apps/pulp/api/books" I think we should only have one for "/"
+* I thought the release aim mentioned using Cookies - did we add any functionality around cookies or just a bug?
+* API is not really a search API, it is more like a filter on the book title - are we sure that we implemented this correctly? If it was going to be a filter then shouldn't the argument be ?title= or possibly title~= for approximately = (I'm not sure how search is normally implemented in an API)
+
 
 ## v009
 

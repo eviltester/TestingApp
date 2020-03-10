@@ -2530,6 +2530,46 @@
 					]
 				}
 			]
+		},
+		{
+			"name": "search",
+			"item": [
+				{
+					"name": "search for title",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-AUTH",
+								"value": "{{x-api-auth}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/api/books?searchterm=death",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"books"
+							],
+							"query": [
+								{
+									"key": "searchterm",
+									"value": "death"
+								}
+							]
+						},
+						"description": "Search for a specific book title\n\nuse the searchterm query value as the search\n\nreturns a list of matching books"
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
