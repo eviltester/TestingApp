@@ -17,12 +17,13 @@ public class AppVersion {
     public static final int DEFAULT_VERSION = MAX_VERSION; // default to most recent
 
     AppVersionConfig settings = new AppVersionConfig();
+    private final KnownBugs knownBugs;
 
     int appVersion = DEFAULT_VERSION; // default starting app version
     private boolean versionAllowsShutdown=false;
 
     public AppVersion(final int version) {
-
+        knownBugs = new KnownBugs();
         setAppVersion(version);
     }
 
@@ -38,6 +39,7 @@ public class AppVersion {
 
         appVersion = version;
         settings = AppVersionConfig.getVersionConfigFor(version);
+        setKnownBugs(knownBugs);
     }
 
     public String getAppVersion(){
@@ -104,6 +106,9 @@ public class AppVersion {
     public void setKnownBugs(final KnownBugs knownBugs) {
         // for this version, set the known bugs
         AppVersionConfig.setKnownBugsVersionConfigFor(appVersion, knownBugs);
+    }
 
+    public KnownBugs bugs() {
+        return knownBugs;
     }
 }

@@ -10,6 +10,7 @@ import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reader.forseries.SavageReader;
 import com.javafortesters.pulp.reader.forseries.SpiderReader;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 import org.junit.Assert;
 import org.junit.Before;
@@ -147,10 +148,12 @@ public class DataDeletionTest {
 
         // deleting a house author when bug present will delete all books by that author
         // regardless of whether any other authors are listed on the book
-        KnownBugs bugs = new KnownBugs();
-        bugs.setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR, true);
+        AppVersion buggy = new AppVersion(AppVersion.DEFAULT_VERSION);
+        // hack in a bug
+        buggy.bugs().setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR, true);
 
-        books = new PulpData(bugs);
+
+        books = new PulpData(buggy);
         populateDataInBooks();
 
         int currentBooks = books.books().count();
