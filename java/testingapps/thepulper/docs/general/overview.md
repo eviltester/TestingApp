@@ -137,6 +137,8 @@ Inline delete links in the list (confirm required):
 
 Version 005 is a bug fix release for the "Show All X books." and now this should show the correct number and entity name for the various lists and reports in the application.
 
+Fixed bug - deleting house author deletes books.
+
 Released in 2018.
 
 ---
