@@ -6,6 +6,7 @@ import com.javafortesters.pulp.domain.objects.PulpPublisher;
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
 import com.javafortesters.pulp.reporting.filtering.BooksFilter;
 import com.javafortesters.pulp.reporting.filtering.PaginationDetails;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 import java.util.*;
 
@@ -14,12 +15,13 @@ public class PulpBooks {
     private int key;
     private ArrayList<PulpBook> books;
     private BooksFilter booksFilter;
+    private KnownBugs knownBugs;
 
-    public PulpBooks(){
+    public PulpBooks(final KnownBugs bugs){
         books = new ArrayList<>();
         key = 1;
         booksFilter = new BooksFilter(new ArrayList<>());
-
+        this.knownBugs = bugs;
     }
     public int count() {
         return books.size();
@@ -175,7 +177,10 @@ public class PulpBooks {
             if(aBook.isAuthoredBy(id)){
                 aBook.removeAuthor(id);
                 if(aBook.getHouseAuthorIndex()==null) {
-                    removeThese.add(aBook);
+                    // this is a bug we should not delete a book when we delete the house author
+                    if(knownBugs.bugIsPresent(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR)) {
+                        removeThese.add(aBook);
+                    }
                 }else{
                     if(aBook.getAuthorIndexes().size()==0){
                         removeThese.add(aBook);

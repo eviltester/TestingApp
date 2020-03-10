@@ -1,6 +1,7 @@
 package com.javafortesters.pulp.domain.groupings;
 
 import com.javafortesters.pulp.domain.objects.PulpBook;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 public class PulpData {
     private PulpAuthors theAuthors;
@@ -8,11 +9,15 @@ public class PulpData {
     private PulpSeriesCollection theSerieses;
     private PulpBooks theBooks;
 
-    public PulpData(){
+    public PulpData(KnownBugs bugs){
         theAuthors = new PulpAuthors();
         thePublishers = new PulpPublishers();
         theSerieses = new PulpSeriesCollection();
-        theBooks = new PulpBooks();
+        theBooks = new PulpBooks(bugs);
+    }
+
+    public static PulpData Empty() {
+        return new PulpData(new KnownBugs());
     }
 
     public PulpAuthors authors() {

@@ -15,7 +15,7 @@ public class DataPopulationTest {
     @Test
     public void canHaveAStaticDataPopulator(){
 
-        PulpData books = new PulpData();
+        PulpData books = PulpData.Empty();
         PulpDataPopulator populator = new PulpDataPopulator(books);
         SavageReader reader = new SavageReader("/data/pulp/doc_savage_test.csv");
         populator.populateFrom(reader);
@@ -56,7 +56,7 @@ public class DataPopulationTest {
     @Test
     public void canHaveAStaticDataPopulatorFromTheSpider(){
 
-        PulpData books = new PulpData();
+        PulpData books = PulpData.Empty();
         PulpDataPopulator populator = new PulpDataPopulator(books);
         PulpSeriesCSVReader reader = new SpiderReader("/data/pulp/the_spider_test.csv");
         populator.populateFrom(reader);

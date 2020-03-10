@@ -19,7 +19,7 @@ public class AppEndPointTest {
     @Test
     public void canGetBooksByAuthor(){
 
-        PulpData books = new PulpData();
+        PulpData books = PulpData.Empty();
         PulpDataPopulator populator = new PulpDataPopulator(books);
         SavageReader reader = new SavageReader("/data/pulp/doc_savage_test.csv");
         populator.populateFrom(reader);

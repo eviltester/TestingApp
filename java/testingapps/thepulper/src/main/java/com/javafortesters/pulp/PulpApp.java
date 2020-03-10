@@ -8,11 +8,13 @@ import com.javafortesters.pulp.reader.PulpDataPopulator;
 import com.javafortesters.pulp.reader.PulpSeriesCSVReader;
 import com.javafortesters.pulp.reporting.ReportConfig;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 import java.util.UUID;
 
 public class PulpApp {
 
+    private final KnownBugs knownBugs;
     private PulpData books;
     private PulpEntities entities;
     private String apisecret;
@@ -25,6 +27,7 @@ public class PulpApp {
     public PulpApp() {
 
         apisecret = UUID.randomUUID().toString();
+        knownBugs = new KnownBugs();
         reset();
     }
 
@@ -62,6 +65,7 @@ public class PulpApp {
     public void setAppVersion(final int version) {
 
         appVersion.setAppVersion(version);
+        appVersion.setKnownBugs(knownBugs);
         reports = new HtmlReports(books, appVersion, apisecret);
     }
 
@@ -87,9 +91,10 @@ public class PulpApp {
 
     public void reset() {
         // reset the data, keep the sessions and api secret the same
-        books = new PulpData();
+        books = new PulpData(knownBugs);
         //reports = new HtmlReports(books, this.appversion);
         appVersion = new AppVersion(AppVersion.DEFAULT_VERSION); //default to version
+        appVersion.setKnownBugs(knownBugs);
         reports = new HtmlReports(books, appVersion, apisecret);
         entities = new PulpEntities(books);
     }

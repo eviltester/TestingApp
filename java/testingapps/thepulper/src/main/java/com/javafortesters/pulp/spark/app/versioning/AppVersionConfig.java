@@ -11,6 +11,8 @@ public class AppVersionConfig {
     int displayedVersionNumber=1;
     private Map<String, String> configVariables = new HashMap();
 
+
+
     public boolean getSettingAsBoolean(final AppVersionSettings appVersionSetting) {
 
         return configSettings.get(appVersionSetting.getKey()).getBoolean();
@@ -152,6 +154,27 @@ public class AppVersionConfig {
         }
 
         return retConfig;
+    }
+
+    public static void setKnownBugsVersionConfigFor(final int appVersion, final KnownBugs knownBugs) {
+        knownBugs.setDefault();
+
+        switch(appVersion) {
+            case 4:
+                // first time we are deleting authors so deleting a house author deletes book
+                // regardless of any other authors
+                knownBugs.setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR, true);
+                break;
+
+            case 9:
+                // we added CRUD access via API and that brought back the bug
+                // about deleting house author
+                knownBugs.setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR, true);
+                break;
+
+            default:
+                // leave knownBugs at default level
+        }
     }
 
     private void setDisplayedVersionNumber(final int version) {

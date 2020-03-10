@@ -40,7 +40,7 @@ public class EntityResponse {
         errorResponses.add(new ActionEntityResponsePair(new ActionToDo().isError(statusCode, errorMessage),
                 new EntityResponse().asError()));
 
-        final BulkResponse bulkResponse = new BulkResponse(errorResponses, new PulpData());
+        final BulkResponse bulkResponse = new BulkResponse(errorResponses, PulpData.Empty());
 
         this.errorMessage = errorMessage;
         this.responseBody = bulkResponse.asEntityResponse().responseBody;

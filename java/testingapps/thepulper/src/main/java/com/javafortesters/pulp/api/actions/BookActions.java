@@ -168,7 +168,7 @@ public class BookActions {
         String errorMessage = "";
 
         BookEntity single=null;
-        BooksListEntity list= new BooksListEntity(new PulpData());
+        BooksListEntity list= new BooksListEntity(PulpData.Empty());
 
         try {
             single = new Gson().fromJson(body, BookEntity.class);

@@ -12,9 +12,6 @@ public class AppVersion {
         Have bugs toggleable in an admin interface
         Have collections of bugs so that we can associate them with versions of the app if we want to
         e.g. release 1, release 2, etc.
-
-
-
      */
     public static final int MAX_VERSION = 10;
     public static final int DEFAULT_VERSION = MAX_VERSION; // default to most recent
@@ -102,5 +99,11 @@ public class AppVersion {
 
     public String getVariable(final String name) {
         return settings.getVariableValue(name);
+    }
+
+    public void setKnownBugs(final KnownBugs knownBugs) {
+        // for this version, set the known bugs
+        AppVersionConfig.setKnownBugsVersionConfigFor(appVersion, knownBugs);
+
     }
 }

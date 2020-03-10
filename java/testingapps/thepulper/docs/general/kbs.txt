@@ -27,6 +27,8 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 
 ## v004
 
+- delete house author, deletes all books for author, even if other authors on book
+
 ## v005
 
 - help content seems to have misleading information i.e. "GUI Uses Form Submissions" the [x] delete form submission was added in version 4
@@ -46,6 +48,7 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 * on the Amend Publisher screen we lost the "View Publisher" and "List of Books by Publisher" links
 * on the Amend Series screen we lost the "View Series" and "List of Books in Series" links
 * if session expires then GUI will report an invalid X-API-AUTH session when using API calls from GUI, user has to refresh to get a new session, but that isn't obvious "Error: X-API-AUTH header is invalid - check in the GUI"
+* delete house author - deletes all books associated with author - regression from v5 fix
 
 ## v010
 
@@ -57,7 +60,10 @@ fixed
 * series amend form via api amends series
 * update number in list when delete an item
 * amend book via javascript
+* delete house author
 
 
 * there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does. Might need to use a PUT for this.
 * a book can have multiple authors but the API call does not support this, only a single author is provided.
+* current count shown at bottom of list when item is deleted, is updated for the numbers shown on screen, not the actual numbers on the server i.e. mult-window delete shows wrong list of items in list and wrong count - list refresh is not performed from server, just a delete request issued.
+
