@@ -37,7 +37,7 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 
 ## v004
 
-fixed series template error
+fixed faq series template error
 
 - deleting a house author, deletes all books for author, even if other authors on the book, I don't think we should be doing this, we are allowed to have no house author on a book, but we are not allowed to create a book with no authors.
 - cannot delete book from list or table, only on author, publisher and series (book might have been a copy and past error in the story)
