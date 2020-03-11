@@ -23,6 +23,8 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 
 ## v002
 
+fixed issue with drop down menu overlap
+
 - after adding a book, it could be useful to have a link to amend the book to allow adding a house author
 - after deleting an author and going 'back' I see "Cannot amend an unknown author"
 - amending an author, but not changing details says "Author name amended", but no changes took place
@@ -34,6 +36,7 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 - help file has bug where version change "Books FAQ page accessible from drop down menu" is listed twice
 - the series FAQ list has a template error so one of the FAQs does not work _Is "!!name!"! pulp available to download as pdf?_
 - the title of every FAQs page is "Authors with FAQs"
+- menu titles are inconsistent e.g. mix of FAQs and FAQ "Years > FAQs" and "Series > FAQ"
 
 ## v004
 

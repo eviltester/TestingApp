@@ -38,7 +38,7 @@
     background:#ddd
 }
 
-#primary_nav_wrap ul li:hover
+#primary_nav_wrap ul li:hover, #primary_nav_wrap ul li.shownow
 {
     background:#f6f6f6
 }
@@ -71,7 +71,7 @@
     left:100%
 }
 
-#primary_nav_wrap ul li:hover > ul
+#primary_nav_wrap ul li:hover > ul, #primary_nav_wrap ul li.shownow > ul
 {
     display:block;
     z-index:100;
