@@ -16,6 +16,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static spark.Spark.halt;
 
+// TODO: trim down logging
+// TODO: make the gc dependent on how many have been deleted e.g. if more than 100 then trigger a gc?
+// TODO: make the delete dependent on time based on number of sessions e.g. < 100, 15 mins, 101 - 300, 5 mins, 300 - 400 3 mins, 400+ 1min
+// TODO: create an admin page showing number of sessions
+// TODO: create a detailed admin page showing settings, number of sessions, created, last used, life, and button to [trim]
+
 /*
     This got overly complicated - do not store sessions with the mapping
     map: sessionid x pulp app x last accessed time
@@ -159,6 +165,8 @@ public class SessionMapping {
             System.out.println("Deleted session " + sessionKey);
         }
 
+        System.out.println("Total Sessions active : " + api_session_mapping.size());
+
         System.gc();
     }
 
@@ -275,6 +283,7 @@ public class SessionMapping {
         SessionAppMapping guiSessionMapping;
 
         if(guiSession==null && sessionMapping!=null){
+
             // could not find aGUI session but we found an API session
             // create the GUI session and associate it with the App from the API session
             guiSession = req.session();

@@ -213,6 +213,10 @@ public class PulpAppForSpark {
                 return apiEntityResponse(res, new EntityResponse().setSuccessStatus(201, "{}"));
             });
 
+            // TODO: experiment with a getPulpAppForApiView where view returns a readonly version unless used getPulpAppForApiRW where RW changes to a writable
+            // TODO: note that the X-API-AUTH for view/readonly would need to be replaced with a new one in the mapping
+            // TODO: note that the X-API-AUTH for readwrite would need to be replaced with the one in the mapping when the new app is created
+            // TODO: same for the getPulpApp
             head("", (req, res) -> {
                 final EntityResponse response = sessions.getPulpAppForApi(req.headers("X-API-AUTH")).entities().getAuthor(req.params(":authorid"), req.headers("Accept"));
                 return apiEmptyEntityResponse(res, response);
