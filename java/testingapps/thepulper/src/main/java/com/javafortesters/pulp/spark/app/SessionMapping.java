@@ -8,7 +8,6 @@ import com.javafortesters.pulp.reader.forseries.TheAvengerReader;
 import spark.Request;
 import spark.Session;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,19 +16,98 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static spark.Spark.halt;
 
+/*
+    This got overly complicated - do not store sessions with the mapping
+    map: sessionid x pulp app x last accessed time
+
+    request (with session) -> find the app for this session id
+
+    we will track last accessed using system time
+    and if system time goes beyond the point we want,
+    we will delete this from the system
+ */
+
+class SessionAppMapping {
+    String sessionKey;
+    PulpApp app;
+    long createdTime;
+    long lastAccessedTime;
+
+    static long MAX_SESSION_TIME_MILLIS = SessionMapping.MAX_SESSION_LENGTH * 1000;
+
+    public SessionAppMapping(final String sessionKey, final PulpApp sessionPulpApp) {
+        this.sessionKey = sessionKey;
+        this.app = sessionPulpApp;
+        createdTime = System.currentTimeMillis();
+        updateAccessTime();
+    }
+
+    private void updateAccessTime() {
+        lastAccessedTime = System.currentTimeMillis();
+    }
+
+    public boolean shouldRemove() {
+
+        // if it doesn't have an app
+        if(this.app==null){
+            return true;
+        }
+
+        // if it is too old
+        long timeSinceLastUsageMillis = System.currentTimeMillis() - lastAccessedTime;
+        if(timeSinceLastUsageMillis > MAX_SESSION_TIME_MILLIS) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void invalidateForRemoval() {
+        if(app!=null){
+            app.invalidate();
+        }
+
+        app=null;
+    }
+
+
+    public void debugOutput() {
+        System.out.println("session.lastAccessedTime() " + lastAccessedTime);
+        System.out.println("session.creationTime() " + createdTime);
+        System.out.println("current time " + System.currentTimeMillis());
+        long currentTimeLastAccessedSeconds = ((System.currentTimeMillis() - lastAccessedTime) / 1000 / 60);
+        System.out.println("current time - last accessed seconds " + currentTimeLastAccessedSeconds);
+        if (currentTimeLastAccessedSeconds > (60 * 5)) {
+            System.out.println("I SHOULD DELETE THIS SESSION");
+        }
+    }
+
+    public PulpApp getApp() {
+        return app;
+    }
+
+    public boolean sessionIdMatches(final String id) {
+        return sessionKey.equalsIgnoreCase(id);
+    }
+
+
+    public String getSessionId() {
+        return sessionKey;
+    }
+}
+
 public class SessionMapping {
 
-    private static final String SESSION_APP = "sessionPulpApp";
+    public static final String SESSION_ATTRIBUTE = "validity";
     private final boolean allowsShutdown;
 
-    private Map<String, Session> api_session_mapping= new ConcurrentHashMap<>();
-
-    private static final String SESSION_API_SECRET = "apisecret";
+    // instead of storing apps in sessions I am going to create an
+    // object to map them
+    private Map<String, SessionAppMapping> api_session_mapping= new ConcurrentHashMap<>();
 
     // TODO: make max session configurable through environment variables
-    private static final int MAX_SESSION_LENGTH = 60*3;  // set max session without interactivity to 5 minutes
-    private static final long CHECK_FOR_EXPIRED_API_SESSIONS_EVERY_MILLIS = 60*1*1000;  // checkfor expired api sessions every 3 minutes
-    private static final long CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS = 60*1*1000;  // checkfor expired GUI sessions every 2 minutes
+    public static final int MAX_SESSION_LENGTH = 60*5;  // set max session without interactivity to 5 minutes
+    private static final long CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS = 60*1*1000;  // checkfor expired sessions every minute
 
 
     long lastDeleteExpiredCheck=0;
@@ -39,35 +117,13 @@ public class SessionMapping {
         this.allowsShutdown = allowsShutdown;
     }
 
-    public void deleteExpiredAPISessions() {
-
-        long currentCheck = System.currentTimeMillis();
-        long timeSinceLastCheck = currentCheck-lastDeleteExpiredCheck;
-        long checkInXMilliseconds = timeSinceLastCheck-CHECK_FOR_EXPIRED_API_SESSIONS_EVERY_MILLIS;
-
-        if(checkInXMilliseconds<0){
-            System.out.println("Check for expired API sessions in milliseconds time " + (checkInXMilliseconds*-1));
-            return;
-        }
-
-        lastDeleteExpiredCheck=currentCheck;
-
-        for(String sessionKey : api_session_mapping.keySet()){
-            Session session = api_session_mapping.get(sessionKey);
-            System.out.println("checking session " + sessionKey);
-            if(session==null){
-                System.out.println("session is null removing... " + sessionKey);
-                api_session_mapping.remove(sessionKey);
-            }else {
-                try {
-                    System.out.println("checking session validity... " + sessionKey);
-                    final PulpApp app = session.attribute(SESSION_APP);
-                } catch (Exception e) {
-                    System.out.println("automatically removed api session " + sessionKey);
-                    api_session_mapping.remove(sessionKey);
-                }
+    public SessionAppMapping findSessionMapping(String sessionId){
+        for(SessionAppMapping mapping : api_session_mapping.values()){
+            if(mapping.sessionIdMatches(sessionId)){
+                return mapping;
             }
         }
+        return null;
     }
 
     public void deleteAnyInvalidSessions(){
@@ -77,7 +133,7 @@ public class SessionMapping {
         long checkInXMilliseconds = timeSinceLastCheck-CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS;
 
         if(checkInXMilliseconds<0){
-            System.out.println("Check for expired GUI sessions in milliseconds time " + (checkInXMilliseconds*-1));
+            System.out.println("Check for expired sessions in milliseconds time " + (checkInXMilliseconds*-1));
             return;
         }
 
@@ -86,63 +142,24 @@ public class SessionMapping {
         List<String> deleteThese = new ArrayList<>();
 
         for(String sessionKey : api_session_mapping.keySet()){
-            try {
-                System.out.println("checking gui session " + sessionKey);
-                Session session = api_session_mapping.get(sessionKey);
-                System.out.println("session.lastAccessedTime() " + session.lastAccessedTime());
-                System.out.println("session.creationTime() " + session.creationTime());
-                System.out.println("session.maxInactiveInterval() " + session.maxInactiveInterval());
-                System.out.println("current time " + System.currentTimeMillis());
-                long currentTimeLastAccessedSeconds = ((System.currentTimeMillis()-session.lastAccessedTime())/1000/60);
-                System.out.println("current time last accessed seconds" + ((System.currentTimeMillis()-session.lastAccessedTime())/1000/60));
-                if(currentTimeLastAccessedSeconds > 60*5){
-                    System.out.println("I SHOULD DELETE THIS SESSION");
-                }
-
-                PulpApp sessionPulpApp=session.attribute(SESSION_APP);
-            }catch (Exception e){
+            System.out.println("checking session " + sessionKey);
+            SessionAppMapping session = api_session_mapping.get(sessionKey);
+            if(session.shouldRemove()){
                 System.out.println("Delete invalid session " + sessionKey);
-                System.out.println(e.getMessage());
+                session.debugOutput();
                 deleteThese.add(sessionKey);
             }
         }
 
         for(String sessionKey :  deleteThese){
-            Session session=null;
-
-            try{
-                System.out.println("Clearing session " + sessionKey);
-                session = api_session_mapping.get(sessionKey);
-            }catch(Exception e){
-                System.out.println("Could not clear down session " + sessionKey);
-                System.out.println(e.getMessage());
-            }
-            try {
-                System.out.println("Nulling app attribute " + sessionKey);
-                session.attribute(SESSION_APP, null);
-            } catch (Exception e) {
-                System.out.println("FAILED Nulling app attribute " + sessionKey);
-                e.printStackTrace();
-            }
-            try {
-                System.out.println("Removing app attribute " + sessionKey);
-                session.removeAttribute(SESSION_APP);
-            } catch (Exception e) {
-                System.out.println("FAILED Removing app attribute " + sessionKey);
-                e.printStackTrace();
-            }
-            try {
-                System.out.println("Invalidating session " + sessionKey);
-                session.invalidate();
-            } catch (Exception e) {
-                System.out.println("FAILED Invalidating session" + sessionKey);
-                e.printStackTrace();
-            }
-
-
+            System.out.println("Deleting invalid session " + sessionKey);
+            SessionAppMapping session = api_session_mapping.get(sessionKey);
+            session.invalidateForRemoval();
             api_session_mapping.remove(sessionKey);
             System.out.println("Deleted session " + sessionKey);
         }
+
+        System.gc();
     }
 
     public PulpApp createSessionFor(Request req, final String xapiauth_sessionid) {
@@ -160,8 +177,6 @@ public class SessionMapping {
         sessionPulpApp.readData(new SpiderReader("/data/pulp/the_spider.csv"));
         sessionPulpApp.readData(new TheAvengerReader("/data/pulp/the_avenger.csv"));
 
-        session.attribute(SESSION_APP, sessionPulpApp);
-
         // For an API to be valid you have to access the GUI first
         String appApiKey = xapiauth_sessionid;
         if(xapiauth_sessionid.length()==0) {
@@ -170,11 +185,13 @@ public class SessionMapping {
             sessionPulpApp.setApiSecret(xapiauth_sessionid);
         }
 
-        session.attribute(SESSION_API_SECRET, appApiKey);
+        SessionAppMapping mapping = new SessionAppMapping(session.id(), sessionPulpApp);
 
-        System.out.println(appApiKey);
-        api_session_mapping.put(appApiKey, session);
+        System.out.println("Created new Session");
+        System.out.println("JSESSIONID: " + session.id());
+        System.out.println("API-KEY: " + appApiKey);
 
+        api_session_mapping.put(appApiKey, mapping);
 
         System.out.println("Session count " + api_session_mapping.size());
 
@@ -182,6 +199,9 @@ public class SessionMapping {
     }
 
 
+    /*
+        given a request, return the associated pulp app
+     */
     public PulpApp getPulpApp(Request req){
 
         final PulpApp app = getPulpAppSession(req);
@@ -227,78 +247,70 @@ public class SessionMapping {
 
         PulpApp sessionPulpApp;
 
-        Session session=null;
+        SessionAppMapping sessionMapping=null;
 
+        // delete any old unused sessions
         deleteAnyInvalidSessions();
 
+        // we can use the app for any session if we know what the X-API-AUTH is
         // if the request contains a cookie or header of X-API-AUTH then try to find that session
         final Collection<String> cookieValues = getCookieValueFromRequest(req, "X-API-AUTH");
         for(String authcode : cookieValues){
-            session = api_session_mapping.get(authcode);
-            if(session!=null){
+            sessionMapping = api_session_mapping.get(authcode);
+            if(sessionMapping!=null){
                 break;
             }
         }
 
-        session = nullifyIfNotValid(session);
-
         // if there is an X-API-AUTH header then find that session
-        if(session==null){
+        if(sessionMapping==null){
             final String header = req.headers("X-API-AUTH");
             if(header!=null) {
-                session = api_session_mapping.get(header);
+                sessionMapping = api_session_mapping.get(header);
             }
         }
 
-        session = nullifyIfNotValid(session);
-
-        // do we have a gui session?
+        // do we have an existing gui session?
         Session guiSession = req.session(false);
+        SessionAppMapping guiSessionMapping;
 
-        if(guiSession==null && session!=null){
+        if(guiSession==null && sessionMapping!=null){
             // could not find aGUI session but we found an API session
             // create the GUI session and associate it with the App from the API session
             guiSession = req.session();
             guiSession.maxInactiveInterval(MAX_SESSION_LENGTH);
-            sessionPulpApp = session.attribute(SESSION_APP);
-            guiSession.attribute(SESSION_APP, sessionPulpApp);
+            sessionPulpApp = sessionMapping.getApp();
 
-            // a GUI request was made, is the API still valid? or has it been removed?
-            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
-                api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSession);
-            }
+            guiSessionMapping = new SessionAppMapping(guiSession.id(), sessionPulpApp);
+
+            api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSessionMapping);
 
             return sessionPulpApp;
-
         }
 
-        if(guiSession==null && session==null){
-            // no GUI session, and no API session, create default GUI Session
+        if(guiSession==null && sessionMapping==null){
+            // no GUI session, and no API session, create new default GUI Session
             return createSessionFor(req, "");
         }
 
-        if(guiSession!=null && session==null){
-            // we have a gui session, and no api session so return the app
-            // no GUI session, and no API session, create default GUI Session
-            sessionPulpApp = guiSession.attribute(SESSION_APP);
-            // a GUI request was made, is the API still valid? or has it been removed?
-            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
-                api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSession);
-            }
+        if(guiSession!=null && sessionMapping==null){
+            // we have an existing gui session, and no api session so return the app
 
-            return sessionPulpApp;
+            guiSessionMapping = findSessionMapping(guiSession.id());
+            if(guiSessionMapping!=null){
+                sessionPulpApp = guiSessionMapping.getApp();
+                return sessionPulpApp;
+            }
         }
 
-        if(guiSession!=null && session!=null){
-            // we have a gui session, and an api session
+        if(guiSession!=null && sessionMapping!=null){
+            // we have an existing gui session, and an api session
             // replace the gui session app with the api session app
             // no GUI session, and no API session, create default GUI Session
-            sessionPulpApp = session.attribute(SESSION_APP);
-            guiSession.attribute(SESSION_APP, sessionPulpApp);
-            // a GUI request was made, is the API still valid? or has it been removed?
-            if (api_session_mapping.get(sessionPulpApp.getAPISecret()) == null) {
-                api_session_mapping.put(sessionPulpApp.getAPISecret(), session);
-            }
+            sessionPulpApp = sessionMapping.getApp();
+            guiSessionMapping = new SessionAppMapping(guiSession.id(), sessionPulpApp);
+
+            api_session_mapping.put(sessionPulpApp.getAPISecret(), guiSessionMapping);
 
             return sessionPulpApp;
         }
@@ -307,90 +319,25 @@ public class SessionMapping {
         return null;
     }
 
-    private Session nullifyIfNotValid(final Session session) {
-        if(session!=null){
-            // check if the session is valid by trying to use it
-            try{
-                session.attribute(SESSION_APP);
-            }catch(Exception e){
-                // session is invalid, do not use it
-                return null;
-            }
-        }
-        return session;
-    }
-
-
-
     public PulpApp getPulpAppForApi(String api_auth_header){
-        final Session session = api_session_mapping.get(api_auth_header);
-        PulpApp sessionPulpApp=null;
-        try{
-            // access session to see if it is still alive
-            sessionPulpApp = session.attribute(SESSION_APP);
-
-            hackGuiSessionToKeepItAliveFromApi(session, System.currentTimeMillis());
-
-
-        }catch(Exception e){
-            // session is not valid
-            if(session!=null) {
-                try {
-                    session.invalidate();
-                }catch(Exception invalidateException){
-
-                }
-            }
-            api_session_mapping.remove(api_auth_header);
-
+        final SessionAppMapping sessionMapping = api_session_mapping.get(api_auth_header);
+        if(sessionMapping==null){
             halt(401, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI").getResponseBody());
         }
-        return sessionPulpApp;
+        return sessionMapping.getApp();
     }
 
     public String getSessionCookieForApi(String api_auth_header){
-        final Session session = api_session_mapping.get(api_auth_header);
-        PulpApp sessionPulpApp=null;
-        try{
-            // access session to see if it is still alive
-            sessionPulpApp = session.attribute(SESSION_APP);
-
-            return hackGuiSessionToKeepItAliveFromApi(session, System.currentTimeMillis());
-
-        }catch(Exception e){
+        final SessionAppMapping sessionMapping = api_session_mapping.get(api_auth_header);
+        if(sessionMapping!=null){
+            return sessionMapping.getSessionId();
         }
         return "";
     }
 
-    private String hackGuiSessionToKeepItAliveFromApi(final Session session, final long currentTimeMillis){
-        // wanted to have the API keep the session alive
-        // tried to use reflection to change lastaccessedtime on the session byt that didn't extend time
-        // instead, pull out the JSESSIONID and send it back in SET-COOKIE responses
-
-        try{
-
-            Field subsession = session.getClass().getDeclaredField("session");
-            subsession.setAccessible(true);
-            org.eclipse.jetty.server.session.Session theSessionWithData = (org.eclipse.jetty.server.session.Session) subsession.get(session);
-            Field theData = theSessionWithData.getClass().getDeclaredField("_sessionData");
-            theData.setAccessible(true);
-            final org.eclipse.jetty.server.session.SessionData theSessionData = (org.eclipse.jetty.server.session.SessionData) theData.get(theSessionWithData);
-
-            return theSessionData.getId();
-
-        }catch(NoSuchFieldException e){
-            // couldn't do it
-            System.out.println("Could not keep session alive");
-        } catch (IllegalAccessException e) {
-            System.out.println("Could not keep session alive - illegal access");
-            e.printStackTrace();
-        }
-
-        return "";
-
-    }
-
-    public Session getSessionForX_API_AUTH(final String x_api_auth_header) {
+    public SessionAppMapping getSessionForX_API_AUTH(final String x_api_auth_header) {
         return api_session_mapping.get(x_api_auth_header);
     }
+
+
 }

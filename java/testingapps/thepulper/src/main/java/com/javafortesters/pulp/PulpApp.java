@@ -87,6 +87,13 @@ public class PulpApp {
     }
 
 
+    public void invalidate(){
+        appVersion=null;
+        books=null;
+        reports=null;
+        entities=null;
+    }
+
     public void reset() {
 
         // reset the data, keep the sessions and api secret the same

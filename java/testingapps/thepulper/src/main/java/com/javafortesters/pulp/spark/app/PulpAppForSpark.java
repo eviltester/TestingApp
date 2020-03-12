@@ -150,14 +150,14 @@ public class PulpAppForSpark {
                 }
 
                 // check if the API AUTH is known to us
-                Session session = sessions.getSessionForX_API_AUTH(request.headers("X-API-AUTH"));
+                SessionAppMapping session = sessions.getSessionForX_API_AUTH(request.headers("X-API-AUTH"));
                 if (session == null) {
                     halt(401, apiEntityResponse(response, new EntityResponse().setErrorStatus(401, "X-API-AUTH header is invalid - check in the GUI")));
                 }
             }
 
             // delete any expired sessions for tidy up
-            sessions.deleteExpiredAPISessions();
+            sessions.deleteAnyInvalidSessions();
 
             if(authNeeded) {
                 final String jsessionid = sessions.getSessionCookieForApi(request.headers("X-API-AUTH"));
@@ -183,9 +183,9 @@ public class PulpAppForSpark {
                 if(authCode==null || authCode.length()==0){
                     halt(401, apiEntityResponse(res, new EntityResponse().setErrorStatus(401, "Invalid X-API-AUTH header")));
                 }
-                Session session = null;
-                session = sessions.getSessionForX_API_AUTH(authCode);
-                if(session!=null){
+                SessionAppMapping sessionMapping = null;
+                sessionMapping = sessions.getSessionForX_API_AUTH(authCode);
+                if(sessionMapping!=null){
                     // session exists
                     halt(204, "");
                 }
