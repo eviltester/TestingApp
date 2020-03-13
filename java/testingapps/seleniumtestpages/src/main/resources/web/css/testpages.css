@@ -61,6 +61,16 @@ div.page-footer:before{
     margin-top: 10em;
 }
 
+div.verticalspace{
+      padding-top: 1em;
+      margin-top: 1em;
+}
+
+.withwhitespacesurround{
+    padding: 0.5em;
+    margin: 0.5em;
+}
+
 div.page-footer{
     text-align: center;
     margin: 10em;
