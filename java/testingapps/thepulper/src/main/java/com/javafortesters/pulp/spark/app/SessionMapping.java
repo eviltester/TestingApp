@@ -17,8 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static spark.Spark.halt;
 
 // TODO: trim down logging
-// TODO: make the gc dependent on how many have been deleted e.g. if more than 100 then trigger a gc?
-// TODO: make the delete dependent on time based on number of sessions e.g. < 100, 15 mins, 101 - 300, 5 mins, 300 - 400 3 mins, 400+ 1min
+// TODO: introduce a logout as a way of having user triggered session deletion and tidy up
 // TODO: create an admin page showing number of sessions
 // TODO: create a detailed admin page showing settings, number of sessions, created, last used, life, and button to [trim]
 
@@ -132,11 +131,38 @@ public class SessionMapping {
         return null;
     }
 
+    public long checkForExpiredGUISessionPeriod(){
+
+        // this is a millisecond period
+        // with fewer sessions we can extend this time period
+        // make the delete dependent on time based on number of sessions e.g. < 100, 15 mins,
+        // 101 - 300, 5 mins, 300 - 400 3 mins, 400+ 1min
+
+        int numberOfSessions = api_session_mapping.size();
+
+        if(numberOfSessions<100){
+            return 900000L; //60*15*1000; // 15 mins
+        }
+
+        if(numberOfSessions<300){
+            return 300000L; //60*5*1000; // 5 mins
+        }
+
+        if(numberOfSessions<400){
+            return 180000L; //60*3*1000; // 3 mins
+        }
+
+        // return default
+        return CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS;
+    }
+
+    int deletedSessionCount=0;
+
     public void deleteAnyInvalidSessions(){
 
         long currentCheck = System.currentTimeMillis();
         long timeSinceLastCheck = currentCheck-lastDeleteGUIExpiredCheck;
-        long checkInXMilliseconds = timeSinceLastCheck-CHECK_FOR_EXPIRED_GUI_SESSIONS_EVERY_MILLIS;
+        long checkInXMilliseconds = timeSinceLastCheck-checkForExpiredGUISessionPeriod();
 
         if(checkInXMilliseconds<0){
             System.out.println("Check for expired sessions in milliseconds time " + (checkInXMilliseconds*-1));
@@ -163,11 +189,16 @@ public class SessionMapping {
             session.invalidateForRemoval();
             api_session_mapping.remove(sessionKey);
             System.out.println("Deleted session " + sessionKey);
+            deletedSessionCount++;
         }
 
         System.out.println("Total Sessions active : " + api_session_mapping.size());
 
-        System.gc();
+        if(deletedSessionCount>100) {
+            deletedSessionCount=0;
+            // tell system that some garbage collection might be wise
+            System.gc();
+        }
     }
 
     public PulpApp createSessionFor(Request req, final String xapiauth_sessionid) {
