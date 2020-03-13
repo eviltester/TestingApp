@@ -147,6 +147,17 @@ public class AppVersionConfig {
                 retConfig.setVariable("COPYRIGHTDATE","2020");
                 retConfig.setDisplayedVersionNumber(10);
                 break;
+            case 11:
+                // specific version 11 config here
+                // fixed version of the API code
+                retConfig.setSetting(AppVersionSettings.TITLE_LINKS_TO_BOOKS_LIST, false);
+                retConfig.setSetting(AppVersionSettings.HTML_TAGS_EASY_TO_AUTOMATE, true);
+                retConfig.setSetting(AppVersionSettings.AMEND_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.DELETE_LINKS_SHOWN_IN_LIST, true);
+                retConfig.setSetting(AppVersionSettings.LISTS_SHOWING_CORRECT_NUMBER_OF_THINGS, true);
+                retConfig.setVariable("COPYRIGHTDATE","2020");
+                retConfig.setDisplayedVersionNumber(11);
+                break;
             default:
                 // use all the defaults - careful now
                 // this is because we didn't configure the version
@@ -186,6 +197,11 @@ public class AppVersionConfig {
             knownBugs.setBugPresenceTo(KnownBugs.Bug.FAQ_PAGE_TITLE_ALWAYS_AUTHORS, true);
         }
 
+        if(appVersion<11){
+            // we did not fix the bug where if we delete a house author first then we can get a book with no authors
+            // this is present since version 4
+            knownBugs.setBugPresenceTo(KnownBugs.Bug.DELETE_HOUSE_AUTHOR_FIRST_ALLOWS_CREATING_BOOK_WITH_NO_AUTHORS, true);
+        }
     }
 
     private void setDisplayedVersionNumber(final int version) {

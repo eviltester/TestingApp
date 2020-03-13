@@ -176,17 +176,18 @@ public class PulpBooks {
         List<PulpBook> removeThese = new ArrayList<>();
         for(PulpBook aBook : books){
             if(aBook.isAuthoredBy(id)){
-                aBook.removeAuthor(id);
+                aBook.removeAuthor(id, appversion);
                 if(aBook.getHouseAuthorIndex()==null) {
                     // this is a bug we should not delete a book when we delete the house author
                     if(appversion.bugs().bugIsPresent(KnownBugs.Bug.DELETE_BOOK_WHEN_DELETING_HOUSE_AUTHOR)) {
                         removeThese.add(aBook);
                     }
-                }else{
-                    if(aBook.getAuthorIndexes().size()==0){
-                        removeThese.add(aBook);
-                    }
                 }
+
+                if(aBook.getAuthorIndexes().size()==0){
+                    removeThese.add(aBook);
+                }
+
             }
         }
 

@@ -13,7 +13,7 @@ public class AppVersion {
         Have collections of bugs so that we can associate them with versions of the app if we want to
         e.g. release 1, release 2, etc.
      */
-    public static final int MAX_VERSION = 10;
+    public static final int MAX_VERSION = 11;
     public static final int DEFAULT_VERSION = MAX_VERSION; // default to most recent
 
     AppVersionConfig settings = new AppVersionConfig();

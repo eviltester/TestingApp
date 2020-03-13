@@ -1,6 +1,8 @@
 package com.javafortesters.pulp.domain.objects;
 
 import com.javafortesters.pulp.reporting.filtering.BookFilter;
+import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -285,7 +287,7 @@ public class PulpBook {
         return true;
     }
 
-    public void removeAuthor(final String id) {
+    public void removeAuthor(final String id, final AppVersion appversion) {
         if(id==null){
             return;
         }
@@ -295,6 +297,16 @@ public class PulpBook {
         }
 
         authorIndexNames.remove(id);
+
+        if(appversion.bugs().bugIsPresent(KnownBugs.Bug.DELETE_HOUSE_AUTHOR_FIRST_ALLOWS_CREATING_BOOK_WITH_NO_AUTHORS)) {
+
+        }else {
+            //fix bug where if houseAuthorIndexName is null then we get a blank author on the book
+            if (houseAuthorIndexName == null) {
+                return;
+            }
+        }
+
         if(houseAuthorIndexName.contentEquals(id)){
             houseAuthorIndexName=null;
         }

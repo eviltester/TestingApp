@@ -50,6 +50,7 @@ fixed faq series template error
 fixed bug title of FAQs page
 
 - help content seems to have misleading information i.e. "GUI Uses Form Submissions" the [x] delete form submission was added in version 4
+- there is a bug with the house author deletion, if you delete the house author before deleting the last author then you can create a book with no authors
 
 ## v006
 
@@ -105,4 +106,10 @@ fixed
 * there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does. Might need to use a PUT for this.
 * a book can have multiple authors but the API call does not support this, only a single author is provided.
 * current count shown at bottom of list when item is deleted, is updated for the numbers shown on screen, not the actual numbers on the server i.e. mult-window delete shows wrong list of items in list and wrong count - list refresh is not performed from server, just a delete request issued.
+* there is a bug with the house author deletion, if you delete the house author before deleting the last author then you can create a book with no authors (present since v 5), in v10 this is shown as a failed ajax call as well as book display
 
+## v011
+
+fixed
+
+* delete house author prior to deleting last author
