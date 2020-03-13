@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>The Coloured Square Changing Game</title>
-
+	<link rel="stylesheet" href="/css/testpages.css">
 <script type="text/javascript">
 
 var colours = ["blue", "white", "green", "black", "pink", "red", "grey"];
@@ -186,6 +186,8 @@ setTimerChangeButtonColour();
 </script>
 
 </head>
+<body>
+<div class="page-body">
 <h1>The Coloured Square Changing Game</h1>
 <p>The aim of the game is to Press the [It is ...] button, when the square is the same colour as the button, to score a point.</p>
 <p>Get it wrong and lose a life.</p>
@@ -203,4 +205,6 @@ setTimerChangeButtonColour();
 </table>
 
 <p><button id="theButton" style="background-color:red" onclick="checkColour()">It is ...Red</button><span id="theButtonColour"></span></p>
+</div>
+</body>
 </html>

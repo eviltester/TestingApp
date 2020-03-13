@@ -15,6 +15,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>uk.co.compendiumdev.testing</groupId>
+            <artifactId>shared-styles</artifactId>
+            <version>${sharedstyles.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>${spark.version}</version>

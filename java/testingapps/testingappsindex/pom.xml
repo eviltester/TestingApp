@@ -15,6 +15,15 @@
     <artifactId>testingappsindexpage</artifactId>
     <version>${testingindexpage.version}</version>
 
+
+    <dependencies>
+        <dependency>
+            <groupId>uk.co.compendiumdev.testing</groupId>
+            <artifactId>shared-styles</artifactId>
+            <version>${sharedstyles.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
 
         <plugins>

@@ -2,6 +2,7 @@
 <head>
 <title>The Grid Walker Game</title>
 <!-- tested on Firefox 45.0.1, IE11, Chrome -->
+	<link rel="stylesheet" href="/css/testpages.css">
 <style>
 td{
 	padding: 15px;
@@ -218,6 +219,9 @@ function checkWin(){
 </script>
 
 </head>
+<body>
+<div class="page-body">
+
 <h1>The Grid Walker Game</h1>
 <p>The aim of the game is to walk through the grid and exit with a total score ending in zero.</p>
 <p>You can only walk left, right, up, or down.</p>
@@ -239,4 +243,6 @@ function checkWin(){
 </table>
 <button id="exitButton" onclick="checkWin()">Exit The Grid</button>
 <p><strong>Total Score:</strong> <span id="scoretally">0</span> | <strong>Moves:</strong> <span id="movestally">0</span> | <strong>Position:</strong> <span id="atcell">0</span></p>
+</div>
+</body>
 </html>

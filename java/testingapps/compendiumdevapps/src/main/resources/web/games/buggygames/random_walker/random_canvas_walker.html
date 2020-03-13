@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>Random Canvas Walker</title>
-
+  <link rel="stylesheet" href="/css/testpages.css">
   <script>
     // - game is to 'edit' the route in situ to make it to the exit faster
     // [x]  canvas or Dom to render?
@@ -212,7 +212,7 @@
   </script>
 </head>
 <body>
-
+<div class="page-body">
   <canvas id="myCanvas" width="200" height="200"></canvas><br/>
   <input id="manMoves" type="text"/>
 
@@ -226,6 +226,7 @@
     var theManRouteTimer = window.setInterval(updateManRouteLoop, 500);
 
   </script>
+</div>
 </body>
 
 </html>

@@ -16,7 +16,7 @@ public class DocumentationTest {
     public void canConvertMarkdownToHTML() throws IOException {
 
         DocumentationGenerator docs = new DocumentationGenerator();
-        String expectedStart = "<html><head><title>REST Listicator Instructions</title></head><body>";
+        String expectedStart = "<html><head><title>REST Listicator Instructions</title>";
         System.out.println(docs.getInstructionsAsHTMLPage("REST Listicator Instructions"));
         Assert.assertEquals(expectedStart, docs.getInstructionsAsHTMLPage("REST Listicator Instructions").substring(0,expectedStart.length()));
 

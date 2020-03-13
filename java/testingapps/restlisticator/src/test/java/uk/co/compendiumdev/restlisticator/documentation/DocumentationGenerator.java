@@ -69,8 +69,12 @@ public class DocumentationGenerator {
         StringBuilder page = new StringBuilder();
         page.append("<html><head><title>");
         page.append(title);
-        page.append("</title></head><body>");
+        page.append("</title>");
+        page.append("<link rel=\"stylesheet\" href=\"/css/testpages.css\">\n");
+        page.append("</head><body>");
+        page.append("<div class=\"page-body\">");
         page.append(getInstructionsAsHTML());
+        page.append("</div>");
         page.append("</body>");
         return page.toString();
     }

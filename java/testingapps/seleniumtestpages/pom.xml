@@ -24,7 +24,16 @@
     v1.2 - Surfaced The Pulper as a beta app on the index page
     -->
 
+
     <dependencies>
+
+        <!-- bring in any CSS and assets shared across the apps -->
+        <dependency>
+            <groupId>uk.co.compendiumdev.testing</groupId>
+            <artifactId>shared-styles</artifactId>
+            <version>${sharedstyles.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>

@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static spark.Spark.get;
-import static spark.Spark.staticFiles;
+import static spark.Spark.*;
 
 /**
  * Created by Alan on 04/07/2017.
@@ -86,7 +85,7 @@ public class Main {
 
         String []newargs = argsAsList.toArray(new String[argsAsList.size()]);
 
-        staticFiles.location("/uk/co/compendiumdev/restlisticator");
+        staticFiles.location("/web");
         // allows loading gui from http://localhost:4567/listicator/app/todo.html
 
         // redirects for documentation when running as own app
