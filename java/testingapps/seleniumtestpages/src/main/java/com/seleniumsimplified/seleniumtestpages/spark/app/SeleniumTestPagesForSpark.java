@@ -41,7 +41,7 @@ public class SeleniumTestPagesForSpark {
         // pretty versions
         get("/styled/calculator", (req, res) -> {return new PhpPrettyCalculate(req,res).get();});
         post("/styled/calculator", (req, res) -> {return new PhpPrettyCalculate(req,res).post();});
-        post("/the_form_processor.php", (req, res) -> {return new PhpPrettyFormProcessor(req,res).post();}); // pretty template version
+        post("/styled/the_form_processor.php", (req, res) -> {return new PhpPrettyFormProcessor(req,res).post();}); // pretty template version
         get("/styled/refresh", (req, res) -> {return new PhpPrettyRefresh(req,res).get();});
         get("/styled/frames/get-list", (req, res) -> {return new PhpGetList(req,res).get();});
 

@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Page For Element Attributes</title>
+    <link rel="stylesheet" href="../../css/testpages.css">
+
+    <style>
+        #hoverparaeffect{
+            display: none;
+        }
+
+        .secret{
+            display: none;
+        }
+
+        .hovered > .secret{
+            display:block;
+        }
+
+        #hoverdiv:hover > .secret{
+            display:block;
+        }
+
+        p.styled-click-button:hover + #hoverparaeffect,
+        p.styled-click-button.hovered + #hoverparaeffect
+        {
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+    </div>
+
+    <h1>CSS Pseudo Class - hover</h1>
+
+    <div class="explanation">
+        <p>CSS Pseudo classes can be used to implement what looks like functionality.
+        </p>
+        <p>In this example the elements on the left have 'hover' implemented.
+            If you hover over the element then you should see an effect.</p>
+        <code>
+            e.g p:hover{ /* restyle here */ }
+        </code>
+        <p>Hover can be harder to trigger during automating so sometimes people
+        add automation hacks e.g. if you change the style of the 'hover' element to 'hovered'
+        you should be able to trigger the same effect as hovering.</p>
+    </div>
+
+
+    <div>
+        <p id="hoverpara" class="styled-click-button">Hover Para</p>
+        <p id="hoverparaeffect" class="inline-explanation">You can see this paragraph now that you hovered on the above 'button'.</p>
+    </div>
+
+    <div id="hoverdiv">
+        <p id="hoverdivpara" class="styled-click-button">Hover Div</p>
+        <div class="secret">
+            <p id="hoverdivparaeffect" class="inline-explanation">You can see this child div content now that you hovered on the above 'button'.</p>
+            <a id="hoverlink" href="../redirector.html?to=/csspseudo/css-hover.html">Can you click me?</a>
+        </div>
+
+    </div>
+
+
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>

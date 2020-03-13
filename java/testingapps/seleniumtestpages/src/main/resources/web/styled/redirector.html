@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+    <title>Results of Action Page</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="index.html">Index</a>
+    </div>
+
+    <h1>Action Complete</h1>
+
+    <div class="explanation">
+        <p>You performed the action suggested to you.
+        </p>
+    </div>
+
+
+    <div class="centered">
+        <a id="returnlink" class="styled-click-button">Return to previous page</a>
+    </div>
+
+    <script>
+        function getURLQueryParameter(name) {
+            url = window.location.href;
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            redirectTo = results[2];
+            if (!redirectTo) return '';
+            redirectTo = decodeURIComponent(redirectTo);
+            redirectTo = redirectTo.substring(redirectTo.indexOf("/")-1);
+            return "."+redirectTo;
+        }
+        document.getElementById("returnlink").setAttribute("href", getURLQueryParameter("to"));
+    </script>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>
