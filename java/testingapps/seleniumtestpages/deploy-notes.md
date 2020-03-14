@@ -14,7 +14,7 @@ I'm on mac
 - `heroku plugins:install heroku-cli-deploy`
 - `heroku login`
 - `mvn package`
-- `heroku deploy:jar target/seleniumtestpages-1-3-5-jar-with-dependencies.jar --app testpages`
+- `heroku deploy:jar target/seleniumtestpages-1-3-6-jar-with-dependencies.jar --app testpages`
 
 had to add `:target/*` to the procfile when deploying fat app
 
