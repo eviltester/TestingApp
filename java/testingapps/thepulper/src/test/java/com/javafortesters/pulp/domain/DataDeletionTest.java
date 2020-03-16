@@ -32,6 +32,7 @@ public class DataDeletionTest {
     public void createData(){
         books = PulpData.Empty();
         populateDataInBooks();
+        books.getAppVersion().bugs().setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR, false);
     }
 
     private void populateDataInBooks() {
@@ -76,8 +77,9 @@ public class DataDeletionTest {
     }
 
     @Test
-    public void canNotDeleteAnAuthorLeavingOnlyHouseAuthor() {
+    public void canDeleteAnAuthorLeavingOnlyHouseAuthorOnSomeVersions() {
 
+        books.getAppVersion().bugs().setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR, true);
         // if we have an author and house author, but delete the author then we will delete the book
         int currentBooks = books.books().count();
         int currentPublishers = books.publishers().count();
@@ -100,8 +102,31 @@ public class DataDeletionTest {
     }
 
     @Test
+    public void canNotDeleteAnAuthorLeavingOnlyHouseAuthorWithSomeVersions() {
+
+        books.getAppVersion().bugs().setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR, false);
+        // if we have an author and house author, but delete the author then we will delete the book
+        int currentBooks = books.books().count();
+        int currentPublishers = books.publishers().count();
+        int currentSeries = books.series().count();
+        int currentAuthors = books.authors().count();
+
+        books.deleteAuthor(deleteauthor.getId());
+
+        // when house author on book then do not delete book
+        Assert.assertEquals(currentBooks, books.books().count());
+        Assert.assertEquals(currentPublishers, books.publishers().count());
+        Assert.assertEquals(currentSeries, books.series().count());
+        Assert.assertEquals(currentAuthors - 1, books.authors().count());
+
+        Assert.assertEquals(PulpAuthor.UNKNOWN_AUTHOR, books.authors().get(deleteauthor.getId()));
+    }
+
+
+    @Test
     public void canDeleteAnAuthorLeavingBook(){
 
+        books.getAppVersion().bugs().setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR, true);
         // if multiple authors in addition to house author then do not delete book
         final PulpAuthor anotherauthor = books.authors().add("Another Author To Delete");
         final PulpBook monitorbook = deletedBooks.get(0);

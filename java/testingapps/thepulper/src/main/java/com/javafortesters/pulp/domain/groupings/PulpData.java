@@ -1,10 +1,9 @@
 package com.javafortesters.pulp.domain.groupings;
 
-import com.javafortesters.pulp.domain.objects.PulpBook;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
-import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 public class PulpData {
+    private final AppVersion appVersion;
     private PulpAuthors theAuthors;
     private PulpPublishers thePublishers;
     private PulpSeriesCollection theSerieses;
@@ -15,6 +14,7 @@ public class PulpData {
         thePublishers = new PulpPublishers();
         theSerieses = new PulpSeriesCollection();
         theBooks = new PulpBooks(appVersion);
+        this.appVersion = appVersion;
     }
 
     public static PulpData Empty() {
@@ -67,5 +67,9 @@ public class PulpData {
 
     public boolean deleteBook(final String id) {
         return theBooks.delete(id);
+    }
+
+    public AppVersion getAppVersion() {
+        return appVersion;
     }
 }
