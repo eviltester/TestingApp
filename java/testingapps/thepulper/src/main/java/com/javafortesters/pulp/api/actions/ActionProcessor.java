@@ -169,6 +169,19 @@ public class ActionProcessor {
             }
         }
 
+        PulpAuthor houseAuthor = null;
+        if(book.houseAuthor!=null) {
+            if (book.houseAuthor.id == null) {
+                houseAuthor = bookdata.authors().findByName(book.houseAuthor.name);
+            } else {
+                houseAuthor = bookdata.authors().get(book.houseAuthor.id);
+            }
+
+            if (houseAuthor == null || houseAuthor == PulpAuthor.UNKNOWN_AUTHOR) {
+                return new EntityResponse().setErrorStatus(404, String.format("Cannot find house author %s named: %s", book.houseAuthor.id, book.houseAuthor.name));
+            }
+        }
+
         if(action.actionName.contentEquals("CREATE")) {
 
             if(publisher==null || publisher==PulpPublisher.UNKNOWN_PUBLISHER){
@@ -187,6 +200,10 @@ public class ActionProcessor {
 
             for (PulpAuthor addAuthor : authors) {
                 actualBook.addCoAuthor(addAuthor.getId());
+            }
+
+            if(houseAuthor!=null){
+                actualBook.amendHouseAuthor(houseAuthor.getId());
             }
 
             action.actualBook = actualBook;
@@ -232,6 +249,10 @@ public class ActionProcessor {
                 actualBook.amendPatchAuthors(authorIds);
             }else{ //  if action.actionName.contentEquals("REPLACE")
                 actualBook.amendAuthors(authorIds);
+            }
+
+            if(houseAuthor!=null){
+                actualBook.amendHouseAuthor(houseAuthor.getId());
             }
 
             actualBook.amendSeriesIdentifier(bookDetails.seriesId);

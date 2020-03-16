@@ -30,8 +30,11 @@ fixed issue with drop down menu overlap
 - amending an author, but not changing details says "Author name amended", but no changes took place
 - after creating a book, and viewing the book details is says "No House Author Assigned" but this is a clickable link to author -1, suspect this should not be a clickable link
 - when I amend a book with no house author, the house authors list shows 'all' the authors, it should only show house authors
+- house author is shown twice in the view book screen
 
 ## v003
+
+fixed house author shown twice
 
 - help file has bug where version change "Books FAQ page accessible from drop down menu" is listed twice
 - the series FAQ list has a template error so one of the FAQs does not work _Is "!!name!"! pulp available to download as pdf?_
@@ -89,6 +92,7 @@ fixed bug title of FAQs page
 * on the Amend Series screen we lost the "View Series" and "List of Books in Series" links
 * if session expires then GUI will report an invalid X-API-AUTH session when using API calls from GUI, user has to refresh to get a new session, but that isn't obvious "Error: X-API-AUTH header is invalid - check in the GUI"
 * delete house author - deletes all books associated with author - regression from v5 fix
+* house author shown twice in view screen again
 
 ## v010
 
@@ -104,12 +108,16 @@ fixed
 
 
 * there is still a bug in v10 where it does not update authors properly because it does not remove any authors - but the #form version does. Might need to use a PUT for this.
-* a book can have multiple authors but the API call does not support this, only a single author is provided.
-* current count shown at bottom of list when item is deleted, is updated for the numbers shown on screen, not the actual numbers on the server i.e. mult-window delete shows wrong list of items in list and wrong count - list refresh is not performed from server, just a delete request issued.
+* a book can have multiple authors but the API call does not support this, only a single author is provided. This means we can put the book in a state with multiple authors we we cannot remove authors from the book.
+* current count shown at bottom of list when item is deleted, is updated for the numbers shown on screen, not the actual numbers on the server i.e. multi-window delete shows wrong list of items in list and wrong count - list refresh is not performed from server, just a delete request issued.
 * there is a bug with the house author deletion, if you delete the house author before deleting the last author then you can create a book with no authors (present since v 5), in v10 this is shown as a failed ajax call as well as book display
+* there is a bug with the book author deletion, if we delete the last author, but there is still a house author then book will be deleted. It should probably be valid to have a book with just a house author.
 
 ## v011
 
 fixed
 
 * delete house author prior to deleting last author
+* deleting last author, but still with house author does not delete the book
+* can remove authors when editing as now use a PUT request, and API call sends multiple authors
+* house author should not be shown twice in the view screen

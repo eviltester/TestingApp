@@ -184,8 +184,14 @@ public class PulpBooks {
                     }
                 }
 
-                if(aBook.getAuthorIndexes().size()==0){
-                    removeThese.add(aBook);
+                if(appversion.bugs().bugIsPresent(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR)) {
+                    if (aBook.getAuthorIndexes().size() == 0) {
+                        removeThese.add(aBook);
+                    }
+                }else{
+                    if (aBook.getAllAuthorIndexes().size() == 0) {
+                        removeThese.add(aBook);
+                    }
                 }
 
             }

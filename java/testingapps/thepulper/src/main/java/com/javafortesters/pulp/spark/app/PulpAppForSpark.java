@@ -62,11 +62,6 @@ public class PulpAppForSpark {
     SessionMapping sessions = new SessionMapping(allowsShutdown);
 
 
-
-
-
-
-
     // TODO: add official GUI facility to input an API session id into GUI to switch GUI to that session
 
 

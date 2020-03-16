@@ -145,7 +145,7 @@ public class BookActions {
             ActionProcessor actioner = new ActionProcessor(bookdata, convertor, rooturl);
             List<ActionEntityResponsePair> responses = new ArrayList<>();
             ActionToDo action = new ActionToDo().isReplace(
-                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher));
+                            new BookEntity(actualBook.getId(), book.title, book.publicationYear, book.seriesId, book.series, book.authors, book.publisher, book.houseAuthor));
             responses.add(new ActionEntityResponsePair(action, actioner.process(action)));
             return new BulkResponse(responses, bookdata).asEntityResponse();
 

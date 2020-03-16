@@ -197,10 +197,17 @@ public class AppVersionConfig {
             knownBugs.setBugPresenceTo(KnownBugs.Bug.FAQ_PAGE_TITLE_ALWAYS_AUTHORS, true);
         }
 
+        if(appVersion ==2 || appVersion==9 || appVersion==10){
+            // introduced a duplicate display of Author in version 2, fixed it in 3, then API GUI usage
+            // brought it back in version 9 and fixed again in 11
+            knownBugs.setBugPresenceTo(KnownBugs.Bug.DUPLICATE_HOUSE_AUTHOR_NAME_IN_VIEW, true);
+        }
         if(appVersion<11){
             // we did not fix the bug where if we delete a house author first then we can get a book with no authors
             // this is present since version 4
             knownBugs.setBugPresenceTo(KnownBugs.Bug.DELETE_HOUSE_AUTHOR_FIRST_ALLOWS_CREATING_BOOK_WITH_NO_AUTHORS, true);
+            // fix the bug where we delete a book if we delete the last author, but there is still a house author
+            knownBugs.setBugPresenceTo(KnownBugs.Bug.DELETE_BOOK_WHEN_ZERO_AUTHORS_BUT_STILL_HAS_HOUSE_AUTHOR, true);
         }
     }
 

@@ -15,6 +15,7 @@ public class BookEntity {
     public Integer publicationYear;
     public String seriesId;
     public List<AuthorEntity> authors;
+    public AuthorEntity houseAuthor;
     public SeriesEntity series;
     public PublisherEntity publisher;
 
@@ -43,8 +44,18 @@ public class BookEntity {
         }
     }
 
+    public BookEntity(final String id, final String title, final int publicationYear, final String seriesId,
+                      final PulpSeries pulpSeries, final Collection<PulpAuthor> allAuthors, final PulpPublisher pulpPublisher,
+                      PulpAuthor aHouseAuthor) {
+        this(id, title, publicationYear, seriesId, pulpSeries, allAuthors, pulpPublisher);
+
+        if(aHouseAuthor!=null) {
+                this.houseAuthor = new AuthorEntity(aHouseAuthor.getId(), aHouseAuthor.getName());
+        }
+    }
+
     public BookEntity(final String id, final String title, final Integer publicationYear, final String seriesId,
-                      final SeriesEntity pulpSeries, final List<AuthorEntity> allAuthors, final PublisherEntity pulpPublisher) {
+                           final SeriesEntity pulpSeries, final List<AuthorEntity> allAuthors, final PublisherEntity pulpPublisher) {
         this.id = id;
         this.title = title;
         this.publicationYear = publicationYear;
@@ -55,6 +66,22 @@ public class BookEntity {
         this.authors = allAuthors;
 
         this.publisher = pulpPublisher;
+    }
+
+    public BookEntity(final String id, final String title, final Integer publicationYear, final String seriesId,
+                      final SeriesEntity pulpSeries, final List<AuthorEntity> allAuthors, final PublisherEntity pulpPublisher,
+                      final AuthorEntity houseAuthor) {
+        this.id = id;
+        this.title = title;
+        this.publicationYear = publicationYear;
+        this.seriesId = seriesId;
+
+        this.series = pulpSeries;
+
+        this.authors = allAuthors;
+
+        this.publisher = pulpPublisher;
+        this.houseAuthor = houseAuthor;
     }
 
     public void includeOnlyFields(final IncludeFieldNames includeFieldNames) {
@@ -86,6 +113,10 @@ public class BookEntity {
 
         if(!fieldNames.contains("publisher")){
             this.publisher=null;
+        }
+
+        if(!fieldNames.contains("houseauthor")){
+            this.houseAuthor=null;
         }
     }
 }

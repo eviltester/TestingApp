@@ -9,6 +9,7 @@ import com.javafortesters.pulp.html.gui.snippets.AppPageBuilder;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.reader.VersionedResourceReader;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
+import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
 
 import java.util.Collection;
 
@@ -61,13 +62,26 @@ public class ViewBookPage {
         for(PulpAuthor author : books.authors().getAllOrderedByName()){
             if(bookAuthorIds.contains(author.getId())) {
 
-                authorLi.replace("!!AUTHORID!!", author.getId());
-                authorLi.replace("!!AUTHORNAME!!", author.getName());
+                boolean addAuthor =true;
 
-                authorsInLi.append(authorLi.toString());
-                authorsInLi.append(String.format("%n"));
+                // make sure we don't display the author name twice, unless that bug is present
+                if(!appversion.bugs().bugIsPresent(KnownBugs.Bug.DUPLICATE_HOUSE_AUTHOR_NAME_IN_VIEW)) {
+                    if( book.getHouseAuthorIndex()!=null &&
+                            book.getHouseAuthorIndex().contentEquals(author.getId())){
+                        // this author is the house author
+                        addAuthor=false;
+                    }
+                }
 
-                authorLi.reset();
+                if(addAuthor){
+                    authorLi.replace("!!AUTHORID!!", author.getId());
+                    authorLi.replace("!!AUTHORNAME!!", author.getName());
+
+                    authorsInLi.append(authorLi.toString());
+                    authorsInLi.append(String.format("%n"));
+
+                    authorLi.reset();
+                }
             }
         }
         template.replace("<-- LIST OF AUTHORS -->", authorsInLi.toString());

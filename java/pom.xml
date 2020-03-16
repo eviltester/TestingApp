@@ -64,8 +64,9 @@ v1.4 - split into multiple pom.xnl
         1-2-3 has different app instantiation internally for each connected user via JSESSIONID
         1-2-4 has updated style sheets and XHTTP has moved to version 6 and 7
         1-2-5 will have more docs and up to version 10 with Ajax functionality
+        1-2-6 will have v11 fixes e.g. api book amendment on PUT
         -->
-        <thepulper.version>1-2-5</thepulper.version>
+        <thepulper.version>1-2-6-SNAPSHOT</thepulper.version>
 
         <!-- COLLECTED APPS -->
         <!-- 1-2-0 has the pulper with CRUD and formatting-->

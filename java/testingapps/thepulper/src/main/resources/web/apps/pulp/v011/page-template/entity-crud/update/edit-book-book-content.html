@@ -1,0 +1,139 @@
+<script type="text/javascript">
+
+    function confirmDeleteBook(){
+
+        if(location.hash==="#form"){
+            document.getElementById("deleteform").setAttribute("action", "deletebook");
+            document.getElementById("deleteform").setAttribute("method", "post");
+            return areYouSureYouWantToDeleteBook("!!BOOKTITLE!!");
+        }else{
+            document.getElementById("deleteform").setAttribute("action", "");
+            document.getElementById("deleteform").setAttribute("method", "");
+            if(deleteBookViaApi("!!BOOKTITLE!!", document.querySelector("[name='bookid']").value)){
+                var controls = document.getElementById("amendobjectsection");
+                controls.parentElement.removeChild(controls);
+            }
+            return false;
+        }
+    }
+
+    function renderDeleteSuccess(){
+        document.getElementById("outputmessage").innerHTML = "Deleted Book";
+    }
+
+    function renderErrorMessage(message){
+        document.getElementById("outputmessage").innerHTML = message;
+    }
+
+    function renderAmendSuccess(){
+        document.getElementById("outputmessage").innerHTML = "Amended Book";
+    }
+
+    function getSelectValues(select) {
+        var result = [];
+        var options = select && select.options;
+        var opt;
+
+        for (var i=0, iLen=options.length; i<iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                result.push(opt.value || opt.text);
+            }
+        }
+        return result;
+    }
+
+    function amendBook(){
+        var api=new PulperApi(new CookieAccess().getCookie("X-API-AUTH"));
+        api.amendBook(
+            document.querySelector("[name='bookid']").value,
+            document.getElementById("booktitle").value,
+            getSelectValues(document.getElementById("authoridselect")),
+            document.getElementById("houseauthoridselect").value,
+            document.getElementById("publisheridselect").value,
+            document.getElementById("seriesidselect").value,
+            document.getElementById("seriesidentifierid").value,
+            document.getElementById("yearofPub").value,
+            renderAmendSuccess, renderErrorMessage);
+        return false;
+    }
+</script>
+
+<h1>Amend Book</h1>
+
+<div id="amendobjectsection">
+
+    <div>
+        <form id="amendform" onsubmit="return amendBook();">
+
+            <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
+            <label for="booktitle">Title of book</label>
+            <input type="text" id="booktitle" name="title" value="!!BOOKTITLE!!" required="required" pattern=".{1,}">
+
+            <br/>
+
+
+             <label for="authoridselect">Author</label>
+             <select id="authoridselect" name="authorid" required="required" multiple required>
+                <!-- AUTHOR-ID-OPTIONS -->
+                <option value="unknown">Author</option>
+                <!-- AUTHOR-ID-OPTIONS -->
+            </select>
+            <br/>
+
+
+            <label for="houseauthoridselect">House Author</label>
+            <select id="houseauthoridselect" name="houseauthorid" required="required">
+                <!-- HOUSE-AUTHOR-ID-OPTIONS -->
+                <option value="UNKNOWN">UNKNOWN</option>
+                <!-- HOUSE-AUTHOR-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="publisheridselect">Publisher</label>
+            <select id="publisheridselect" name="publisherid" required="required">
+                <!-- PUBLISHER-ID-OPTIONS -->
+                <option value="unknown">Publisher</option>
+                <!-- PUBLISHER-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidselect">Series</label>
+            <select id="seriesidselect" name="seriesid" required="required">
+                <!-- SERIES-ID-OPTIONS -->
+                <option value="unknown">Series</option>
+                <!-- SERIES-ID-OPTIONS -->
+            </select>
+            <br/>
+
+            <label for="seriesidentifierid">Series Identifier e.g. "March, 1933"</label>
+            <input type="text" id="seriesidentifierid" name="seriesidentifier" value="!!SERIESIDENTIFIER!!" required="required" pattern=".{1,}">
+            <br/>
+
+            <label for="yearofPub">Year of publication e.g. 1933</label>
+            <input type="number" id="yearofPub" name="yearofpub" value="!!PUBLICATIONYEAR!!" required="required" pattern=".{1,}">
+            <br/>
+
+
+            <input type="submit" value="Update" />
+        </form>
+        <hr/>
+        <form id="deleteform" onsubmit="return confirmDeleteBook()">
+            <input type = "hidden" name="bookid" value="!!BOOKID!!"/>
+            <input  type="submit" value="Delete" />
+        </form>
+    </div>
+
+</div>
+
+<div>
+    <p id="outputmessage"></p>
+</div>
+
+<script>
+    restoreToSubmitPost("amendform");
+</script>
+<!-- OUTPUT GOES HERE -->
+
+<!-- FOOTER GOES HERE -->
