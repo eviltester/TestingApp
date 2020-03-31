@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+    <title>Cookie Controlled Admin</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <!-- HEAD -->
+
+    <script src="js/admin.js"></script>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+         [<a id="navadminlogin" href="adminlogin.html">Admin Login</a>]
+         [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
+    </div>
+
+    <h1>Cookie Controlled Admin</h1>
+
+    <div class="explanation">
+        <p>Once you login using the form below, there should be a cookie which helps control which page you see.
+        i.e. you should not be able to visit the <a href="adminview.html">adminview.html</a> page until logged in. And (once logged in) you should not be able to come back to this page until you logout.</p>
+        <p>Try it and see - and use dev tools to mess with the cookie or try and inject a cookie wit your automated execution</p>
+    </div>
+
+    <div class="centered">
+
+        <section class="main" style="display: block;">
+
+            <form onsubmit="return loginas();">
+                <div class="login">
+                    <label for="username"><b>Username</b></label>
+                    <input type="text" placeholder="Enter Username" name="username" required>
+                    <br><br>
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+                    <br><br>
+                    <button class="styled-click-button" id="login" type="submit">Login</button>
+                    <br><br>
+                    <label>
+                        <input type="checkbox" checked="checked" name="remember"> Remember me
+                    </label>
+                </div>
+            </form>
+            <br><br>
+            <h2 class="loginmessage"></h2>
+
+        </section>
+
+        <p>PS: Admin / AdminPass</p>
+
+    </div>
+
+    <script>
+
+
+        function loginas(){
+
+            var username = document.getElementsByName("username")[0].value;
+            var password = document.getElementsByName("password")[0].value;
+            var remember = document.getElementsByName("remember")[0].value=="on" ? true : false;
+
+            admin = new Admin();
+            admin.login(username, password, remember, function(){
+                document.getElementsByClassName("loginmessage")[0].innerHTML = "Login Details Incorrect";
+            });
+
+            return false;
+        }
+
+        new Admin().activateLoginLink();
+
+        if(new Admin().isLoggedIn()){
+            window.location.href = "adminview.html";
+        }
+
+
+    </script>
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>

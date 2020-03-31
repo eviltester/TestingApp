@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+    <title>Cookie Controlled Admin</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <!-- HEAD -->
+
+    <script src="js/admin.js"></script>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+         [<a id="navadminlogin" href="adminlogin.html">Admin Login</a>]
+         [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
+    </div>
+
+    <h1>Admin View</h1>
+
+    <div class="explanation">
+        <p>You are logged in to the Admin View.
+        i.e. you should not be able to use the login page until you logout because you are already logged in.</p>
+        <p>Try it and see - <a href="adminlogin.html">adminlogin.html</a> and use dev tools to mess with the cookie or try and inject a cookie with your automated execution</p>
+    </div>
+
+    <div class="centered">
+
+        <a id="gologin" class="styled-click-button" href="adminlogin.html">Go To Login</a>
+
+    </div>
+
+    <script>
+
+        if(!(new Admin().isLoggedIn())){
+            window.location.href = "adminlogin.html";
+        }
+
+        new Admin().activateLoginLink();
+
+
+    </script>
+    
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+
+</body>
+</html>
