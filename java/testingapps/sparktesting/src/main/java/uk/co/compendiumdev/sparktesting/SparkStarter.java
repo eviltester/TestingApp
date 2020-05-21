@@ -65,7 +65,9 @@ public abstract class SparkStarter {
     public void killServer(){
 
         Spark.stop();
-        //Spark.halt();
+        Spark.awaitStop();
+
+        // TODO: trust the awaitStop
 
         // wait until server has stopped
         int tries = 10;
