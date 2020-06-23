@@ -4,8 +4,8 @@ A Compendium of applications, pages and REST APIs that you can use to practice y
 
 These are also used in training provided by Alan Richardson (Evil Tester).
 
-- http://compendiumdev.co.uk
-- http://eviltester.com
+- https://compendiumdev.co.uk
+- https://eviltester.com
 
 ## How to use
 
@@ -77,4 +77,4 @@ But if you find anything that causes the local application to crash (that should
 
 The [releases](https://github.com/eviltester/TestingApp/releases) should work. Their @Test methods were run during the build. And some interactive investigation would have been performed prior to release. Snapshot is not guaranteed to run, but the build status (as reported by travis) can be seen here [![Current Snapshot Build Status](https://travis-ci.org/eviltester/TestingApp.svg?branch=master)](https://travis-ci.org/eviltester/TestingApp).
 
-You might like to sign up to my [email mailing list](https://www.compendiumdev.co.uk/page/join) where I will mention any updates to the application.
+You might like to sign up to my [email mailing list](https://www.eviltester.com/page/emaillist/) where I will mention any updates to the application.
