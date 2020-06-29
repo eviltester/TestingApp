@@ -31,6 +31,18 @@ body {
     box-shadow: 0 0.3em #999999;
 }
 
+.styled-click-button-triggered {
+    padding: 0.5em 1em;
+    font-size: 1.4em;
+    text-align: center;
+    cursor: pointer;
+    color: #ffffff;
+    outline: none;
+    background-color: #939393;
+    border-radius: 0.5em;
+    box-shadow: 0 0.3em #999999;
+}
+
 .styled-click-button:hover {background-color: darkgreen}
 
 .styled-click-button:active {

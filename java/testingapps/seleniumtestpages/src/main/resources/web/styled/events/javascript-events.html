@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+<head>
+    <title>JavaScript Events</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="index.html">Index</a>
+    </div>
+
+    <h1>JavaScript Events</h1>
+
+    <div class="explanation">
+        <p>Not all buttons are based around 'click' events. We might encounter
+            systems based around 'blur' or 'mousedown' or a whole host of other
+            "it made sense at the time" or "because on this device...". So we have
+            to learn how to handle different events.
+        </p>
+        <p>Each of the buttons has a different triggering event, try to trigger them.</p>
+    </div>
+
+    <div class="centered">
+
+        <script>
+            function triggeredEvent(thang){
+                var myid= thang.getAttribute("id");
+                document.getElementById(myid + "status").innerHTML="Event Triggered";
+                thang.className="styled-click-button-triggered";
+            }
+        </script>
+
+        <div>
+            <button id="onblur" class="styled-click-button" onblur="triggeredEvent(this)">OnBlur</button>
+            <p id="onblurstatus"></p>
+        </div>
+
+        <div>
+            <button id="onclick" class="styled-click-button" onclick="triggeredEvent(this)">OnClick</button>
+            <p id="onclickstatus"></p>
+        </div>
+
+        <div>
+            <button id="oncontextmenu" class="styled-click-button" oncontextmenu="triggeredEvent(this)">OnContextMenu</button>
+            <p id="oncontextmenustatus"></p>
+        </div>
+
+        <div>
+            <button id="ondoubleclick" class="styled-click-button" ondblclick="triggeredEvent(this)">OnDoubleClick</button>
+            <p id="ondoubleclickstatus"></p>
+        </div>
+
+        <div>
+            <button id="onfocus" class="styled-click-button" onfocus="triggeredEvent(this)">OnFocus</button>
+            <p id="onfocusstatus"></p>
+        </div>
+
+        <div>
+            <button id="onkeydown" class="styled-click-button" onkeydown="triggeredEvent(this)">OnKeyDown</button>
+            <p id="onkeydownstatus"></p>
+        </div>
+
+        <div>
+            <button id="onkeyup" class="styled-click-button" onkeyup="triggeredEvent(this)">OnKeyUp</button>
+            <p id="onkeyupstatus"></p>
+        </div>
+
+        <div>
+            <button id="onkeypress" class="styled-click-button" onkeypress="triggeredEvent(this)">OnKeyPress</button>
+            <p id="onkeypressstatus"></p>
+        </div>
+
+        <div>
+            <button id="onmouseover" class="styled-click-button" onmouseover="triggeredEvent(this)">OnMouseOver</button>
+            <p id="onmouseoverstatus"></p>
+        </div>
+
+        <div>
+            <button id="onmouseleave" class="styled-click-button" onmouseleave="triggeredEvent(this)">OnMouseLeave</button>
+            <p id="onmouseleavestatus"></p>
+        </div>
+
+        <div>
+            <button id="onmousedown" class="styled-click-button" onmousedown="triggeredEvent(this)">OnMouseDown</button>
+            <p id="onmousedownstatus"></p>
+        </div>
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
