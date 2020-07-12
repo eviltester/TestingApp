@@ -32,13 +32,11 @@ public class PageRoutingsExistForLocalExecutionTest {
     @Test
     public void localIndexPageContainsURLForAppsIndex(){
         Assert.assertTrue(http.getPageContents("/").contains("href=\"/apps/\">"));
-        Assert.assertTrue(http.getPageContents("/").contains("href=\"/games/buggygames/\">"));
     }
 
     @Test
     public void localIndexPageContainsURLForGamesIndex(){
-        Assert.assertTrue(http.getPageContents("").contains("href=\"/apps/\">"));
-        Assert.assertTrue(http.getPageContents("").contains("href=\"/games/buggygames/\">"));
+        Assert.assertTrue(http.getPageContents("").contains("href=\"/games/\">"));
     }
 
 
