@@ -1,3 +1,6 @@
+rm -R docs/apps
+rm -R docs/games
+rm -R docs/css
 cp -R java/testingapps/compendiumdevapps/src/main/resources/web/apps docs/apps
 cp -R java/testingapps/compendiumdevapps/src/main/resources/web/games docs/games
 cp -R java/testingapps/shared-styles/src/main/resources/web/css docs/css
