@@ -1,0 +1,86 @@
+<html><head>
+
+    <!--meta_data-->
+    <!--css_styles-->
+    <title>The iFramed Search Engine</title>
+
+    </head>
+<body>
+
+<!--page_header-->
+
+
+<script>
+    var searchTool = {
+
+        customId: 1,
+
+        searchEngine: "https://bing.com/search?q=",
+        lastUrl: "https://bing.com/search?q=doc+savage",
+
+        changeUrl: function (theUrl) {
+
+            var iframes = document.getElementsByClassName("viewport-container");
+            for (var i = 0; i < iframes.length; i++) {
+                iframes[i].src = theUrl;
+            }
+            searchTool.lastUrl = theUrl;
+        },
+
+        changeUrlFromForm: function () {
+            var e = document.getElementById("engines");
+            var urlPrefix = e.options[e.selectedIndex].value;
+            var theUrl = urlPrefix + encodeURI(document.getElementById('search-term').value);
+            searchTool.changeUrl(theUrl);
+            document.getElementById("gosearch").href=theUrl;
+        }
+    }
+</script>
+
+<select id="engines">
+    <option value="https://bing.com/search?q=">bing.com</option>
+    <option value="http://www.dogpile.com/search/web?q=">dogpile</option>
+    <option value="http://www.baidu.com/s?wd=">baidu.com</option>
+    <option value="https://duckduckgo.com/?q=">duckduckgo.com</option>
+    <option value="https://www.wolframalpha.com/input/?i=">wolframalpha</option>
+    <option value="http://www.info.com/serp?q=">info.com</option>
+    <option value="https://www.hotbot.com/web?q=">hotbot.com</option>
+    <option value="http://www.gigablast.com/search?q=">Gigablast.com</option>
+    <option value="http://www.webcrawler.com/serp?q=">WebCrawler.com</option>
+
+    <option value="https://uk.ask.com/web?q=">uk.ask.com</option>
+    <option value="https://ask.com/web?q=">ask.com</option>
+    <option value="https://search.aol.co.uk/aol/search?q=">aol.co.uk</option>
+    <option value="https://search.aol.com/aol/search?q=">aol.com</option>
+    <option value="https://search.yahoo.com/search?p=">yahoo.com</option>
+    <option value="https://www.google.com/search?q=">google.com</option>
+    <option value="https://www.google.co.uk/search?q=">google.co.uk</option>
+</select>
+
+<input type="text" id="search-term"></text>
+<button type="button" class="trigger-url-change" onclick="searchTool.changeUrlFromForm()">Search</button>
+<a id="gosearch" href='' target="_blank">Go search</a>
+
+<div class="viewport" style="height: 100%;" >
+    <iframe class="viewport-container" src="" id="theiframe" style="width: 100%; height: 100%;">
+
+    </iframe>
+</div>
+
+
+
+
+<!--
+
+Related information:
+
+- https://stackoverflow.com/questions/153152/resizing-an-iframe-based-on-content
+- https://stackoverflow.com/questions/18327314/how-to-allow-http-content-within-an-iframe-on-a-https-site
+
+-->
+
+<!--page_footer-->
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--meta_data-->
+    <!--css_styles-->
+    <title>Mini Bookmarklet Maker</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+</head>
+<body>
+
+<div class="page-body">
+<!--page_header-->
+
+<!--
+
+A minimalist bookmarklet generator
+
+- Click [Rename] and type in a name to rename the link.
+- Click [Make BookMarkLet], copy in the code you want to convert and click OK
+- Drag the link to bookmark toolbar
+- Or copy and past into bookmark manager from the JavaScript Console
+
+For a really minimal bookmarklet just type this into the console
+
+~~~~~~~~
+"javascript:(function(){" + encodeURI(window.prompt("")) + "})()"
+~~~~~~~~
+
+Currently live at [compendiumdev.co.uk/apps/eviltester/bookmarklets.html](https://www.compendiumdev.co.uk/apps/eviltester/bookmarklets.html)
+
+-->
+
+<h2><a id="bookmark" href="">bookmark</a></h2>
+
+<div class="renamebookmarklet">
+    <button id="renamer" onclick="renamebookmark()">Rename</button>
+</div>
+
+<div class="makebookmarklet">
+    <button onclick="generatebookmark()">Make BookMarkLet</button>
+</div>
+
+<script>
+
+    function generatebookmark(){
+        bookmarklet = "javascript:(function(){" + encodeURI(window.prompt("")) + "})()";
+        console.log(bookmarklet);
+        document.getElementById("bookmark").setAttribute("href",bookmarklet);
+    }
+
+    function renamebookmark(){
+        currname = document.getElementById("bookmark").innerHTML;
+        thename = window.prompt(currname,"bookmarkname");
+        if(thename)
+            document.getElementById("bookmark").innerHTML = thename;
+    }
+</script>
+
+<!--page_footer-->
+</div>
+</body>
+</html>

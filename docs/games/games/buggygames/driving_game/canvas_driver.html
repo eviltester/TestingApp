@@ -1,0 +1,920 @@
+<html>
+<head>
+    <title>Canvas Driver</title>
+  <link rel="stylesheet" href="/css/testpages.css">
+    <style>
+        .render-area {
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            width: 800px;}
+        .responsive-canvas{
+          width: 100%;
+          text-align:center;
+        }
+        #gameboard{
+          text-align:center;
+        }
+        .responsive-canvas canvas{
+          display: inline;
+        }
+        #instructions h1 {color: #000000;}
+        #instructions p {color: rgb(57, 0, 0);}
+        #gameboard p {color: rgb(14, 67, 147);}
+        #gameboard h2 {color: rgb(255, 0, 0);}
+        .pressstart{
+          text-align: center;
+          font-size: 2em;
+        }
+        .blink{
+          animation: blinky 1s step-start infinite;
+        }
+        @keyframes blinky{
+          50%{
+            opacity: 0;
+          }
+        }
+      </style>
+
+<script>
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function changeSpanText(id, spanText){
+	var theSpan = document.getElementById(id);
+	if ('textContent' in theSpan) {
+		theSpan.textContent = spanText;
+	} else {
+		theSpan.innerText = spanText;
+	}
+}
+
+
+function getTrackLine(left, roadWidth, trackWidth){
+
+    var track="";
+
+    for(var i=0; i < left; i++){
+        track+="*";
+    }
+
+    // create the width
+    for(var i=0; i < roadWidth; i++){
+        track += " ";
+    }
+
+    for(var i=left+roadWidth; i < trackWidth; i++){
+      track+="*";
+    }
+
+    return track;
+}
+
+
+// RESET KEYS
+
+function showMessage(message){
+	document.getElementById('message').style.display = 'block';
+  changeSpanText('message', message);
+}
+
+function hideMessage(){
+  document.getElementById('message').style.display = 'none';
+}
+
+function resetLeftKey(event){
+    showMessage("Left Key Set to "+event.keyCode);
+    keys[event.keyCode]=left_key_action;
+}
+function resetRightKey(event){
+    showMessage("Right Key Set to "+event.keyCode);
+    keys[event.keyCode]=right_key_action;
+}
+
+function redefineKeys(){
+
+  showMessage("Redefining Keys...");
+  setTimeout(function(){showMessage("Get Ready to Press The Keys You Want for LEFT and RIGHT")}, 500);
+  setTimeout(function(){showMessage("Press The Key For Left NOW");document.onkeydown = resetLeftKey}, 3000);
+  setTimeout(function(){showMessage("Press The Key For Right NOW");document.onkeydown = resetRightKey}, 6000);
+  setTimeout(function (){showMessage("Keys have been redefined");document.onkeydown = handleKeyPress}, 9000);
+  setTimeout(function (){hideMessage()}, 11000);
+}
+
+// DEFAULT KEYS
+
+var LEFT_KEY = 37;
+var RIGHT_KEY = 39;
+var UP_KEY = 38;
+var DOWN_KEY = 40;
+var SPACE_KEY = 32;
+var ENTER_KEY = 13;
+var ONE_KEY = 49;
+var TWO_KEY = 50;
+var THREE_KEY = 51;
+
+
+var keys = [];
+keys[LEFT_KEY] = left_key_action;
+keys[RIGHT_KEY] = right_key_action;
+keys[SPACE_KEY] = function(){startDifficulty(0)};
+keys[ENTER_KEY] = promptForValues;
+
+
+function left_key_action(){
+  carPosition-=1;
+}
+
+function right_key_action(){
+  carPosition+=1;
+}
+
+function startDifficulty(diff){
+    difficultyLevel=diff;
+    setDifficulty();
+    showInfo(difficultySettings.name);
+		startGame=true;
+}
+
+function promptForValues(){
+  promptForValues=true;
+}
+
+
+
+
+
+function handleKeyPress(event){
+	//console.log(event.keyCode);
+  if (keys.hasOwnProperty(event.keyCode)) {
+    keys[event.keyCode]();
+  }
+}
+
+document.onkeydown = handleKeyPress;
+
+// extra difficulties
+keys[ONE_KEY] = function(){startDifficulty(1)};
+keys[TWO_KEY] = function(){startDifficulty(2)};
+keys[THREE_KEY] = function(){startDifficulty(3)};
+keys[82] = redefineKeys; // Press r to redefine keys
+//keys[52] = function(){startDifficulty(4)};  // too hard 
+//keys[53] = function(){startDifficulty(5)};  // much too hard
+
+
+var track = new Array();
+
+function showInfo(message){
+  changeSpanText('info', message);
+}
+
+function instructions(){
+	//document.getElementById('gameboard').style.display = 'none';
+	if(startGame){
+    showInfo("Drive Safely");
+		window.clearInterval(theTimer);
+		document.getElementById('instructions').style.display = 'none';
+    document.getElementById('highscoreboard').style.display = 'none';
+		document.getElementById('gameboard').style.display = 'block';
+		setValuesToStartingValues();
+
+    // set level prototype
+    setLevelElement = document.getElementById('setLevel');
+    if(setLevelElement.style.display != 'none'){
+        var setLevelTo = parseInt(setLevelElement.value);
+        setDifficultyLevel(setLevelTo);
+    }
+
+    createTrack();
+
+		theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
+		startGame=false;
+	}
+}
+
+function createTrack(){
+
+    calculateFontSizeBasedOnCanvas()
+
+    track = new Array();
+    for(var trackLine=0;trackLine<maxTrackLines;trackLine++){
+        track.push(getTrackLine(posOfLeftOfTrack, widthOfTrack, maxWidthOfArena));
+    }
+}
+
+function calculateFontSizeBasedOnCanvas(){
+    var canvas = document.getElementById("gamedisplay");
+    if(canvas.getContext){
+        var context2d = canvas.getContext("2d");
+
+        // calculate a fontsize that fits canvas
+        fontSize = Math.floor(context2d.canvas.height/maxTrackLines);
+        context2d.font = fontSize + "px courier";
+        while((context2d.measureText("*").width * maxWidthOfArena)>context2d.canvas.width){
+          fontSize--;
+          context2d.font = fontSize + "px courier";
+        }
+        fontWidth = context2d.measureText("*").width;
+        // how many lines fit into the canvas?
+        while(maxTrackLines*fontSize<context2d.canvas.height){
+          maxTrackLines++;
+        }
+        maxTrackLines--;
+    }
+
+    carLine = Math.floor((maxTrackLines/2)/2);
+
+}
+
+function drawTrack(){
+  var canvas = document.getElementById("gamedisplay");
+
+  if(canvas.getContext){
+      var context2d = canvas.getContext("2d");
+
+      context2d.clearRect(0,0,context2d.canvas.width, context2d.canvas.height);
+      context2d.fillStyle = "#FFFFFF";
+      context2d.fillRect(0,0,context2d.canvas.width, context2d.canvas.height);
+      context2d.fillStyle = "#000000";
+      
+      for(var yline=0;yline<maxTrackLines;yline++){
+          context2d.fillText(track[yline],0,yline*fontSize);
+      }
+  }
+
+}
+
+function drawCar(carLine,carPosition){
+  drawCarAs(carLine, carPosition, "V");
+}
+
+function drawCrashedCar(carLine,carPosition){
+  drawCarAs(carLine, carPosition, "X");
+}
+
+function drawCarAs(carLine,carPosition, carChar){
+    var canvas = document.getElementById("gamedisplay");
+
+    if(canvas.getContext){
+        var context2d = canvas.getContext("2d");
+        context2d.fillStyle = "#000000";
+        context2d.fillText(carChar,carPosition*fontWidth,carLine*fontSize);
+    }
+}
+
+function scrollTrack(nextLine){
+    track.shift();
+    track.push(nextLine);
+}
+
+
+
+function playGame(){
+
+  // calculate points etc.
+  distanceTravelled++;
+  points=distanceTravelled*10;
+  points+=bonuspoints + difficultySettings.startBonus;
+  changeSpanText('thePoints', points);
+  changeSpanText('theSpeed', 50 + Math.floor(500-millisecondsBetweenScrolls)); ///500);
+  changeSpanText('lives', lives);
+  changeSpanText('health', currenthealth);
+
+  scroll()
+
+
+  // change track width
+  changeTrackWidth();
+
+
+  displayTheTrackToTheConsole();
+  adjustTheTrackForRoadWeaving();
+
+	if(hasCrashed){
+    endGame();
+	}
+}
+
+function scroll(){
+    // change speed
+    distanceToNextSpeedChange--;
+    //console.log("distance to speed change " + distanceToNextSpeedChange);
+  if(distanceToNextSpeedChange<0){
+      millisecondsBetweenScrolls-=currentAcceleration;
+      //console.log("speed " + millisecondsBetweenScrolls + " and max " + maxSpeedMillis);
+
+      if(millisecondsBetweenScrolls<maxSpeedMillis){
+        millisecondsBetweenScrolls=maxSpeedMillis;
+      }
+
+      window.clearInterval(theTimer);
+      theTimer = window.setInterval(playGame, millisecondsBetweenScrolls);
+
+      changeSpeed();
+
+  }
+}
+
+function getNewLevelDetails(aDistance){
+
+  for(var changeIndex=0; changeIndex<levelSettings.changes.length; changeIndex++){
+    var changes = levelSettings.changes[changeIndex];
+    if(aDistance>=changes.start && aDistance<=changes.end){
+      return changes;
+    }
+  }
+
+  return levelSettings.defaultChanges;
+
+}
+
+function changeSpeed(){
+
+  //level {start:0, end:100, tillSpeedChange:5, accel:100, widthChangeEvery:1, minWidth:12, maxWidth:100, maxSpeedMillisChange:null, milliSpeedLimit=500},
+  //difficulty {name:"normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0}
+
+
+  if(distanceTravelled > currentLevelChanges.end){
+    currentLevelChanges = getNewLevelDetails(distanceTravelled);
+  }
+
+  
+
+  if(distanceToNextSpeedChange<0){
+
+    //console.log(currentLevelChanges);
+
+
+
+    if(currentLevelChanges.tillSpeedChange!=null){
+
+      distanceToNextSpeedChange=currentLevelChanges.tillSpeedChange;
+
+      if(currentLevelChanges.accel!=null){
+        currentAcceleration=currentLevelChanges.accel+difficultySettings.accel;
+        if(currentAcceleration<5){
+          currentAcceleration=5;
+        }
+        //console.log("accel: " + currentAcceleration);
+      }
+      if(currentLevelChanges.widthChangeEvery!=null){
+        trackWidthChangeEvery=currentLevelChanges.widthChangeEvery;
+        //console.log("trackWidthChangeEvery: " + trackWidthChangeEvery);
+      }      
+
+      if(currentLevelChanges.maxSpeedMillisChange!=null){
+        maxSpeedMillis-=currentLevelChanges.maxSpeedMillisChange;
+        //console.log("maxSpeedMillis: " + maxSpeedMillis);
+      }
+      if(currentLevelChanges.milliSpeedLimit!=null){       
+          maxSpeedMillis=currentLevelChanges.milliSpeedLimit-difficultySettings.speedDecrement;
+         // console.log("speed limit changed maxSpeedMillis: " + maxSpeedMillis);
+      }
+    }
+
+    
+    if(currentLevelChanges.minWidth!=null){
+        minWidthOfTrack=currentLevelChanges.minWidth-difficultySettings.minTrackDecrement;
+        if(minWidthOfTrack<1){
+          minWidthOfTrack=1;
+        }
+    }
+
+    
+    if(currentLevelChanges.maxWidth!=null){
+      if(currentLevelChanges.maxWidth<maxWidthOfArena){
+        maxWidthOfTrack=currentLevelChanges.maxWidth-difficultySettings.maxTrackDecrement;
+        if(maxWidthOfTrack>maxWidthOfArena){
+          maxWidthOfTrack=maxWidthOfArena;
+        }
+      }
+    }
+  }
+}
+
+
+function changeTrackWidth(){
+  //console.log(trackWidthChangeEvery)
+
+  if(distanceTravelled%trackWidthChangeEvery==0){
+    
+      //console.log("track change " + widthOfTrack)
+      if(widthOfTrack < minWidthOfTrack){
+        // too small bring withing width
+        widthOfTrack++;
+        return;
+      }
+      if(widthOfTrack > maxWidthOfTrack){
+        // too big get width back within tolerances
+        widthOfTrack--;
+        return;
+      }
+
+      // decide if we make bigger or smaller
+      var sizeOptions = [];
+      sizeOptions.push(0); // stay same size
+      for(var addItem=widthOfTrack;addItem<maxWidthOfTrack;addItem++){
+        sizeOptions.push(1); // increase
+      }
+      for(var addItem=minWidthOfTrack;addItem<widthOfTrack;addItem++){
+        sizeOptions.push(-1); // decrease
+      }
+
+      var sizeBy = Math.floor(Math.random()*sizeOptions.length);
+      //console.log("choose option " + sizeBy);
+      //console.log("widen " + sizeOptions[sizeBy]);
+      widthOfTrack+=sizeOptions[sizeBy];
+  }
+}
+
+function setDifficultyLevel(theLevel){
+
+  bonuspoints = difficultySettings.startBonus + theLevel*1000;
+
+  var levels =[{s:500,w:40},
+               {s:450,w:35},
+               {s:400,w:30},
+               {s:350,w:25},
+               {s:300,w:20},
+               {s:250,w:15},
+               {s:200,w:10}
+            ];
+
+  var setToLevel=0;
+  if(theLevel>=0 && theLevel<levels.length){
+    setToLevel=theLevel;
+  }
+
+  if(theLevel>=levels.length){
+    setToLevel=levels.length-1;
+  }
+
+  millisecondsBetweenScrolls=levels[setToLevel].s;
+  widthOfTrack=levels[setToLevel].w;
+  carPosition = posOfLeftOfTrack + Math.floor(widthOfTrack/2);
+}
+
+function endGame(){
+  showInfo("!!GAME OVER!! You Crashed! You Scored " + points);
+  captureHighScore(points);
+  startGame=false;
+  window.clearInterval(theTimer);
+  document.getElementById('instructions').style.display = 'block';
+  document.getElementById('highscoreboard').style.display = 'block';
+  //document.getElementById('gameboard').style.display = 'none';
+  theTimer = window.setInterval(instructions, millisecondsBetweenScrolls);
+
+}
+
+
+
+function advanceCar(){
+  drawCar(carLine,carPosition);
+}
+
+function displayTheTrackToTheConsole(){
+
+  
+
+  var nextLine = getTrackLine(posOfLeftOfTrack, widthOfTrack, maxWidthOfArena);
+
+  scrollTrack(nextLine);
+
+  drawTrack();
+
+  advanceCar();
+  
+
+  // get track from array
+  var trackDisplay = track[carLine];
+
+  var trackArray = trackDisplay.split("");
+  var carSpace = trackArray[carPosition];
+
+  // use array above instead of string manipulationg - seems simpler
+  //var leftOfTrack = trackDisplay.substring(0,carPosition);
+  //var carSpace = trackDisplay.substr(carPosition, 1);
+  //var rightOfTrack = trackDisplay.slice(carPosition);
+
+  if(checkForCrash(carSpace)){
+    carDisplay="X";
+    drawCrashedCar(carLine, carPosition);
+  }
+
+  // add car to the track
+  //trackDisplay = leftOfTrack + carDisplay + rightOfTrack;
+  trackArray[carPosition] = carDisplay;
+
+  trackDisplay = trackArray.join("");
+
+  // enable for console driver - 2 in 1 game mega bonus - double winner you are
+  //console.log(trackDisplay);
+  
+
+}
+
+function centerCar(){
+  carPosition = track[carLine].indexOf(" ")+
+                Math.floor(
+                    (track[carLine].lastIndexOf(" ")-track[carLine].indexOf(" ")
+                    )/2);
+}
+
+function bumpCarBackOnToRoad(){
+  var leftSide = track[carLine].indexOf(" ");
+  var rightSide = track[carLine].lastIndexOf(" ");
+  if(carPosition<=leftSide){
+    carPosition=leftSide+1;
+  }else{
+    carPosition=rightSide-1;
+  }
+}
+
+
+function checkForCrash(carSpace){
+    //if(carSpace != " "){  // are you on a road?
+    var justLostALife = false;
+
+  if(carSpace == "*"){ // have you hit a wall?
+
+    currenthealth--;
+    if(currenthealth<1){
+      lives--;
+      justLostALife = true;
+      currenthealth=maxhealth-difficultySettings.maxHealthDecrement;
+      if(currenthealth<1){
+        currenthealth=1;
+      }
+    }
+
+    
+    if(lives<1){
+      // deaded
+      hasCrashed=true;
+    }else{
+
+      // second chance
+      showInfo("OUCH - be careful - Health: " + currenthealth + " - Lives left: " + lives);
+
+      if(justLostALife){
+        millisecondsBetweenScrolls*=3;
+        if(millisecondsBetweenScrolls>500){
+          millisecondsBetweenScrolls=500;
+        }
+        centerCar()
+      }else{
+        // bump car on to road
+        bumpCarBackOnToRoad();
+      }
+    }
+
+    
+    return true;
+  }
+  return false;
+}
+
+
+function adjustTheTrackForRoadWeaving(){
+  var leftNudge = getRandomInt(-1, 1);
+
+  posOfLeftOfTrack += leftNudge;
+  if(posOfLeftOfTrack<1){
+    posOfLeftOfTrack=1;
+  }
+  if((posOfLeftOfTrack+widthOfTrack) > maxWidthOfArena){
+    posOfLeftOfTrack = maxWidthOfArena - widthOfTrack - 1;
+  }
+}
+
+var defaultLevelData = { changes:[
+                      {start:0, end:40, tillSpeedChange:1, accel:100, widthChangeEvery:1, minWidth:15, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:40, end:80, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:250},
+                      {start:81, end:100, tillSpeedChange:4, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:230},
+                      {start:101, end:150, tillSpeedChange:3, accel:5, widthChangeEvery:1, minWidth:3, maxWidth:7, maxSpeedMillisChange:null, milliSpeedLimit:200},
+                      {start:151, end:200, tillSpeedChange:3, accel:5, widthChangeEvery:2, minWidth:5, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:180},
+                      {start:201, end:250, tillSpeedChange:3, accel:10, widthChangeEvery:3, minWidth:4, maxWidth:8, maxSpeedMillisChange:null, milliSpeedLimit:190},
+                      {start:251, end:300, tillSpeedChange:3, accel:10, widthChangeEvery:2, minWidth:7, maxWidth:13, maxSpeedMillisChange:null, milliSpeedLimit:170},
+                      {start:301, end:325, tillSpeedChange:3, accel:10, widthChangeEvery:1, minWidth:3, maxWidth:6, maxSpeedMillisChange:null, milliSpeedLimit:200},
+                      {start:326, end:350, tillSpeedChange:3, accel:10, widthChangeEvery:2, minWidth:5, maxWidth:9, maxSpeedMillisChange:null, milliSpeedLimit:160},
+                      {start:351, end:400, tillSpeedChange:3, accel:10, widthChangeEvery:1, minWidth:5, maxWidth:8, maxSpeedMillisChange:null, milliSpeedLimit:150},
+                      {start:401, end:500, tillSpeedChange:3, accel:15, widthChangeEvery:2, minWidth:5, maxWidth:6, maxSpeedMillisChange:null, milliSpeedLimit:150},
+                      {start:501, end:600, tillSpeedChange:2, accel:20, widthChangeEvery:3, minWidth:3, maxWidth:6, maxSpeedMillisChange:null, milliSpeedLimit:125},
+                      {start:601, end:700, tillSpeedChange:2, accel:30, widthChangeEvery:2, minWidth:3, maxWidth:5, maxSpeedMillisChange:null, milliSpeedLimit:100},
+                      {start:701, end:800, tillSpeedChange:2, accel:40, widthChangeEvery:4, minWidth:3, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:50},
+                      {start:801, end:900, tillSpeedChange:2, accel:40, widthChangeEvery:2, minWidth:2, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:40},
+                      {start:901, end:1000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:30},
+                      {start:1001, end:2000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:20, maxSpeedMillisChange:null, milliSpeedLimit:20},
+                      {start:2001, end:4000, tillSpeedChange:2, accel:40, widthChangeEvery:3, minWidth:2, maxWidth:10, maxSpeedMillisChange:null, milliSpeedLimit:20},
+                    ],
+                    // pretty much only bots can do default
+                    defaultChanges: {start:0, end:0, tillSpeedChange:5, accel:40, widthChangeEvery:1, minWidth:1, maxWidth:5, maxSpeedMillisChange:10, milliSpeedLimit:20}
+                  };
+
+function getLevelData(){
+  return defaultLevelData;
+}
+
+var defaultDifficulties = [
+            {name:"Drive Normal", speedDecrement:0, minTrackDecrement:0, maxTrackDecrement:0, maxHealthDecrement:0, startBonus:0, accel:0},
+            {name:"Drive Easy", speedDecrement:-100, minTrackDecrement:-3, maxTrackDecrement:-3, maxHealthDecrement:-1, startBonus:0, accel:-10},
+            {name:"Drive Hard", speedDecrement:100, minTrackDecrement:2, maxTrackDecrement:2, maxHealthDecrement:2, startBonus:1000, accel:10},
+            {name:"Drive Harder", speedDecrement:150, minTrackDecrement:3, maxTrackDecrement:2, maxHealthDecrement:3, startBonus:2000, accel:15},
+            {name:"Live Free or Drive Hard", speedDecrement:200, minTrackDecrement:3, maxTrackDecrement:3, maxHealthDecrement:3, startBonus:3000, accel:20},
+            {name:"A Good Day to Drive Hard", speedDecrement:200, minTrackDecrement:4, maxTrackDecrement:4, maxHealthDecrement:3, startBonus:4000, accel:25}
+         ];
+
+function getDifficulties(){
+
+  return defaultDifficulties;
+}
+
+function setDifficulty(){
+  var difficultyTiers = getDifficulties();
+  if(difficultyLevel>=difficultyTiers.length){
+    difficultyLevel=0;
+  }
+  difficultySettings = difficultyTiers[difficultyLevel];
+}
+
+var highScores = [ {name:"KAR",score:7000}, {name:"AAA",score:6000}, {name:"AJR",score:8000}, {name:"___",score:5000}, {name:"BOB",score:4000},  {name:"HI_",score:3000}   ];
+
+function captureHighScore(points){
+  if(highScores.length < maxHighScores || points>highScores[highScores.length-1]){
+    var initials = prompt(points + " is a HIGH SCORE. Please enter your initials", "AAA");
+    if(!initials){
+      initials = "AAA";
+    }
+    addHighScore(points, initials);
+  }
+}
+
+function addHighScore(points, initials){
+  highScores.push({name:initials, score:points});
+  sortHighScores();
+  trimHighScores();
+  saveHighScoresToCookies();
+  displayHighScoresOnPage();
+}
+
+function trimHighScores(){
+  if(highScores.length>maxHighScores){
+    highScores.pop();
+  }
+}
+
+function saveHighScoresToCookies(){
+
+  var cookieString="highscores=";
+  for(var scoreinc=0; scoreinc < highScores.length; scoreinc++){
+    cookieString+= highScores[scoreinc].name + ":" + highScores[scoreinc].score + "&";
+  }
+  document.cookie = cookieString + ";";
+}
+
+// https://www.w3schools.com/js/js_cookies.asp
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+function sortHighScores(){
+
+  highScores = highScores.sort(
+                  function(a, b){return b.score - a.score;}
+                );
+
+}
+
+function loadHighScores(){
+
+  var highScoreCookie = getCookie("highscores");
+  console.log(highScoreCookie);
+  var rawHighScores = highScoreCookie.split("&");
+  console.log(rawHighScores);
+
+  var newHighScores = [];
+
+  for(var scoreinc=0; scoreinc<rawHighScores.length; scoreinc++){
+    if(rawHighScores[scoreinc]!=null && rawHighScores[scoreinc].length>0){
+      var aScore = rawHighScores[scoreinc].split(":");
+      if(aScore.length>=2){
+        if(aScore[0].length>1 && Number.isInteger(parseInt(aScore[1]))){
+          newHighScores.push({name:aScore[0],score:parseInt(aScore[1])});
+        }
+      }
+    }
+  }
+
+  highScores = newHighScores;
+  sortHighScores();
+
+}
+
+function displayHighScoresOnPage(){
+  //https://stackoverflow.com/questions/14643617/create-table-using-javascript
+    var parent = document.getElementById("highscoredisplay");
+    parent.innerHTML = ''; // delete any existing table data
+    var tbl  = document.createElement('table');
+    tbl.style.width  = '100px';
+    tbl.style.border = '1px solid black';
+
+    for(var scoreinc = 0; scoreinc < highScores.length; scoreinc++){
+        var tr = tbl.insertRow();
+        
+        var td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].name));
+        td.style.border = '1px solid black';
+
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(highScores[scoreinc].score));
+        td.style.border = '1px solid black';
+
+    }
+    
+    parent.appendChild(tbl);
+
+}
+
+
+
+function setValuesToStartingValues(){
+
+
+  levelSettings = getLevelData();
+  setDifficulty();
+
+
+   currentLevelChanges = levelSettings.changes[0];
+
+   posOfLeftOfTrack=1;
+   maxWidthOfArena=defaultMaxWidthOfTrack;
+   widthOfTrack=maxWidthOfArena-2;
+   maxWidthOfTrack=widthOfTrack;
+   minWidthOfTrack=4;
+
+   trackWidthChangeEvery=5;
+   currentAcceleration=50;
+   lives = 3;
+   maxhealth = 4;
+   currenthealth = 4;
+
+   points=0;
+   bonuspoints=0;
+   startGame = false;
+   trackString = " - ";
+   carDisplay = "V";
+   hasCrashed = false;
+   millisecondsBetweenScrolls=500;
+   distanceTravelled=0;
+   distanceToNextSpeedChange=5;
+   speedChanges=0;
+   maxSpeedMillis=100;
+   maxWidthOfTrackIncrement=3;
+
+   maxTrackLines=20;
+
+   if(promptForValues){
+      var promptedValue = window.prompt("Enter Max Arena Width",maxWidthOfArena);
+      if(promptedValue!=null){
+        maxWidthOfArena = parseInt(promptedValue);
+      }
+
+      promptedValue = window.prompt("Enter Start Width of Track",widthOfTrack);
+      if(promptedValue!=null){
+        widthOfTrack = parseInt(promptedValue);
+      }
+
+      promptedValue = window.prompt("Enter initial milliseconds between scrolls (speed - high is slower)",millisecondsBetweenScrolls);
+      if(promptedValue!=null){
+        millisecondsBetweenScrolls = parseInt(millisecondsBetweenScrolls);
+      }
+
+      promptForValues=false;
+   }
+
+   posOfLeftOfTrack = getRandomInt(1,(maxWidthOfArena/2)-(widthOfTrack/2)-1);
+   carPosition = posOfLeftOfTrack + Math.floor(widthOfTrack/2);
+
+}
+
+
+  var maxHighScores=10;
+  var defaultMaxWidthOfTrack=60;
+  var difficultyLevel=0;
+  var distanceTravelled, distanceToNextSpeedChange, speedChanges, fontSize, fontWidth;
+  var levelSettings, currentLevelChanges;
+  var carLine; // car position line display
+  var posOfLeftOfTrack=1;
+  var maxWidthOfArena=60;
+  var widthOfTrack=maxWidthOfArena-6;
+  var maxWidthOfTrack=widthOfTrack;
+  var minWidthOfTrack=8;
+  var trackWidthChangeEvery=5;
+  var currentAcceleration=50;
+  var maxTrackLines=20;
+  var lives = 3;
+  var maxhealth = 4;   // when testing try maxhealth=1000 to explore levels more easily
+  var currenthealth = 4;
+
+  var carPosition = posOfLeftOfTrack + (widthOfTrack/2);
+  var points=0;
+  var bonuspoints=0;
+  var startGame = false;
+  var promptForValues=false;
+  // build a string and display to the console
+  // randomly shift track left or right
+
+  var trackString = " - ";
+
+  var carDisplay = "V";
+  var hasCrashed = false;
+
+  // initially show the instructions
+  var millisecondsBetweenScrolls=500;
+  var maxSpeedMillis=50;
+  var theTimer = window.setInterval(instructions, millisecondsBetweenScrolls);
+  var maxWidthOfTrackIncrement=3;
+
+
+
+  if(!getCookie("highscores")){
+    saveHighScoresToCookies();
+  }
+  
+  loadHighScores();
+
+
+</script>
+
+</head>
+<body>
+
+
+<div class="page-body">
+
+  <div class="render-area">
+  <h1>Canvas Driver</h1>
+
+  <h2><span id='message' style="display:none"></span></h2>
+
+    <div id="instructions">
+      <h1>Instructions</h1>
+      <p>Use cursor left and cursor Right to keep your car 'V' on the track.
+        Hit a wall '*' and you will lose health. You only have 4 health.
+        If you lose all your health, you explode "X". Each Time you
+        explode you lose a life. You only have 3 lives.</p>
+        <p><em>Press 'r' to redefine the keys.</em></p>
+      <p class="pressstart blink"><strong>Press space to start game</strong></p>
+      <!-- prototype for set start level difficulty -->
+      <input id="setLevel" style="display:none" value="1" />
+    </div>
+
+    <div id="highscoreboard" style="">
+      <h2>High Scores</h2>
+      <div id="highscoredisplay">
+
+      </div>
+
+    </div>
+    <!-- todo: add some defaults and debugging here to make tweaking gameplay easier -->
+
+    <div id="gameboard">
+      <p>
+        Points: <span id='thePoints'></span>
+        Speed: <span id='theSpeed'></span>
+        Health: <span id='health'></span>
+        Lives: <span id='lives'></span>
+      </p>
+      <div class="responsive-canvas">
+        <canvas id="gamedisplay" width="500" height="500"></canvas>
+      </div>
+      <h2>Info: <span id='info'></span></h2>
+    </div>
+
+    
+
+</div>
+
+
+<script> 
+  displayHighScoresOnPage();
+</script>
+</div>
+</body>
+</html>
+<!-- note to self php -S localhost:8000-->

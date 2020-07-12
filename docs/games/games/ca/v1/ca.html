@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cellular Automata</title>
+
+    <style>
+        /* full screen canvas demo html
+           http://stackoverflow.com/questions/15525560/html5-canvas-fit-to-window
+           Loktar
+           */
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+
+<!--
+
+    You can learn the technical skills needed to 'hack' this program on our
+    online training course.
+
+    - The basic theory of technical testing
+    - How to use proxies to look at web traffic
+    - How to manipulate web traffic during your testing
+    - Free tools that you can use immediately to improve the depth of your testing
+    - How and why to work with Cookies
+    - Testing REST Web Services
+    - Using the JavaScript Browser Console
+    - Enough JavaScript to make you dangerous
+    - How to automate web applications from within the browser
+    - Fun practical exercises
+
+    https://www.compendiumdev.co.uk/page/techweb101course
+
+    **Still only $10**
+
+    Suggested Exercises For this App:
+
+    - can you change the colour of the cellular entitites?
+    - can you change the colour to a random colour every second?
+    - can you cycle through every colour?
+    - can you replace the invasion with an invasion of gliders
+    - can you change the size of the world? e.g. 100x100, 1000x1000
+    - can you stop the invasion and instead make a randomly filled world?
+
+    All the exercises can be done without editing the source code via a proxy or making a local copy of the source.
+
+    Try to do everything from the console.
+
+-->
+
+<canvas id="myCanvas" width="100" height="100"></canvas>
+<br/>
+
+<script>
+
+
+    // other javascript life http://pmav.eu/stuff/javascript-game-of-life-v3.1.1/
+
+    // size canvas to window http://stackoverflow.com/questions/4288253/html5-canvas-100-width-height-of-viewport
+    window.addEventListener('resize', handleResize, false);
+
+    // store canvas to avoid finding element all the time
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+    function setCanvasSizeToScreen() {
+
+        canvas.width = window.innerWidth; //-20;
+        canvas.height = window.innerHeight; //-20;
+    }
+
+    function clearCanvas() {
+        // use earlier canvas to avoid finding element all the time
+        //var canvas = document.getElementById("myCanvas");
+        //var context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function handleResize() {
+        // use earlier canvas to avoid finding element all the time
+        //var canvas = document.getElementById("myCanvas");
+        if (canvas.width !== window.innerWidth) {
+            // resize canvas
+            setCanvasSizeToScreen();
+            // and size drawings
+            worldSizes.calculateScales();
+        }
+
+        clearCanvas();
+    }
+
+    // setup canvas and clear screen
+    setCanvasSizeToScreen();
+    clearCanvas();
+
+
+    function drawSquare(x, y, colour, xScale, yScale) {
+        // use earlier canvas to avoid finding element all the time
+        //var canvas = document.getElementById("myCanvas");
+        //var context = canvas.getContext("2d");
+        context.fillStyle = colour;
+
+        context.fillRect(x * xScale, y * yScale, xScale, yScale);
+    }
+
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function Position(setX, setY) {
+        this.X = setX;
+        this.Y = setY;
+    }
+
+    function LifeForm() {
+
+        this.age = 0;
+        this.alive = true;
+        this.position = new Position(0, 0);
+
+        // we don't care about memory yet so let's not hog the device memory as much
+        //this.memory = [];
+        //this.memory[0] = this.position;
+
+        this.move = function (generation, newX, newY) {
+            //this.memory[generation] = this.position;
+            this.position = new Position(newX, newY);
+            return this;
+        }
+
+    }
+
+
+    function World(xsize, ysize) {
+
+
+        this.xSize = xsize;
+        this.ySize = ysize;
+        this.grid = [];
+        this.population = [];
+        this.worldPopulation = 0;
+        this.entityColour = "#FF0000";
+
+
+        this.getACleanWorld = function () {
+
+            var aGrid = new Array(this.xSize);
+            for (var i = 0; i < this.xSize; i++) {
+                aGrid[i] = new Array(this.ySize);
+            }
+
+            return aGrid;
+        }
+
+        this.grid = this.getACleanWorld();
+
+        this.addToPopulation = function (aLifeForm) {
+            for (var pop = 0; pop < this.population.length; pop++) {
+                if (this.population[pop] === null) {
+                    this.population[pop] = aLifeForm;
+                    return;
+                }
+            }
+            // could not find any gaps in the array
+            this.population.push(aLifeForm);
+        }
+
+        // this world wraps around
+        this.positionInWorld = function (x, y) {
+            var atX = x;
+            var atY = y;
+
+            if (x < 0) {
+                atX = this.xSize + x;
+            }
+            if (y < 0) {
+                atY = this.ySize + y;
+            }
+            var position = new Position(atX % this.xSize, atY % this.ySize);
+            return position;
+        }
+
+        this.censusPopulation = function () {
+            var populationCount = 0;
+            var entity=null;
+            var pop=0;
+
+            this.grid = this.getACleanWorld();
+            // put each person in the right place in the world
+            for (pop = 0; pop < this.population.length; pop++) {
+                entity = this.population[pop];
+                if (entity !== null && entity !== undefined) {
+                    if (entity.alive === true) {
+                        if (this.grid[entity.position.X] === undefined) {
+                            this.grid[entity.position.X] = new Array(this.ySize);
+                        }
+                        this.grid[entity.position.X][entity.position.Y] = entity;
+                        populationCount++;
+                    } else {
+                        // if they are dead, take them off the board
+                        // should probably add them to a graveyard and reuse
+                        this.population[pop] = null;
+                    }
+                }
+            }
+
+            //console.log("population " + populationCount);
+            this.worldPopulation = populationCount;
+        }
+
+        this.logWorld = function () {
+
+            var entity=null;
+            //var line = "";
+
+            for (var y = 0; y < this.ySize; y++) {
+
+                //line = "";
+                for (var x = 0; x < this.xSize; x++) {
+                    entity = this.grid[x][y];
+                    if (entity !== null && entity !== undefined) {
+                        //line = line + "X";
+                        drawSquare(x, y, this.entityColour, worldSizes.xScale, worldSizes.yScale);
+                    } else {
+                        //line = line + ".";
+                    }
+                }
+                //console.log(line);
+            }
+        }
+
+        this.cellNeighbourPositions =
+                [[-1, -1], [0, -1], [1, -1],
+                    [-1, 0], [1, 0],
+                    [-1, 1], [0, 1], [1, 1]
+                ];
+
+        this.neighboursCount = function (x, y) {
+
+            var theCount = 0;
+            var pos = null;
+            var entity = null;
+            var yInc = 0;
+            var xInc = 0;
+
+            var posIndex = 0;
+
+            for (posIndex = 0; posIndex < 8; posIndex++) {
+
+                xInc = this.cellNeighbourPositions[posIndex][0];
+                yInc = this.cellNeighbourPositions[posIndex][1];
+
+                //console.log (xInc + " " + yInc)
+                pos = this.positionInWorld(x + xInc, y + yInc);
+                entity = this.grid[pos.X][pos.Y];
+                if (entity !== null && entity !== undefined) {
+                    theCount++;
+                }
+
+            }
+            //console.log (theCount);
+            return theCount;
+        }
+
+
+        this.decideWhoLivesAndWhoDies = function (generation) {
+
+            var entity = null;
+            var neighboursCount = 0;
+            var x, y;
+
+            for (y = 0; y < this.ySize; y++) {
+
+                for (x = 0; x < this.xSize; x++) {
+                    entity = this.grid[x][y];
+                    neighboursCount = this.neighboursCount(x, y);
+                    //console.log("X " + x + " Y " + y + " neighbours " + neighboursCount);
+                    if (entity !== null && entity !== undefined) {
+                        // live cell
+                        if (neighboursCount < 2 || neighboursCount > 3) {
+                            entity.alive = false;
+                        } else {
+                            //if(neighboursCount === 2 || neighboursCount === 3){
+                            entity.age++;
+                        }
+
+                    } else {
+                        if (neighboursCount === 3) {
+                            this.addToPopulation(new LifeForm().move(generation, x, y));
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+        this.nukeEmAll = function () {
+            this.nukeEm(world.population.length, 0);
+        }
+
+        this.nukeEm = function (howMany, fromWhere) {
+
+            var pos = fromWhere;
+
+            for (var x = 0; x < howMany; x++) {
+
+                pos = x + fromWhere;
+
+                if (pos >= world.population.length)
+                    return;
+
+                if (world.population[pos] !== null) {
+                    world.population[pos].alive = false;
+                }
+            }
+        }
+
+    }
+
+
+    // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
+    // patterns
+    var addLifeForms = {
+
+        lifeFormNames: [],
+
+        populateLifeFormNames: function(){
+            this.lifeFormNames[0]="glider";
+            this.lifeFormNames[1]="block";
+            this.lifeFormNames[2]="blinker1";
+            this.lifeFormNames[3]="blinker2";
+            this.lifeFormNames[4]="acorn";
+        },
+
+        glider: function (world, x, y) {
+            world.addToPopulation(new LifeForm().move(0, x, y));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y + 1));
+            world.addToPopulation(new LifeForm().move(0, x + 2, y + 1));
+            world.addToPopulation(new LifeForm().move(0, x + 0, y + 2));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y + 2));
+        },
+
+        block: function (world, x, y) {
+            world.addToPopulation(new LifeForm().move(0, x, y));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y));
+            world.addToPopulation(new LifeForm().move(0, x, y + 1));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y + 1));
+        },
+
+        // horizontal blinker
+        blinker1: function (world, x, y) {
+            world.addToPopulation(new LifeForm().move(0, x, y));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y));
+            world.addToPopulation(new LifeForm().move(0, x + 2, y));
+        },
+
+        // vertical blinker
+        blinker2: function (world, x, y) {
+            world.addToPopulation(new LifeForm().move(0, x, y));
+            world.addToPopulation(new LifeForm().move(0, x, y + 1));
+            world.addToPopulation(new LifeForm().move(0, x, y + 2));
+        },
+
+        acorn: function (world, x, y) {
+            world.addToPopulation(new LifeForm().move(0, x + 1, y));
+            world.addToPopulation(new LifeForm().move(0, x + 3, y + 1));
+            world.addToPopulation(new LifeForm().move(0, x, y + 2));
+            world.addToPopulation(new LifeForm().move(0, x + 1, y + 2));
+            world.addToPopulation(new LifeForm().move(0, x + 4, y + 2));
+            world.addToPopulation(new LifeForm().move(0, x + 5, y + 2));
+            world.addToPopulation(new LifeForm().move(0, x + 6, y + 2));
+        }
+    }
+
+    addLifeForms.populateLifeFormNames();
+
+    var worldSizes = {
+
+        // space we render on should match canvas
+        realWorldWidth: 200,
+        realWorldHeight: 200,
+
+        // grid we live on is 20x20
+        myWorldWidth: 200,
+        myWorldHeight: 200,
+
+        xScale: 1,
+        yScale: 1,
+
+        setDefaultValuesFromCanvas: function () {
+            this.setRealWorldValues();
+            this.myWorldWidth = Math.floor(this.realWorldWidth / 4);
+            this.myWorldHeight = Math.floor(this.realWorldHeight / 4);
+        },
+
+        setRealWorldValues: function () {
+            var canvas = document.getElementById("myCanvas");
+            this.realWorldWidth = canvas.width;
+            this.realWorldHeight = canvas.height;
+        },
+
+        calculateScales: function () {
+
+            this.setRealWorldValues();
+            this.xScale = this.realWorldWidth / this.myWorldWidth;
+            this.yScale = this.realWorldHeight / this.myWorldHeight;
+        },
+
+        resize: function (x, y) {
+            worldSizes.myWorldWidth = x;
+            world.xSize = x;
+            worldSizes.myWorldHeight = y, world.ySize = y;
+            this.calculateScales();
+        }
+    }
+
+
+    worldSizes.setDefaultValuesFromCanvas();
+    worldSizes.calculateScales();
+
+    var world = new World(worldSizes.myWorldWidth, worldSizes.myWorldHeight);
+
+    // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules
+    // add a block
+
+    //addLifeForms.block(world, 40,50);
+
+    // add a glider
+    //addLifeForms.glider(world, 0,0);
+
+    //addLifeForms.glider(world, 10,0);
+
+
+    // add a blinker
+    //addLifeForms.blinker1(world, 10,40);
+    //addLifeForms.blinker1(world, 20,40);
+    //addLifeForms.blinker1(world, 30,40);
+
+
+    // timed events
+    var autoAdvance = null;
+    var endOfTheWorld = null;
+    var invasion = null;
+
+    var genx = 0;
+
+    var advanceWorldPopulation = function () {
+        genx++;
+
+        world.censusPopulation();
+        //console.log("Generation " + genx);
+
+        clearCanvas();
+        world.logWorld();
+
+        world.decideWhoLivesAndWhoDies(genx);
+    };
+
+    var checkEndGame = function () {
+        if (world.worldPopulation === 0) {
+            console.log("Everybody died on Generation " + genx);
+            stopGame();
+            clearInterval(endOfTheWorld);
+        }
+    };
+
+    var randomEntity = function () {
+        //var entities = Object.keys(addLifeForms);
+        return addLifeForms[addLifeForms.lifeFormNames[getRandomInt(0, addLifeForms.lifeFormNames.length - 1)]];
+    }
+
+
+    // startGame(5) // 5 milliseconds between generations
+    var startGame = function (generationDelayMillis) {
+        autoAdvance = setInterval(advanceWorldPopulation, generationDelayMillis);
+    }
+
+    var stopGame = function () {
+        clearInterval(autoAdvance);
+    }
+
+    var periodicallyCheckForEndOfWorld = function (howOftenMillis) {
+        endOfTheWorld = setInterval(checkEndGame, howOftenMillis);
+    }
+
+    var startInvasion = function (invadeMillis) {
+        // add a random thing every invadeMillis
+        invasion = setInterval(function () {
+            var e = randomEntity();
+            e(world, getRandomInt(0, world.xSize - 50), getRandomInt(0, world.ySize - 50));
+        }, invadeMillis)
+    }
+
+    var stopInvasion = function () {
+        clearInterval(invasion);
+    }
+
+    // start the game up
+    startGame(5);
+    startInvasion(100);
+    // if there is an invasion, we never really need to check for end of world
+    //periodicallyCheckForEndOfWorld(1000);
+
+
+    // world.worldPopulation shows how many are alive after a census
+    // world.population.length shows the max number of entities that there have ever been
+</script>
+</body>
+</html>

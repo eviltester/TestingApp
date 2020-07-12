@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!--meta_data-->
+    <!--css_styles-->
+
+    <title>Eprimer - e-prime checking tool</title>
+
+    <link href="eprimer.css" rel="stylesheet" type="text/css"/>
+    <script src="eprime.js"></script>
+    <link rel="stylesheet" href="/css/testpages.css">
+</head>
+<body>
+
+<div class="page-body">
+<!--page_header-->
+
+<div class='listpageintro'>
+    <h1>E-Primer an e-prime checking tool</h1>
+    <p>Do you want to write without using the verb "to be"?</p>
+    <p>Do you want to master <a target="_blank" rel="nofollow" href="http://en.wikipedia.org/wiki/E-Prime">e-prime</a>?</p>
+    <p>Use our online tool to check your writing.</p>
+</div>
+
+
+<div id="app">
+    <div id="statistics">
+        <ul>
+            <li> Word Count: <span id="wordCount"></span></li>
+            <li> Discouraged Words: <span id="discouragedWordCount"></span></li>
+            <li> Possible Violations: <span id="possibleViolationCount"></span></li>
+        </ul>
+    </div>
+    <div id="eprimeoutput" class="eprime_text"></div>
+    <label for="inputtext">Text: </label>
+    <br/>
+    <textarea id="inputtext" rows="5" cols="60"></textarea>
+    <br/>
+    <button id="CheckForEPrimeButton" onclick='processInputText();'>Check For E-Prime</button>
+</div>
+
+<!--page_footer-->
+</div>
+</body></html>

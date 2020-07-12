@@ -1,0 +1,104 @@
+<html>
+<head>
+    <!--meta_data-->
+    <title>CounterStrings</title>
+    <!--css_styles-->
+    <script language="JavaScript" src="counterstrings.js"></script>
+    <link rel="stylesheet" href="/css/testpages.css">
+</head>
+<body>
+
+<div class="page-body">
+<!--page_header-->
+
+<script>
+
+    var elementIdToStoreResult = 'counterstring';
+
+    function generateCounterString(howlong){
+        howlong = typeof howlong !== 'undefined' ? howlong : Number(document.getElementById('lengthOfCounterString').value);
+        var separator = document.getElementById('csseparator').value;
+        document.getElementById(elementIdToStoreResult).innerText= new CounterString().create(howlong, separator);
+        document.getElementById("status").innerText="Generated - Ready to Copy"
+    }
+    function copySetup(){
+        var copyText = document.getElementById("counterstring");
+        copyText.select();
+    }
+    function copyIt() {
+        copySetup();
+        document.execCommand("Copy");
+        //alert("Copied the text: " + copyText.value);
+        document.getElementById("status").innerText="Copied To Clipboard"
+    }
+
+</script>
+
+
+<h1>CounterStrings Generator</h1>
+
+<form id="charsform" onsubmit="generateCounterString(); return false;">
+    <p>Length: <input type="text" name="length" id="lengthOfCounterString" value="6"></p>
+    <p><input type="button" name="validate" value="Generate Counterstring" onclick="generateCounterString();"></p>
+    <p><input id="copybutton" type="button" name="copy" value="Copy" onclick="copyIt();"></p>
+</form>
+
+<!-- v1 use a text area-->
+<div id="textAreaCounterString">
+    <hr/>
+    <div><p><input type="hidden" name="separator" id="csseparator" value="*"></p></div>
+    <textarea name="counterstring" id="counterstring" form="charsform">*3*5*</textarea>
+</div>
+
+
+
+
+<div>
+    <div id="divCounterString" style="display:none">
+        <hr/>
+        <p name="v2UseParaInDiv" id="divcounterstringvalue" style="word-wrap:break-word;">*3*5*</p>
+    </div>
+</div>
+
+<hr/>
+<p id="status"></p>
+
+
+<i>See also <a href="http://www.satisfice.com/blog/archives/22">James Bach Counterstrings</a></i>
+
+<script>
+
+    // setup app for version 2
+    if(window.location.search.includes("v=2")){
+        elementIdToStoreResult = 'divcounterstringvalue';
+        document.getElementById('textAreaCounterString').style.display="none";
+        document.getElementById('divCounterString').style.display="";
+        copySetup = function(){
+            var selection = window.getSelection();
+            selection.removeAllRanges();
+            var range = document.createRange();
+            range.selectNodeContents(document.getElementById('divcounterstringvalue'));
+            selection.addRange(range);
+        }
+    }
+    // setup app for version 3
+    if(window.location.search.includes("v=3")){
+        elementIdToStoreResult = '';
+        document.getElementById('textAreaCounterString').style.display="none";
+        document.getElementById('divCounterString').style.display="none";
+        document.getElementById('copybutton').style.display="none";
+        generateCounterString = function(){
+            var howlong = document.getElementById('lengthOfCounterString').value;
+            var separator = document.getElementById('csseparator').value;
+            console.log(new CounterString().create(howlong, separator));
+        }
+    }
+
+</script>
+
+
+<!--page_footer-->
+
+</div>
+</body>
+</html>
