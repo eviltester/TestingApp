@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+<head>
+    <title>Calculator</title>
+    <link rel="stylesheet" href="../../css/testpages.css">
+
+    <!-- HEAD -->
+
+    <script>
+
+
+        Calculator = function(){
+
+            total=0;
+            memory=0;
+            value=0;
+            lastfunction="+";
+
+            this.allclear = function(){
+                total=0;
+                value=0;
+                lastfunction="+";
+            }
+
+            this.clearentry = function(){
+                value=0;
+            }
+
+            this.setValue = function(textvalue) {
+                    value = parseFloat(textvalue);
+            }
+
+            this.setLastFunction = function(givenFunction){
+                lastfunction = givenFunction;
+            }
+
+            this.doFunction = function() {
+
+                switch (lastfunction) {
+                    case "+":
+                        total = total + value;
+                        break;
+                    case "-":
+                        total = total - value;
+                        break;
+                    case "/":
+                        total = total / value;
+                        break;
+                    case "*":
+                        total = total * value;
+                        break;
+                }
+                return total;
+            }
+
+            this.addMemory = function(aValue){
+                memory += parseFloat(aValue);
+            }
+
+            this.setMemory = function(aValue){
+                memory = parseFloat(aValue);
+            }
+
+            this.getMemory = function(){
+                return memory;
+            }
+
+            this.getTotal = function(){
+                return total;
+            }
+
+            this.getValue = function(){
+                return value;
+            }
+
+            this.getLastFunction = function(){
+                return lastfunction;
+            }
+        }
+
+        myCalculator = new Calculator();
+
+        laststate=0;  //0 button, 1 function
+        BUTTON_STATE=0;
+        FUNCTION_STATE=1;
+
+        function displayAppend(appendThis){
+            document.getElementById("calculated-display").value=
+                document.getElementById("calculated-display").value + appendThis;
+        }
+
+        function typenumber(typethis){
+            if(laststate==FUNCTION_STATE){
+                displayClear();
+            }
+            displayAppend(typethis);
+            laststate=BUTTON_STATE;
+        }
+
+        function typesymbol(typethis){
+            if(laststate==FUNCTION_STATE){
+                displayClear();
+            }
+            displayAppend(typethis);
+            laststate=BUTTON_STATE;
+        }
+
+        function calcfunction(dothis){
+
+            displayedValue = document.getElementById("calculated-display").value;
+
+            if(laststate==BUTTON_STATE){
+                myCalculator.setValue(displayedValue);
+            }
+
+            switch(dothis){
+                case "+":
+                case "-":
+                case "/":
+                case "*":
+                    if(laststate==BUTTON_STATE){
+                        displayClear();
+                        displayAppend(myCalculator.doFunction());
+                    }
+                    myCalculator.setLastFunction(dothis);
+                    break;
+                case "=":
+                    displayClear();
+                    displayAppend(myCalculator.doFunction());
+                    break;
+                case "ac":
+                    displayClear();
+                    myCalculator.allclear();
+                    break;
+                case "ce":
+                    displayClear();
+                    myCalculator.clearentry();
+                    break;
+                case "m+":
+                    myCalculator.addMemory(displayedValue)
+                    break;
+                case "mr":
+                    displayClear();
+                    displayAppend(myCalculator.getMemory());
+                    laststate=BUTTON_STATE;
+                    return;
+                    break;
+                case "min":
+                    myCalculator.setMemory(displayedValue);
+                    break;
+            }
+            laststate=FUNCTION_STATE;
+        }
+        function displayClear(){
+            document.getElementById("calculated-display").value ="";
+        }
+
+        document.addEventListener("load", displayClear);
+
+
+    </script>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+    </div>
+
+
+    <h1>Button Based Calculator</h1>
+
+    <div class="explanation">
+        <p>This is a simple button based calculator.
+        </p>
+    </div>
+
+    <style>
+        .calculator .display{zoom:1.5}
+        .display input{text-align: center}
+        .calculator button{zoom:2}
+        .num-pad{display:inline-grid; grid-template-columns: 1fr 1fr 1fr; margin: 0.5em}
+        .functions{display:inline-grid; grid-template-rows: repeat(5, 1fr); grid-auto-flow: column; margin: 0.5em}
+        .keypad{display:inline-grid; grid-template-columns: 1fr 1fr}
+    </style>
+
+    <div class="centered">
+        <div class="calculator">
+
+            <div class="display">
+                <input type="text" id="calculated-display">
+            </div>
+
+            <div class="keypad">
+                <div class="num-pad">
+                    <button id="button01" onclick="typenumber(1)">1</button>
+                    <button id="button02" onclick="typenumber(2)">2</button>
+                    <button id="button03" onclick="typenumber(3)">3</button>
+                    <button id="button04" onclick="typenumber(4)">4</button>
+                    <button id="button05" onclick="typenumber(5)">5</button>
+                    <button id="button06" onclick="typenumber(6)">6</button>
+                    <button id="button07" onclick="typenumber(7)">7</button>
+                    <button id="button08" onclick="typenumber(8)">8</button>
+                    <button id="button09" onclick="typenumber(9)">9</button>
+                    <button id="button00" onclick="typenumber(0)">0</button>
+                    <button id="buttondot" onclick="typesymbol('.')">.</button>
+                </div>
+
+                <div class="functions">
+                    <button id="buttonplus" onclick="calcfunction('+')">+</button>
+                    <button id="buttonminus" onclick="calcfunction('-')">-</button>
+                    <button id="buttonmultiply" onclick="calcfunction('*')">*</button>
+                    <button id="buttondivide" onclick="calcfunction('/')">/</button>
+                    <button id="buttonequals" onclick="calcfunction('=')">=</button>
+                    <button id="buttonallclear" onclick="calcfunction('ac')">AC</button>
+                    <button id="buttonclearentry" onclick="calcfunction('ce')">CE</button>
+                    <button id="buttonmemoryplus" onclick="calcfunction('m+')">M+</button>
+                    <button id="buttonmemoryrecall" onclick="calcfunction('mr')">MR</button>
+                    <button id="buttonmemoryin" onclick="calcfunction('min')">Min</button>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>

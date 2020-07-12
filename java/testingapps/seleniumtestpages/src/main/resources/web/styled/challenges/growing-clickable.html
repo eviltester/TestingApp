@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <title>Growing Clickable</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+    </div>
+
+    <h1>Growing Clickable</h1>
+
+    <div class="explanation">
+        <p>Not all elements are instantly clickable, particularly when animations etc. are in use.
+        </p>
+        <p>Try to click the elements below.</p>
+    </div>
+
+    <div class="centered">
+
+        <script>
+            function triggeredEvent(thang){
+                var myid= thang.getAttribute("id");
+                document.getElementById(myid + "status").innerHTML="Event Triggered";
+                thang.className="styled-click-button-triggered";
+            }
+            // handle the auto grow button challenge
+            window.addEventListener('load', (event) => {
+                document.getElementById("growbutton").addEventListener('transitionend', () => {
+                    document.getElementById("growbutton").classList.add("grown");
+                });
+                document.getElementById("growbutton").addEventListener('transitioncancel', () => {
+                    document.getElementById("growbutton").classList.remove("grown");
+                });
+                document.getElementById("growbutton").classList.add("showgrow");
+            });
+        </script>
+
+        <style>
+            .hovergrow { transition: all 2s ease-in-out; }
+            .hovergrow:hover { transform: scale(2); }
+
+            .showgrow { transition: all 4s ease-in-out; transform: scale(4);}
+            .grown {transform: scale(4);}
+        </style>
+        <div style="padding:5em">
+            <button id="growbutton" class="styled-click-button" onclick="if(this.classList.contains('grown')){triggeredEvent(this)}">Click Me</button>
+            <p id="growbuttonstatus"></p>
+        </div>
+
+
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>

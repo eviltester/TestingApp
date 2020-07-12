@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+    <title>Challenging Selectors</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../index.html">Index</a>
+    </div>
+
+    <h1>Challenging Selectors</h1>
+
+    <div class="explanation">
+        <p>The buttons below have 'challenging' selectors. Try to find the button and click it.</p>
+    </div>
+
+    <div class="centered">
+
+        <script>
+            function triggeredEvent(thang,idtouse){
+                var myid=idtouse;
+                if(!idtouse) {
+                    myid = thang.getAttribute("id");
+                }
+                document.getElementById(myid + "status").innerHTML="Event Triggered";
+                thang.className="styled-click-button-triggered";
+            }
+        </script>
+
+        <div>
+            <button id="select.me.by.id" class="styled-click-button" onclick="triggeredEvent(this)">Select Me By Id</button>
+            <p id="select.me.by.idstatus"></p>
+        </div>
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
