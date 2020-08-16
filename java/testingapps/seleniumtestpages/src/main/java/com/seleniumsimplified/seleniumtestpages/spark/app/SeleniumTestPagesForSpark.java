@@ -5,7 +5,7 @@ import com.seleniumsimplified.seleniumtestpages.php.*;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
-import static spark.Spark.staticFiles;
+import static spark.Spark.put;
 
 public class SeleniumTestPagesForSpark {
 
@@ -72,6 +72,36 @@ public class SeleniumTestPagesForSpark {
         // I Was going to rewrite the find_by_playground.php but then realised that the html is actually static now
         // as I just added the output of the old php to the resources and serve it up as a static html page
         //get("/find_by_playground.php", (req, res) -> {return new PhpFindByPlayground(req,res).get();});
+
+
+        /*
+            When migrating compendiumdev.co.uk to static site, we have some
+            'loose' pages which were used in the book API Testing a REST API
+            redirect these to the testing app.
+            compendiumdev.co.uk/apps/mocktracks/projectsjson.php
+         */
+        get("/apps/mocktracks/projectsjson.php", (req, res) -> {
+            res.header("Content-Type","application/json");
+            return new ResourceReader().
+                asString(
+                        "/web/mocktracks/projects.json");
+        });
+        get("/apps/mocktracks/projectsxml.php", (req, res) -> {
+            res.header("Content-Type","application/xml");
+            return new ResourceReader().
+                    asString(
+                            "/web/mocktracks/projects.xml");
+        });
+        get("/apps/mocktracks/reflect.php", (req, res) -> {
+            return "GET\n\n"+req.body();
+        });
+        post("/apps/mocktracks/reflect.php", (req, res) -> {
+            return "POST\n\n"+req.body();
+        });
+        put("/apps/mocktracks/reflect.php", (req, res) -> {
+            return "PUT\n\n"+req.body();
+        });
+
 
         // the upload functionality makes this insecure for external sites - do not release with this active
         post("/uploads/fileprocessor", (req, res) -> {
