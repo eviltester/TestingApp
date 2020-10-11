@@ -116,9 +116,6 @@ public class PulpAppForSpark {
         });
         */
 
-
-
-
         before("/apps/pulp/api/*", (request, response) -> {
             // before any API request, check for an X-API-AUTH header
             // the value of the X-API-AUTH header must match the value displayed on the GUI
@@ -133,6 +130,25 @@ public class PulpAppForSpark {
                 authNeeded = false;
             }
 
+            if(request.requestMethod().toUpperCase().equals("OPTIONS")){
+                // XHR sends an options message first, this will not
+                // have authentication headers, so don't authenticate
+                authNeeded = false;
+                String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+                if (accessControlRequestHeaders != null) {
+                    response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+                }
+
+                String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+                if (accessControlRequestMethod != null) {
+                    response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+                }
+                response.header("Access-Control-Allow-Origin", "*");
+            }else{
+                // by default add a cors header to allow online tools to work
+                response.header("Access-Control-Allow-Origin", "*");
+                response.header("Access-Control-Allow-Headers", "*");
+            }
 
             if(request.pathInfo().contentEquals("/apps/pulp/api/session")){
                 // does not require auth... but probably should need an admin password or summat!

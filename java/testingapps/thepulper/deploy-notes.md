@@ -12,7 +12,7 @@ I'm on mac
 - `heroku plugins:install heroku-cli-deploy`
 - `heroku login`
 - `mvn package`
-- `heroku deploy:jar target/thepulper-1-2-5-jar-with-dependencies.jar --app thepulper`
+- `heroku deploy:jar target/thepulper-1-2-6-SNAPSHOT-jar-with-dependencies.jar --app thepulper`
 
 had to add `:target/*` to the procfile when deploying fat app
 
