@@ -1,4 +1,4 @@
-# Instructor Notes
+# Appendix: Extra Information
 
 ## Changing Versions
 

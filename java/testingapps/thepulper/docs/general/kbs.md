@@ -1,5 +1,3 @@
-\newpage
-
 # Appendix - Known bugs
 
 This section has spoilers. You may want to find these bugs yourself by testing the application first.
@@ -21,6 +19,8 @@ This section has spoilers. You may want to find these bugs yourself by testing t
 - the reports have the "Showing All 364 books" bug as mentioned earlier
 - the drop down menus overlap and don't show properly on a small screen, the app needs to be more responsive in its layout.
 
+\newpage
+
 ## v002
 
 fixed issue with drop down menu overlap
@@ -32,6 +32,8 @@ fixed issue with drop down menu overlap
 - when I amend a book with no house author, the house authors list shows 'all' the authors, it should only show house authors
 - house author is shown twice in the view book screen
 
+\newpage
+
 ## v003
 
 fixed house author shown twice
@@ -41,12 +43,16 @@ fixed house author shown twice
 - the title of every FAQs page is "Authors with FAQs"
 - menu titles are inconsistent e.g. mix of FAQs and FAQ "Years > FAQs" and "Series > FAQ"
 
+\newpage
+
 ## v004
 
 fixed faq series template error
 
 - deleting a house author, deletes all books for author, even if other authors on the book, I don't think we should be doing this, we are allowed to have no house author on a book, but we are not allowed to create a book with no authors.
 - cannot delete book from list or table, only on author, publisher and series (book might have been a copy and past error in the story)
+
+\newpage
 
 ## v005
 
@@ -55,13 +61,19 @@ fixed bug title of FAQs page
 - help content seems to have misleading information i.e. "GUI Uses Form Submissions" the [x] delete form submission was added in version 4
 - there is a bug with the house author deletion, if you delete the house author before deleting the last author then you can create a book with no authors
 
+\newpage
+
 ## v006
 
 * user experience has changed, previously the "Added Author" was styled as an h2, now it is text `p` with an id of `outputmessage` - story says "no change to user experience"
 
+\newpage
+
 ## v007
 
 * error message when adding a duplicate author from GUI has changed, i.e. it used to be "Could not add author" now it is "Error: Cannot create author. Author 'bob' already exists with id 25." - story says "should be no change to user experience on GUI"
+
+\newpage
 
 ## v008
 
@@ -75,6 +87,7 @@ fixed bug title of FAQs page
 * I thought the release aim mentioned using Cookies - did we add any functionality around cookies or just a bug?
 * API is not really a search API, it is more like a filter on the book title - are we sure that we implemented this correctly? If it was going to be a filter then shouldn't the argument be ?title= or possibly title~= for approximately = (I'm not sure how search is normally implemented in an API)
 
+\newpage
 
 ## v009
 
@@ -94,6 +107,8 @@ fixed bug title of FAQs page
 * delete house author - deletes all books associated with author - regression from v5 fix
 * house author shown twice in view screen again
 
+\newpage
+
 ## v010
 
 fixed
@@ -112,6 +127,8 @@ fixed
 * current count shown at bottom of list when item is deleted, is updated for the numbers shown on screen, not the actual numbers on the server i.e. multi-window delete shows wrong list of items in list and wrong count - list refresh is not performed from server, just a delete request issued.
 * there is a bug with the house author deletion, if you delete the house author before deleting the last author then you can create a book with no authors (present since v 5), in v10 this is shown as a failed ajax call as well as book display
 * there is a bug with the book author deletion, if we delete the last author, but there is still a house author then book will be deleted. It should probably be valid to have a book with just a house author.
+
+\newpage
 
 ## v011
 
