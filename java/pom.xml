@@ -51,7 +51,7 @@ v1.4 - split into multiple pom.xnl
         1.3.4 added a redirect page for the selenium user-agent example
         1.3.5 added synchronisation pages
         1.3.6 added css pseudoclass hover page
-        1.3.7 will have cookies "Admin Login" page
+        1.3.7 has have cookies "Admin Login" page
         1.3.8 added the input validation micro app
         1.3.9 will add the javascript events button page,
                 and the auto grow challenge, and selector challenge buttons
@@ -68,8 +68,8 @@ v1.4 - split into multiple pom.xnl
         1.2.2 has operating system independent resource loading i.e. it didn't work on windows
         1-2-3 has different app instantiation internally for each connected user via JSESSIONID
         1-2-4 has updated style sheets and XHTTP has moved to version 6 and 7
-        1-2-5 will have more docs and up to version 10 with Ajax functionality
-        1-2-6 will have v11 fixes e.g. api book amendment on PUT and book author deletion bug fix
+        1-2-5 has have more docs and up to version 10 with Ajax functionality
+        1-2-6 has have v11 fixes e.g. api book amendment on PUT and book author deletion bug fix
         -->
         <thepulper.version>1-2-6</thepulper.version>
 
@@ -85,11 +85,11 @@ v1.4 - split into multiple pom.xnl
         <!-- 1-3-5 has updated to thepulper 1-2-4 -->
         <!-- 1-3-6 has updated the selenium test pages to work with heroku -->
         <!-- 1-3-7 has updated the selenium test pages to have a redirect on user agent page -->
-        <!-- 1-3-8 will have additional test pages - synchronisation test pages (1.3.5), css-hover (1.3.6)
+        <!-- 1-3-8 has have additional test pages - synchronisation test pages (1.3.5), css-hover (1.3.6)
                         and pulper amendments and better styling
         -->
         <!-- 1-3-9 has the addition of the input validation micro app in the test pages -->
-        <!-- 1-3-10 will have the javascript events buttons page, and the auto grow challenge -->
+        <!-- 1-3-10 has have the javascript events buttons page, and the auto grow challenge -->
         <collectedapp.version>1-3-10</collectedapp.version>
 
 
