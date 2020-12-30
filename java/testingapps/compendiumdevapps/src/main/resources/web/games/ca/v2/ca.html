@@ -110,7 +110,75 @@ Related:
     }
 
 
+    /*
+        Lifeforms, Creatures, Cells
+     */
 
+
+    function ColourBasedOnAgeAndAlive(){
+
+        function toHex(num) {
+            return  ("0"+(num.toString(16))).slice(-2).toUpperCase()
+        }
+
+        this.getColour = function(age, alive){
+            if(alive===false){
+                return "#000000";
+            }
+
+            if(age>10){
+                colourAgeRed = (255-age)%255;
+                colourAgeGreen = 0;
+                colourAgeBlue = 0;
+
+                if(age>255 && age<512){
+                    colourAgeRed=200;
+                    colourAgeGreen=(age-255)%512;
+                }
+                if(age>512 && age<765){
+                    colourAgeRed=200;
+                    colourAgeGreen=150;
+                    colourAgeBlue=(age-512)%765;
+                }
+
+                if(age>765){
+                    colourAgeRed=getRandomInt(200,255);
+                    colourAgeGreen=getRandomInt(0,200);
+                    colourAgeBlue=getRandomInt(0,200);
+                }
+
+                return "#" + toHex(colourAgeRed) + toHex(colourAgeGreen) + toHex(colourAgeBlue);
+            }
+
+            return "#ff0000";
+        }
+    }
+
+    function Position(setX, setY) {
+        this.X = setX;
+        this.Y = setY;
+    }
+
+    function LifeForm(colourizer) {
+
+        this.age = 0;
+        this.alive = true;
+        this.position = new Position(0, 0);
+
+        this.getColour = function(){
+
+            if(colourizer){
+                return colourizer.getColour(this.age, this.alive);
+            }
+
+            return this.alive ? "#FF0000": "#000000";
+        }
+
+        this.at = function ( newX, newY) {
+            this.position = new Position(newX, newY);
+            return this;
+        }
+    }
 
 
 
@@ -149,62 +217,8 @@ Related:
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    function Position(setX, setY) {
-        this.X = setX;
-        this.Y = setY;
-    }
 
-    function LifeForm() {
 
-        this.age = 0;
-        this.alive = true;
-        this.position = new Position(0, 0);
-
-        this.colour = "#FF0000";
-
-        function toHex(num) {
-            return  ("0"+(num.toString(16))).slice(-2).toUpperCase()
-        }
-
-        this.getColour = function(){
-
-            if(this.alive===false){
-                return "#000000";
-            }
-
-            if(this.age>10){
-                colourAgeRed = (255-this.age)%255;
-                colourAgeGreen = 0;
-                colourAgeBlue = 0;
-
-                if(this.age>255 && this.age<512){
-                    colourAgeRed=200;
-                    colourAgeGreen=(this.age-255)%512;
-                }
-                if(this.age>512 && this.age<765){
-                    colourAgeRed=200;
-                    colourAgeGreen=150;
-                    colourAgeBlue=(this.age-512)%765;
-                }
-
-                if(this.age>765){
-                    colourAgeRed=getRandomInt(200,255);
-                    colourAgeGreen=getRandomInt(0,200);
-                    colourAgeBlue=getRandomInt(0,200);
-                }
-
-                this.colour = "#" + toHex(colourAgeRed) + toHex(colourAgeGreen) + toHex(colourAgeBlue);
-            }
-
-            return this.colour;
-        }
-
-        this.at = function ( newX, newY) {
-            this.position = new Position(newX, newY);
-            return this;
-        }
-
-    }
 
     function WorldCanvasRenderer(fullScreenCanvas, world){
 
@@ -235,19 +249,53 @@ Related:
         }
     }
 
+    /*
+        Storage of a generation of creatures on a grid width x height
+     */
+    function Grid(width, height){
+
+        this.xSize = width;
+        this.ySize = height;
+
+        this.grid = [];
+
+        this.atPosition = function(x,y){
+            return this.grid[x][y];
+        }
+
+        this.add = function(entity, xPos, yPos){
+            if (this.grid[xPos] === undefined) {
+                this.grid[xPos] = new Array(this.ySize);
+            }
+            this.grid[xPos][yPos] = entity;
+            return this;
+        }
+
+        this.clean = function () {
+
+            var aGrid = new Array(this.xSize);
+            for (var i = 0; i < this.xSize; i++) {
+                aGrid[i] = new Array(this.ySize);
+            }
+
+            this.grid = aGrid;
+            return this;
+        }
+    }
+
     function World(xsize, ysize) {
 
 
         this.xSize = xsize;
         this.ySize = ysize;
-        this.grid = [];
+        this.grid = new Grid(xsize, ysize).clean();
         this.population = [];
         this.worldPopulation = 0;
 
+        this.colourizer = new ColourBasedOnAgeAndAlive();
 
-
-        this.atPosition = function(x,y){
-            return this.grid[x][y];
+        this.getColourizer = function(){
+            return this.colourizer;
         }
 
         this.getYSize = function(){
@@ -258,18 +306,9 @@ Related:
             return this.xSize;
         }
 
-
-        this.getACleanWorld = function () {
-
-            var aGrid = new Array(this.xSize);
-            for (var i = 0; i < this.xSize; i++) {
-                aGrid[i] = new Array(this.ySize);
-            }
-
-            return aGrid;
+        this.atPosition = function(x,y){
+            return this.grid.atPosition(x,y);
         }
-
-        this.grid = this.getACleanWorld();
 
         this.addToPopulation = function (aLifeForm) {
             for (var pop = 0; pop < this.population.length; pop++) {
@@ -302,16 +341,13 @@ Related:
             var entity=null;
             var pop=0;
 
-            this.grid = this.getACleanWorld();
+            this.grid = new Grid(this.xSize, this.ySize).clean();
             // put each person in the right place in the world
             for (pop = 0; pop < this.population.length; pop++) {
                 entity = this.population[pop];
                 if (entity !== null && entity !== undefined) {
                     if (entity.alive === true) {
-                        if (this.grid[entity.position.X] === undefined) {
-                            this.grid[entity.position.X] = new Array(this.ySize);
-                        }
-                        this.grid[entity.position.X][entity.position.Y] = entity;
+                        this.grid.add(entity, entity.position.X, entity.position.Y);
                         populationCount++;
                     } else {
                         // if they are dead, take them off the board
@@ -348,7 +384,7 @@ Related:
 
                 //console.log (xInc + " " + yInc)
                 pos = this.positionInWorld(x + xInc, y + yInc);
-                entity = this.grid[pos.X][pos.Y];
+                entity = this.grid.atPosition(pos.X,pos.Y);
                 if (entity !== null && entity !== undefined ) {
                     theCount++;
                 }
@@ -368,7 +404,7 @@ Related:
             for (y = 0; y < this.ySize; y++) {
 
                 for (x = 0; x < this.xSize; x++) {
-                    entity = this.grid[x][y];
+                    entity = this.grid.atPosition(x,y);
                     neighboursCount = this.neighboursCount(x, y);
                     //console.log("X " + x + " Y " + y + " neighbours " + neighboursCount);
                     if (entity !== null && entity !== undefined) {
@@ -383,7 +419,7 @@ Related:
 
                     } else {
                         if (neighboursCount === 3) {
-                            this.addToPopulation(new LifeForm().at( x, y));
+                            this.addToPopulation(new LifeForm(this.colourizer).at( x, y));
                         }
                     }
                 }
@@ -431,42 +467,42 @@ Related:
         },
 
         glider: function (world, x, y) {
-            world.addToPopulation(new LifeForm().at( x, y));
-            world.addToPopulation(new LifeForm().at( x + 1, y + 1));
-            world.addToPopulation(new LifeForm().at( x + 2, y + 1));
-            world.addToPopulation(new LifeForm().at( x + 0, y + 2));
-            world.addToPopulation(new LifeForm().at( x + 1, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 0, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
         },
 
         block: function (world, x, y) {
-            world.addToPopulation(new LifeForm().at( x, y));
-            world.addToPopulation(new LifeForm().at( x + 1, y));
-            world.addToPopulation(new LifeForm().at( x, y + 1));
-            world.addToPopulation(new LifeForm().at( x + 1, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 1));
         },
 
         // horizontal blinker
         blinker1: function (world, x, y) {
-            world.addToPopulation(new LifeForm().at( x, y));
-            world.addToPopulation(new LifeForm().at( x + 1, y));
-            world.addToPopulation(new LifeForm().at( x + 2, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y));
         },
 
         // vertical blinker
         blinker2: function (world, x, y) {
-            world.addToPopulation(new LifeForm().at( x, y));
-            world.addToPopulation(new LifeForm().at( x, y + 1));
-            world.addToPopulation(new LifeForm().at( x, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
         },
 
         acorn: function (world, x, y) {
-            world.addToPopulation(new LifeForm().at( x + 1, y));
-            world.addToPopulation(new LifeForm().at( x + 3, y + 1));
-            world.addToPopulation(new LifeForm().at( x, y + 2));
-            world.addToPopulation(new LifeForm().at( x + 1, y + 2));
-            world.addToPopulation(new LifeForm().at( x + 4, y + 2));
-            world.addToPopulation(new LifeForm().at( x + 5, y + 2));
-            world.addToPopulation(new LifeForm().at( x + 6, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 3, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 4, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 5, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 6, y + 2));
         }
     }
 
