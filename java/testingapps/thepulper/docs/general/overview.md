@@ -1,4 +1,4 @@
-# Overview
+# Overview of The Pulper
 
 A simple overview of the app to support usage and workshops.
 

@@ -70,6 +70,7 @@ v1.4 - split into multiple pom.xnl
         1-2-4 has updated style sheets and XHTTP has moved to version 6 and 7
         1-2-5 has have more docs and up to version 10 with Ajax functionality
         1-2-6 has have v11 fixes e.g. api book amendment on PUT and book author deletion bug fix
+        1-2-7-SNAPSHOT will have: minor technical refactorings (remove Faq)
         -->
         <thepulper.version>1-2-6</thepulper.version>
 
