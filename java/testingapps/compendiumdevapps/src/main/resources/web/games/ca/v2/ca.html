@@ -364,6 +364,16 @@ Related:
         }
 
         this.disposeOfTheDead = function(){
+            // this is currently used during rendering to build trails
+            // different algorithms and colouring (e.g. based on death age)
+            // could create different visual effects
+
+            var maxGraveyardSize = 1000; // this will slow down the world if too large
+            while(this.graveyard.length>maxGraveyardSize){
+                this.graveyard.shift();
+            }
+            return;
+
             // tidy out the graveyard to keep it small
             // remove 50% of the dead
             let remove = Math.floor(this.graveyard.length/2);
