@@ -249,6 +249,7 @@ Related:
             var entity=null;
             //var line = "";
 
+            // todo: this could use the population, rather than the grid
             for (var y = 0; y < this.myWorld.getYSize(); y++) {
 
                 //line = "";
@@ -307,6 +308,7 @@ Related:
         this.ySize = ysize;
         this.grid = new Grid(xsize, ysize).clean();
         this.population = [];
+        this.graveyard = [];
         this.worldPopulation = 0;
 
         this.colourizer = new ColourBasedOnAgeAndAlive();
@@ -354,29 +356,49 @@ Related:
         }
 
         this.censusPopulation = function () {
-            var populationCount = 0;
-            var entity=null;
-            var pop=0;
+            var nextPopulation = this.findTheLiving(this.population);
+            var newlyDead = this.findTheDead(this.population);
+            var nextGrid = this.populateOnGrid(nextPopulation);
+            this.worldPopulation = nextPopulation.length;
 
-            this.grid = new Grid(this.xSize, this.ySize).clean();
-            // put each person in the right place in the world
-            for (pop = 0; pop < this.population.length; pop++) {
-                entity = this.population[pop];
-                if (entity !== null && entity !== undefined) {
-                    if (entity.alive === true) {
-                        this.grid.add(entity, entity.position.X, entity.position.Y);
-                        populationCount++;
-                    } else {
-                        // if they are dead, take them off the board
-                        // should probably add them to a graveyard and reuse
-                        this.population[pop] = null;
-                    }
-                }
-            }
-
-            //console.log("population " + populationCount);
-            this.worldPopulation = populationCount;
+            // todo: possibly keep track of populations?
+            this.population = nextPopulation;
+            this.grid = nextGrid;
+            this.graveyard = this.graveyard.concat(newlyDead);
         }
+
+        this.disposeOfTheDead = function(){
+            // tidy out the graveyard to keep it small
+            // remove 50% of the dead
+            let remove = Math.floor(this.graveyard.length/2);
+            // is a small number then may as well just remove them all
+            remove = remove < 20 ? this.graveyard.length : remove;
+            while(this.graveyard.length>0 && remove > 0){
+                this.graveyard.shift();
+                remove--;
+            }
+        }
+
+        this.populateOnGrid = function (aPopulation) {
+
+            aGrid = new Grid(this.xSize, this.ySize).clean();
+
+            // put each person in the right place in the world
+            for (pop = 0; pop < aPopulation.length; pop++) {
+                entity = aPopulation[pop];
+                aGrid.add(entity, entity.position.X, entity.position.Y);
+            }
+            return aGrid;
+        }
+
+        this.findTheLiving = function (aPopulation) {
+            return aPopulation.filter(entity => (entity !== null && entity !== undefined) && entity.alive === true);
+        }
+
+        this.findTheDead = function (aPopulation) {
+            return aPopulation.filter(entity => (entity !== null && entity !== undefined) && entity.alive === false);
+        }
+
 
         this.cellNeighbourPositions =
                 [
@@ -391,7 +413,6 @@ Related:
 
         this.getNeighbours = function (neighbourPositions, x, y) {
 
-            var theCount = 0;
             var pos = null;
             var entity = null;
             var yInc = 0;
@@ -622,6 +643,7 @@ Related:
         // world.logWorld();
 
         world.decideWhoLivesAndWhoDies(genx);
+        world.disposeOfTheDead();
     };
 
     var checkEndGame = function () {
