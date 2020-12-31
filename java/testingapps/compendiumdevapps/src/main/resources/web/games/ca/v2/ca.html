@@ -406,6 +406,7 @@ Related:
         }
 
 
+        // default for conways life
         this.cellNeighbourPositions =
                 [
                     [-1, -1], [0, -1], [1, -1],
@@ -455,18 +456,17 @@ Related:
                     entity = this.grid.atPosition(x,y);
 
                     if (entity !== null && entity !== undefined) {
-
                         if(typeof entity.getCellNeighbourPositions === 'undefined'){
                             // entity has not defined a getCellNeighbourPositions method
                             // use the world method
-                            entity.process(this.getNeighbours(this.cellNeighbourPositions, x, y));
+                            neighboursAre = this.getNeighbours(this.cellNeighbourPositions, x, y);
                         }else{
                             neighboursAre = this.getNeighbours(entity.getCellNeighbourPositions(), x, y)
-                            entity.process(neighboursAre);
                         }
+                        entity.process(neighboursAre);
 
                     } else {
-                        // if no entity then world has its own neighbours rules
+                        // if no entity then world has its own neighbours rules for generation
                         neighboursCount = this.neighboursCount(x, y);
                         if (neighboursCount === 3) {
                             this.addToPopulation(new LifeForm(this.colourizer).at( x, y));
@@ -504,24 +504,101 @@ Related:
 
     // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
     // patterns
+    // https://www.conwaylife.com/wiki/Main_Page
+    // plaintext from conwaylife wiki can be converted using the createFromTextArray
+
+    function createFromTextArray(anArray, world, origx, origy){
+
+        var y=0;
+        anArray.forEach(line => {
+            var x=0;
+            Array.from(line).forEach( aChar => {
+                if(aChar!=="."){
+                    world.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
+                }
+                x++;
+            })
+            y++;
+        })
+    }
+
+    function createFromNewlineString(aString, world, origx, origy){
+
+        var y=0;
+        aString.split("\n").forEach(line => {
+            var x=0;
+            Array.from(line).forEach( aChar => {
+                if(aChar!=="."){
+                    world.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
+                }
+                x++;
+            })
+            y++;
+        })
+    }
+
     var addLifeForms = {
 
         lifeFormNames: [],
 
         populateLifeFormNames: function(){
-            this.lifeFormNames[0]="glider";
-            this.lifeFormNames[1]="block";
-            this.lifeFormNames[2]="blinker1";
-            this.lifeFormNames[3]="blinker2";
-            this.lifeFormNames[4]="acorn";
+            this.lifeFormNames.push("glider");
+            this.lifeFormNames.push("block");
+            this.lifeFormNames.push("blinker1");
+            this.lifeFormNames.push("blinker2");
+            this.lifeFormNames.push("acorn");
+            this.lifeFormNames.push("beehive");
+            this.lifeFormNames.push("loaf");
+            this.lifeFormNames.push("gosperGliderGun");
+            this.lifeFormNames.push("babblingBrook1");
         },
 
+        // https://www.conwaylife.com/wiki/Spaceship
         glider: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 0, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
+            createFromTextArray(
+                [
+                ".O..O",
+                "O",
+                "O...O",
+                "OOOO"
+                ],
+                world, x, y
+            )
+        },
+
+        // https://www.conwaylife.com/wiki/Babbling_brook_1
+        babblingBrook1: function(world, x, y){
+            createFromNewlineString(
+                ".......O\n" +
+                ".....OOO....OO\n" +
+                "....O...OO..O\n" +
+                ".O..O.OO..O.O\n" +
+                "O.O.O....OO..OO\n" +
+                ".OO..OO....O.O.O\n" +
+                "...O.O..OO.O..O\n" +
+                "...O..OO...O\n" +
+                "..OO....OOO\n" +
+                "........O",
+                world, x, y
+            )
+        },
+
+        // https://www.conwaylife.com/wiki/Gosper_glider_gun
+        gosperGliderGun: function(world, x, y){
+            createFromTextArray(
+            [
+            "........................O" ,
+            "......................O.O" ,
+            "............OO......OO............OO" ,
+            "...........O...O....OO............OO" ,
+            "OO........O.....O...OO" ,
+            "OO........O...O.OO....O.O" ,
+            "..........O.....O.......O" ,
+            "...........O...O" ,
+            "............OO"
+            ],
+                world, x, y
+            )
         },
 
         block: function (world, x, y) {
@@ -553,7 +630,26 @@ Related:
             world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 4, y + 2));
             world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 5, y + 2));
             world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 6, y + 2));
-        }
+        },
+
+        beehive: function (world, x, y) {
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x-1, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
+        },
+
+        loaf: function (world, x, y) {
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x-1, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 2));
+            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 3));
+        },
     }
 
     addLifeForms.populateLifeFormNames();
@@ -689,7 +785,7 @@ Related:
 
     // start the game up
     startGame(5);
-    startInvasion(100);
+    startInvasion(10);
     // if there is an invasion, we never really need to check for end of world
     //periodicallyCheckForEndOfWorld(1000);
 
