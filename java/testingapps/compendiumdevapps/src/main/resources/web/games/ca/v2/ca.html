@@ -242,28 +242,24 @@ Related:
         this.myWorld = world;
         this.mySizes = worldSizes;
 
+        function renderAPopulation(aPopulation, sizes){
+
+            aPopulation.forEach(entity => {
+                drawSquare(entity.position.X, entity.position.Y, entity.getColour(),
+                    sizes.xScale, sizes.yScale);
+            })
+        }
+
         this.renderWorld = function () {
 
             this.myFullScreenCanvas.clearCanvas();
 
-            var entity=null;
-            //var line = "";
+            // render the dead to create a trail
+            renderAPopulation(this.myWorld.graveyard, this.mySizes);
 
-            // todo: this could use the population, rather than the grid
-            for (var y = 0; y < this.myWorld.getYSize(); y++) {
+            // render the living
+            renderAPopulation(this.myWorld.population, this.mySizes);
 
-                //line = "";
-                for (var x = 0; x < this.myWorld.getXSize(); x++) {
-                    entity = this.myWorld.atPosition(x, y);
-                    if (entity !== null && entity !== undefined) {
-                        //line = line + "X";
-                        drawSquare(x, y, entity.getColour(), this.mySizes.xScale, this.mySizes.yScale);
-                    } else {
-                        //line = line + ".";
-                    }
-                }
-                //console.log(line);
-            }
         }
     }
 
@@ -457,10 +453,6 @@ Related:
                         }else{
                             neighboursAre = this.getNeighbours(entity.getCellNeighbourPositions(), x, y)
                             entity.process(neighboursAre);
-                        }
-
-                        if(!entity.alive){
-                            drawSquare(x, y, entity.getColour(), worldSizes.xScale, worldSizes.yScale);
                         }
 
                     } else {
