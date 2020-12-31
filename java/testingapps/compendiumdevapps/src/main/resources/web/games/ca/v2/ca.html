@@ -416,16 +416,13 @@ Related:
             return neighbours;
         }
 
-
-        // TODO: push this into the lifeform and process all lifeforms
+        // todo: this should really be a 'generate new generation'
         this.decideWhoLivesAndWhoDies = function (generation) {
 
             var entity = null;
             var neighboursCount = 0;
             var x, y;
 
-            // currently this goes around the grid, but that will result in a lot of
-            // false positives for empty grid cells, we could instead process the population
             for (y = 0; y < this.ySize; y++) {
                 for (x = 0; x < this.xSize; x++) {
                     entity = this.grid.atPosition(x,y);
