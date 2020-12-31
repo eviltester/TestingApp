@@ -178,6 +178,20 @@ Related:
             this.position = new Position(newX, newY);
             return this;
         }
+
+        this.process = function (neighbours){
+
+            var neighboursCount = neighbours.length;
+
+            if (neighboursCount < 2 || neighboursCount > 3) {
+                this.alive = false;
+            } else {
+                //if(neighboursCount === 2 || neighboursCount === 3){
+                this.age++;
+            }
+
+            return this.alive;
+        }
     }
 
 
@@ -192,6 +206,8 @@ Related:
 
     var fullScreenCanvas = new FullScreenCanvas(canvas);
 
+    // todo - three modes - scale display and resize world to match display and scrollbars for wider display
+    // currently we scale
     function handleResize(){
 
         fullScreenCanvas.handleResize();
@@ -220,10 +236,11 @@ Related:
 
 
 
-    function WorldCanvasRenderer(fullScreenCanvas, world){
+    function WorldCanvasRenderer(fullScreenCanvas, world, worldSizes){
 
         this.myFullScreenCanvas = fullScreenCanvas;
         this.myWorld = world;
+        this.mySizes = worldSizes;
 
         this.renderWorld = function () {
 
@@ -239,7 +256,7 @@ Related:
                     entity = this.myWorld.atPosition(x, y);
                     if (entity !== null && entity !== undefined) {
                         //line = line + "X";
-                        drawSquare(x, y, entity.getColour(), worldSizes.xScale, worldSizes.yScale);
+                        drawSquare(x, y, entity.getColour(), this.mySizes.xScale, this.mySizes.yScale);
                     } else {
                         //line = line + ".";
                     }
@@ -362,62 +379,75 @@ Related:
         }
 
         this.cellNeighbourPositions =
-                [[-1, -1], [0, -1], [1, -1],
-                    [-1, 0], [1, 0],
-                    [-1, 1], [0, 1], [1, 1]
+                [
+                    [-1, -1], [0, -1], [1, -1],
+                    [-1, 0],           [1, 0],
+                    [-1, 1],  [0, 1],  [1, 1]
                 ];
 
         this.neighboursCount = function (x, y) {
+            return this.getNeighbours(this.cellNeighbourPositions, x, y).length;
+        }
+
+        this.getNeighbours = function (neighbourPositions, x, y) {
 
             var theCount = 0;
             var pos = null;
             var entity = null;
             var yInc = 0;
             var xInc = 0;
+            var neighbours = [];
 
             var posIndex = 0;
 
-            for (posIndex = 0; posIndex < 8; posIndex++) {
+            for (posIndex = 0; posIndex < neighbourPositions.length; posIndex++) {
 
-                xInc = this.cellNeighbourPositions[posIndex][0];
-                yInc = this.cellNeighbourPositions[posIndex][1];
+                xInc = neighbourPositions[posIndex][0];
+                yInc = neighbourPositions[posIndex][1];
 
-                //console.log (xInc + " " + yInc)
                 pos = this.positionInWorld(x + xInc, y + yInc);
                 entity = this.grid.atPosition(pos.X,pos.Y);
                 if (entity !== null && entity !== undefined ) {
-                    theCount++;
+                    neighbours.push(entity);
                 }
 
             }
-            //console.log (theCount);
-            return theCount;
+
+            return neighbours;
         }
 
 
+        // TODO: push this into the lifeform and process all lifeforms
         this.decideWhoLivesAndWhoDies = function (generation) {
 
             var entity = null;
             var neighboursCount = 0;
             var x, y;
 
+            // currently this goes around the grid, but that will result in a lot of
+            // false positives for empty grid cells, we could instead process the population
             for (y = 0; y < this.ySize; y++) {
-
                 for (x = 0; x < this.xSize; x++) {
                     entity = this.grid.atPosition(x,y);
-                    neighboursCount = this.neighboursCount(x, y);
-                    //console.log("X " + x + " Y " + y + " neighbours " + neighboursCount);
+
                     if (entity !== null && entity !== undefined) {
-                        // live cell
-                        if (neighboursCount < 2 || neighboursCount > 3) {
-                            entity.alive = false;
+
+                        if(typeof entity.getCellNeighbourPositions === 'undefined'){
+                            // entity has not defined a getCellNeighbourPositions method
+                            // use the world method
+                            entity.process(this.getNeighbours(this.cellNeighbourPositions, x, y));
+                        }else{
+                            neighboursAre = this.getNeighbours(entity.getCellNeighbourPositions(), x, y)
+                            entity.process(neighboursAre);
+                        }
+
+                        if(!entity.alive){
                             drawSquare(x, y, entity.getColour(), worldSizes.xScale, worldSizes.yScale);
-                        } else {
-                            //if(neighboursCount === 2 || neighboursCount === 3){
-                            entity.age++;
                         }
 
                     } else {
+                        // if no entity then world has its own neighbours rules
+                        neighboursCount = this.neighboursCount(x, y);
                         if (neighboursCount === 3) {
                             this.addToPopulation(new LifeForm(this.colourizer).at( x, y));
                         }
@@ -514,17 +544,23 @@ Related:
         realWorldWidth: 200,
         realWorldHeight: 200,
 
-        // grid we live on is 20x20
+        // grid we live on
         myWorldWidth: 200,
         myWorldHeight: 200,
 
         xScale: 1,
         yScale: 1,
 
-        setDefaultValuesFromCanvas: function () {
+        setWorldWidthToMatchCanvas: function (scale) {
             this.setRealWorldValues();
-            this.myWorldWidth = Math.floor(this.realWorldWidth / 4);
-            this.myWorldHeight = Math.floor(this.realWorldHeight / 4);
+            var usescale = isNaN(scale)? 1 : Number(scale);
+
+            usescale = usescale >0 ? usescale : 1;
+
+            // ? add an upper limit?
+
+            this.myWorldWidth = Math.floor(this.realWorldWidth / usescale);
+            this.myWorldHeight = Math.floor(this.realWorldHeight / usescale);
         },
 
         setRealWorldValues: function () {
@@ -549,8 +585,7 @@ Related:
         }
     }
 
-
-    worldSizes.setDefaultValuesFromCanvas();
+    worldSizes.setWorldWidthToMatchCanvas(4);
     worldSizes.calculateScales();
 
     var world = new World(worldSizes.myWorldWidth, worldSizes.myWorldHeight);
@@ -585,7 +620,7 @@ Related:
         world.censusPopulation();
         //console.log("Generation " + genx);
 
-        new WorldCanvasRenderer(fullScreenCanvas, world).renderWorld();
+        new WorldCanvasRenderer(fullScreenCanvas, world, worldSizes).renderWorld();
         // fullScreenCanvas.clearCanvas();
         // world.logWorld();
 
