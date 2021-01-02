@@ -107,6 +107,14 @@ Related:
 
             this.clearCanvas();
         }
+
+        this.drawSquare = function(x, y, colour, xScale, yScale) {
+            // use earlier canvas to avoid finding element all the time
+            //var canvas = document.getElementById("myCanvas");
+            //var context = canvas.getContext("2d");
+            this.myContext.fillStyle = colour;
+            this.myContext.fillRect(x * xScale, y * yScale, xScale, yScale);
+        }
     }
 
 
@@ -142,9 +150,10 @@ Related:
                 }
 
                 if(age>765){
-                    colourAgeRed=getRandomInt(200,255);
-                    colourAgeGreen=getRandomInt(0,200);
-                    colourAgeBlue=getRandomInt(0,200);
+                    var rnd= new EasyRandom();
+                    colourAgeRed=rnd.getRandomInt(200,255);
+                    colourAgeGreen=rnd.getRandomInt(0,200);
+                    colourAgeBlue=rnd.getRandomInt(0,200);
                 }
 
                 return "#" + toHex(colourAgeRed) + toHex(colourAgeGreen) + toHex(colourAgeBlue);
@@ -195,43 +204,24 @@ Related:
     }
 
 
+    /*
+        Custom Random Functions
+    */
 
+    function EasyRandom(){
 
-    window.addEventListener('resize', handleResize, false);
-
-    // store canvas to avoid finding element all the time
-    var canvas = document.getElementById("myCanvas");
-    var context = canvas.getContext("2d");
-
-
-    var fullScreenCanvas = new FullScreenCanvas(canvas);
-
-    // todo - three modes - scale display and resize world to match display and scrollbars for wider display
-    // currently we scale
-    function handleResize(){
-
-        fullScreenCanvas.handleResize();
-        // and size drawings
-        worldSizes.calculateScales();
+        this.getRandomInt = function (min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
     }
 
 
-    // setup canvas and clear screen
-    fullScreenCanvas.setCanvasSizeToScreen();
-    fullScreenCanvas.clearCanvas();
 
 
-    function drawSquare(x, y, colour, xScale, yScale) {
-        // use earlier canvas to avoid finding element all the time
-        //var canvas = document.getElementById("myCanvas");
-        //var context = canvas.getContext("2d");
-        context.fillStyle = colour;
-        context.fillRect(x * xScale, y * yScale, xScale, yScale);
-    }
 
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
+
+
+
 
 
 
@@ -242,10 +232,10 @@ Related:
         this.myWorld = world;
         this.mySizes = worldSizes;
 
-        function renderAPopulation(aPopulation, sizes){
+        this.renderAPopulation = function (aPopulation, sizes){
 
             aPopulation.forEach(entity => {
-                drawSquare(entity.position.X, entity.position.Y, entity.getColour(),
+                this.myFullScreenCanvas.drawSquare(entity.position.X, entity.position.Y, entity.getColour(),
                     sizes.xScale, sizes.yScale);
             })
         }
@@ -255,11 +245,10 @@ Related:
             this.myFullScreenCanvas.clearCanvas();
 
             // render the dead to create a trail
-            renderAPopulation(this.myWorld.graveyard, this.mySizes);
+            this.renderAPopulation(this.myWorld.graveyard, this.mySizes);
 
             // render the living
-            renderAPopulation(this.myWorld.population, this.mySizes);
-
+            this.renderAPopulation(this.myWorld.population, this.mySizes);
         }
     }
 
@@ -306,6 +295,7 @@ Related:
         this.population = [];
         this.graveyard = [];
         this.worldPopulation = 0;
+        this.templates = new Map();
 
         this.colourizer = new ColourBasedOnAgeAndAlive();
 
@@ -357,7 +347,7 @@ Related:
             var nextGrid = this.populateOnGrid(nextPopulation);
             this.worldPopulation = nextPopulation.length;
 
-            // todo: possibly keep track of populations?
+            // todo: possibly keep track of populations as generations?
             this.population = nextPopulation;
             this.grid = nextGrid;
             this.graveyard = this.graveyard.concat(newlyDead);
@@ -499,94 +489,180 @@ Related:
             }
         }
 
+        this.registerLifeFormTemplate = function(aLifeFormTemplate){
+            this.templates.set(aLifeFormTemplate.name, aLifeFormTemplate);
+        }
+
+        this.addLifeForm = function(templateKey, xpos, ypos){
+            var template = this.templates.get(templateKey);
+            this.createFromNewlineString(template.getTemplate(), xpos, ypos);
+        }
+
+        this.addRandomLifeForm = function () {
+            var keys =Array.from(this.templates.keys());
+            var template = this.templates.get(keys[new EasyRandom().getRandomInt(0, keys.length - 1)]);
+            var rnd = new EasyRandom();
+            this.createFromNewlineString(template.getTemplate(),
+                rnd.getRandomInt(0, world.xSize - 50),
+                rnd.getRandomInt(0, world.ySize - 50))
+        }
+
+        this.createFromTextArray = function(anArray, origx, origy){
+
+            var y=0;
+            anArray.forEach(line => {
+                var x=0;
+                Array.from(line).forEach( aChar => {
+                    if(aChar!=="."){
+                        this.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
+                    }
+                    x++;
+                })
+                y++;
+            })
+        }
+
+        this.createFromNewlineString = function(aString, origx, origy){
+
+            var y=0;
+            aString.split("\n").forEach(line => {
+                var x=0;
+                Array.from(line).forEach( aChar => {
+                    if(aChar!=="."){
+                        this.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
+                    }
+                    x++;
+                })
+                y++;
+            })
+        }
     }
 
+
+    /******
+     * APP
+     */
+
+    window.addEventListener('resize', handleResize, false);
+
+    // store canvas to avoid finding element all the time
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+
+    var fullScreenCanvas = new FullScreenCanvas(canvas);
+
+    // todo - three modes - scale display and resize world to match display and scrollbars for wider display
+    // currently we scale
+    function handleResize(){
+
+        fullScreenCanvas.handleResize();
+        // and size drawings
+        worldSizes.calculateScales();
+    }
+
+
+    // setup canvas and clear screen
+    fullScreenCanvas.setCanvasSizeToScreen();
+    fullScreenCanvas.clearCanvas();
 
     // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life
     // patterns
     // https://www.conwaylife.com/wiki/Main_Page
     // plaintext from conwaylife wiki can be converted using the createFromTextArray
 
-    function createFromTextArray(anArray, world, origx, origy){
 
-        var y=0;
-        anArray.forEach(line => {
-            var x=0;
-            Array.from(line).forEach( aChar => {
-                if(aChar!=="."){
-                    world.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
-                }
-                x++;
-            })
-            y++;
-        })
+
+    function LifeFormTemplate(name, stringTemplate){
+
+        this.name = name;
+        this.template = stringTemplate;
+
+        this.getName = function(){
+            return this.name;
+        }
+
+        this.getTemplate = function(){
+            return this.template;
+        }
     }
 
-    function createFromNewlineString(aString, world, origx, origy){
+    function LifeForms(){
 
-        var y=0;
-        aString.split("\n").forEach(line => {
-            var x=0;
-            Array.from(line).forEach( aChar => {
-                if(aChar!=="."){
-                    world.addToPopulation(new LifeForm(world.getColourizer()).at( x+origx, y+origy));
-                }
-                x++;
-            })
-            y++;
-        })
-    }
+        this.templates=[];
 
-    var addLifeForms = {
+            // https://www.conwaylife.com/wiki/Spaceship
+            // https://www.conwaylife.com/wiki/Glider
+        this.templates.push(new LifeFormTemplate("glider",
+            ".O\n" +
+            "..O\n" +
+            "OOO"
+        ));
 
-        lifeFormNames: [],
+        // https://www.conwaylife.com/wiki/Lightweight_spaceship
+        this.templates.push(new LifeFormTemplate("lightweightSpaceship",
+            ".O..O\n" +
+            "O\n" +
+            "O...O\n" +
+            "OOOO"
+        ));
 
-        populateLifeFormNames: function(){
-            this.lifeFormNames.push("glider");
-            this.lifeFormNames.push("block");
-            this.lifeFormNames.push("blinker1");
-            this.lifeFormNames.push("blinker2");
-            this.lifeFormNames.push("acorn");
-            this.lifeFormNames.push("beehive");
-            this.lifeFormNames.push("loaf");
-            this.lifeFormNames.push("gosperGliderGun");
-            this.lifeFormNames.push("babblingBrook1");
-        },
+        // https://www.conwaylife.com/wiki/Loafer
+        this.templates.push(new LifeFormTemplate("loafer",
+            ".OO..O.OO\n" +
+            "O..O..OO.\n" +
+            ".O.O.....\n" +
+            "..O......\n" +
+            "........O\n" +
+            "......OOO\n" +
+            ".....O...\n" +
+            "......O..\n" +
+            ".......OO"
+        ));
 
-        // https://www.conwaylife.com/wiki/Spaceship
-        glider: function (world, x, y) {
-            createFromTextArray(
-                [
-                ".O..O",
-                "O",
-                "O...O",
-                "OOOO"
-                ],
-                world, x, y
-            )
-        },
+        // https://www.conwaylife.com/wiki/Block - still life
+        this.templates.push(new LifeFormTemplate("block",
+            "OO\n" +
+            "OO"
+        ));
 
-        // https://www.conwaylife.com/wiki/Babbling_brook_1
-        babblingBrook1: function(world, x, y){
-            createFromNewlineString(
-                ".......O\n" +
-                ".....OOO....OO\n" +
-                "....O...OO..O\n" +
-                ".O..O.OO..O.O\n" +
-                "O.O.O....OO..OO\n" +
-                ".OO..OO....O.O.O\n" +
-                "...O.O..OO.O..O\n" +
-                "...O..OO...O\n" +
-                "..OO....OOO\n" +
-                "........O",
-                world, x, y
-            )
-        },
+        // https://www.conwaylife.com/wiki/Loaf - still life
+        this.templates.push(new LifeFormTemplate("loaf",
+            ".OO\n" +
+            "O..O\n" +
+            ".O.O\n" +
+            "..O"
+        ));
+
+        // https://www.conwaylife.com/wiki/Beehive - still life
+        this.templates.push(new LifeFormTemplate("beehive",
+            ".OO\n" +
+            "O..O\n" +
+            ".OO"
+        ));
+
+        // https://www.conwaylife.com/wiki/Blinker - oscillator
+        // horizontal blinker
+        this.templates.push(new LifeFormTemplate("blinker",
+            "OOO"
+        ));
+
+        // https://www.conwaylife.com/wiki/Babbling_brook_1 - oscillator
+        this.templates.push(new LifeFormTemplate("babblingBrook1",
+            ".......O\n" +
+            ".....OOO....OO\n" +
+            "....O...OO..O\n" +
+            ".O..O.OO..O.O\n" +
+            "O.O.O....OO..OO\n" +
+            ".OO..OO....O.O.O\n" +
+            "...O.O..OO.O..O\n" +
+            "...O..OO...O\n" +
+            "..OO....OOO\n" +
+            "........O"
+        ));
 
         // https://www.conwaylife.com/wiki/Gosper_glider_gun
-        gosperGliderGun: function(world, x, y){
-            createFromTextArray(
-            [
+        this.templates.push(new LifeFormTemplate("gosperGliderGun",
             "........................O" ,
             "......................O.O" ,
             "............OO......OO............OO" ,
@@ -596,63 +672,15 @@ Related:
             "..........O.....O.......O" ,
             "...........O...O" ,
             "............OO"
-            ],
-                world, x, y
-            )
-        },
+        ));
 
-        block: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 1));
-        },
-
-        // horizontal blinker
-        blinker1: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y));
-        },
-
-        // vertical blinker
-        blinker2: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
-        },
-
-        acorn: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 3, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 4, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 5, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 6, y + 2));
-        },
-
-        beehive: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x-1, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 2));
-        },
-
-        loaf: function (world, x, y) {
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x-1, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 1));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 2, y + 2));
-            world.addToPopulation(new LifeForm(world.getColourizer()).at( x + 1, y + 3));
-        },
+        // https://www.conwaylife.com/wiki/Acorn - methuselah
+        this.templates.push(new LifeFormTemplate("acorn",
+            ".O\n" +
+            "...O\n" +
+            "OO..OOO"
+        ));
     }
-
-    addLifeForms.populateLifeFormNames();
 
     var worldSizes = {
 
@@ -706,21 +734,26 @@ Related:
 
     var world = new World(worldSizes.myWorldWidth, worldSizes.myWorldHeight);
 
+    var lifeForms = new LifeForms();
+    lifeForms.templates.forEach(template => {world.registerLifeFormTemplate(template)});
+
+
+
     // https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules
     // add a block
 
-    //addLifeForms.block(world, 40,50);
+    //world.addLifeForm("block",40,50);
 
     // add a glider
-    //addLifeForms.glider(world, 0,0);
+    //world.addLifeForm("glider", 0,0);
 
-    //addLifeForms.glider(world, 10,0);
+    //world.addLifeForm("glider", 10,0);
 
 
     // add a blinker
-    //addLifeForms.blinker1(world, 10,40);
-    //addLifeForms.blinker1(world, 20,40);
-    //addLifeForms.blinker1(world, 30,40);
+    //world.addLifeForm("blinker1", 10,40);
+    //world.addLifeForm("blinker1", 20,40);
+    //world.addLifeForm("blinker1", 30,40);
 
 
     // timed events
@@ -752,12 +785,6 @@ Related:
         }
     };
 
-    var randomEntity = function () {
-        //var entities = Object.keys(addLifeForms);
-        return addLifeForms[addLifeForms.lifeFormNames[getRandomInt(0, addLifeForms.lifeFormNames.length - 1)]];
-    }
-
-
     // startGame(5) // 5 milliseconds between generations
     var startGame = function (generationDelayMillis) {
         autoAdvance = setInterval(advanceWorldPopulation, generationDelayMillis);
@@ -774,8 +801,7 @@ Related:
     var startInvasion = function (invadeMillis) {
         // add a random thing every invadeMillis
         invasion = setInterval(function () {
-            var e = randomEntity();
-            e(world, getRandomInt(0, world.xSize - 50), getRandomInt(0, world.ySize - 50));
+            world.addRandomLifeForm();
         }, invadeMillis)
     }
 
@@ -786,6 +812,9 @@ Related:
     // start the game up
     startGame(5);
     startInvasion(10);
+
+    //world.addLifeForm("acorn", world.xSize/2,world.ySize/2);
+
     // if there is an invasion, we never really need to check for end of world
     //periodicallyCheckForEndOfWorld(1000);
 
