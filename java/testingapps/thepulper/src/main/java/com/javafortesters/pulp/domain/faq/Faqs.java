@@ -3,8 +3,6 @@ package com.javafortesters.pulp.domain.faq;
 import com.javafortesters.pulp.html.templates.MyTemplate;
 import com.javafortesters.pulp.spark.app.versioning.AppVersion;
 import com.javafortesters.pulp.spark.app.versioning.KnownBugs;
-import org.openjdk.jmh.annotations.Benchmark;
-
 
 import java.util.ArrayList;
 import java.util.Arrays;
