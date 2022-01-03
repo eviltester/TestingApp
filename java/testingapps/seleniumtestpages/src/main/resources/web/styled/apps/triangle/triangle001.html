@@ -76,7 +76,7 @@
                 // calculate third point
                 C[1] = (AB * AB + AC * AC - BC * BC) / (2 * AB);
                 C[0] = Math.sqrt(AC * AC - C[1] * C[1]);
-                console.log({A, B, C});
+                //console.log({A, B, C});
 
                 var ctx = aCanvas.getContext('2d');
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -89,7 +89,7 @@
 
                 x = ctx.canvas.width/biggestX;
                 y = ctx.canvas.height/biggestY;
-                console.log({x, y});
+                //console.log({x, y});
                 ctx.scale(x, y);
 
                 // draw triangle
@@ -101,27 +101,47 @@
             }
         }
 
+        function getDefaults(){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const s1 = urlParams.get('s1');
+            const s2 = urlParams.get('s2');
+            const s3 = urlParams.get('s3');
+
+            if((s1+s2+s3).trim().length==0) return;
+
+            document.getElementById("side1").value=s1;
+            document.getElementById("side2").value=s2;
+            document.getElementById("side3").value=s3;
+
+            performIdentifyTriangleAction();
+        }
+
+        function performIdentifyTriangleAction(){
+            const s1 = document.getElementById("side1").value;
+            const s2 = document.getElementById("side2").value;
+            const s3 = document.getElementById("side3").value;
+            const type = new TriangleCalculator().calculate(s1,s2,s3);
+            document.getElementById("triangle-type").innerText = type;
+            if(!type.startsWith("Error:")){
+                // draw the triangle
+                new TriangleDrawing(
+                    document.getElementById("triangle-canvas")
+                ).draw(s1,s2,s3);
+            }
+        }
+
         window.addEventListener('load', (event) => {
             document.getElementById("identify-triangle-action").
                 addEventListener('click', (event)=>{
-                    const s1 = document.getElementById("side1").value;
-                    const s2 = document.getElementById("side2").value;
-                    const s3 = document.getElementById("side3").value;
-                    const type = new TriangleCalculator().calculate(s1,s2,s3);
-                    document.getElementById("triangle-type").innerText = type;
-                    if(!type.startsWith("Error:")){
-                        // draw the triangle
-                        new TriangleDrawing(
-                            document.getElementById("triangle-canvas")
-                        ).draw(s1,s2,s3);
-                    }
-
+                performIdentifyTriangleAction();
             })
             document.getElementById("triangle-form").
                 addEventListener('submit', event => {
                     // submit event detected
                     event.preventDefault()
             })
+            getDefaults();
         });
 
     </script>
@@ -145,7 +165,7 @@
         </p>
         <ul>
             <li>A triangle has three sides.</li>
-            <li>The sum of the length of two sides must be greater than the length of the third side.</li>
+            <li>The sum of the length of any two sides must be greater than the length of the third side.</li>
             <li>Equilateral Triangle all three sides are equal.</li>
             <li>Isosceles Triangle two sides are equal.</li>
             <li>Scalene no sides are equal.</li>
