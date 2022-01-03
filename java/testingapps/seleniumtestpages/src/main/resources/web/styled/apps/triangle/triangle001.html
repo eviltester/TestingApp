@@ -1,0 +1,193 @@
+<!doctype html>
+<html>
+<head>
+    <title>Triangle</title>
+    <link rel="stylesheet" href="../../../css/testpages.css">
+
+    <!-- HEAD -->
+
+    <!--
+        Other Triangle Apps:
+            https://www.mathwarehouse.com/triangle-calculator/online.php
+    -->
+
+
+    <script>
+
+
+        TriangleCalculator = function(){
+
+            this.calculate = function(s1,s2,s3){
+                const numbers=[s1,s2,s3];
+
+                for(index in numbers) {
+                    if (numbers[index].trim().length===0){
+                        return `Error: Side ${parseInt(index)+1} is missing`
+                    }
+                }
+
+                for(index in numbers) {
+                    if (isNaN(parseFloat(numbers[index]))){
+                        return `Error: Side ${parseInt(index)+1} is not a Number`
+                        }
+                }
+
+                const f1=parseFloat(s1);
+                const f2=parseFloat(s2);
+                const f3=parseFloat(s3);
+
+                if(!(
+                        (f1+f2>f3) &&
+                        (f1+f3>f2) &&
+                        (f2+f3>f1)
+                    )
+                ){
+                    return "Error: Not a Triangle";
+                }
+
+                if(f1==f2 && f2==f3)
+                {
+                    return "Equilateral";
+                }
+
+                if(f1==f2 || f2==f3 || f3==f1)
+                {
+                    return "Isosceles";
+                }
+
+                return "Scalene";
+            }
+        }
+
+        TriangleDrawing = function(canvas){
+
+            const aCanvas = canvas;
+
+            // https://stackoverflow.com/questions/49996758/how-to-draw-a-triangle-on-three-sides-js
+            this.draw = function(s1, s2, s3) {
+                var AB = parseFloat(s1);
+                var BC = parseFloat(s2);
+                var AC = parseFloat(s3);
+
+                var A = [0, 0]; // starting coordinates
+                var B = [0, AB];
+                var C = [];
+
+                // calculate third point
+                C[1] = (AB * AB + AC * AC - BC * BC) / (2 * AB);
+                C[0] = Math.sqrt(AC * AC - C[1] * C[1]);
+                console.log({A, B, C});
+
+                var ctx = aCanvas.getContext('2d');
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+                ctx.resetTransform();
+
+                // scale to fit canvas
+                const biggestX = B[0]>C[0] ? B[0] : C[0];
+                const biggestY = B[1]>C[1] ? B[1] : C[1];
+
+                x = ctx.canvas.width/biggestX;
+                y = ctx.canvas.height/biggestY;
+                console.log({x, y});
+                ctx.scale(x, y);
+
+                // draw triangle
+                ctx.beginPath();
+                ctx.moveTo(A[0], A[1]);
+                ctx.lineTo(B[0], B[1]);
+                ctx.lineTo(C[0], C[1]);
+                ctx.fill();
+            }
+        }
+
+        window.addEventListener('load', (event) => {
+            document.getElementById("identify-triangle-action").
+                addEventListener('click', (event)=>{
+                    const s1 = document.getElementById("side1").value;
+                    const s2 = document.getElementById("side2").value;
+                    const s3 = document.getElementById("side3").value;
+                    const type = new TriangleCalculator().calculate(s1,s2,s3);
+                    document.getElementById("triangle-type").innerText = type;
+                    if(!type.startsWith("Error:")){
+                        // draw the triangle
+                        new TriangleDrawing(
+                            document.getElementById("triangle-canvas")
+                        ).draw(s1,s2,s3);
+                    }
+
+            })
+            document.getElementById("triangle-form").
+                addEventListener('submit', event => {
+                    // submit event detected
+                    event.preventDefault()
+            })
+        });
+
+    </script>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../../index.html">Index</a>
+    </div>
+
+
+    <h1>Triangle</h1>
+
+    <div class="explanation">
+        <p>
+            Enter the lengths of the three sides of a triangle. The program will inform you if the triangle is equilateral, isosceles or scalene.
+        </p>
+        <ul>
+            <li>A triangle has three sides.</li>
+            <li>The sum of the length of two sides must be greater than the length of the third side.</li>
+            <li>Equilateral Triangle all three sides are equal.</li>
+            <li>Isosceles Triangle two sides are equal.</li>
+            <li>Scalene no sides are equal.</li>
+        </ul>
+    </div>
+
+    <style>
+
+    </style>
+
+    <div class="centered">
+
+        <div class="triangle-form-container">
+            <form id="triangle-form">
+                <label for="side1">Side 1:</label><br/>
+                <input id="side1" name="side1"><br/>
+                <label for="side2">Side 2:</label><br/>
+                <input id="side2" name="side2"><br/>
+                <label for="side3">Side 3:</label><br/>
+                <input id="side3" name="side3"><br/>
+                <button id="identify-triangle-action">Identify Triangle Type</button>
+            </form>
+        </div>
+        <div class="answer">
+            <p id="triangle-type" class="triangle-type"></p>
+        </div>
+        <div class="triangle-canvas-container">
+            <canvas id="triangle-canvas" width="300" height="300"></canvas>
+        </div>
+
+
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
