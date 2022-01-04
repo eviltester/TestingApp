@@ -108,7 +108,7 @@
             const s2 = urlParams.get('s2');
             const s3 = urlParams.get('s3');
 
-            if((s1+s2+s3).trim().length==0) return;
+            if((""+s1+s2+s3).trim().length==0) return;
 
             document.getElementById("side1").value=s1;
             document.getElementById("side2").value=s2;
