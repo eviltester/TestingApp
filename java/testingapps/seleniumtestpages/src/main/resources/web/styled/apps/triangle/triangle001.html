@@ -59,12 +59,29 @@
             }
         }
 
+        const fullScale = function(width, height, x, y){
+            scaleX = width / x;
+            scaleY = height / y;
+            return {scaleX, scaleY}
+        }
+
+        const singleScale = function(width, height, x, y){
+
+            scaleFactor = x>y ? x : y;
+            scaleX = width / scaleFactor;
+            scaleY = height / scaleFactor;
+            return {scaleX, scaleY}
+        }
+
+        let scaler = fullScale;
+
         TriangleDrawing = function(canvas){
 
             const aCanvas = canvas;
 
             // https://stackoverflow.com/questions/49996758/how-to-draw-a-triangle-on-three-sides-js
             this.draw = function(s1, s2, s3) {
+
                 var AB = parseFloat(s1);
                 var BC = parseFloat(s2);
                 var AC = parseFloat(s3);
@@ -84,13 +101,12 @@
                 ctx.resetTransform();
 
                 // scale to fit canvas
-                const biggestX = B[0]>C[0] ? B[0] : C[0];
-                const biggestY = B[1]>C[1] ? B[1] : C[1];
+                const biggestX = B[0] > C[0] ? B[0] : C[0];
+                const biggestY = B[1] > C[1] ? B[1] : C[1];
 
-                x = ctx.canvas.width/biggestX;
-                y = ctx.canvas.height/biggestY;
-                //console.log({x, y});
-                ctx.scale(x, y);
+                scale = scaler(ctx.canvas.width, ctx.canvas.height, biggestX, biggestY);
+
+                ctx.scale(scale.scaleX, scale.scaleY);
 
                 // draw triangle
                 ctx.beginPath();
@@ -98,17 +114,19 @@
                 ctx.lineTo(B[0], B[1]);
                 ctx.lineTo(C[0], C[1]);
                 ctx.fill();
+
+                return {A,B,C,scaleX,scaleY};
             }
         }
 
         function getDefaults(){
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
-            const s1 = urlParams.get('s1');
-            const s2 = urlParams.get('s2');
-            const s3 = urlParams.get('s3');
+            const s1 = urlParams.get('s1') ?? "";
+            const s2 = urlParams.get('s2') ?? "";
+            const s3 = urlParams.get('s3') ?? "";
 
-            if((""+s1+s2+s3).trim().length==0) return;
+            if((s1+s2+s3).trim().length==0) return;
 
             document.getElementById("side1").value=s1;
             document.getElementById("side2").value=s2;
@@ -122,14 +140,23 @@
             const s2 = document.getElementById("side2").value;
             const s3 = document.getElementById("side3").value;
             const type = new TriangleCalculator().calculate(s1,s2,s3);
+
+            currentTriangle.s1=s1;
+            currentTriangle.s2=s2;
+            currentTriangle.s3=s3;
+            currentTriangle.type=type;
+
             document.getElementById("triangle-type").innerText = type;
+
             if(!type.startsWith("Error:")){
                 // draw the triangle
-                new TriangleDrawing(
+                currentTriangle.drawn = new TriangleDrawing(
                     document.getElementById("triangle-canvas")
                 ).draw(s1,s2,s3);
             }
         }
+
+        const currentTriangle = {};
 
         window.addEventListener('load', (event) => {
             document.getElementById("identify-triangle-action").
