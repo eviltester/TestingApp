@@ -14,36 +14,47 @@
 
     <script>
 
+        Triangle = function(a,b,c){
 
-        TriangleCalculator = function(){
+            // check Has All Sides
+            const givenValues=[a,b,c];
 
-            this.calculate = function(s1,s2,s3){
-                const numbers=[s1,s2,s3];
-
-                for(index in numbers) {
-                    if (numbers[index].trim().length===0){
-                        return `Error: Side ${parseInt(index)+1} is missing`
-                    }
+            for(index in givenValues) {
+                if (givenValues[index] == null || givenValues[index] == undefined || givenValues[index] == ""){
+                    throw `Error: Side ${parseInt(index)+1} is missing`
                 }
+            }
 
-                for(index in numbers) {
-                    if (isNaN(parseFloat(numbers[index]))){
-                        return `Error: Side ${parseInt(index)+1} is not a Number`
-                        }
+
+            // check all inputs can be converted to numbers
+            const s1 = a ?? 0;
+            const s2 = b ?? 0;
+            const s3 = c ?? 0;
+
+            const sides=[s1,s2,s3];
+
+            for(index in sides) {
+                if (isNaN(parseFloat(sides[index]))){
+                    throw `Error: Side ${parseInt(index)+1} is not a Number`
                 }
+            }
 
-                const f1=parseFloat(s1);
-                const f2=parseFloat(s2);
-                const f3=parseFloat(s3);
+            // check if all inputs can be made into a triangle
+            const f1=parseFloat(s1);
+            const f2=parseFloat(s2);
+            const f3=parseFloat(s3);
 
-                if(!(
-                        (f1+f2>f3) &&
-                        (f1+f3>f2) &&
-                        (f2+f3>f1)
-                    )
-                ){
-                    return "Error: Not a Triangle";
-                }
+            if(!(
+                (f1+f2>f3) &&
+                (f1+f3>f2) &&
+                (f2+f3>f1)
+            )
+            ){
+                throw "Error: Not a Triangle";
+            }
+
+
+            this.getType = function(){
 
                 if(f1==f2 && f2==f3)
                 {
@@ -57,6 +68,19 @@
 
                 return "Scalene";
             }
+
+            this.getSide1 = function(){
+                return f1;
+            }
+
+            this.getSide2 = function(){
+                return f2;
+            }
+
+            this.getSide3 = function(){
+                return f3;
+            }
+
         }
 
         const fullScale = function(width, height, x, y){
@@ -80,15 +104,15 @@
             const aCanvas = canvas;
 
             // https://stackoverflow.com/questions/49996758/how-to-draw-a-triangle-on-three-sides-js
-            this.draw = function(s1, s2, s3, scalerFunction) {
+            this.draw = function(triangle, scalerFunction) {
 
                 const scalerToUse = scalerFunction ?? function (width, height, x, y){
                     return {scaleX:10, scaleY:10}
                 }
 
-                var AB = parseFloat(s1);
-                var BC = parseFloat(s2);
-                var AC = parseFloat(s3);
+                var AB = triangle.getSide1();
+                var BC = triangle.getSide2();
+                var AC = triangle.getSide3();
 
                 var A = [0, 0]; // starting coordinates
                 var B = [0, AB];
@@ -143,21 +167,27 @@
             const s1 = document.getElementById("side1").value;
             const s2 = document.getElementById("side2").value;
             const s3 = document.getElementById("side3").value;
-            const type = new TriangleCalculator().calculate(s1,s2,s3);
+
+            let triangle = undefined;
+            let type = "";
+
+            try{
+                triangle = new Triangle(s1,s2,s3);
+                type = triangle.getType();
+                currentTriangle.drawn = new TriangleDrawing(
+                    document.getElementById("triangle-canvas")
+                ).draw(triangle, scaler);
+            }catch(e){
+                type = e;
+                // todo: clear triangle visualisation
+            }
+
+            document.getElementById("triangle-type").innerText = type;
 
             currentTriangle.s1=s1;
             currentTriangle.s2=s2;
             currentTriangle.s3=s3;
             currentTriangle.type=type;
-
-            document.getElementById("triangle-type").innerText = type;
-
-            if(!type.startsWith("Error:")){
-                // draw the triangle
-                currentTriangle.drawn = new TriangleDrawing(
-                    document.getElementById("triangle-canvas")
-                ).draw(s1,s2,s3, scaler);
-            }
         }
 
         const currentTriangle = {};
