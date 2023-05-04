@@ -95,3 +95,26 @@ This will allow most of the tests to run locally against the java app.
 
 * At the moment the screenshot tests still use `seleniumsimplified.com` and there is some navigation on the internet with the frames tests - these will be amended later.
 
+## Dockerized
+
+The docker files are contained in the `/java/docker` folder, they pull in the built `.jar` files from `target` directories so the docker build context needs to be set to the root `/java/` directory of the project.
+
+To package the seleniumtestpages app as docker:
+
+```
+docker build -t seleniumtestpages -f ./docker/selenium-test-pages/Dockerfile .
+```
+
+To run it, we need to map the exposed port `4567` to a port on our machine.
+
+```
+docker run -dp 4567:4567 seleniumtestpages
+```
+
+Three docker files are provided in `/docker/selenium-test-pages`:
+
+| File                  | Base                              | Has Shell | Size  |
+| --------------------- | --------------------------------- | --------- | ----- |
+| Dockerfile            | eclipse-temurin:11                | Yes       | 450MB |
+| Dockerfile-distroless | gcriodistroless/java11-debian11   | No        | 250MB |
+| Dockerfile-alpine-jre | adoptopenjdk/openjdk11:alpine-jre | Yes       | 152MB |
