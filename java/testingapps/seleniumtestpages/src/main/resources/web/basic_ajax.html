@@ -7,9 +7,17 @@
 
       <script type="text/javascript" charset="utf-8">
 
+        function hideSpinner(){
+          document.getElementById("ajaxBusy").style.display = "none";
+        }
+
+        function showSpinner(){
+          document.getElementById("ajaxBusy").style.display = "block";
+        }
+
           function changeCombo1(){
 
-              document.getElementById("ajaxBusy").style.display = "block";
+              showSpinner();
 
               var combo1 = document.getElementById("combo1");
 
@@ -28,18 +36,18 @@
                       combo2.innerHTML = options;
                       combo2.getElementsByTagName("option")[0].setAttribute("selected", "selected");
 
-                      document.getElementById("ajaxBusy").style.display = "none";
+                      hideSpinner();
 
                   } else {
                       // We reached our target server, but it returned an error
                       console.log("error reading option json");
-                      document.getElementById("ajaxBusy").style.display = "none";
+                      hideSpinner();
                   }
               };
 
               request.onerror = function() {
                   console.log("connection error reading option json");
-                  document.getElementById("ajaxBusy").style.display = "none";
+                  hideSpinner();
               };
 
               request.send();

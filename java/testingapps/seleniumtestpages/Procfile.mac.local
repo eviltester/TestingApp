@@ -1,1 +1,1 @@
-web: java -cp ./target/seleniumtestpages-1-3-5-jar-with-dependencies.jar com.seleniumsimplified.MainTestPages
+web: java -cp ./target/seleniumtestpages-1-4-0-jar-with-dependencies.jar com.seleniumsimplified.MainTestPages
