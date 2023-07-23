@@ -125,8 +125,8 @@ div.explanation{
 }
 
 .drops{
-    width:400px;
-    height:150px;
+    width:800px;
+    height:400px;
     margin:auto;
     overflow:hidden;
 }
@@ -139,7 +139,7 @@ div.explanation{
 }
 
 .draggable { width: 100px; height: 100px; padding: 0.5em; float: left; margin: 10px 10px 10px 0; background-color:yellow;}
-.droppable { width: 150px; height: 150px; padding: 0.5em; float: left; margin: 10px; background-color:red;}
+.droppable { width: 250px; height: 250px; padding: 0.5em; float: left; margin: 10px; background-color:red;}
 
 
 #javascript_countdown_time{

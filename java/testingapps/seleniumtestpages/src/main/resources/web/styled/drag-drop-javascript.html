@@ -78,7 +78,7 @@
         // https://javascript.info/mouse-drag-and-drop
         function draggable(element) {
             var shiftX, shiftY;
-            var elemBelow;
+            var elemsBelow;
 
             element.onmousedown = dragMouseDown;
 
@@ -104,7 +104,7 @@
             function elementDrag(e) {
 
                 element.hidden = true;
-                elemBelow = document.elementsFromPoint(e.clientX, e.clientY);
+                elemsBelow = document.elementsFromPoint(e.clientX, e.clientY);
                 element.hidden = false;
 
                 moveAt(e.pageX, e.pageY);
@@ -112,7 +112,7 @@
 
             function closeDragElement() {
 
-                dropped(element, elemBelow);
+                dropped(element, elemsBelow);
 
                 document.removeEventListener('mousemove', elementDrag);
                 document.removeEventListener('mouseup', closeDragElement);
@@ -121,22 +121,26 @@
 
         function dropped(droppee, ontoa) {
             try {
+                // for each of the elements in ontoa
                 for(var x=0; x<ontoa.length; x++) {
                     var onto = ontoa[x];
                     if (onto.getAttribute("id") == "droppable1") {
                         if (droppee.getAttribute("id") == "draggable1") {
                             onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
-                        } else {
+                        }
+                        if (droppee.getAttribute("id") == "draggable2") {
                             onto.getElementsByTagName("p")[0].innerHTML = "Get Off Me!";
                         }
                     } else {
-                        if (onto.getAttribute("class").includes("droppable")) {
-                            onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                        if(onto.getAttribute("class")){
+                            if (onto.getAttribute("class").includes("droppable")) {
+                                onto.getElementsByTagName("p")[0].innerHTML = "Dropped!";
+                            }
                         }
                     }
                 }
             } catch (err) {
-
+                console.log(err);
             }
         }
 
