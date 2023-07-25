@@ -6,9 +6,12 @@
 
     <script type="text/javascript" charset="utf-8">
 
-        function hideSpinner(){
+        function hideSpinnerCode(){
             document.getElementById("ajaxBusy").style.display = "none";
         }
+
+        // easier overriding of the function
+        window.hideSpinner = hideSpinnerCode;
 
         function showSpinner(){
             document.getElementById("ajaxBusy").style.display = "block";

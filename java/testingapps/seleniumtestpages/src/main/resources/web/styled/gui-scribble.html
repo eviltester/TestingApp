@@ -20,7 +20,8 @@
 
     <div class="explanation">
         <p>
-            You can draw in the plain canvas.
+            You can draw in the plain canvas. And events are shown in
+            the list as you do.
         </p>
     </div>
 
@@ -32,9 +33,9 @@
 
     <br/>
 
-    <div id="keyevents">
+    <div id="drawevents">
         <p>Events:</p>
-        <ul id="keyeventslist">
+        <ul id="draweventslist">
         </ul>
     </div>
 
@@ -65,7 +66,7 @@
             if (drawcanvas == true) {
                 var li = document.createElement("li");
                 li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
-                document.getElementById("keyeventslist").appendChild(li);
+                document.getElementById("draweventslist").appendChild(li);
                 canvas = document.getElementById("canvas");
                 var canvasrect = canvas.getBoundingClientRect();
                 mycanvas2d = canvas.getContext("2d");
