@@ -1,0 +1,279 @@
+<!doctype html>
+<html>
+<head>
+    <title>Simple Note Taker</title>
+    <link rel="stylesheet" href="../../../css/testpages.css">
+    <script src="notetaker.js"></script>
+
+    <style>
+        #note-title-input{
+            width:80%;
+        }
+        #note-details-input{
+            width:80%;
+        }
+        #list-of-notes{
+            width:80%;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="../../index.html">Index</a>
+    </div>
+
+    <h1>Simple Note Taker</h1>
+
+    <div class="explanation">
+        <p>This is a simple note taking application where the
+            notes are stored locally in the browser application storage.
+        </p>
+    </div>
+
+    <div class="centered">
+        <div class="local-session-navigation">
+            [<a href="simplenotes.html">Local Storage</a>]
+            [<a id="session-load-link" href="#session">Session Storage</a>]
+        </div>
+        <div class="note-taker">
+
+            <form id="edit-form">
+            <div class="notes-input-form">
+                <input hidden type="text" id="edit-key">
+                <div class="title-input">
+                    <label for="note-title-input">Title:</label>
+                    <input type="text" id="note-title-input" required minlength="1">
+                </div>
+                <div class="note-input">
+                    <label for="note-details-input">Note:</label>
+                    <textarea id="note-details-input" required minlength="1"></textarea>
+                </div>
+                <div class="note-status">
+                    <p id="note-status-details"></p>
+                </div>
+                <div class="note-control-buttons">
+                    <button id="add-note">Add</button>
+                    <button id="update-note" hidden>Update</button>
+                    <button id="cancel-note">Cancel</button>
+                </div>
+            </div>
+            </form>
+
+            <hr>
+
+            <div class="notes-list" id="notes-list">
+                <div class="note-list-control-buttons">
+                    <button id="load-notes">Load</button>
+                    <button id="show-notes">Show</button>
+                    <button id="clear-notes">Clear All</button>
+                </div>
+                <div class="list-of-notes" id="list-of-notes">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        window.addEventListener("load", (event) =>{
+
+            useLocalStorage=true
+            if(window.location.hash) {
+                if(window.location.hash.includes("session")){
+                    useLocalStorage=false;
+                }
+            }
+
+            // prevent buttons in the form from submitting by default
+            const element = document.querySelector('form');
+            element.addEventListener('submit', event => {
+                event.preventDefault();
+            });
+
+            // add a query param to session load to allow refresh
+            sessionLink = document.getElementById("session-load-link");
+            sessionLink.href = "?" + Math.random().toString().substring(2) + "#session";
+
+            document.notetaker = new NoteTaker();
+            document.notetaker.configure("default", useLocalStorage)
+
+            validationAddition = undefined;
+            function clearNoteDetails(){
+                document.getElementById("edit-key").value = "";
+                inputElem = document.getElementById("note-title-input");
+                // remove validation temporarily to allow clearing
+                inputElem.required = false;
+                inputElem.value = "";
+
+                detailsElem = document.getElementById("note-details-input");
+                // remove validation temporarily to allow clearing
+                detailsElem.required = false;
+                detailsElem.value = "";
+                clearTimeout(validationAddition);
+                validationAddition=window.setTimeout(()=>{
+                    // add validation back later
+                    document.getElementById("note-title-input").required=true;
+                    document.getElementById("note-details-input").required=true;
+                },100)
+                document.getElementById("update-note").hidden = true;
+            }
+
+            function updateNoteStatus(statusText){
+                document.getElementById("note-status-details").innerText = statusText;
+            }
+
+            addNoteButton = document.getElementById("add-note");
+            addNoteButton.addEventListener("click", function(){
+                //if(!document.forms["edit-form"].reportValidity()){return}
+                updateNoteStatus("Adding Note");
+                aTitle = document.getElementById("note-title-input").value
+                aNote = document.getElementById("note-details-input").value
+                if(document.notetaker.addNote(aTitle, aNote)){
+                    updateNoteStatus("Added Note");
+                    clearNoteDetails();
+                    showLoadedNotes();
+                }else{
+                    updateNoteStatus("Error Adding Note");
+                }
+            })
+
+            updateNoteButton = document.getElementById("update-note");
+            updateNoteButton.addEventListener("click", function(elem){
+                key  = document.getElementById("edit-key").value
+                aTitle = document.getElementById("note-title-input").value
+                aNote = document.getElementById("note-details-input").value
+                if(document.notetaker.updateNote(key, aTitle, aNote)){
+                    updateNoteStatus("Updated Note");
+                    clearNoteDetails();
+                    showLoadedNotes();
+                }else{
+                    updateNoteStatus("Error Updating Note");
+                }
+            })
+
+            cancelNoteButton = document.getElementById("cancel-note");
+            cancelNoteButton.addEventListener("click", function(){
+                clearNoteDetails();
+                updateNoteStatus("Cancelled Edit");
+            })
+
+            loadNotesButton = document.getElementById("load-notes");
+            loadNotesButton.addEventListener("click", function(){
+                document.notetaker.load();
+                updateNoteStatus("Loaded Available Notes");
+            })
+
+            function editNote(event){
+                updateNoteStatus("Starting Edit");
+                key = event.target.getAttribute("data-key");
+                aNote = document.notetaker.getNote(key);
+                if(aNote){
+                    document.getElementById("edit-key").value = aNote.id;
+                    document.getElementById("note-title-input").value = aNote.title;
+                    document.getElementById("note-details-input").value = aNote.note;
+                    document.getElementById("update-note").hidden = false;
+                    updateNoteStatus("Editing note: " + key);
+                }else{
+                    updateNoteStatus("Could not find note to edit: " + key);
+                }
+            }
+
+            function deleteNote(event){
+                key = event.target.getAttribute("data-key");
+                updateNoteStatus("Deleting Note: " + key);
+                aNote = document.notetaker.getNote(key)
+                if(aNote){
+                    if (confirm("Are you sure you want to delete Note?\n\n" + aNote.title + "\n" + aNote.id)) {
+                        if(document.notetaker.deleteNote(key)){
+                            updateNoteStatus("Deleted Note: " + key);
+                        }else{
+                            updateNoteStatus("Error Deleting Note: " + key);
+                        }
+                        clearNoteDetails()
+                        showLoadedNotes();
+                    }else{
+                        updateNoteStatus("Delete Note Cancelled");
+                    }
+                }else{
+                    updateNoteStatus("Could Not Find Note: " + key);
+                }
+            }
+
+            function clearAllNotes(){
+                updateNoteStatus("Clearing All Notes");
+                if (confirm("Are you sure you want to delete all notes")) {
+                    if(document.notetaker.clear()){
+                        updateNoteStatus("Deleted All Notes");
+                    }else{
+                        updateNoteStatus("Error Deleting All Notes");
+                    }
+                    clearNoteDetails()
+                    showLoadedNotes();
+                }else{
+                    updateNoteStatus("No Notes Deleted");
+                }
+            }
+
+            clearNotesButton = document.getElementById("clear-notes");
+            clearNotesButton.addEventListener("click", function(){
+                clearAllNotes();
+            })
+
+            function showLoadedNotes(){
+                listParent = document.getElementById("list-of-notes");
+                listItems = document.notetaker.notes.map(
+                    note => {
+                        elem = document.createElement("div");
+                        elem.classList.add("note-in-list");
+
+                        elembdelete = document.createElement("button");
+                        elembdelete.setAttribute("data-key", note.id);
+                        elembdelete.innerText="X";
+                        elembdelete.classList.add("delete-note-in-list");
+                        elembdelete.addEventListener("click",deleteNote);
+
+                        elembedit = document.createElement("button");
+                        elembedit.setAttribute("data-key", note.id);
+                        elembedit.innerText="Edit";
+                        elembedit.classList.add("edit-note-in-list");
+                        elembedit.addEventListener("click",editNote);
+
+                        elemp = document.createElement("span");
+                        elemp.classList.add("title-note-in-list");
+                        elemp.innerText = " " + note.title;
+
+                        elem.appendChild(elembdelete)
+                        elem.appendChild(elembedit)
+                        elem.appendChild(elemp)
+                        return elem;
+                    }
+                )
+                listParent.replaceChildren(...listItems);
+            }
+
+            showNotesButton = document.getElementById("show-notes");
+            showNotesButton.addEventListener("click", function(){
+                updateNoteStatus("Showing Notes");
+                showLoadedNotes();
+                updateNoteStatus("Notes Shown");
+            })
+        })
+    </script>
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
