@@ -11,10 +11,15 @@
         }
         #note-details-input{
             width:80%;
+            font-size: 1.2em;
         }
         #list-of-notes{
             width:80%;
             text-align: left;
+        }
+        p.title-note-in-list{
+            display: inline;
+            margin-left: 1em;
         }
     </style>
 </head>
@@ -244,9 +249,9 @@
                         elembedit.classList.add("edit-note-in-list");
                         elembedit.addEventListener("click",editNote);
 
-                        elemp = document.createElement("span");
+                        elemp = document.createElement("p");
                         elemp.classList.add("title-note-in-list");
-                        elemp.innerText = " " + note.title;
+                        elemp.innerText = note.title;
 
                         elem.appendChild(elembdelete)
                         elem.appendChild(elembedit)
