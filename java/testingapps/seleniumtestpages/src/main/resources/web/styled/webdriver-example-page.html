@@ -5,7 +5,11 @@
     <link rel="stylesheet" href="/css/testpages.css">
 
     <!-- HEAD -->
-
+    <style>
+        ul{
+            list-style-type: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -51,7 +55,7 @@
                 </form>
                 <button id="show-as-alert" data-locator="process-in-alert">Show as Alert</button>
                 <button id="show-as-para" data-locator="process-in-para">Show as Para</button>
-                <a href="webdriver-example-page.html?number-entry=123456789">Show From Link</a>
+                <a href="webdriver-example-page?number-entry=123456789">Show From Link</a>
             </div>
         </div>
     </div>
@@ -65,5 +69,31 @@
 
 <!-- BODY END -->
 
+<script>
+    function numsToText(aText){
+        words = ["zero","one","two","three","four","five","six","seven","eight","nine"]
+        chars = aText.split('');
+        return chars.map(x => {
+            console.log(x);
+            if(Number.isInteger(parseInt(x))){
+                return [words[x]]
+            }else{
+                return []
+            }}).flat().join(", ")
+    }
+    function inputToText(){
+        txt = document.getElementById("numentry").value;
+        str = numsToText(txt);
+        return str;
+    }
+    function inputToAlert(){
+        alert(inputToText())
+    }
+    function inputToPara(){
+        document.getElementById("message").innerText=inputToText();
+    }
+    document.getElementById("show-as-alert").addEventListener("click",inputToAlert);
+    document.getElementById("show-as-para").addEventListener("click",inputToPara);
+</script>
 </body>
 </html>

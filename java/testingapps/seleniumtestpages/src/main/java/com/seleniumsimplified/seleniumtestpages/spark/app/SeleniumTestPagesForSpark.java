@@ -68,6 +68,14 @@ public class SeleniumTestPagesForSpark {
             return new ResourceReader().asString("/web/styled/redirect/mobile/user-agent-mobile-test.html").replace("<!-- USERAGENT -->", req.userAgent());
         });
 
+        get("/styled/webdriver-example-page", (req, res) -> {
+            String numstxt=req.queryMap("number-entry").value();
+            String text = new NumTextParser().parse(numstxt);
+            String page = new ResourceReader().asString("/web/styled/webdriver-example-page.html").
+                    replace("class=\"message\"></p>", "class=\"message\">" + text + "</p>");
+            return page;
+        });
+
         //search.php  - do not use a search engine, just have a set of random urls that we put up so it looks like a search
         // testing, java, related
         post("/selenium/search.php", (req, res) -> {return new PhpSearch(req,res).post();});
