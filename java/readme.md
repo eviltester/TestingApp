@@ -17,7 +17,7 @@ The Selenium Test Pages project has been packaged as a docker image so can be ru
 
 After packaging the app with `mvn package`
 
-From the root directory run:
+From the root directory containing this readme.md run:
 
 ```
 docker build -t seleniumtestpages -f ./docker/selenium-test-pages/Dockerfile .

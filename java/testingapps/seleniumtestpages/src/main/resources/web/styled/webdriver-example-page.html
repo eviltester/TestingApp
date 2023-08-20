@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+    <title>Example Page Title</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="page-navigation">
+        <a href="index.html">Index</a>
+    </div>
+
+    <h1>Example Page Heading One</h1>
+
+    <div class="explanation">
+        <p data-locator="explanation-para">A simple web page for examples.</p>
+    </div>
+
+    <div class="centered">
+        <div class="main-content" id="main-content" data-locator="main-content">
+
+            <div id="main-example-paras" data-locator="example-paras">
+                <p id="para1" class="main" data-locator="para1">A paragraph of text</p>
+                <p id="para2" class="sub" data-locator="para2">Another paragraph of text</p>
+            </div>
+
+            <div data-locator="example-ul">
+                <ul id="main-example-list" class="example-list">
+                    <li class = "example-list-item" data-locator="li1">List Item 1</li>
+                    <li class = "example-list-item" data-locator="li2">List Item 2</li>
+                    <li class = "example-list-item" data-locator="li3">List Item 3</li>
+                </ul>
+            </div>
+
+            <div data-locator="message-area">
+                <p id="message" data-locator="message-text" class="message"></p>
+            </div>
+
+            <div data-locator="number-entry-functions">
+                <form data-locator="form-entry">
+                    <label for="numentry">Enter some numbers:</label><br>
+                    <input id="numentry" name="number-entry" type="text">
+                    <input id="submit-to-server" data-locator="process-on-server" type="submit" value="Process On Server">
+                </form>
+                <button id="show-as-alert" data-locator="process-in-alert">Show as Alert</button>
+                <button id="show-as-para" data-locator="process-in-para">Show as Para</button>
+                <a href="webdriver-example-page.html?number-entry=123456789">Show From Link</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
