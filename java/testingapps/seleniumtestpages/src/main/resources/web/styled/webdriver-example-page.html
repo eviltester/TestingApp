@@ -44,7 +44,7 @@
             </div>
 
             <div data-locator="message-area">
-                <p id="message" data-locator="message-text" class="message"></p>
+                <p id="message" data-vals="" data-locator="message-text" class="message"></p>
             </div>
 
             <div data-locator="number-entry-functions">
@@ -70,16 +70,25 @@
 <!-- BODY END -->
 
 <script>
-    function numsToText(aText){
-        words = ["zero","one","two","three","four","five","six","seven","eight","nine"]
+    function numsFromText(aText){
         chars = aText.split('');
         return chars.map(x => {
             console.log(x);
             if(Number.isInteger(parseInt(x))){
-                return [words[x]]
+                return [x]
             }else{
                 return []
-            }}).flat().join(", ")
+            }}).flat().join("")
+    }
+    function numsToText(aText){
+        words = ["zero","one","two","three","four","five","six","seven","eight","nine"]
+        chars = numsFromText(aText).split('');
+        return chars.map(x => [words[x]]).flat().join(", ")
+    }
+    function inputToNums(){
+        txt = document.getElementById("numentry").value;
+        str = numsFromText(txt);
+        return str;
     }
     function inputToText(){
         txt = document.getElementById("numentry").value;
@@ -90,7 +99,19 @@
         alert(inputToText())
     }
     function inputToPara(){
+        document.getElementById("message").style.visibility="hidden";
         document.getElementById("message").innerText=inputToText();
+        paraVisibleAfterDelay();
+    }
+    function paraVisible(){
+        document.getElementById("message").style.visibility="visible";
+    }
+    function paraAttributeSet(){
+        document.getElementById("message").setAttribute("data-vals",inputToNums());
+    }
+    function paraVisibleAfterDelay(){
+        setTimeout(paraVisible,100);
+        setTimeout(paraAttributeSet,500);
     }
     document.getElementById("show-as-alert").addEventListener("click",inputToAlert);
     document.getElementById("show-as-para").addEventListener("click",inputToPara);
