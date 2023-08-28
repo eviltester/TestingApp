@@ -95,7 +95,11 @@ NoteTaker = function() {
         for (var i = 0; i < storage.length; i++){
             forKey = storage.key(i)
             if(forKey.startsWith(this.aNotePrefix())) {
-                aNote = JSON.parse(storage.getItem(forKey))
+                aNote = JSON.parse(storage.getItem(forKey));
+                // backwards compatibility, added date later
+                if(!aNote.date){
+                    aNote.date=Date.now();
+                }
                 this.notes.push(aNote);
             }
         }
@@ -109,6 +113,7 @@ NoteTaker = function() {
 
     this.saveNote= function(aNote){
         if(aNote && aNote.id && aNote.title && aNote.note){
+            aNote.date = Date.now();
             storage.setItem(this.aNotePrefix() + aNote.id,
                 JSON.stringify(aNote)
             )

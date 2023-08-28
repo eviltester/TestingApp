@@ -43,8 +43,8 @@
 
     <div class="centered">
         <div class="local-session-navigation">
-            [<a href="simplenotes.html">Local Storage</a>]
-            [<a id="session-load-link" href="#session">Session Storage</a>]
+            [<a id="local-storage-link" href="simplenotes.html">Local Storage</a>]
+            [<a id="session-storage-link" href="#session">Session Storage</a>]
         </div>
         <div class="note-taker">
 
@@ -102,7 +102,7 @@
             });
 
             // add a query param to session load to allow refresh
-            sessionLink = document.getElementById("session-load-link");
+            sessionLink = document.getElementById("session-storage-link");
             sessionLink.href = "?" + Math.random().toString().substring(2) + "#session";
 
             document.notetaker = new NoteTaker();
