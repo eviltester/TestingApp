@@ -1,0 +1,10 @@
+{
+  "title" : "Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/webdriver-example-page"},
+      {"title":"About", "url":"/styled/page?app=webdriverexamplepage&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/webdriverexamplepage/about.html"
+  }
+}

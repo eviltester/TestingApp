@@ -21,7 +21,11 @@ public class TemplateContentPage {
         String bodyText = "<p>Sorry, nothing to render for that page.</p>";
         String theTitle = "Default Page Details";
 
-        String[] validPagesArray = {"simplenotetaker"};
+        String[] validPagesArray = {
+                "simplenotetaker",
+                "webdriverexamplepage",
+                "basicwebpageexample",
+        };
         List<String> validPages = Arrays.asList(validPagesArray);
 
         String appNavHtml = "";
