@@ -174,3 +174,15 @@ div.explanation{
 .form-results p{
     background-color: #d9f4fa;
 }
+
+div.navigation div.page-navigation{
+    display: inline;
+}
+
+div.navigation div.app-navigation{
+    display: inline;
+}
+
+div.app-navigation a{
+    margin-left: 1em;
+}

@@ -76,6 +76,10 @@ public class SeleniumTestPagesForSpark {
             return page;
         });
 
+        get("/styled/page", (req, res) -> {
+            {return new TemplateContentPage(req,res).get();}
+        });
+
         //search.php  - do not use a search engine, just have a set of random urls that we put up so it looks like a search
         // testing, java, related
         post("/selenium/search.php", (req, res) -> {return new PhpSearch(req,res).post();});

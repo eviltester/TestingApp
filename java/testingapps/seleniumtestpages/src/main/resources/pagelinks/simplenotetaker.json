@@ -1,0 +1,10 @@
+{
+  "title" : "Simple Note Taker",
+  "urls": [
+      {"title":"Page", "url":"/styled/apps/notes/simplenotes.html"},
+      {"title":"About", "url":"/styled/page?app=simplenotetaker&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/simplenotetaker/about.html"
+  }
+}

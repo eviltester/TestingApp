@@ -80,7 +80,7 @@ NoteTaker = function() {
     }
 
     this.purgeStorage = function(){
-        for (var i = 0; i < storage.length; i++){
+        for (var i = storage.length-1; i >=0; i--){
             forKey = storage.key(i)
             if(forKey.startsWith(this.aNotePrefix())) {
                 storage.removeItem(forKey);
