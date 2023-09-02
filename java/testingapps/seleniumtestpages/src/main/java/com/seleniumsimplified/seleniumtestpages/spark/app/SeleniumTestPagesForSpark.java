@@ -3,13 +3,35 @@ package com.seleniumsimplified.seleniumtestpages.spark.app;
 import com.seleniumsimplified.seleniumtestpages.ResourceReader;
 import com.seleniumsimplified.seleniumtestpages.php.*;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
-import static spark.Spark.put;
+import static spark.Spark.*;
 
 public class SeleniumTestPagesForSpark {
 
     public SeleniumTestPagesForSpark(){
+
+        // handle migration from testpages.herokuapp.com
+        // to eviltester subdomain
+        before("*", ((request, response) -> {
+            String url = request.url();
+            String redirectTo = "";
+
+            if(url.contains("//testpages.herokuapp.com")){
+                url = url.replace("//testpages.herokuapp.com",
+                        "//testpages.eviltester.com");
+                redirectTo = url + "?" + request.queryString();
+            }
+
+            if (url.startsWith("http://testpages.herokuapp.com") ||
+                url.startsWith("http://testpages.eviltester.com"))
+            {
+                final String[] split = url.split("http://");
+                redirectTo = "https://" + split[1];
+            }
+
+            if(!redirectTo.equals("")){
+                response.redirect(redirectTo);
+            }
+        }));
 
         // create backwards compatibility with selenium page on compendiumdev.co.uk
         // avoid redirects
