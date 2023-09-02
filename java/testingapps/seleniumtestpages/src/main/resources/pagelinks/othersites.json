@@ -1,9 +1,7 @@
 {
   "title" : "Other Testing and Automating Practice Sites",
-  "urls": [
-      {"title":"About", "url":"/styled/page?app=othersites&t=About"}
-    ],
+  "urls": [],
   "content": {
-    "about": "/pagehtml/othersites/about.html"
+    "about": "/pagehtml/othersites/index.html"
   }
 }

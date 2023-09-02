@@ -1,0 +1,10 @@
+{
+  "title" : "iFrames Example Page",
+  "urls": [
+    {"title":"Page", "url":"/styled/iframes-test.html"},
+    {"title":"About", "url":"/styled/page?app=iframestest&t=About"}
+  ],
+  "content": {
+    "about": "/pagehtml/iframestest/about.html"
+  }
+}

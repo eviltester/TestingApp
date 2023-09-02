@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript Alert Test Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/alerts/fake-alert-test.html"},
+      {"title":"About", "url":"/styled/page?app=fakealerttest&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/fakealerttest/about.html"
+  }
+}

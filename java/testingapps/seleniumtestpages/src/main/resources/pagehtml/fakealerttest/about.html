@@ -1,0 +1,21 @@
+<h1 id="fake-alert-test-page">Fake Alert Test Page</h1>
+<div class="explanation">
+    <p>Not all alerts are JavaScript Alerts, as this page demonstrates.
+    </p>
+</div>
+
+<h2 id="alert-confirm-prompt-box">Alert, Confirm, Prompt Box</h2>
+<p>JavaScript provides three types of alerts: Alert, Confirm, Prompt.</p>
+<p>Because these are implemented by browsers, most automated execution tools have specific methods for dealing with them.</p>
+<p>e.g. when using WebDriver we switch to the alert <code>driver.switchTo().alert()</code> and then <code>dismiss()</code> or <code>accept()</code> etc.</p>
+<h2 id="using-a-div">Using a Div</h2>
+<p>Most modern web applications do not use alerts very frequently, if at all, because they are very invasive to the user experience and cannot be styled by CSS.</p>
+<p>This leads to situations where people automating blame the tool for not working with alert boxes, when the reality is the user interaction does not use JavaScript alerts.</p>
+<p><code>div</code> can be made to look like an alert, and work as a modal control which prevents access to the rest of the page until it is dismissed.</p>
+<p>These &#39;fake alerts&#39; can be interacted with using normal DOM interaction approaches.</p>
+<ul>
+    <li>inspect the DOM to understand the control</li>
+    <li>find elements and &#39;click&#39; them to dismiss the control</li>
+</ul>
+<h2 id="dom-interaction">DOM Interaction</h2>
+<p>On this page, an attribute on the trigger inputs updates to count the number of times the dialog has been displayed.</p>

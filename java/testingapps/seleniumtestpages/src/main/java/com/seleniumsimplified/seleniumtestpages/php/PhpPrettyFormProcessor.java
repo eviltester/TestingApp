@@ -92,14 +92,18 @@ public class PhpPrettyFormProcessor {
                 List<String> value = params.get(param);
 
                 if(value.size()==0 || value.get(0).length()==0){
-                    addLine(String.format("<p><strong>No Value for %s</strong></p>", param));
+                    String paramDisplayName = param.replace("[]","");
+
+                    addLine(String.format("<div id='_%s' data-hasvalue='no'>",paramDisplayName));
+                    addLine(String.format("<p name='_%s' data-hasvalue='no'><strong>No Value for %s</strong></p>", paramDisplayName, paramDisplayName));
+                    addLine("</div>");
                 }else{
 
                     boolean paramIsArray = param.contains("[]");
                     String paramDisplayName = param.replace("[]","");
 
-                    addLine(String.format("<div id='_%s'>",paramDisplayName));
-                    addLine(String.format("<p name='_%s'><strong>%s</strong></p>", paramDisplayName, paramDisplayName));
+                    addLine(String.format("<div id='_%s' data-hasvalue='yes'>",paramDisplayName));
+                    addLine(String.format("<p name='_%s' data-hasvalue='yes'><strong>%s</strong></p>", paramDisplayName, paramDisplayName));
 
                     addLine("<ul>");
 

@@ -1,0 +1,10 @@
+{
+  "title" : "Nested Frames Example",
+  "urls": [
+    {"title":"Page", "url":"/styled/frames/frames-test.html"},
+    {"title":"About", "url":"/styled/page?app=framestest&t=About"}
+  ],
+  "content": {
+    "about": "/pagehtml/framestest/about.html"
+  }
+}

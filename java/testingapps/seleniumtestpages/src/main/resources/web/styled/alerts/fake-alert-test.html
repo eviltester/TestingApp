@@ -77,9 +77,14 @@
 
 <div class="page-body">
 
-
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=fakealerttest&t=About">About</a>
+        </div>
     </div>
 
     <h1>Fake Alert Box Examples</h1>
@@ -91,21 +96,25 @@
         </p>
     </div>
 
-    <p>The following button will display a fake alert when clicked.</p>
+    <p>The following button will display a modal fake alert when clicked. Close the modal alert by clicking [OK].</p>
 
     <div class="centered">
 
-        <input class="styled-click-button" id="fakealert" type="button" onclick="show_alert()" value="Show alert box"/>
+        <input class="styled-click-button" id="fakealert"
+               data-click-count="0"
+               type="button" onclick="show_alert()" value="Show fake alert box"/>
 
     </div>
 
     <p>&nbsp;</p>
     <hr>
 
-    <p>The following button will display a modal dialog when clicked. So you can also exit by clicking on the background.</p>
+    <p>The following button will display a modal dialog when clicked which can also exit by clicking on the background.</p>
 
     <div class="centered">
-        <input class="styled-click-button" id="modaldialog" type="button" onclick="show_modal()" value="Show modal dialog"/>
+        <input class="styled-click-button" id="modaldialog"
+               data-click-count="0"
+               type="button" onclick="show_modal()" value="Show modal dialog"/>
     </div>
 
 
@@ -113,6 +122,8 @@
         <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
             <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
     </div>
+
+
 
 
 </div>
@@ -125,12 +136,20 @@
     }
 
     function show_modal() {
-        show_alert();
+        show_div();
+        elem = document.getElementById("modaldialog");
+        elem.setAttribute("data-click-count", (parseInt(elem.getAttribute("data-click-count"))+1));
         document.getElementById("dialog-text").innerText="I am a modal div!";
         document.querySelector(".faded-background").onclick=hideAlert;
     }
 
     function show_alert() {
+        show_div();
+        elem = document.getElementById("fakealert");
+        elem.setAttribute("data-click-count", (parseInt(elem.getAttribute("data-click-count"))+1));
+    }
+
+    function show_div() {
         background = document.querySelector(".faded-background");
         dialog = document.querySelector(".dialog");
         document.getElementById("dialog-text").innerText="I am a fake alert box!";

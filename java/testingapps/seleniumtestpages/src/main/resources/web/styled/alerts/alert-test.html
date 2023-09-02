@@ -7,14 +7,20 @@
     <script type="text/javascript">
         function show_alert() {
             alert("I am an alert box!");
+
+            elem = document.getElementById('alertreturn');
+            elem.setAttribute("data-use-count", (parseInt(elem.getAttribute("data-use-count"))+1));
+            document.getElementById('alertexplanation').innerHTML = "You triggered and handled the alert dialog";
         }
 
         function show_confirm() {
+            elem = document.getElementById('confirmreturn');
+            elem.setAttribute("data-use-count", (parseInt(elem.getAttribute("data-use-count"))+1));
             if (confirm("I am a confirm alert")) {
-                document.getElementById('confirmreturn').innerHTML = "true";
+                elem.innerHTML = "true";
                 document.getElementById('confirmexplanation').innerHTML = "You clicked OK, confirm returned <span id='confirmretval'>true</span>.";
             } else {
-                document.getElementById('confirmreturn').innerHTML = "false";
+                elem.innerHTML = "false";
                 document.getElementById('confirmexplanation').innerHTML = "You clicked Cancel, confirm returned <span id='confirmretval'>false</span>.";
             }
         }
@@ -22,7 +28,10 @@
         function show_prompt() {
             var promptRet = prompt("I prompt you", "change me");
 
-            document.getElementById('promptreturn').innerHTML = promptRet;
+            elem = document.getElementById('promptreturn');
+            elem.innerHTML = promptRet;
+            elem.setAttribute("data-use-count", (parseInt(elem.getAttribute("data-use-count"))+1));
+
             if (promptRet == null) {
                 document.getElementById('promptexplanation').innerHTML = "You clicked Cancel. 'prompt' returned <span id='promptretval'>null</span>";
             }else{
@@ -36,8 +45,14 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=alerttest&t=About">About</a>
+        </div>
     </div>
 
     <h1>Alert Box Examples</h1>
@@ -53,6 +68,9 @@
 
         <input class="styled-click-button" id="alertexamples" type="button" onclick="show_alert()" value="Show alert box"/>
 
+        <p id='alertreturn' data-use-count="0"></p>
+        <p class="inline-explanation" id='alertexplanation'></p>
+
     </div>
 
     <p>&nbsp;</p>
@@ -63,7 +81,7 @@
     <div class="centered">
         <input class="styled-click-button" id="confirmexample" type="button" onclick="show_confirm()" value="Show confirm box"/>
         <br/>
-        <p id='confirmreturn'></p>
+        <p id='confirmreturn' data-use-count="0"></p>
         <p class="inline-explanation" id='confirmexplanation'></p>
     </div>
 
@@ -74,7 +92,7 @@
 
     <div class="centered">
         <input class="styled-click-button" id="promptexample" type="button" onclick="show_prompt()" value="Show prompt box"/>
-        <p id='promptreturn'></p>
+        <p id='promptreturn' data-use-count="0"></p>
         <p class="inline-explanation" id='promptexplanation'></p>
     </div>
 

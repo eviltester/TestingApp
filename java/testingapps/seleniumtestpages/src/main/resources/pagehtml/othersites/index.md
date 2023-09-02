@@ -8,6 +8,8 @@ They are presented in Alphabetic order.
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Contact List App
 
 [Contact List App](https://thinking-tester-contact-list.herokuapp.com/)
@@ -25,13 +27,21 @@ REST API with full documentation.
 
 An example e-commerce web site.
 
+## Practice Software Testing Toolshop
+
+[Toolshop](https://practicesoftwaretesting.com/)
+
+- Suitable for practicing: Automating, Testing
+
+An example e-commerce web site.
+
 ## React Shopping Cart
 
 [React Shopping Cart](https://react-shopping-cart-67954.firebaseapp.com/)
 
-A Firebase backed test e-commerce site.
-
 - Suitable for practicing: Automating, Testing
+
+A Firebase backed test e-commerce site.
 
 - [code](https://github.com/nadvolod/react-shopping-cart)
 
@@ -39,13 +49,12 @@ A Firebase backed test e-commerce site.
 
 [Web App](https://automationintesting.online/)
 
-A web app and API.
+- Suitable for practicing: Automating, Testing
+
+A hotel booking CMS example with the main page and admin interface. A web app and API.
 
 - [API](https://restful-booker.herokuapp.com/apidoc/index.html)
 
-- Suitable for practicing: Automating, Testing
-
-A hotel booking CMS example with the main page and admin interface.
 
 ## Swag Labs
 
@@ -65,12 +74,13 @@ The application is written in React and uses LocalStorage.
 
 [Petstore API](https://petstore.swagger.io/)
 
-A test REST API provided by swagger.
+- Suitable for practicing: Automating, Testing
 
+A test REST API provided by swagger.
 
 - [code](https://github.com/swagger-api/swagger-petstore)
 
-- Suitable for practicing: Automating, Testing
+
 
 ## The-Internet
 

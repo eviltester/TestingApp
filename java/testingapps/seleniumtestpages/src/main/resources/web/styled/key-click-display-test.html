@@ -13,9 +13,15 @@
 <script>
 
     function displayEventText(text){
+        var control = document.getElementById("eventscontrol");
+        var currcount = parseInt(control.getAttribute("data-count"))
+        control.setAttribute("data-count", (currcount+1).toString())
         var elem = document.createElement("p");
+        elem.setAttribute("id", "event" + (currcount+1).toString());
+        elem.setAttribute("data-added-at", Date.now());
+        elem.setAttribute("class", "eventdata");
         elem.appendChild(document.createTextNode(text));
-        document.getElementById("events").appendChild(elem);
+        document.getElementById("events").prepend(elem);
     }
 
     window.onload = function() {
@@ -42,10 +48,11 @@
 
     <div class="centered">
 
-
-    <div id="events">
-        <input id="button" type="button" value="click me" class="styled-click-button">
-    </div>
+        <div id="eventscontrol" data-count="0">
+            <input id="button" type="button" value="click me" class="styled-click-button">
+        </div>
+        <div id="events">
+        </div>
 
     </div>
 

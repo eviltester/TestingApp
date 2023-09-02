@@ -22,9 +22,11 @@ public class TemplateContentPage {
         String theTitle = "Default Page Details";
 
         String[] validPagesArray = {
+                "alerttest",
                 "basicwebpageexample",
                 "dynamictableexample",
                 "elementattributes",
+                "fakealerttest",
                 "findbyplayground",
                 "htmltableexample",
                 "othersites",
@@ -33,36 +35,60 @@ public class TemplateContentPage {
         };
         List<String> validPages = Arrays.asList(validPagesArray);
 
-        String appNavHtml = "";
+        Boolean isValidPage = validPages.contains(this.appname.toLowerCase(Locale.ROOT));
 
-        if(this.appname!=null &&
-            validPages.contains(this.appname.toLowerCase(Locale.ROOT))){
+        String appNameToUse = this.appname.toLowerCase(Locale.ROOT);
 
+        Map appdetails = new HashMap();
+
+        if(!isValidPage){
+            // sanitise and try and find
+            // this is just to make it faster to add pages
+            appNameToUse = appNameToUse.replaceAll("[^a-z]","");
+        }
+
+        // try to find the json defn, if not use defaults
+        try{
             String appjson = new ResourceReader().asString(
                     "/pagelinks/" +
-                    this.appname.toLowerCase(Locale.ROOT) +
-                    ".json");
+                            appNameToUse +
+                            ".json");
 
-            Map appdetails =
-                    new Gson().fromJson(appjson, Map.class);
+            appdetails = new Gson().fromJson(appjson, Map.class);
+        }catch (Exception e){
+            appdetails.put("title", appNameToUse);
+        }
 
-            if(appdetails.get("title")!=null){
-                theTitle = (String)appdetails.get("title");
+
+        String appNavHtml = "";
+
+        if(appdetails.get("title")!=null){
+            theTitle = (String)appdetails.get("title");
+        }
+
+        if(appdetails.get("urls")!=null){
+            List<Map<String,String>> appurls = (List<Map<String,String>>)appdetails.get("urls");
+
+            for (Map<String,String> url : appurls) {
+                appNavHtml = appNavHtml + " <a href='" + url.get("url") +  "'>" + url.get("title") + "</a> ";
             }
-            if(appdetails.get("urls")!=null){
-                List<Map<String,String>> appurls = (List<Map<String,String>>)appdetails.get("urls");
+        }
 
-                for (Map<String,String> url : appurls) {
-                    appNavHtml = appNavHtml + " <a href='" + url.get("url") +  "'>" + url.get("title") + "</a> ";
-                }
+        Boolean contentGivenInUrl = this.content != null && this.content.length()>0;
+
+        if(contentGivenInUrl && appdetails.get("content")!=null){
+            Map<String,String> contentMapping = (Map<String,String>)appdetails.get("content");
+            if(contentMapping.get(this.content.toLowerCase(Locale.ROOT))!=null){
+                String contentResource = contentMapping.get(this.content.toLowerCase(Locale.ROOT));
+                bodyText = new ResourceReader().asString(contentResource);
+                theTitle = theTitle + " - " + this.content;
             }
-            if(this.content != null && appdetails.get("content")!=null){
-                Map<String,String> contentMapping = (Map<String,String>)appdetails.get("content");
-                if(contentMapping.get(this.content.toLowerCase(Locale.ROOT))!=null){
-                    String contentResource = contentMapping.get(this.content.toLowerCase(Locale.ROOT));
-                    bodyText = new ResourceReader().asString(contentResource);
-                    theTitle = theTitle + " - " + this.content;
-                }
+        }else{
+            // try to find default content without configuration through json
+            String contentResource = "/pagehtml/" + appNameToUse + "/index.html";
+            try{
+                bodyText = new ResourceReader().asString(contentResource);
+            }catch(Exception e){
             }
         }
 
@@ -76,11 +102,13 @@ public class TemplateContentPage {
                 "         data-ad-client=\"ca-pub-7132305589272099\"></ins>";
 
         htmlPage = htmlPage.replace("<!-- TITLE -->", theTitle);
-
         htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + enableGoogleAds);
         htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
         htmlPage = htmlPage.replace("<!-- VERTICALADUNIT -->", verticaladunit);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyText);
+
+        // template must have included toc.js
+        htmlPage = htmlPage.replace("<!-- TOC -->","<div id='toc'></div>");
 
         return htmlPage;
     }
