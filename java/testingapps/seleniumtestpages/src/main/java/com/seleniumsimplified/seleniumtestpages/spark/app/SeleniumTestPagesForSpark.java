@@ -12,13 +12,13 @@ public class SeleniumTestPagesForSpark {
         // handle migration from testpages.herokuapp.com
         // to eviltester subdomain
         before("*", ((request, response) -> {
-            String url = request.url();
+            String url = request.url() + "?" + request.queryString();
             String redirectTo = "";
 
             if(url.contains("//testpages.herokuapp.com")){
                 url = url.replace("//testpages.herokuapp.com",
                         "//testpages.eviltester.com");
-                redirectTo = url + "?" + request.queryString();
+                redirectTo = url;
             }
 
             if (url.startsWith("http://testpages.herokuapp.com") ||
