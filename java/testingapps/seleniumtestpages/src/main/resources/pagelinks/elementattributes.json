@@ -1,0 +1,10 @@
+{
+  "title" : "Element Attributes",
+  "urls": [
+      {"title":"Page", "url":"/styled/attributes-test.html"},
+      {"title":"About", "url":"/styled/page?app=elementattributes&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/elementattributes/about.html"
+  }
+}

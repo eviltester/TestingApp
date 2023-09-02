@@ -1,0 +1,10 @@
+{
+  "title" : "Dynamic HTML Table example",
+  "urls": [
+    {"title":"Page", "url":"/styled/tag/dynamic-table.html"},
+    {"title":"About", "url":"/styled/page?app=dynamictableexample&t=About"}
+  ],
+  "content": {
+    "about": "/pagehtml/dynamictableexample/about.html"
+  }
+}

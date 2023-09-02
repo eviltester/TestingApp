@@ -9,6 +9,10 @@
         ul{
             list-style-type: none;
         }
+        div[data-locator="number-entry-functions"]{
+            line-height: 3em;
+            background: #e1f0f5;
+        }
     </style>
 </head>
 
@@ -55,7 +59,7 @@
             <div data-locator="number-entry-functions">
                 <form data-locator="form-entry">
                     <label for="numentry">Enter some numbers:</label><br>
-                    <input id="numentry" name="number-entry" type="text">
+                    <input id="numentry" name="number-entry" type="text" autocomplete="off">
                     <input id="submit-to-server" data-locator="process-on-server" type="submit" value="Process On Server">
                 </form>
                 <button id="show-as-alert" data-locator="process-in-alert">Show as Alert</button>

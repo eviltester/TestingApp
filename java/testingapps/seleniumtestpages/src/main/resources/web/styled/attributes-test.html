@@ -9,9 +9,14 @@
 
 <div class="page-body">
 
-
-    <div class="page-navigation">
-        <a href="index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="page?app=elementattributes&t=About">About</a>
+        </div>
     </div>
 
     <h1>Element Attributes Examples</h1>
@@ -26,7 +31,9 @@
     <p class="inline-explanation">The next paragraph has attributes. Some are custom attributes, and one "original-title" was added using JavaScript.</p>
 
     <div class="centered">
-        <p id="domattributes" class="class-attribute" custom-attrib="attrib in source at load" title="a paragraph to test attributes on">This paragraph has attributes</p>
+        <div class="coloured-para-blue">
+            <p id="domattributes" class="class-attribute" custom-attrib="attrib in source at load" title="a paragraph to test attributes on">This paragraph has attributes</p>
+        </div>
     </div>
 
     <br/>
@@ -48,14 +55,53 @@
 
     <p class="inline-explanation">The next paragraph has an id, and a custom attribute called "nextid" which is used when adding additional attributes via JavaScript when the button is clicked e.g. "custom-{nextid}.</p>
 
-    <br/>
+    <br>
 
     <div class="centered">
-        <p id="jsattributes" nextid="1">This paragraph has dynamic attributes</p>
+        <div class="coloured-para-green">
+            <p id="jsattributes" nextid="1">This paragraph has dynamic attributes</p>
+        </div>
         <button class="styled-click-button" onclick="setNewAttrib()">Add Another Attribute</button>
     </div>
 
 
+    <br>
+    <h2>Auto Dynamically Updating Attributes</h2>
+
+    <p class="inline-explanation">The next paragraph has a static id, and attributes that are dynamically updating regularly.</p>
+
+    <br/>
+
+    <div class="centered">
+        <div class="coloured-para-red">
+            <p id="jsautoattributes" name="paradyn1" data-count="0" data-dynamic="">This paragraph has dynamic attributes</p>
+        </div>
+    </div>
+
+    <script>
+        function updateDynamicDataCount(){
+            var pelem = document.getElementById("jsautoattributes");
+            var count = parseInt(pelem.getAttribute("data-count"));
+            pelem.setAttribute("data-count", (count+1).toString());
+            // obvious bug
+            pelem.setAttribute('data-dynamic',Date.now().toString().
+            replaceAll("1","B").replaceAll("2","C").replaceAll("3","D").
+            replaceAll("4","F").replaceAll("5","G").replaceAll("6","H").
+            replaceAll("8","J").replaceAll("9","K").replaceAll("0","L"));
+        }
+        setInterval(updateDynamicDataCount,500);
+
+        function getRandomRange(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+        function updateName(){
+            var pelem = document.getElementById("jsautoattributes");
+            var namecount = parseInt(pelem.getAttribute("name").replace("paradyn",""));
+            pelem.setAttribute("name", "paradyn" + (namecount+1));
+            setTimeout(updateName, getRandomRange(200,900));
+        }
+        updateName();
+    </script>
 
     <div class="page-footer">
         <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,

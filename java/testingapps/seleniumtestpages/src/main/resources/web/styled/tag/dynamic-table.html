@@ -13,8 +13,14 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=dynamictableexample&t=About">About</a>
+        </div>
     </div>
 
     <h1>Dynamic HTML TABLE Tag</h1>
@@ -98,11 +104,19 @@
     document.getElementById("tableid").value = "dynamictable";
 
     function createTable(){
+        createTableFromJson(
+            document.getElementById("jsondata").value,
+            document.getElementById("caption").value,
+            document.getElementById("tableid").value
+        );
+    }
+
+    function createTableFromJson(jsonData, caption="Dynamic Table", id="tableid"){
 
         myTable = new TableCreator();
-        myTable.setCaption(document.getElementById("caption").value);
-        myTable.setData(JSON.parse(document.getElementById("jsondata").value));
-        tableElement =  myTable.getTable({"id" : document.getElementById("tableid").value });
+        myTable.setCaption(caption);
+        myTable.setData(JSON.parse(jsonData));
+        tableElement =  myTable.getTable({"id" : id });
 
         replaceTableWith(tableElement);
     }

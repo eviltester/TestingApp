@@ -1,0 +1,10 @@
+{
+  "title" : "Find By Playground",
+  "urls": [
+      {"title":"Page", "url":"/styled/find-by-playground-test.html"},
+      {"title":"About", "url":"/styled/page?app=findbyplayground&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/findbyplayground/about.html"
+  }
+}

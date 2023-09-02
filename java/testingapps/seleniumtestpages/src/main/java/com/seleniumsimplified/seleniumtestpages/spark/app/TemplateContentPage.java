@@ -22,9 +22,14 @@ public class TemplateContentPage {
         String theTitle = "Default Page Details";
 
         String[] validPagesArray = {
+                "basicwebpageexample",
+                "dynamictableexample",
+                "elementattributes",
+                "findbyplayground",
+                "htmltableexample",
+                "othersites",
                 "simplenotetaker",
                 "webdriverexamplepage",
-                "basicwebpageexample",
         };
         List<String> validPages = Arrays.asList(validPagesArray);
 
@@ -63,11 +68,18 @@ public class TemplateContentPage {
 
         String htmlPage = new ResourceReader().asString("/web/styled/template.html");
 
+        String enableGoogleAds = "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7132305589272099\"\n" +
+                "     crossorigin=\"anonymous\"></script>";
 
+        String verticaladunit = "    <ins class=\"adsbygoogle\"\n" +
+                "         style=\"display:inline-block;width:90px;height:728px\"\n" +
+                "         data-ad-client=\"ca-pub-7132305589272099\"></ins>";
 
         htmlPage = htmlPage.replace("<!-- TITLE -->", theTitle);
-        htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
 
+        htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + enableGoogleAds);
+        htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
+        htmlPage = htmlPage.replace("<!-- VERTICALADUNIT -->", verticaladunit);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyText);
 
         return htmlPage;
