@@ -3,6 +3,8 @@ package com.seleniumsimplified.seleniumtestpages.spark.app;
 import com.seleniumsimplified.seleniumtestpages.ResourceReader;
 import com.seleniumsimplified.seleniumtestpages.php.*;
 
+import java.util.Locale;
+
 import static spark.Spark.*;
 
 public class SeleniumTestPagesForSpark {
@@ -12,7 +14,18 @@ public class SeleniumTestPagesForSpark {
         // handle migration from testpages.herokuapp.com
         // to eviltester subdomain
         before("*", ((request, response) -> {
-            String url = request.url() + "?" + request.queryString();
+
+            // only perform redirects on GET requests
+            if(!request.requestMethod().toLowerCase(Locale.ROOT).equals("GET")){
+                return;
+            }
+
+            String url = request.url();
+
+            if(request.queryString()!=null){
+                url = url + "?" + request.queryString();
+            }
+
             String redirectTo = "";
 
             if(url.contains("//testpages.herokuapp.com")){
