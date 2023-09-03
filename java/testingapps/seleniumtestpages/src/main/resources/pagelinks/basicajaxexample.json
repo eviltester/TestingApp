@@ -1,0 +1,10 @@
+{
+  "title" : "Basic AJAX Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/basic-ajax-test.html"},
+      {"title":"About", "url":"/styled/page?app=basicajaxexample&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/basicajaxexample/about.html"
+  }
+}
