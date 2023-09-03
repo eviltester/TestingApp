@@ -11,8 +11,14 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="page?app=basicjsformvalidation&t=About">About</a>
+        </div>
     </div>
 
     <h1>Basic JavaScript Form Validation Example</h1>
@@ -24,8 +30,8 @@
 
     <script type="text/javascript" charset="utf-8">
 
-        function checkGT30() {
-            val = document.getElementById("lteq30").value;
+        function checkGT30elem(elem) {
+            val = elem.value;
             val = parseInt(val);
             goodval = true;
             if(isNaN(val) || val > 30) {
@@ -34,12 +40,28 @@
             }
             return goodval;
         }
+        function checkGT30a(){
+            return checkGT30elem(document.getElementById("lteq30a"))
+        }
+        function checkGT30b(){
+            return checkGT30elem(document.getElementById("lteq30b"))
+        }
+        function checkGT30(){
+            goodcheck = checkGT30a();
+            if(goodcheck){
+                goodcheck = goodcheck && checkGT30b();
+            }
+            return goodcheck
+        }
     </script>
 
     <div class="centered">
         <form method="post" action="the_form_processor.php?ajax=1" onsubmit="return checkGT30()">
             <div class="form-label">
-            Values Less Than 30 please : <input type="text" id="lteq30" name="value" onblur="checkGT30()">
+            Values Less Than 30 please : <input type="text" id="lteq30a" name="value1" onblur="checkGT30a()">
+            </div>
+            <div class="form-label">
+                Another Value Less Than 30 : <input type="number" id="lteq30b" name="value2" onblur="checkGT30b()">
             </div>
             <input class="styled-click-button" type="submit" name="submitbutton" value="Submit Value" />
             <input hidden type="text" name="form_return" value="/styled/basic-javascript-validation-test.html" />

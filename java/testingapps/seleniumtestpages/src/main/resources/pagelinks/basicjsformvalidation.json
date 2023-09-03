@@ -1,0 +1,10 @@
+{
+  "title" : "Basic JavaScript Form Validation Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/basic-javascript-validation-test.html"},
+      {"title":"About", "url":"/styled/page?app=basicjsformvalidation&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/basicjsformvalidation/about.html"
+  }
+}
