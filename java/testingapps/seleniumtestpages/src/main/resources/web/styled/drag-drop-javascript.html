@@ -26,7 +26,6 @@
 
     <div class="explanation">
         <p>You can move the yellow squares to drag them on the red drop points.
-            And keyboard events will be displayed as events.
         </p>
     </div>
 
@@ -60,11 +59,13 @@
 
     <br/>
 
+    <!--
     <div id="keyevents">
         <p>Events:</p>
         <div id="keyeventslist" data-count="0">
         </div>
     </div>
+    -->
 
     <div class="page-footer">
         <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
@@ -154,20 +155,20 @@
 
         document.addEventListener("keydown", function (event) {
 
-            var control = document.getElementById("keyeventslist")
-            var currcount = parseInt(control.getAttribute("data-count"))
-            control.setAttribute("data-count", (currcount+1).toString())
-
-            var elem = document.createElement("p");
-            elem.setAttribute("id", "event" + (currcount+1).toString());
-            elem.setAttribute("data-added-at", Date.now());
-            elem.setAttribute("class", "eventdata");
-            elem.appendChild(document.createTextNode("down " + event.key));
-            control.prepend(elem);
-
-            // var li = document.createElement("li");
-            // li.appendChild(document.createTextNode("down " + event.key));
-            document.getElementById("keyeventslist").prepend(elem);
+            // var control = document.getElementById("keyeventslist")
+            // var currcount = parseInt(control.getAttribute("data-count"))
+            // control.setAttribute("data-count", (currcount+1).toString())
+            //
+            // var elem = document.createElement("p");
+            // elem.setAttribute("id", "event" + (currcount+1).toString());
+            // elem.setAttribute("data-added-at", Date.now());
+            // elem.setAttribute("class", "eventdata");
+            // elem.appendChild(document.createTextNode("down " + event.key));
+            // control.prepend(elem);
+            //
+            // // var li = document.createElement("li");
+            // // li.appendChild(document.createTextNode("down " + event.key));
+            // document.getElementById("keyeventslist").prepend(elem);
 
             if (event.ctrlKey) cntrlPressed = true;
 

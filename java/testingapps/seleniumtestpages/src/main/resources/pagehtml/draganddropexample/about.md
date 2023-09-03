@@ -17,14 +17,8 @@ Dragging the second yellow square to:
 - Left Red Square shows "Get Off Me!"
 - Right Red Square shows "Dropped!"
 
-## Key Events
-
-Pressing key down or key up show an event in the list of Events.
-
-These events have additional attributes to show the event number and time event was created.
-
-## Other Keys
+## Keys
 
 You can reset the red square text by pressing `Ctrl`.
 
-There may be other secret key combinations.
+There may be other secret key combinations, and you might be able to determine these from the HTML code.

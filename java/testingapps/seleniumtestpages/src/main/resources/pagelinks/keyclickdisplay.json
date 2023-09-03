@@ -1,0 +1,10 @@
+{
+  "title" : "Keys and Clicks Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/key-click-display-test.html"},
+      {"title":"About", "url":"/styled/page?app=keyclickdisplay&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/keyclickdisplay/about.html"
+  }
+}

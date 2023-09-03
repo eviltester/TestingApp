@@ -26,8 +26,8 @@
 
     window.onload = function() {
         document.getElementById("button").addEventListener("click", function(){displayEventText("click")});
-        document.addEventListener("keydown", function(event){displayEventText(" down " + event.which)});
-        document.addEventListener("keyup", function(event){displayEventText(" up " + event.which)});
+        document.addEventListener("keydown", function(event){displayEventText(" down " + event.key + " " + event.which)});
+        document.addEventListener("keyup", function(event){displayEventText(" up " + event.key + " " + event.which)});
     }
 
 </script>
@@ -35,8 +35,14 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="page?app=keyclickdisplay&t=About">About</a>
+        </div>
     </div>
 
     <h1>Keys and Click Event Display</h1>
