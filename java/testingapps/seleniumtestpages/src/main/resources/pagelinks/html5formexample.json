@@ -1,0 +1,10 @@
+{
+  "title" : "HTML5 Form Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/html5-form-test.html"},
+      {"title":"About", "url":"/styled/page?app=html5formexample&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/html5formexample/about.html"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "title" : "Basic HTML Form Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/basic-html-form-test.html"},
+      {"title":"About", "url":"/styled/page?app=basichtmlformexample&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/basichtmlformexample/about.html"
+  }
+}

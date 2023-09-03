@@ -44,7 +44,7 @@ public class TemplateContentPage {
         if(!isValidPage){
             // sanitise and try and find
             // this is just to make it faster to add pages
-            appNameToUse = appNameToUse.replaceAll("[^a-z]","");
+            appNameToUse = appNameToUse.replaceAll("[^a-z0-9]","");
         }
 
         // try to find the json defn, if not use defaults
