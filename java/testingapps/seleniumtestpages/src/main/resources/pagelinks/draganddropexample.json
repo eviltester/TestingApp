@@ -1,0 +1,10 @@
+{
+  "title" : "Drag and Drop Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/drag-drop-javascript.html"},
+      {"title":"About", "url":"/styled/page?app=draganddropexample&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/draganddropexample/about.html"
+  }
+}
