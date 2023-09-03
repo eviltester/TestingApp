@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript Redirect Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/javascript-redirect-test.html"},
+      {"title":"About", "url":"/styled/page?app=javascriptredirect&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/javascriptredirect/about.html"
+  }
+}
