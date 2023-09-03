@@ -1,0 +1,10 @@
+{
+  "title" : "Window Links and Names Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/windows-test.html"},
+      {"title":"About", "url":"/styled/page?app=windowslinks&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/windowslinks/about.html"
+  }
+}

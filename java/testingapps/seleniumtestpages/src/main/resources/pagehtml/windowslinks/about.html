@@ -1,0 +1,29 @@
+<h1 id="about-windows-links-examples">About Windows Links Examples</h1>
+<div class="explanation">
+    <p>Links can open new pages, these can have &#39;names&#39;
+        associated with them.
+    </p>
+</div>
+
+<h2 id="page-specific-details">Page Specific Details</h2>
+<ul>
+    <li>This window is named &#39;windowsindex&#39;.</li>
+    <li>The Basic Ajax window is named &#39;basicajax&#39; (configured in the page itself).</li>
+    <li>The Attributes window, when opened, has no name.</li>
+    <li>The Alerts window will be named &#39;alerts&#39; but only if the link on this page is used to open it.</li>
+</ul>
+<h2 id="window-names">Window Names</h2>
+<p>Windows or browser tabs can have &#39;names&#39;. This allows links to jump to the open tab without opening a new tab or window.</p>
+<p>This page is configured to have the name <code>windowsindex</code>.</p>
+<p>The name is set using JavaScript. Use the developer tools to find the code which sets the name.</p>
+<h2 id="window-links">Window Links</h2>
+<p>Links on a page can open a new window.</p>
+<p>This might be done using the <code>target</code> attribute.</p>
+<p>Links can also be implemented using JavaScript to open a window with a specific name associated with it.</p>
+<h2 id="synchronization">Synchronization</h2>
+<p>Window names can be used to switch back and forward between the windows.</p>
+<h2 id="dev-tools">Dev Tools</h2>
+<p>Use the dev tools to inspect and explore the page DOM to understand the controls.</p>
+<p>You can also use the JavaScript console to show the current window name:</p>
+<pre><code class="lang-javascript">window.<span class="hljs-built_in">name</span>
+</code></pre>
