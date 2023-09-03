@@ -57,7 +57,10 @@ public class PhpPrettyRefresh {
 
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyContent);
 
+        String aboutNav = "<a>Page</a>\n" +
+                "<a href=\"page?app=refreshtest&t=About\">About</a>";
 
+        htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", aboutNav);
         return htmlPage;
     }
 }

@@ -1,0 +1,10 @@
+{
+  "title" : "Refresh Test Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/refresh"},
+      {"title":"About", "url":"/styled/page?app=refreshtest&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/refreshtest/about.html"
+  }
+}
