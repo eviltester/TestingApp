@@ -46,8 +46,12 @@ public class PhpPrettyRefresh {
                 "    </div>\n" +
                 "\n" +
                 "    <div class=\"centered\">\n" +
+                "<input id=\"button\" type=\"button\" value=\"Refresh Now\" class=\"styled-click-button\">" +
+                "    </div>\n" +
+                "    <div class=\"centered\">\n" +
                 "        <p id=\"refreshdisplay\">This page refreshed at <span id=\"refreshdate\">!REFRESHDATE!</span></p>\n" +
-                "    </div>";
+                "    </div>" +
+                "<script>document.getElementById('button').addEventListener('click', (event) => {location.reload()});</script>";
 
         bodyContent = bodyContent.replace("!REFRESHDATE!", refreshDate);
 
