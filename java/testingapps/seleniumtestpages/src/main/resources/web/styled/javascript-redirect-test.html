@@ -7,15 +7,16 @@
     <script type="text/javascript" src="countdown.js"></script>
 
     <script  type="text/javascript">
+        var javascript_countdown = new CountDown();
         function gotoRedirect(){
+            javascript_countdown.clearTimer();
             window.location = "redirected.html"
         }
         function startRedirection(millis){
             document.getElementById("countdown-render").style.display="block";
-            var javascript_countdown = new CountDown();
             javascript_countdown.setTimeoutMessage("Redirecting Now")
             javascript_countdown.start(millis/1000);
-            setTimeout('gotoRedirect()', millis);
+            setTimeout('gotoRedirect()', millis+100);
         }
     </script>
 
