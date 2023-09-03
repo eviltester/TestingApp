@@ -57,8 +57,8 @@
 
     <div id="keyevents">
         <p>Events:</p>
-        <ul id="keyeventslist">
-        </ul>
+        <div id="keyeventslist" data-count="0">
+        </div>
     </div>
 
     <div class="page-footer">
@@ -149,29 +149,38 @@
 
         document.addEventListener("keydown", function (event) {
 
-            var li = document.createElement("li");
-            li.appendChild(document.createTextNode("down " + event.which));
-            document.getElementById("keyeventslist").append(li);
+            var control = document.getElementById("keyeventslist")
+            var currcount = parseInt(control.getAttribute("data-count"))
+            control.setAttribute("data-count", (currcount+1).toString())
 
-            if (event.which == 17) cntrlPressed = true;
+            var elem = document.createElement("p");
+            elem.setAttribute("id", "event" + (currcount+1).toString());
+            elem.setAttribute("data-added-at", Date.now());
+            elem.setAttribute("class", "eventdata");
+            elem.appendChild(document.createTextNode("down " + event.key));
+            control.prepend(elem);
 
-            if (event.which == 32 && cntrlPressed) {
+            // var li = document.createElement("li");
+            // li.appendChild(document.createTextNode("down " + event.key));
+            document.getElementById("keyeventslist").prepend(elem);
+
+            if (event.ctrlKey) cntrlPressed = true;
+
+            if (event.key == " " && cntrlPressed) {
                 // ctrl space
                 document.getElementById("droppable1").getElementsByTagName("p")[0].innerHTML = "Let GO!!!";
                 document.getElementById("droppable2").getElementsByTagName("p")[0].innerHTML = "Let GO!!!";
             }
 
-            if (event.which != 17) {
-                if (event.which == 66 && cntrlPressed) {
-                    // ctrl B
-                    document.getElementById("draggable1").getElementsByTagName("p")[0].innerHTML = "Bwa! Ha! Ha!";
-                }
+            if (event.key == "b" && cntrlPressed) {
+                // ctrl B
+                document.getElementById("draggable1").getElementsByTagName("p")[0].innerHTML = "Bwa! Ha! Ha!";
             }
         });
 
         // change text on droppables to "Drop Here"
         document.addEventListener("keyup", function (event) {
-            if (event.which == 17) cntrlPressed = false;
+            if (!event.ctrlKey) cntrlPressed = false;
             document.getElementById("droppable1").getElementsByTagName("p")[0].innerHTML = "Drop Here";
             document.getElementById("droppable2").getElementsByTagName("p")[0].innerHTML = "Drop Here";
         });
