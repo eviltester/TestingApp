@@ -1,0 +1,10 @@
+{
+  "title" : "Multiple Progress Bars",
+  "urls": [
+      {"title":"Page", "url":"/styled/progress-bars-sync.html"},
+      {"title":"About", "url":"/styled/page?app=multipleprogressbars&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/multipleprogressbars/about.html"
+  }
+}

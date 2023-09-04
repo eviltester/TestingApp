@@ -1,0 +1,1 @@
+The buttons suggest that you can only click them in order, but really you can click them as often as you want leading to too many buttons on screen.

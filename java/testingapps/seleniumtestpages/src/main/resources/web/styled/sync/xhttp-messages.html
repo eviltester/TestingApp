@@ -13,15 +13,20 @@
 
 <div class="page-body">
 
-
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=xhttpmessages&t=About">About</a>
+        </div>
     </div>
 
     <h1>XHTTP Messages</h1>
 
     <div class="explanation">
-        <p>This page makes some calls to the server for messages to render on screen. The message count display shows you how many requests are being processed and how many messages are left to be rendered. The application has some internal variables that you can synchronise on e.g. liveMessages, totalRequestsMade, renderingQueueCount,totalMessagesReceived. The application is 'finished' when some requests have been made and the renderingQueueCount equals 0. The display for the Message Count updates every second so there may be a delay between finishing the message processing and representing this on screen.
+        <p>This page makes some calls to the server for messages to render on screen. The message count display shows you how many requests are being processed and how many messages are left to be rendered. The application is 'finished' when both counts reach 0.
         </p>
     </div>
 

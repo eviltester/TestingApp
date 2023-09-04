@@ -1,0 +1,10 @@
+{
+  "title" : "Simple Dynamic Buttons Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/dynamic-buttons-simple.html"},
+      {"title":"About", "url":"/styled/page?app=dynamicbuttonssimple&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/dynamicbuttonssimple/about.html"
+  }
+}

@@ -1,0 +1,33 @@
+<h1 id="about-xhttp-messages">About XHTTP Messages</h1>
+<div class="explanation">
+    <p>This page makes requests to a server and displays the messages received.
+    </p>
+</div>
+
+<h2 id="page-specific-details">Page Specific Details</h2>
+<ul>
+    <li>The number of requests sent is randomized.</li>
+    <li>The first number after &quot;Message Count&quot; is the number of requests to send.</li>
+    <li>The second number after &quot;Message Count&quot; is the number of messages to display.  </li>
+    <li>The messages received are random.</li>
+    <li>The processing is complete when <code>Message Count: 0 : 0</code> is displayed.</li>
+</ul>
+<h2 id="automating-visually">Automating Visually</h2>
+<p>You can synchronize your automated execution by monitoring the request and message count.</p>
+<p><code>Message Count: &lt;number of requests to send&gt; : &lt;number of messages to render&gt;</code></p>
+<p>You can also count the number of messages in the list to make sure they are the total you expect.</p>
+<p>The display for the Message Count updates every second so there may be a delay between finishing the message processing and representing this on screen.</p>
+<h2 id="internal-variables">Internal Variables</h2>
+<p>The page has a number of internal variables that are available to check when automating.</p>
+<ul>
+    <li>You could make sure these match the numbers represented on screen.</li>
+    <li>You could use these completely for synchronization.</li>
+</ul>
+<p>The variables are:</p>
+<ul>
+    <li><code>liveMessages</code>,</li>
+    <li><code>totalRequestsMade</code>,</li>
+    <li><code>renderingQueueCount</code>,</li>
+    <li><code>totalMessagesReceived</code>.</li>
+</ul>
+<p>The application is &#39;finished&#39; when all requests have been sent and the <code>renderingQueueCount</code> equals 0.</p>

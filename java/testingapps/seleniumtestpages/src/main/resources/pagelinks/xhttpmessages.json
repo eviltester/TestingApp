@@ -1,0 +1,10 @@
+{
+  "title" : "XHTTP Messages",
+  "urls": [
+      {"title":"Page", "url":"/styled/sync/xhttp-messages.html"},
+      {"title":"About", "url":"/styled/page?app=xhttpmessages&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/xhttpmessages/about.html"
+  }
+}
