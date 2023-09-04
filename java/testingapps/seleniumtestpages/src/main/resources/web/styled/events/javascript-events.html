@@ -12,20 +12,23 @@
 
 <div class="page-body">
 
-
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=javascriptevents&t=About">About</a>
+        </div>
     </div>
 
     <h1>JavaScript Events</h1>
 
     <div class="explanation">
         <p>Not all buttons are based around 'click' events. We might encounter
-            systems based around 'blur' or 'mousedown' or a whole host of other
-            "it made sense at the time" or "because on this device...". So we have
-            to learn how to handle different events.
+            systems based around 'blur' or 'mousedown'.
         </p>
-        <p>Each of the buttons has a different triggering event, try to trigger them.</p>
+        <p>Each of the buttons has a different triggering event, try to trigger them all.</p>
     </div>
 
     <div class="centered">
@@ -38,6 +41,90 @@
             }
         </script>
 
+        <script>
+            function resetChallenge(){
+                buttons = document.getElementsByTagName("button");
+                for(const elem of buttons){
+                    elemId = elem.getAttribute("id");
+                    if(elemId != "reset-challenge"){
+                        elem.style.display = "inline-block";
+                        elem.style.position = "";
+                        elem.className="styled-click-button"
+                        document.getElementById(elemId + "status").innerHTML="";
+                    }
+                }
+                endChallengeCompleted();
+            }
+
+            var pollingForCompletion=null;
+
+            function startPollingForCompletion(){
+                if(pollingForCompletion!=null){
+                    return;
+                }
+                pollingForCompletion = setInterval(pollForCompletion,500);
+            }
+
+            function pollForCompletion(){
+                total = document.getElementsByTagName("button");
+                doneButtons = document.querySelectorAll("button.styled-click-button-triggered");
+
+                if(doneButtons.length+1 == total.length){
+                    // done
+                    clearInterval(pollingForCompletion);
+                    pollingForCompletion = null;
+                    startChallengeCompleted();
+                }
+            }
+
+            var challengeCompletedInterval = null;
+
+            function startChallengeCompleted(){
+                elem=document.getElementById("completed-controls");
+                elem.style.display="block";
+                challengeCompletedInterval = setInterval(moveCompletedButtons, 500);
+            }
+
+            function endChallengeCompleted(){
+                if(challengeCompletedInterval!=null){
+                    clearInterval(challengeCompletedInterval);
+                    challengeCompletedInterval = null;
+                }
+                elem=document.getElementById("completed-controls");
+                elem.style.display="none";
+                startPollingForCompletion();
+            }
+
+            startPollingForCompletion();
+
+            // not sure if we should do this or not!
+            function randomElementMove(elem)
+            {
+                var xadjust = Math.floor(Math.random()*500)+1;
+                var yadjust = Math.floor(Math.random()*500)+1;
+                elem.style.position = "absolute"
+                elem.style.display = "block"
+                elem.style.left = xadjust+"px";
+
+                topelem=document.getElementById("completed-controls");
+                ystart = topelem.getBoundingClientRect();
+                elem.style.top = ystart.bottom + yadjust+"px";
+            }
+
+            function moveCompletedButtons(){
+                doneButtons = document.querySelectorAll("button.styled-click-button-triggered");
+                for(const elem of doneButtons){
+                    randomElementMove(elem);
+                }
+            }
+
+        </script>
+
+        <div id="completed-controls" style="display:none; margin-bottom:1em; padding-bottom: 2em; background: gold;">
+            <p class="challenge-completed-notification">Challenge Completed</p>
+            <button id="reset-challenge" class="styled-click-button" onclick="resetChallenge()">Reset Challenge</button>
+            <br>
+        </div>
         <div>
             <button id="onblur" class="styled-click-button" onblur="triggeredEvent(this)">OnBlur</button>
             <p id="onblurstatus"></p>

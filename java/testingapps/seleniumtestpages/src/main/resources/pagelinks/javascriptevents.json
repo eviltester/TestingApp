@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript Events Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/events/javascript-events.html"},
+      {"title":"About", "url":"/styled/page?app=javascriptevents&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/javascriptevents/about.html"
+  }
+}
