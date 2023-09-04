@@ -1,0 +1,27 @@
+<h1 id="about-user-agent-redirect-page">About User Agent Redirect Page</h1>
+<div class="explanation">
+    <p>Different pages will be shown, depending on the <code>user-agent</code> header.
+    </p>
+</div>
+
+<h2 id="about">About</h2>
+<p>If you hit the page with a browser, that the server thinks is a mobile browser then you will be redirected to the mobile version of this page. The server decides when to redirect based on the user-agent header in the request.</p>
+<p>The server does not have particularly good user agent detection so it will not work for all mobile user agents. It is deliberately buggy.</p>
+<p><em>Note: This is a pretty old fashioned way of handling mobile devices. Most websites now are responsive, and will work on both desktop and mobile, and so no separate mobile pages, or subdomain would be used.</em></p>
+<p>In the real world, you will normally find a subdomain being used e.g. instead of <code>https://eviltester.com</code> it would be <code>https://m.eviltester.com</code>.</p>
+<h2 id="functionality">Functionality</h2>
+<ul>
+    <li>The page which detects user-agent for redirection is  <a href="/styled/redirect/user-agent-redirect-test">/styled/redirect/user-agent-redirect-test</a></li>
+    <li>The redirected user agent page is at <a href="/styled/redirect/mobile/user-agent-mobile-test">/styled/redirect/mobile/user-agent-mobile-test</a></li>
+</ul>
+<p>If you are automating, then you can either detect you were redirected by looking at the title, or the url.</p>
+<ul>
+    <li>If the title contains &quot;Mobile&quot; then you were redirected.</li>
+    <li>If the url contains &quot;/mobile&quot; or &quot;/mobile/&quot; then you were redirected</li>
+</ul>
+<h2 id="dev-tools">Dev Tools</h2>
+<p>You can change the browser user-agent header by using the dev tools.</p>
+<p>e.g. the &quot;Toggle Device Toolbar&quot; in Chrome.</p>
+<p>This simulates a mobile device by changing the view port size and sending the appropriate header to the server when the page is refreshed.</p>
+<h2 id="extensions">Extensions</h2>
+<p>There are many browser extensions which will also do this for you, these often come with more user-agents and make it possible to simulate visiting the site as GoogleBot or BingBot.</p>

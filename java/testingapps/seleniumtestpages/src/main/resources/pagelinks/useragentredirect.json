@@ -1,0 +1,10 @@
+{
+  "title" : "User Agent Redirect Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/redirect/user-agent-redirect-test"},
+      {"title":"About", "url":"/styled/page?app=useragentredirect&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/useragentredirect/about.html"
+  }
+}
