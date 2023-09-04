@@ -43,6 +43,7 @@
 
         <script>
             function resetChallenge(){
+                clearAllTimeouts();
                 buttons = document.getElementsByTagName("button");
                 for(const elem of buttons){
                     elemId = elem.getAttribute("id");
@@ -82,6 +83,7 @@
             function startChallengeCompleted(){
                 elem=document.getElementById("completed-controls");
                 elem.style.display="block";
+                makeButtonsMoveable();
                 challengeCompletedInterval = setInterval(moveCompletedButtons, 500);
             }
 
@@ -102,8 +104,8 @@
             {
                 var xadjust = Math.floor(Math.random()*500)+1;
                 var yadjust = Math.floor(Math.random()*500)+1;
-                elem.style.position = "absolute"
-                elem.style.display = "block"
+                // elem.style.position = "absolute"
+                // elem.style.display = "block"
                 elem.style.left = xadjust+"px";
 
                 topelem=document.getElementById("completed-controls");
@@ -111,10 +113,27 @@
                 elem.style.top = ystart.bottom + yadjust+"px";
             }
 
+            timeouts = [];
+
+            function clearAllTimeouts(){
+                for(const timeout of timeouts){
+                    clearTimeout(timeouts);
+                }
+            }
+
+            function makeButtonsMoveable(){
+                for(const elem of doneButtons){
+                    elem.style.position = "absolute";
+                    elem.style.display = "block";
+                }
+            }
+
             function moveCompletedButtons(){
+                clearAllTimeouts();
                 doneButtons = document.querySelectorAll("button.styled-click-button-triggered");
                 for(const elem of doneButtons){
-                    randomElementMove(elem);
+                    timeouts.push(setTimeout(randomElementMove,Math.floor(Math.random()*500)+1, elem));
+                    //randomElementMove(elem);
                 }
             }
 
