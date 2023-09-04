@@ -1,0 +1,10 @@
+{
+  "title" : "CSS Media Query Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/css-media-queries.html"},
+      {"title":"About", "url":"/styled/page?app=cssmediaquery&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/cssmediaquery/about.html"
+  }
+}

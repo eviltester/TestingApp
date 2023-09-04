@@ -1,0 +1,24 @@
+<h1 id="about-css-media-queries-sizing-page">About CSS Media Queries Sizing Page</h1>
+<div class="explanation">
+    <p>CSS Media Queries change the displayed content based on the width of the browser.
+    </p>
+</div>
+
+<h2 id="css-media-queries">CSS Media Queries</h2>
+<p>CSS Media queries can be used to style the page differently based on the browser size.</p>
+<pre><code class="lang-css">@<span class="hljs-keyword">media</span> only screen and (min-width: <span class="hljs-number">1800px</span>) {
+    <span class="hljs-selector-tag">h2</span><span class="hljs-selector-class">.s1800</span>{
+        <span class="hljs-attribute">visibility</span>: visible;
+    }
+}
+</code></pre>
+<h2 id="functionality">Functionality</h2>
+<p>On this page, media queries are used to &#39;hide&#39; headings.</p>
+<p>The wider the page, the more headings you will see.</p>
+<h2 id="automating">Automating</h2>
+<p>You might be limited in automating this by your tooling or screen size.</p>
+<p>If the tool does not support resizing the browser then this will be difficult to automate.</p>
+<p>If your machine has limited resolution then this might also be difficult to automate.</p>
+<h2 id="dev-tools">Dev Tools</h2>
+<p>Using the Dev Tools in the browser and the &quot;Toggle Device Toolbar&quot; should allow you to test this, regardless of the size of your browser.</p>
+<p>In the Dev Tools the Media Queries toolbar can make it easy to adjust the size of the responsive view based on the queries available in the CSS.</p>

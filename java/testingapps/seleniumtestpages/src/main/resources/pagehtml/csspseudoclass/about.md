@@ -1,7 +1,7 @@
 # About CSS Pseudo Class Examples
 
 <div class="explanation">
-        <p>CSS Pseudo classes can be used to implement what looks like JavaScript functionality..
+        <p>CSS Pseudo classes can be used to implement what looks like JavaScript functionality.
         </p>
 </div>
 
