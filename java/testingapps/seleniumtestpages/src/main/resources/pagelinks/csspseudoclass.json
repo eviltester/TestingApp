@@ -1,0 +1,10 @@
+{
+  "title" : "Basic JavaScript Form Validation Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/csspseudo/css-hover.html"},
+      {"title":"About", "url":"/styled/page?app=csspseudoclass&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/csspseudoclass/about.html"
+  }
+}

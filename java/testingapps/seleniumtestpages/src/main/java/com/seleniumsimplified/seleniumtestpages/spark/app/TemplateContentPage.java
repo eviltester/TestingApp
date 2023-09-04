@@ -76,11 +76,16 @@ public class TemplateContentPage {
 
         Boolean contentGivenInUrl = this.content != null && this.content.length()>0;
 
+
         if(contentGivenInUrl && appdetails.get("content")!=null){
             Map<String,String> contentMapping = (Map<String,String>)appdetails.get("content");
             if(contentMapping.get(this.content.toLowerCase(Locale.ROOT))!=null){
                 String contentResource = contentMapping.get(this.content.toLowerCase(Locale.ROOT));
-                bodyText = new ResourceReader().asString(contentResource);
+                try {
+                    bodyText = new ResourceReader().asString(contentResource);
+                }catch(Exception e){
+
+                }
                 theTitle = theTitle + " - " + this.content;
             }
         }else{
