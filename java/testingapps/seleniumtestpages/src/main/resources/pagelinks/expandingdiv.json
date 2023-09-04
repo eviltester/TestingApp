@@ -1,0 +1,10 @@
+{
+  "title" : "Expanding Div Page",
+  "urls": [
+    {"title":"Page", "url":"/styled/expandingdiv.html"},
+    {"title":"About", "url":"/styled/page?app=expandingdiv&t=About"}
+  ],
+  "content": {
+    "about": "/pagehtml/expandingdiv/about.html"
+  }
+}
