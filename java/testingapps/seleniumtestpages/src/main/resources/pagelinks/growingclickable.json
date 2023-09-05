@@ -1,0 +1,10 @@
+{
+  "title" : "Growing Clickable Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/challenges/growing-clickable.html"},
+      {"title":"About", "url":"/styled/page?app=growingclickable&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/growingclickable/about.html"
+  }
+}

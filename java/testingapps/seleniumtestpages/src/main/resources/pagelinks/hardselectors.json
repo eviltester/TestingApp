@@ -1,0 +1,10 @@
+{
+  "title" : "Hard Selector Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/challenges/hard-selectors.html"},
+      {"title":"About", "url":"/styled/page?app=hardselectors&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/hardselectors/about.html"
+  }
+}

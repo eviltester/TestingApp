@@ -1,0 +1,10 @@
+{
+  "title" : "Gui Scribble Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/gui-scribble.html"},
+      {"title":"About", "url":"/styled/page?app=guiscribble&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/guiscribble/about.html"
+  }
+}
