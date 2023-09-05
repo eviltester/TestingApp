@@ -1,0 +1,1 @@
+- The upload button triggering does not check that a file has been entered so even when no file has been selected it redirects to the successful upload page.

@@ -169,6 +169,12 @@ public class FileUploadProcessor {
                 "        </div>\n" +
                 "    </div>";
 
+        String aboutNav = "<a>Page</a>\n" +
+                "<a href=\"/styled/page?app=fileuploadpage&t=About\">About</a>";
+
+        htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", aboutNav);
+
+
         bodyContent = bodyContent.replace("!FILETYPE!", fileType);
         bodyContent = bodyContent.replace("!DOWNLOADLINK!", fileLink);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyContent);

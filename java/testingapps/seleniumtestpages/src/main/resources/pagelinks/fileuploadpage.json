@@ -1,0 +1,10 @@
+{
+  "title" : "File Upload Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/file-upload-test.html"},
+      {"title":"About", "url":"/styled/page?app=fileuploadpage&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/fileuploadpage/about.html"
+  }
+}
