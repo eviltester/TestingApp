@@ -1,0 +1,11 @@
+{
+  "title" : "Test Pages",
+  "urls": [
+      {"title":"About", "url":"/styled/page?app=testpages&t=About"},
+      {"title":"Related Sites", "url":"/styled/page?app=testpages&t=Others"}
+    ],
+  "content": {
+    "about": "/pagehtml/testpages/about.html",
+    "others": "/pagehtml/testpages/othersites.html"
+  }
+}

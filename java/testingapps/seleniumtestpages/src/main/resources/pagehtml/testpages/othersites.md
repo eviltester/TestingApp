@@ -10,6 +10,15 @@ They are presented in Alphabetic order.
 
 <!-- TOC -->
 
+## Buggy Games
+
+[Buggy Games](https://eviltester.github.io/TestingApp/games/buggygames/)
+
+A small set of fun, and deliberately buggy or hackable games.
+
+- Suitable for practicing: Testing, JavaScript Hacking
+
+
 ## Contact List App
 
 [Contact List App](https://thinking-tester-contact-list.herokuapp.com/)
@@ -94,6 +103,26 @@ Be careful because the 'upload' page will upload your content. And it can be
 downloaded from the download page. Do not download anything already there as
 you don't know what it contains. And do not upload anything you don't want
 everyone to see.
+
+## The Pulper
+
+[The Pulper](https://thepulper.herokuapp.com/apps/pulp/)
+
+- Suitable for practicing: Automating, Exploratory Testing, REST API
+
+A sibling site to this one. 
+
+The Pulper is a simple CRUD (Create, Read, Update, Delete) application for managing a pulp book and magazine collection.
+
+Everything runs in memory so there is no database to worry about.
+
+The Pulper has multiple versions built in, the drop down admin menu allows selecting a version, or you can choose a version from the “Help” page.
+
+The Pulper comes with built in canned data so you can instantly start navigating around and getting a feel for the application.
+
+The application has some deliberate bugs, some of which are fixed in later versions of the app.
+
+
 
 ## UI Test Automation Playground
 

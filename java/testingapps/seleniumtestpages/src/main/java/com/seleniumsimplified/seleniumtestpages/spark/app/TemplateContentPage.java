@@ -97,7 +97,8 @@ public class TemplateContentPage {
             }
         }
 
-        String htmlPage = new ResourceReader().asString("/web/styled/template.html");
+        String htmlPage = new ResourceReader().
+                asString("/web/styled/templatep.html");
 
         String enableGoogleAds = "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7132305589272099\"\n" +
                 "     crossorigin=\"anonymous\"></script>";
