@@ -13,18 +13,23 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="../index.html">Index</a>
-         [<a id="navadminlogin" href="adminlogin.html">Admin Login</a>]
-         [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+             [<a id="navadminlogin" href="adminlogin.html">Admin Login</a>]
+             [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=cookiecontrolledpage&t=About">About</a>
+        </div>
     </div>
 
     <h1>Cookie Controlled Admin</h1>
 
     <div class="explanation">
         <p>Once you login using the form below, there should be a cookie which helps control which page you see.
-        i.e. you should not be able to visit the <a href="adminview.html">adminview.html</a> page until logged in. And (once logged in) you should not be able to come back to this page until you logout.</p>
-        <p>Try it and see - and use dev tools to mess with the cookie or try and inject a cookie with your automated execution</p>
+        </p>
     </div>
 
     <div class="centered">

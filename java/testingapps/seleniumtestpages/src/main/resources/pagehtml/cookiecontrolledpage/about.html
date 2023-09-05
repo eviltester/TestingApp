@@ -1,0 +1,24 @@
+<h1 id="about-cookie-controlled-page">About Cookie Controlled Page</h1>
+<div class="explanation">
+    <p>A &#39;fake&#39; login page using JavaScript and Cookies.
+    </p>
+</div>
+
+<h2 id="functionality">Functionality</h2>
+<p>This page simulates a login process.</p>
+<p>You should not be able to visit the AdminView</p>
+<p>page until logged in. And (once logged in) you should not be able to come back to this page until you logout.</p></p>
+<p>Try it and see - and use dev tools to mess with the cookie or try and inject a cookie with your automated execution</p>
+
+<p>When you type in the correct username (Admin) and password (AdminPass), a cookie is created, and you are redirected to the &#39;AdminView&#39;.</p>
+<p>The Cookie represents a session cookie that would be created upon successful login for a normal login process.</p>
+<p>Each page has JavaScript that detects the cookie.</p>
+<p>You can only access the <a href="/styled/cookies/adminview.html">AdminView page</a> when the cookie is set.</p>
+<p>When the cookie is set the <a href="/styled/cookies/adminlogin.html">login page</a> will redirect you to the AdminView Page.</p>
+<p>Use the <code>AdminLogout</code> link to remove the cookie.</p>
+<h2 id="cookies">Cookies</h2>
+<p>Using your Automated Execution tool you should be able to create a cookie and bypass the login process.</p>
+<p>Injecting cookies is often done during Automated Execution to speed up access to a logged in section of an application.</p>
+<h2 id="cookie-inspection-and-manipulation">Cookie Inspection and Manipulation</h2>
+<p>Use the Browser Dev Tools to inspect the cookie and find the correct format and information to add.</p>
+<p>You can also change the cookie details and delete them using the Browser Dev Tools to help you with your testing.</p>

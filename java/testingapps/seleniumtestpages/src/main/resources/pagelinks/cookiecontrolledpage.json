@@ -1,0 +1,10 @@
+{
+  "title" : "Cookie Controlled Page Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/cookies/adminlogin.html"},
+      {"title":"About", "url":"/styled/page?app=cookiecontrolledpage&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/cookiecontrolledpage/about.html"
+  }
+}
