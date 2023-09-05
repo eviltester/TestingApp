@@ -1,0 +1,10 @@
+{
+  "title" : "File Download Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/download/download.html"},
+      {"title":"About", "url":"/styled/page?app=filedownload&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/filedownload/about.html"
+  }
+}

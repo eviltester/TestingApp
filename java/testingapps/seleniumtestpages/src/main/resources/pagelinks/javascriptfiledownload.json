@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript File Download Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/download/download-via-js.html"},
+      {"title":"About", "url":"/styled/page?app=javascriptfiledownload&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/javascriptfiledownload/about.html"
+  }
+}
