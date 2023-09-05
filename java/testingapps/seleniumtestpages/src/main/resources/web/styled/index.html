@@ -6,6 +6,9 @@
         if(window.location.host=="testpages.herokuapp.com"){
             window.location.host = "testpages.eviltester.com";
         }
+        if(window.location.href.startsWith("http://testpages.eviltester.com")){
+            window.location.href = window.location.href.replace("http://","https://");
+        }
     </script>
 </head>
 <body>
