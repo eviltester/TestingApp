@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Abhaya Libre
+- Font Author: Copyright (c) 1996-2015 Pushpananda Ekanayake (pushpanandae@gmail.com) Copyright (c) 2015 Sol Matas (sol@sonnenshine.com.ar) Copyright (c) 2015 Mooniak (hello@mooniak.com)
+- Font Source: http://fonts.gstatic.com/s/abhayalibre/v14/e3tmeuGtX-Co5MNzeAOqinEge0PWovdU4w.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))

@@ -1,0 +1,10 @@
+{
+  "title" : "Input Validation Form Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/validation/input-validation.html"},
+      {"title":"About", "url":"/styled/page?app=inputvalidationform&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/inputvalidationform/about.html"
+  }
+}
