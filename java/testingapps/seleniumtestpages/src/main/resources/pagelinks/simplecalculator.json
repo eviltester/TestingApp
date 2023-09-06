@@ -1,0 +1,10 @@
+{
+  "title" : "Simple Calculator Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/calculator"},
+      {"title":"About", "url":"/styled/page?app=simplecalculator&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/simplecalculator/about.html"
+  }
+}
