@@ -1,0 +1,10 @@
+{
+  "title" : "Canvas JavaScript Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/canvas-javascript-test.html"},
+      {"title":"About", "url":"/styled/page?app=canvasjavascript&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/canvasjavascript/about.html"
+  }
+}

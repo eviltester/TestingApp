@@ -1,0 +1,33 @@
+<h1 id="about-javascript-canvas-page">About JavaScript Canvas Page</h1>
+<div class="explanation">
+    <p>Draw on the canvas using JavaScript commands.
+    </p>
+</div>
+
+<h2 id="about-page">About Page</h2>
+<p>The UI shows a canvas with some input fields.</p>
+<p>Selecting the various values in the input fields will trigger a JavaScript command that will draw shapes on the canvas.</p>
+<p>Each command will be shown in the list on the right of the canvas.</p>
+<h2 id="javascript-instructions">JavaScript Instructions</h2>
+<p>Commands:</p>
+<ul>
+    <li><code>draw(shape, x, y, size, &quot;#colour&quot;)</code></li>
+    <li><code>clearCanvas()</code></li>
+</ul>
+<p>Note:</p>
+<ul>
+    <li>shape is 1 for circle, 0 for square</li>
+    <li>colour is an rgb string e.g. &quot;#FF1C0A&quot;</li>
+    <li>size is in pixels</li>
+    <li>canvas is 300 x 300</li>
+</ul>
+<h2 id="automating-ui">Automating UI</h2>
+<p>The form itself is possible to automate using simple locators.</p>
+<h2 id="javascript-hacking">JavaScript Hacking</h2>
+<p>Because the underlying commands are hooked into the dom it is possible to run the commands from the JavaScript console to create shapes on the canvas.</p>
+<h2 id="exploratory-testing">Exploratory Testing</h2>
+<p>Exploratory Testing might highlight usability improvements or missing functionality that would aid the user.</p>
+<h2 id="suggested-exercises">Suggested Exercises</h2>
+<ul>
+    <li>There is no &#39;save&#39; function in the app. Write some JavaScript in the console that will scrape the commands and output them in a string. Clear the screen and use the generated script to recreate the image. </li>
+</ul>

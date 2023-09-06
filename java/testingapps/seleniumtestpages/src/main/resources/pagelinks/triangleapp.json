@@ -1,0 +1,11 @@
+{
+  "title" : "The Triangle App",
+  "urls": [
+      {"title":"v001", "url":"/styled/apps/triangle/triangle001.html"},
+      {"title":"v002", "url":"/styled/apps/triangle/triangle002.html"},
+      {"title":"About", "url":"/styled/page?app=triangleapp&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/triangleapp/about.html"
+  }
+}

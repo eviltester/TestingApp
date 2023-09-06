@@ -35,12 +35,12 @@
             ctx.closePath();
             ctx.fill();
 
-            addCommandToHistory('draw(' + shape + ',' + x + ',' + y + ',' + size + ',' + colour + ')');
+            addCommandToHistory('draw(' + shape + ',' + x + ',' + y + ',' + size + ',"' + colour + '");');
         }
 
         function clearCanvas(){
             ctx.clearRect(0,0,300,300);
-            addCommandToHistory('clear()');
+            addCommandToHistory('clearCanvas();');
         }
 
         function handleUserShape(){
@@ -61,8 +61,14 @@
 <div class="page-body">
 
 
-    <div class="page-navigation">
-        <a href="index.html">Index</a>
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="page?app=canvasjavascript&t=About">About</a>
+        </div>
     </div>
 
     <h1>Canvas JavaScript Example</h1>
@@ -123,11 +129,12 @@
 
     </div>
 
+    <!--
     <div class="explanation">
         <p>Instructions:</p>
         <ul>
-            <li>command: draw(shape, x, y, size, colour)</li>
-            <li>command: clear()</li>
+            <li>command: draw(shape, x, y, size, "#colour")</li>
+            <li>command: clearCanvas()</li>
         </ul>
         <p>Note:</p>
         <ul>
@@ -137,6 +144,7 @@
             <li>canvas is 300 x 300</li>
         </ul>
     </div>
+    -->
 
 
     <div class="page-footer">

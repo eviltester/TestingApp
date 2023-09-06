@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript Button Calculator",
+  "urls": [
+      {"title":"Page", "url":"/styled/apps/calculator.html"},
+      {"title":"About", "url":"/styled/page?app=buttoncalculator&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/buttoncalculator/about.html"
+  }
+}

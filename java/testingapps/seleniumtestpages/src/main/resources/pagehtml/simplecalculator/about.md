@@ -46,4 +46,4 @@ The form doesn't seem to have much validation so you can explore edge cases.
 
 A Proxy Tool might help here, by intercepting the request to the server, you could resend the request with changed data without having to fill in the web form all the time.
 
-Proxy tools also have fuzzers, and you migth be able to use those to cover a lot of data combinations quickly.
+Proxy tools also have fuzzers, and you might be able to use those to cover a lot of data combinations quickly.
