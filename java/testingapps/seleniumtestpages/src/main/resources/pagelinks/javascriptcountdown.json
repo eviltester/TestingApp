@@ -1,0 +1,10 @@
+{
+  "title" : "JavaScript Countdown Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/javascript-countdown-test.html"},
+      {"title":"About", "url":"/styled/page?app=javascriptcountdown&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/javascriptcountdown/about.html"
+  }
+}

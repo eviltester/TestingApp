@@ -86,5 +86,7 @@ function CountDown() {
         this.startTimer();
     };
 
-
-};
+    this.time_left = function(){
+        return time_left;
+    }
+}

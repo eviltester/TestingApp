@@ -1,0 +1,25 @@
+<h1 id="about-javascript-countdown">About JavaScript Countdown</h1>
+<div class="explanation">
+    <p>A countdown timer implemented in JavaScript.
+    </p>
+</div>
+
+<h2 id="about-page">About Page</h2>
+<p>This page contains text displaying a countdown with <code>hours : minutes : seconds</code>.</p>
+<p>The countdown is controlled by JavaScript running in the background.</p>
+<p>The timer starts automatically when the page loads and can be re-configured and controlled by the GUI.</p>
+<ul>
+    <li><code>seconds</code> input field - the number of seconds to use as the countdown</li>
+    <li><code>Reset Timer</code> - set the timer to the number of <code>seconds</code></li>
+    <li><code>Start Timer</code> - start/restart timer using the number of seconds shown</li>
+    <li><code>Stop Timer</code> - pause the countdown</li>
+    <li><code>Clear Timer</code> - set timer to &quot;Time Up!&quot; with no seconds value.</li>
+</ul>
+<h2 id="automated-execution">Automated Execution</h2>
+<p>For automating, it is a relatively simple set of elements with attributes to make locating easier.</p>
+<p>Results checking can be implemented by asserting on the value of the countdown time.</p>
+<h2 id="exploratory-testing">Exploratory Testing</h2>
+<p>The application maintains internal state e.g. paused, current time, pause -&gt; restart, clear -&gt; reset etc.</p>
+<p>Track your coverage and be sure to have the JavaScript Console open in the Dev Tools as you test, just in case there are any JavaScript issues.</p>
+<h2 id="javascript-hacking">JavaScript Hacking</h2>
+<p>As with the majority of our test pages, the JavaScript is easily callable from the console and many test input combinations could be triggered from JavaScript.</p>
