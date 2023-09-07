@@ -1,0 +1,10 @@
+{
+  "title" : "Selenium Simplified Search Engine",
+  "urls": [
+    {"title":"Page", "url":"/styled/search"},
+    {"title":"About", "url":"/styled/page?app=simplifiedsearchengine&t=About"}
+  ],
+  "content": {
+    "about": "/pagehtml/simplifiedsearchengine/about.html"
+  }
+}

@@ -149,6 +149,12 @@ public class PhpPrettySearch {
 
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", html.toString());
 
+        String aboutNav = "<a>Page</a>\n" +
+                "<a href=\"page?app=simplifiedsearchengine&t=About\">About</a>";
+
+        htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", aboutNav);
+
+
         return htmlPage;
     }
 

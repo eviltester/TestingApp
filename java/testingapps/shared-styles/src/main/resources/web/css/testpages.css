@@ -68,11 +68,6 @@ div.centered{
     padding-bottom: 1em;
 }
 
-div.page-footer:before{
-    padding-top: 10em;
-    margin-top: 10em;
-}
-
 div.verticalspace{
       padding-top: 1em;
       margin-top: 1em;
@@ -85,7 +80,15 @@ div.verticalspace{
 
 div.page-footer{
     text-align: center;
-    margin: 10em;
+    margin-top: 5em;
+    margin-bottom: 2em;
+}
+
+div.promomessage{
+    font-style: italic;
+    font-size: smaller;
+    background: khaki;
+    padding: 0.5em;
 }
 
 div.page-footer p{

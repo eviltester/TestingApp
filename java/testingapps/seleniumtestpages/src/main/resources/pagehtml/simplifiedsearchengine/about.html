@@ -1,0 +1,26 @@
+<h1 id="about-selenium-simplified-search">About Selenium Simplified Search</h1>
+<div class="explanation">
+    <p>A very simple server based search engine .
+    </p>
+</div>
+
+<h2 id="about-page">About Page</h2>
+<p>This page contains an input field and a <code>search</code> button.</p>
+<p>There is some matching of your search term to the hardcoded data in the backend, if not enough results are matched the the list of results will be filled with random results to make up the numbers.</p>
+<p>There will always be the same number of results returned.</p>
+<p>Cookies are used for the page and much of this page functionality concerns the cookies.</p>
+<p>Three Cookies are used:</p>
+<ul>
+    <li>one for the last search term</li>
+    <li>one for the number of visits to the page</li>
+    <li>one for the last visit date</li>
+</ul>
+<p>Information from the cookies is shown on the page.</p>
+<p>Use the Browser Dev Tools to explore and model the cookies used, also to understand the server side interaction.</p>
+<h2 id="automated-execution">Automated Execution</h2>
+<p>Most GUI automated execution tools allow setting and amending the cookies, so this is a useful page to explore that functionality.</p>
+<p>The form has no complicated JavaScript and is submitted directly to the server.</p>
+<p>Minimal synchronisation will be required because the page is populated by the server.</p>
+<h2 id="exploratory-testing">Exploratory Testing</h2>
+<p>There are many comments about this page that you might make to the developer.</p>
+<p>Since the page is populated by the server you might choose to engage in HTTP level testing in addition to the GUI level testing.</p>
