@@ -91,6 +91,12 @@ div.promomessage{
     padding: 0.5em;
 }
 
+div.content h2{
+    margin-top: 2em;
+    border-top: outset;
+    padding-top: 1em;
+}
+
 div.page-footer p{
     padding-top: 1em;
     border-top: 1px solid black;
