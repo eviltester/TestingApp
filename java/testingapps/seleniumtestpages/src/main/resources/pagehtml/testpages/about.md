@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About
 
 [I (Alan Richardson)](https://eviltester.com) created this, because I believe the best way to improve your testing skills is to practice.
