@@ -1,0 +1,46 @@
+<html>
+<head>
+
+    <!--meta_data-->
+    <!--css_styles-->
+    <script src="validationfunctionso.js"></script>
+    <link rel="stylesheet" href="../../../css/testpages.css">
+</head>
+<body>
+
+<div class="page-body">
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../../page?app=simple7charvalidation&t=About">About</a>
+        </div>
+    </div>
+<!--page_header-->
+
+    <h1>Simple 7 Char Validator</h1>
+
+    <div class="explanation">
+        <p>This is a simple JavaScript powered validation input.
+            Only A-Z, a-z, 0-9, and * are valid characters.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <h2>Please Enter Your 7 character value</h2>
+        <p>Only A-Z, a-z, 0-9, and * are valid characters.</p>
+        <form name="charsform">
+        <p>Your 7 digits: <input type="text" name="characters">  <input type="text" name="validation_message" value="" onFocus="this.blur()"></p>
+        <p><input type="button" name="validate" value="Check Input" onclick="processValidation(1);"></p>
+        </form>
+    </div>
+
+<!--page_footer-->
+
+</div>
+
+</body>
+</html>

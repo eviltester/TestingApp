@@ -64,6 +64,16 @@ A hotel booking CMS example with the main page and admin interface. A web app an
 
 - [API](https://restful-booker.herokuapp.com/apidoc/index.html)
 
+## Simple Todo List
+
+[Simple Todo List](https://eviltester.github.io/simpletodolist/todolists.html)
+
+- Suitable for practicing: Automating, Testing, JavaScript Hacking
+
+A Simple Todo List Application written with HTML and JavaScript, and using Local Browser Storage. Based on the [Vanilla JS Todo MVC Project](https://todomvc.com/examples/vanillajs/). But heavily re-written to simplify, add more bug and automation potential, and add an admin feature set.
+
+The application was used as the sample app in my [Linkedin Learning Course Selenium WebDriver Page Objects and Abstractions](https://www.linkedin.com/learning/advanced-selenium-page-objects-and-gui-automation)
+
 
 ## Swag Labs
 
@@ -89,7 +99,13 @@ A test REST API provided by swagger.
 
 - [code](https://github.com/swagger-api/swagger-petstore)
 
+## Testing Challenges
 
+[Testing Challenges](http://testingchallenges.thetestingmap.org/)
+
+- Suitable for practicing: Testing
+
+A set of 10 pages with full instructions to use as Software Testing challenges.
 
 ## The-Internet
 
@@ -122,7 +138,7 @@ The Pulper comes with built in canned data so you can instantly start navigating
 
 The application has some deliberate bugs, some of which are fixed in later versions of the app.
 
-
+I created an [exclusive course and workbook for Patreon Supporters](https://www.testerhq.com/member2/index.php?course=the_pulper_technical_testing_workshop&page=coursecontents&preview=true) describing how to use this to practice testing.
 
 ## UI Test Automation Playground
 

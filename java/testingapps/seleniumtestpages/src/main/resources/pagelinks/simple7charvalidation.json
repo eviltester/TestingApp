@@ -1,0 +1,10 @@
+{
+  "title" : "7 Char Value Validation Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/apps/7charval/simple7charvalidation.html"},
+      {"title":"About", "url":"/styled/page?app=simple7charvalidation&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/simple7charvalidation/about.html"
+  }
+}

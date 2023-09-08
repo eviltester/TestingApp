@@ -1,0 +1,149 @@
+<h1 id="about-7-char-validation">About 7 Char Validation</h1>
+<div class="explanation">
+    <p>A very simple validation input controlled by JavaScript.
+    </p>
+</div>
+
+<!-- TOC -->
+<p>Patreon supporters can download a <a href="https://www.patreon.com/posts/75068248">free 205 page ebook of exercises and notes</a> based on this single 7 Char Validation application.</p>
+<h2 id="about-page">About Page</h2>
+<p>This was the first application I specifically created to teach testing.</p>
+<p>I created it as a team exercise for a team I was managing at the time.</p>
+<p>The form is simple:</p>
+<ul>
+    <li>an input field</li>
+    <li>a button to validate the contents of the field</li>
+    <li>a field that displays the results of the validation</li>
+</ul>
+<p>The validation rules are simple, the input should be 7 characters in length, and the only valid characters are:</p>
+<ul>
+    <li><code>A-Z</code>,</li>
+    <li><code>a-z</code>,</li>
+    <li><code>0-9</code>,</li>
+    <li>and <code>*</code></li>
+</ul>
+<p>When the input is valid the result is &quot;Valid Value&quot;, when invalid the result shows &quot;Invalid Value&quot;</p>
+<p>There are deliberate bugs in the application, so this can be used for testing.</p>
+<h2 id="ui-automated-execution">UI Automated Execution</h2>
+<p>The UI is basic, and has locators for each field.</p>
+<p>You may have to synchronize on the result field.</p>
+<h2 id="javascript-hacking">JavaScript Hacking</h2>
+<p>You could automate this from the console and create a lot of input variation very quickly.</p>
+<p>The controlling JavaScript is obfuscated, but I&#39;m sure that won&#39;t stop you.</p>
+<h2 id="exploratory-testing">Exploratory Testing</h2>
+<p>This is a fun application to test. There are lots of different ways of approaching the application.</p>
+<p>e.g.</p>
+<ul>
+    <li>Exercise Set 1 - First Steps<ul>
+        <li>Instructions</li>
+        <li>Try the app</li>
+        <li>Find a Bug </li>
+        <li>Build a Risk Model of the Application</li>
+    </ul>
+    </li>
+    <li>Exercise Set 2 - Input Output Domain Coverage<ul>
+        <li>Model Output Domain and go for Coverage </li>
+        <li>Model Input Domain and Expand Coverage</li>
+    </ul>
+    </li>
+    <li>Exercise Set 3 - GUI State and Interaction<ul>
+        <li>Investigate Application State</li>
+        <li>Investigate GUI Interaction</li>
+        <li>Investigate the GUI Technically</li>
+        <li>Investigate Error Handling for Malformed Page</li>
+    </ul>
+    </li>
+    <li>Exercise Set 4 - Environment Interaction</li>
+    <li>Exercise: Set 5 - Tooling Use</li>
+    <li>Exercise: Set 6 - Automate Tactically</li>
+    <li>Exercise: Set 7 - End Game - Source investigation</li>
+    <li>Exercise: Set 8 - Debriefs</li>
+</ul>
+<h2 id="ebook">Ebook</h2>
+<p>I documented the various ways I approached the testing of this application for my Patreon supporters and ended up creating a 205 page e-book filled with exercises, testing notes, theory and automated execution tips and code samples.</p>
+<p><a href="https://www.patreon.com/posts/75068248">Patreon supports can download the ebook for free</a></p>
+<p>The workbook contains eight sets of exercises that cover approaches for practicing.</p>
+<p>In total there are twenty five exercises. Each exercise should take between thirty minutes to one hour to complete.</p>
+<p>The workbook also contains the basic theory that I used when I was completing the exercises, so if you are new to testing then you may find those sections useful to give you some ideas, and to help understand the language and thought processes behind testing.</p>
+<p>Additionally, I have included my notes for the practice sessions I performed for each exercise.</p>
+<h2 id="excerpt-learning-to-test-with-7charval">Excerpt - Learning to Test with 7CharVal</h2>
+<p>7CharVal was one of the first applications I wrote to have something small and focussed to use as a testing exercise for teams.</p>
+<p>When I first used this as a testing exercise the instructions were simple:</p>
+<ul>
+    <li>spend 30 minutes</li>
+    <li>test this</li>
+    <li>see what you find</li>
+</ul>
+<p>This is a very open set of instructions.</p>
+<p>It was interesting to see how people approach it:</p>
+<ul>
+    <li>some people immediately go on a bug hunt</li>
+    <li>some people test basic inputs and then start exploring with <a href="https://bugmagnet.org/">BugMagnet</a></li>
+    <li>some people test and create a coverage model as a mind map</li>
+    <li>some people test and take notes as a text file</li>
+    <li>some people freeze, not knowing what to do</li>
+</ul>
+<h2 id="excerpt-on-freezing-when-testing">Excerpt - On Freezing When Testing</h2>
+<p>The &#39;freeze&#39; was a concern for me because testing in its most simple form is:</p>
+<ul>
+    <li>create a model of the system</li>
+    <li>investigate to see if the system matches the model</li>
+    <li>use the differences to:<ul>
+        <li>ask questions</li>
+        <li>amend the model and test more,</li>
+        <li>raise issues when the model is believed to be correct</li>
+    </ul>
+    </li>
+</ul>
+<p>Freezing meant that people didn&#39;t know how to kickstart their process.</p>
+<h2 id="excerpt-modelling-from-null">Excerpt - Modelling from NULL</h2>
+<p>Even when we know nothing about a system, e.g. we have a NULL model, we can look at the system and see that it is not NULL, then immediately expand our model to include what we see e.g.</p>
+<ul>
+    <li>we see a button</li>
+    <li>click it</li>
+    <li>something happens</li>
+</ul>
+<p>We have now expanded our model to include:</p>
+<ul>
+    <li>a button</li>
+    <li>an action</li>
+    <li>am observable result</li>
+</ul>
+<p>We can then reflect on the &#39;happening&#39; and decide &quot;did the resulting &#39;happening&#39; make sense given the state of the application?&quot; and to do that we have to:</p>
+<ul>
+    <li>build a model of the &#39;state&#39; of the application</li>
+    <li>identify some behaviour rules for the application</li>
+</ul>
+<p>We can then identify:</p>
+<ul>
+    <li>more possible states</li>
+    <li>manipulate the system so that it does, or does not move into those states</li>
+    <li>if our behaviour rules model matches the observable results</li>
+</ul>
+<p>We can also go further and move from surface level observations to interrogate the system more deeply and expand our understanding e.g. if the application uses a database then look in the database to see if it matches the information on the GUI.</p>
+<h2 id="excerpt-a-simple-model-of-testing">Excerpt - A Simple Model Of Testing</h2>
+<p>Above I&#39;ve presented a very simple model of how I approach the act of testing:</p>
+<ul>
+    <li>Modeling - creating multiple models of the application e.g. to aid my understanding, to assess coverage, etc.</li>
+    <li>Observing - seeing what happens, what changes, what options are available, what I&#39;m thinking, etc.</li>
+    <li>Reflecting - comparing my observations with my model, identifying gaps, deciding what to do next, etc.</li>
+    <li>Interrogating - going more deeply into the application, examining results in more detail, etc.</li>
+    <li>Manipulating - interacting with the application, controlling its state, etc.</li>
+</ul>
+<p>These are all very active processes and I draw on my experiences, testing knowledge, technical domain knowledge and more as I test.</p>
+<h2 id="excerpt-practice-makes-us-unique">Excerpt - Practice Makes us Unique</h2>
+<p>Testing is a very unique process for each individual that tests, we all do it differently, this is why practicing is very helpful:</p>
+<ul>
+    <li>expand our approach to include techniques and information we learn from others</li>
+    <li>boost our technical skills to improve our competence</li>
+    <li>experiment with different ways of making notes as we test</li>
+    <li>trying new tools to see how they help or hinder us</li>
+    <li>etc.</li>
+</ul>
+<p>Even an application as simple as 7CharVal opens up a lot of possibilities for testing and practicing testing.</p>
+<h2 id="excerpt-old-apps-new-practices">Excerpt - Old Apps, New Practices</h2>
+<p>I wrote 7CharVal back in 2009 and it remains unchanged since then. I revisit it periodically... generally when I&#39;ve forgotten what the bugs are, how it works and what I did with it in the past.</p>
+<p>As I approach it anew every few years I can see that my testing approach has changed and I find new ways to approach the testing.</p>
+<p>What was once a 30 minute exercise can now easily occupy a productive day or more of practice.</p>
+<p>The application hasn&#39;t changed.</p>
+<p>I&#39;ve changed, my approach to testing has changed through a combination of practice and experience.</p>

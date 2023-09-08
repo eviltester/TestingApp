@@ -111,6 +111,7 @@ public class SeleniumTestPagesForSpark {
             return page;
         });
 
+
         get("/styled/page", (req, res) -> {
             {return new TemplateContentPage(req,res).get();}
         });
