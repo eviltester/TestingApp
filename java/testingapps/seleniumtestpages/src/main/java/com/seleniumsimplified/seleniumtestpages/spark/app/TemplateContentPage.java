@@ -100,12 +100,12 @@ public class TemplateContentPage {
         String htmlPage = new ResourceReader().
                 asString("/web/styled/templatep.html");
 
-        String enableGoogleAds = "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7132305589272099\"\n" +
-                "     crossorigin=\"anonymous\"></script>";
+//        String enableGoogleAds = "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7132305589272099\"\n" +
+//                "     crossorigin=\"anonymous\"></script>";
 
 
         htmlPage = htmlPage.replace("<!-- TITLE -->", theTitle);
-        htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + enableGoogleAds);
+        //htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + enableGoogleAds);
         htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyText);
 
