@@ -1,0 +1,262 @@
+<!doctype html>
+<html>
+<head>
+    <title>Input Elements - HTML Testing Reference</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <link rel="shortcut icon" href="favicon.ico">
+    <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
+
+    <!-- HEAD -->
+
+    <style>
+        p.eventinfo {
+            text-align: center;
+            background: khaki;
+        }
+        label.formheading{
+            line-height: 2em;
+            font-size: xx-large;
+        }
+        input{
+            font-size: initial;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="../index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="../page?app=htmlinputreference&t=About">About</a>
+            <!-- APPNAVIGATION CONTENT -->
+        </div>
+    </div>
+
+    <h1>Input Elements - HTML Testing Reference</h1>
+
+    <div class="explanation">
+        <p>This page example input elements of various 'type'.
+            Event hooks have been added, you can see the event information in the console.
+            Use the 'Toggle' button to show events in the DOM.
+        </p>
+    </div>
+
+    <div class="centered">
+
+    <!-- BODY CONTENT -->
+
+        <button onclick="toggleEventParasDisplay()">Toggle Event Info Display</button>
+
+    </div> <!-- end centered -->
+
+    <form>
+
+    <label for="basic-controls"  class="formheading">Basic Controls</label>
+    <div id="basic-controls">
+        <label for="hidden-input">Hidden</label>
+        <input id="hidden-input" type="hidden" defaultValue="bob"/>
+
+        <br>
+
+        <label for="button-input">Button</label>
+        <input id="button-input" type="button" value="A Button"/>
+
+        <br>
+
+        <label for="checkbox-input">Checkbox</label>
+        <input id="checkbox-input" type="checkbox" />
+
+        <br>
+
+        <label for="radio-input">Radio Buttons</label>
+        <div id="radio-input">
+            <label for="radio-input-1">Radio 1</label>
+            <input id="radio-input-1" type="radio" name="choice" value="One"/>
+            <label for="radio-input-2">Radio 2</label>
+            <input id="radio-input-2" type="radio" name="choice" value="Two"/>
+        </div>
+
+    </div> <!-- end basic types -->
+
+    <br>
+
+    <label for="text-controls"  class="formheading">Text Controls</label>
+    <div id="text-controls">
+
+        <label for="text-input">Text</label>
+        <input id="text-input" type="text" defaultValue="bob"/>
+
+        <br>
+
+        <label for="search-input">Search</label>
+        <input id="search-input" type="search"/>
+
+
+        <br>
+
+        <label for="password-input">Password</label>
+        <input id="password-input" type="password"/>
+
+        <br>
+
+        <label for="email-input">email</label>
+        <input id="email-input" type="email"/>
+
+        <br>
+
+        <label for="email-input">url</label>
+        <input id="url-input" type="url"/>
+
+        <br>
+
+        <label for="tel-input">tel</label>
+        <input id="tel-input" type="tel"/>
+
+    </div> <!-- end text controls -->
+    <br>
+
+    <label for="number-controls"  class="formheading">Number Controls</label>
+    <div id="number-controls">
+
+        <label for="number-input">number</label>
+        <input id="number-input" type="number" defaultValue="10"/>
+
+        <br>
+
+        <label for="range-input">range</label>
+        <input id="range-input" type="range"/>
+
+    </div> <!-- end number controls -->
+
+        <br>
+
+    <label for="special-format-controls"  class="formheading">Special Format Controls</label>
+    <div id="special-format-controls">
+
+        <label for="color-input">color</label>
+        <input id="color-input" type="color"/>
+
+        <br>
+        <label for="date-input">date</label>
+        <input id="date-input" type="date"/>
+
+        <br>
+        <label for="datetime-local-input">datetime-local</label>
+        <input id="datetime-local-input" type="datetime-local"/>
+
+
+        <br>
+        <label for="file-input">file</label>
+        <input id="file-input" type="file"/>
+
+        <br>
+
+        <label for="month-input">month</label>
+        <input id="month-input" type="month"/>
+
+        <br>
+        <label for="time-input">time</label>
+        <input id="time-input" type="time"/>
+
+    </div> <!-- end special format controls -->
+
+        <br>
+
+    <label for="form-controls"  class="formheading">Form Controls</label>
+    <div id="form-controls">
+
+        <label for="reset-input">reset</label>
+        <input id="reset-input" type="reset"/>
+
+        <br>
+
+        <label for="image-input">image</label>
+        <input id="image-input" type="image" src="button_image.png"/>
+
+        <br>
+
+        <label for="submit-input">submit</label>
+        <input id="submit-input" type="submit"/>
+    </div>
+    </form>
+
+
+
+    <script>
+
+        function genericListener(e){
+            outputEventInfo = " On: " + e.target.type + " Last Event:" + e.type
+            if(e.target.type=="radio" || e.target.type=="checkbox"){
+                outputEventInfo += " Checked: " + e.target.checked;
+            }
+            if(e.key){
+                outputEventInfo += " Key: " + e.key
+            }
+            outputEventInfo += " Value: " + e.target.value
+
+            document.getElementById(e.target.getAttribute("id")+"-info").innerText=outputEventInfo;
+            console.log(outputEventInfo);
+            console.log(e);
+            // console.log("---");
+            // console.log(e.type)
+            // console.log(e.target.type);
+            // console.log(e.target.value);
+        }
+
+        function toggleEventParasDisplay(){
+            console.log("paras toggle");
+            inputs = document.querySelectorAll("p");
+            inputs.forEach(function(elem){
+                if(elem.classList.contains("eventinfo")){
+                    if(elem.style.display == "none"){
+                        elem.style.display = "block";
+                    }else{
+                        elem.style.display = "none";
+                    }
+                }
+            })
+        }
+
+        function assignEventHandlers(){
+            console.log("assigning event handlers")
+            inputs = document.querySelectorAll("input");
+            inputs.forEach(function(elem){
+                for (const key in elem) {
+                    if(/^on/.test(key)) {
+                        const eventType = key.substr(2);
+                        elem.addEventListener(eventType, genericListener);
+                    }
+                }
+                inputPara = document.createElement("p");
+                inputPara.style.display = "none";
+                inputPara.classList.add("eventinfo");
+                inputPara.setAttribute("id", elem.getAttribute("id")+"-info");
+                inputPara.innerText=elem.getAttribute("id");
+                elem.insertAdjacentElement('afterend', inputPara);
+            })
+
+        }
+        window.addEventListener("load", assignEventHandlers);
+    </script>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
+
+

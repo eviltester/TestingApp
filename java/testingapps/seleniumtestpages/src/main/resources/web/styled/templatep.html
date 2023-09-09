@@ -4,6 +4,7 @@
     <title><!-- TITLE --></title>
     <link rel="stylesheet" href="/css/testpages.css">
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="css/toc.css">
     <script src="js/toc.js"></script>
     <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
 
@@ -43,5 +44,16 @@
 
 <!-- BODY END -->
 
+<script>
+    // open external links in new window
+    var links = document.links;
+
+    for (var i = 0, linksLength = links.length; i < linksLength; i++) {
+        if (links[i].hostname != window.location.hostname) {
+            links[i].target = '_blank';
+            links[i].setAttribute("rel","noopener noreferrer");
+        }
+    }
+</script>
 </body>
 </html>

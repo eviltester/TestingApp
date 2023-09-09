@@ -109,7 +109,7 @@ public class TemplateContentPage {
         htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyText);
 
-        // template must have included toc.js
+        // template must have included toc.js and toc.css to render properly
         htmlPage = htmlPage.replace("<!-- TOC -->","<div id='toc'></div>");
 
         return htmlPage;

@@ -1,0 +1,15 @@
+div#toc div.h2{
+    margin-left: 2em;
+}
+div#toc div.h3{
+    margin-left: 3em;
+}
+div#toc div.h4{
+    margin-left: 4em;
+}
+div#toc div.h5{
+    margin-left: 5em;
+}
+div#toc div.h6{
+    margin-left: 6em;
+}
