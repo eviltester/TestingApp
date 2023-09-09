@@ -2,9 +2,11 @@
   "title" : "Input Elements - HTML Testing Reference",
   "urls": [
       {"title":"Page", "url":"/styled/reference/input.html"},
-      {"title":"About", "url":"/styled/page?app=htmlinputreference&t=About"}
+      {"title":"About", "url":"/styled/page?app=htmlinputreference&t=About"},
+      {"title":"Exercises", "url":"/styled/page?app=htmlinputreference&t=Exercises"}
     ],
   "content": {
-    "about": "/pagehtml/htmltestingreference/input/about.html"
+    "about": "/pagehtml/htmltestingreference/input/about.html",
+    "exercises": "/pagehtml/htmltestingreference/input/exercises.html"
   }
 }
