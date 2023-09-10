@@ -8,9 +8,21 @@ They are presented in Alphabetic order.
         </p>
 </div>
 
+<style>
+    img {
+        float: left;
+        margin-right: 1em;
+    }
+    h2 {
+        clear: both;
+    }
+</style>
+
 <!-- TOC -->
 
 ## Buggy Games
+
+[![Buggy Games Screenshot](/images/othersites/buggy-games-300x300.png)](https://eviltester.github.io/TestingApp/games/buggygames/)
 
 [Buggy Games](https://eviltester.github.io/TestingApp/games/buggygames/)
 
@@ -21,6 +33,8 @@ A small set of fun, and deliberately buggy or hackable games.
 
 ## Contact List App
 
+[![Contact List Screenshot](/images/othersites/contact-list-300x300.png)](https://thinking-tester-contact-list.herokuapp.com/)
+
 [Contact List App](https://thinking-tester-contact-list.herokuapp.com/)
 
 - Suitable for practicing: Automating, Testing
@@ -30,6 +44,8 @@ REST API with full documentation.
 
 ## Demo Blaze Product Store
 
+[![Product Store Screenshot](/images/othersites/demo-blaze-300x300.png)](https://www.demoblaze.com/index.html)
+
 [Product Store](https://www.demoblaze.com/index.html)
 
 - Suitable for practicing: Automating, Testing
@@ -38,6 +54,8 @@ An example e-commerce web site.
 
 ## Practice Software Testing Toolshop
 
+[![Toolshop screenshot](/images/othersites/toolshop-300x300.png)](https://practicesoftwaretesting.com/)
+
 [Toolshop](https://practicesoftwaretesting.com/)
 
 - Suitable for practicing: Automating, Testing
@@ -45,6 +63,8 @@ An example e-commerce web site.
 An example e-commerce web site.
 
 ## React Shopping Cart
+
+[![React Shopping Cart screenshot](/images/othersites/react-shopping-300x300.png)](https://react-shopping-cart-67954.firebaseapp.com/)
 
 [React Shopping Cart](https://react-shopping-cart-67954.firebaseapp.com/)
 
@@ -56,6 +76,8 @@ A Firebase backed test e-commerce site.
 
 ## Restful Booker
 
+[![Restful Booker screenshot](/images/othersites/restful-booker-300x300.png)](https://automationintesting.online/)
+
 [Web App](https://automationintesting.online/)
 
 - Suitable for practicing: Automating, Testing
@@ -65,6 +87,8 @@ A hotel booking CMS example with the main page and admin interface. A web app an
 - [API](https://restful-booker.herokuapp.com/apidoc/index.html)
 
 ## Simple Todo List
+
+[![Todo List Screenshot](/images/othersites/todolist-300x300.png)](https://eviltester.github.io/simpletodolist/todolists.html)
 
 [Simple Todo List](https://eviltester.github.io/simpletodolist/todolists.html)
 
@@ -76,6 +100,8 @@ The application was used as the sample app in my [Linkedin Learning Course Selen
 
 
 ## Swag Labs
+
+[![Swag Labs Screenshot](/images/othersites/swag-labs-300x300.png)](https://www.saucedemo.com)
 
 [Swag Labs](https://www.saucedemo.com)
 
@@ -91,6 +117,8 @@ The application is written in React and uses LocalStorage.
 
 ## Swagger Petstore
 
+[![Swagger Petstore Screenshot](/images/othersites/swagger-petstore-300x300.png)](https://petstore.swagger.io/)
+
 [Petstore API](https://petstore.swagger.io/)
 
 - Suitable for practicing: Automating, Testing
@@ -101,6 +129,8 @@ A test REST API provided by swagger.
 
 ## Testing Challenges
 
+[![Testing Challenges Screenshot](/images/othersites/testing-challenges-300x300.png)](http://testingchallenges.thetestingmap.org/)
+
 [Testing Challenges](http://testingchallenges.thetestingmap.org/)
 
 - Suitable for practicing: Testing
@@ -108,6 +138,8 @@ A test REST API provided by swagger.
 A set of 10 pages with full instructions to use as Software Testing challenges.
 
 ## The-Internet
+
+[![The Internet Screenshot](/images/othersites/the-internet-300x300.png)](https://the-internet.herokuapp.com/)
 
 [The Internet](https://the-internet.herokuapp.com/)
 
@@ -121,6 +153,8 @@ you don't know what it contains. And do not upload anything you don't want
 everyone to see.
 
 ## The Pulper
+
+[![The Pulper Screenshot](/images/othersites/the-pulper-300x300.png)](https://thepulper.herokuapp.com/apps/pulp/)
 
 [The Pulper](https://thepulper.herokuapp.com/apps/pulp/)
 
@@ -141,6 +175,8 @@ The application has some deliberate bugs, some of which are fixed in later versi
 I created an [exclusive course and workbook for Patreon Supporters](https://www.testerhq.com/member2/index.php?course=the_pulper_technical_testing_workshop&page=coursecontents&preview=true) describing how to use this to practice testing.
 
 ## UI Test Automation Playground
+
+[![Ui Test Automation Playground Screenshot](/images/othersites/ui-playground-300x300.png)](http://uitestingplayground.com/)
 
 [UITAP](http://uitestingplayground.com/)
 
