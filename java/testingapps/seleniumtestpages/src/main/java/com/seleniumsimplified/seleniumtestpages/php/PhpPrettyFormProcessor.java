@@ -47,15 +47,18 @@ public class PhpPrettyFormProcessor {
         String[] paramKeys = req.body().split("&");
         Set<String> theParamKeys = new LinkedHashSet<>();
         int index=0;
-        for(String paramKey : paramKeys){
-            int trimFrom = paramKey.indexOf("=");
-            paramKeys[index] = paramKey.substring(0,trimFrom).replace("%5B%5D","[]");
-            if(!theParamKeys.contains(paramKeys[index])){
-                theParamKeys.add(paramKeys[index]);
+        try {
+            for (String paramKey : paramKeys) {
+                int trimFrom = paramKey.indexOf("=");
+                paramKeys[index] = paramKey.substring(0, trimFrom).replace("%5B%5D", "[]");
+                if (!theParamKeys.contains(paramKeys[index])) {
+                    theParamKeys.add(paramKeys[index]);
+                }
+                index++;
             }
-            index++;
+        }catch(Exception e){
+            // ignore input issues
         }
-
         //now decode the form into its name value,value pairs
         MultiMap<String> params = new MultiMap<String>();
         UrlEncoded.decodeTo(req.body(), params, "UTF-8");
@@ -139,6 +142,7 @@ public class PhpPrettyFormProcessor {
                 }
             }
         }
+
 
         addLine("<div class='form-label'>");
         if(params.get("form_return")!=null){

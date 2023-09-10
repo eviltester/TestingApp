@@ -9,9 +9,11 @@
 <p>There is no JavaScript validation on the form. Any validation is added from the <code>type</code> value itself.</p>
 <ul>
     <li>The <code>reset</code> input type will reset any data in the form</li>
-    <li>The <code>image</code> and <code>submit</code> types will submit the form (which is basically just refresh the page).</li>
+    <li>The <code>image</code> and <code>submit</code> types will submit the form.</li>
 </ul>
+<p>After submitting the form the values entered will be displayed.</p>
 <p>Events are added to the form dynamically so when you interact with the form you will see events listed in the JavaScript console. You can toggle display of event information in the page by pressing the <code>Toggle</code> button.</p>
+<!-- TOC -->
 <h2 id="about-input-elements">About <code>input</code> Elements</h2>
 <p>&#39;input&#39; element - input fields are a way of allowing the user to enter information, it is usually used in a form to submit information to the server.</p>
 <p>The MDN documentation has a useful section on <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#client-side_validation">Client Side Validation</a> which is worth reading.</p>
@@ -25,9 +27,10 @@
     </ul>
     </li>
     <li><code>required</code> - defines if a value in the <code>input</code> field is required</li>
+    <li><code>name</code> - if an input is part of a form, it will only be submitted to the server when it has a <code>name</code></li>
 </ul>
 <p><code>input</code> elements are often used within a <code>form</code>. In the example page, all the <code>input</code> elements are in a form. You can see that the &quot;Form Control&quot; <code>input</code> elements control the form to some extent, resetting data, or submitting the form. When a form is submitted, some of the input types provide some validation protection e.g. email, url, etc.</p>
-<!-- TOC -->
+
 <h2 id="types">Types</h2>
 <p>There are many &#39;types&#39; of input and some have more nuances than others e.g. &#39;number&#39; because it allows non-numeric input characters for scientific notation.</p>
 <p>Listed below are different <code>input</code> different types with explanations.</p>
@@ -157,6 +160,20 @@
 <p><code>&lt;input id=&quot;image-input&quot; type=&quot;image&quot; src=&quot;button_image.png&quot;/&gt;</code></p>
 <h3 id="submit">Submit</h3>
 <p><code>&lt;input type=&quot;submit&quot;/&gt;</code></p>
+<h2 id="form-submission">Form Submission</h2>
+<h3 id="name">Name</h3>
+<pre><code>&lt;input <span class="hljs-built_in">id</span>=<span class="hljs-string">"text-input"</span> type=<span class="hljs-string">"text"</span> <span class="hljs-built_in">name</span>=<span class="hljs-string">"text"</span>/&gt;
+</code></pre><ul>
+    <li>cssSelector: <code>&#39;input[name=&quot;text&quot;]&#39;</code></li>
+</ul>
+<p><code>input</code> elements in a form will have their values submitted to the server, only if a name attribute is added to the input element.</p>
+<p>A common bug is to miss out a <code>name</code> value on an input, or to add the &#39;wrong&#39; name value such that the server does not process the form correctly.</p>
+<p>Checking the results on the server is very important.</p>
+<p>Test Ideas:</p>
+<ul>
+    <li>check that every input element has a name, if it is expected to be processed by the server. <code>input:not([name])</code></li>
+    <li>change the names on input elements or remove the names and see how the server side processing copes with the malformed form.</li>
+</ul>
 <h2 id="form-validation">Form Validation</h2>
 <h3 id="required">Required</h3>
 <p>When a form is submitted, some of the input types provide some validation protection e.g. email, url, etc.</p>

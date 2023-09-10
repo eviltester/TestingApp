@@ -57,68 +57,70 @@
 
     </div> <!-- end centered -->
 
-    <form>
+    <form action="/styled/the_form_processor.php"
+          method="post">
 
     <label for="basic-controls"  class="formheading">Basic Controls</label>
     <div id="basic-controls">
         <label for="hidden-input">Hidden</label>
-        <input id="hidden-input" type="hidden" value="bob"/>
+        <input id="hidden-input" type="hidden" name="hidden" value="bob"/>
+        <input id="hidden-noname-input" type="hidden" value="noname"/>
 
         <br>
 
         <label for="button-input">Button</label>
-        <input id="button-input" type="button" value="A Button"/>
+        <input id="button-input" type="button" name="button" value="A Button"/>
 
         <br>
 
         <label for="checkbox-input">Checkbox</label>
-        <input id="checkbox-input" type="checkbox" />
+        <input id="checkbox-input" type="checkbox" name="checkbox" />
 
         <br>
 
         <label for="radio-input">Radio Buttons</label>
         <div id="radio-input">
             <label for="radio-input-1">Radio 1</label>
-            <input id="radio-input-1" type="radio" name="choice" value="One"/>
+            <input id="radio-input-1" type="radio" name="radio" value="One"/>
             <label for="radio-input-2">Radio 2</label>
-            <input id="radio-input-2" type="radio" name="choice" value="Two"/>
+            <input id="radio-input-2" type="radio" name="radio" value="Two"/>
         </div>
 
     </div> <!-- end basic types -->
 
     <br>
 
-    <label for="text-controls"  class="formheading">Text Controls</label>
+    <label for="text-controls" class="formheading">Text Controls</label>
     <div id="text-controls">
 
         <label for="text-input">Text</label>
-        <input id="text-input" type="text"/>
+        <input id="text-input" type="text" name="text"/>
 
         <br>
 
         <label for="search-input">Search</label>
-        <input id="search-input" type="search"/>
+        <input id="search-input" type="search" name="search"/>
 
 
         <br>
 
         <label for="password-input">Password</label>
-        <input id="password-input" type="password"/>
+        <input id="password-input" type="password" name="password"/>
 
         <br>
 
         <label for="email-input">email</label>
-        <input id="email-input" type="email"/>
+        <input id="email-input" type="email" name="email"/>
 
         <br>
 
         <label for="email-input">url</label>
-        <input id="url-input" type="url"/>
+        <input id="url-input" type="url" name="url"/>
 
         <br>
 
         <label for="tel-input">tel</label>
-        <input id="tel-input" type="tel"/>
+        <input id="tel-input" type="tel" name="tel"/>
 
     </div> <!-- end text controls -->
     <br>
@@ -127,12 +129,12 @@
     <div id="number-controls">
 
         <label for="number-input">number</label>
-        <input id="number-input" type="number"/>
+        <input id="number-input" type="number" name="number"/>
 
         <br>
 
         <label for="range-input">range</label>
-        <input id="range-input" type="range"/>
+        <input id="range-input" type="range" name="range"/>
 
     </div> <!-- end number controls -->
 
@@ -142,29 +144,29 @@
     <div id="special-format-controls">
 
         <label for="color-input">color</label>
-        <input id="color-input" type="color"/>
+        <input id="color-input" type="color" name="color"/>
 
         <br>
         <label for="date-input">date</label>
-        <input id="date-input" type="date"/>
+        <input id="date-input" type="date" name="date"/>
 
         <br>
         <label for="datetime-local-input">datetime-local</label>
-        <input id="datetime-local-input" type="datetime-local"/>
+        <input id="datetime-local-input" type="datetime-local" name="datetime-local"/>
 
 
         <br>
         <label for="file-input">file</label>
-        <input id="file-input" type="file"/>
+        <input id="file-input" type="file" name="file"/>
 
         <br>
 
         <label for="month-input">month</label>
-        <input id="month-input" type="month"/>
+        <input id="month-input" type="month" name="month"/>
 
         <br>
         <label for="time-input">time</label>
-        <input id="time-input" type="time"/>
+        <input id="time-input" type="time" name="time"/>
 
     </div> <!-- end special format controls -->
 
@@ -174,17 +176,17 @@
     <div id="form-controls">
 
         <label for="reset-input">reset</label>
-        <input id="reset-input" type="reset"/>
+        <input id="reset-input" type="reset" name="reset"/>
 
         <br>
 
         <label for="image-input">image</label>
-        <input id="image-input" type="image" src="button_image.png"/>
+        <input id="image-input" type="image" src="button_image.png" name="image"/>
 
         <br>
 
         <label for="submit-input">submit</label>
-        <input id="submit-input" type="submit"/>
+        <input id="submit-input" type="submit" name="submitbutton"/>
     </div>
     </form>
 

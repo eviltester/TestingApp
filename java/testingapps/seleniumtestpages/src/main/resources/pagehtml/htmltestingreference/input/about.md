@@ -12,10 +12,13 @@ The example page is a form, with a range of input types.
 There is no JavaScript validation on the form. Any validation is added from the `type` value itself.
 
 - The `reset` input type will reset any data in the form
-- The `image` and `submit` types will submit the form (which is basically just refresh the page).
+- The `image` and `submit` types will submit the form.
+  
+After submitting the form the values entered will be displayed.
 
 Events are added to the form dynamically so when you interact with the form you will see events listed in the JavaScript console. You can toggle display of event information in the page by pressing the `Toggle` button.
 
+<!-- TOC -->
 
 ## About `input` Elements
 
@@ -32,10 +35,9 @@ Important attributes are:
    - `text` a free format single line entry field
    - `number` creates a GUI control that only allows number entry
 - `required` - defines if a value in the `input` field is required
+- `name` - if an input is part of a form, it will only be submitted to the server when it has a `name`
 
 `input` elements are often used within a `form`. In the example page, all the `input` elements are in a form. You can see that the "Form Control" `input` elements control the form to some extent, resetting data, or submitting the form. When a form is submitted, some of the input types provide some validation protection e.g. email, url, etc.
-
-<!-- TOC -->
 
 ## Types
 
@@ -229,6 +231,28 @@ Test Ideas:
 ### Submit
 
 `<input type="submit"/>`
+
+
+## Form Submission
+
+### Name
+
+```
+<input id="text-input" type="text" name="text"/>
+```
+- cssSelector: `'input[name="text"]'`
+
+`input` elements in a form will have their values submitted to the server, only if a name attribute is added to the input element.
+
+A common bug is to miss out a `name` value on an input, or to add the 'wrong' name value such that the server does not process the form correctly.
+
+Checking the results on the server is very important.
+
+Test Ideas:
+
+- check that every input element has a name, if it is expected to be processed by the server. `input:not([name])`
+- change the names on input elements or remove the names and see how the server side processing copes with the malformed form.
+
 
 ## Form Validation
 
