@@ -48,6 +48,15 @@ Explore the 7CharVal validation message field and its use of Javascript events.
 
 - What can you enter in the [Test Pages HTML5 Form](/styled/html5-form-test.html) as a number which might cause validation errors on the server side?
 
+## Image
+
+Try changing the `src` on the image` so that you can see what is rendered when the wrong or missing image is used.
+
+## Form Submission
+
+Try to identify different ways to submit the form. Then experiment with them all.
+
+Hint: I know of at least 6
 
 ## Form Validation
 
@@ -56,3 +65,5 @@ When a form is submitted, some of the input types provide some validation protec
 Explore the form to find out which types offer validation, and when the validation is applied.
 
 Can you think of any risks associated with this type of validation?
+
+ 

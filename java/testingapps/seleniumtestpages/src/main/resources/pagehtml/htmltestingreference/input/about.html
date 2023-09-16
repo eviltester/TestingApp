@@ -30,7 +30,6 @@
     <li><code>name</code> - if an input is part of a form, it will only be submitted to the server when it has a <code>name</code></li>
 </ul>
 <p><code>input</code> elements are often used within a <code>form</code>. In the example page, all the <code>input</code> elements are in a form. You can see that the &quot;Form Control&quot; <code>input</code> elements control the form to some extent, resetting data, or submitting the form. When a form is submitted, some of the input types provide some validation protection e.g. email, url, etc.</p>
-
 <h2 id="types">Types</h2>
 <p>There are many &#39;types&#39; of input and some have more nuances than others e.g. &#39;number&#39; because it allows non-numeric input characters for scientific notation.</p>
 <p>Listed below are different <code>input</code> different types with explanations.</p>
@@ -66,17 +65,28 @@
 <h3 id="button">Button</h3>
 <pre><code class="lang-html">&lt;input <span class="hljs-built_in">type</span>=<span class="hljs-string">"button"</span> <span class="hljs-built_in">value</span>=<span class="hljs-string">"A Button"</span>/&gt;
 </code></pre>
+<p>A button in a form is usually there to trigger some JavaScript to validate, or set values on the form.</p>
+<p>The JavaScript might be visible in the <code>on...</code> attribute in the button, or you might have to use the Developer Tools to see the attached Event Listeners.</p>
+<p>The <code>value</code> is the text shown on the button.</p>
+<p>When the form is submitted, the &#39;value&#39; is not sent through to the server.</p>
+<p>It is also possible to have buttons &#39;outside&#39; a form, associated with the form by using a <code>form</code> attribute, there are other associated attributes to control a form like <code>formaction</code> and <code>formmethod</code>.</p>
+<p>So... don&#39;t assume that only <code>input</code> buttons in the form are related to the form. Check the full DOM.</p>
 <h3 id="checkbox">Checkbox</h3>
 <pre><code class="lang-html">&lt;input <span class="hljs-class"><span class="hljs-keyword">type</span></span>=<span class="hljs-string">"checkbox"</span>/&gt;
 </code></pre>
+<p>A Checkbox is a boolean input. The value of the checkbox is passed to the server, when it is checked.</p>
 <h3 id="radio">Radio</h3>
 <pre><code class="lang-html">&lt;input <span class="hljs-built_in">type</span>=<span class="hljs-string">"radio"</span> name=<span class="hljs-string">"choice"</span> <span class="hljs-built_in">value</span>=<span class="hljs-string">"One"</span>/&gt;
 &lt;input <span class="hljs-built_in">type</span>=<span class="hljs-string">"radio"</span> name=<span class="hljs-string">"choice"</span> <span class="hljs-built_in">value</span>=<span class="hljs-string">"Two"</span>/&gt;
 </code></pre>
+<p>When one of the radio buttons is selected, the others are deselected.</p>
+<p>Note that when an event on one radio button is triggered, events on other radio buttons are not triggered e.g. there is no &#39;unchecked&#39; event fired.</p>
+<p>Also the radio buttons need to have the same <code>name</code>. The  value sent through to the server is the value of the selected radio button.</p>
+<p>If no radio button is selected, no value is sent through to the server.</p>
 <h2 id="text-input-elements">Text Input Elements</h2>
-<p>The following are all plain text controls. The concept that a field might be a &quot;Url&quot; or &quot;Email&quot; suggests that additional validation is available but any validation is created by the developer, usually by using the <a href="https://www.w3schools.com/tags/att_input_pattern.asp"><code>pattern</code> attribute</a>.</p>
-<p>The pattern attribute is a regex and needs to be tested. Because it is a Regex it could be automatically checked against a wide range of input data.
-    Browsers may style the fields differently.</p>
+<p>The following are all plain text controls. The concept that a field might be a &quot;Url&quot; or &quot;Email&quot; suggests that full validation is provided just by adding a type. Fields are only validated when they have a value and additional validation is created by the developer, usually by using the <a href="https://www.w3schools.com/tags/att_input_pattern.asp"><code>pattern</code> attribute</a>.</p>
+<p>The pattern attribute is a regex and needs to be tested. Because it is a Regex it could be automatically checked against a wide range of input data.</p>
+<p>Browsers may style the fields differently.</p>
 <p>A few gotchas:</p>
 <ul>
     <li>sometimes the <code>size</code> and <code>maxlength</code> attributes get mixed up, <code>size</code> controls the display width of the input, <code>maxlength</code> the maximum number of characters that can be entered.</li>
@@ -106,6 +116,7 @@
 <ul>
     <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/search">mdn web docs</a></li>
 </ul>
+<p>This seems to be basically a <code>text</code> input. I&#39;d expect to see this type used of the UI is offering some sort of &#39;search&#39; capability, even though the type would offer no additional validation. It might be useful as a locator strategy to hook in JavaScript dynamically on to every search field.</p>
 <h3 id="password">Password</h3>
 <p><code>&lt;input type=&quot;password&quot;/&gt;</code></p>
 <p>Note: just because you &quot;can&#39;t see the input&quot; doesn&#39;t mean the input is &#39;safe&#39;, the value can be retrieved by JavaScript. And make sure that any use of &quot;password&quot; is only used on a page served and processed via <code>https</code>.</p>
@@ -119,10 +130,14 @@
 </ul>
 <h3 id="email">Email</h3>
 <p><code>&lt;input type=&quot;email&quot;/&gt;</code></p>
+<p>If a value is entered, then the form will perform some basic validation on the email address.</p>
+<p>This is going to be syntactical validation i.e. does the email match a basic email format. But server side validation should apply to make sure the email is suitable for the application e.g. you may not want people signing up for paid plans to your application with a <code>mailinator.com</code> address.</p>
 <h3 id="url">Url</h3>
 <p><code>&lt;input type=&quot;url&quot;/&gt;</code></p>
+<p>If a value is entered, then the form will perform some basic validation on the url.</p>
 <h3 id="tel">Tel</h3>
 <p><code>&lt;input type=&quot;tel&quot;/&gt;</code></p>
+<p>Validation is only performed if a <code>pattern</code> attribute is supplied. But you may well notice difference in the input presented to the user, particularly when this field is used on a mobile device.</p>
 <h2 id="number-controls">Number Controls</h2>
 <h3 id="number">Number</h3>
 <p><code>&lt;input type=&quot;number&quot; value=&quot;10&quot;/&gt;</code></p>
@@ -140,7 +155,11 @@
 </ul>
 <h3 id="range">Range</h3>
 <p><code>&lt;input type=&quot;range&quot;/&gt;</code></p>
+<p>If no attributes are provided for <code>min</code> and <code>max</code> then the range control defaults to <code>0</code> to <code>100</code>.</p>
+<p>The benefit of a range control, compared to a number control, is that a value will always be sent to the server.</p>
 <h2 id="special-format-controls">Special Format Controls</h2>
+<p>The special format controls are browser implemented. You do not need to &#39;test&#39; the rendered form. e.g. when you choose a colour, you do not need to &#39;test&#39; the colour picker dialog.</p>
+<p>When we see Special Format Controls, we are interested in making sure that the server can handle the values generated and that any JavaScript code attached to events is processed correctly.</p>
 <h3 id="color">Color</h3>
 <p><code>&lt;input type=&quot;color&quot;/&gt;</code></p>
 <h3 id="date">Date</h3>
@@ -156,10 +175,16 @@
 <h2 id="form-controls">Form Controls</h2>
 <h3 id="reset">Reset</h3>
 <p><code>&lt;input type=&quot;reset&quot;/&gt;</code></p>
+<p>When <code>reset</code> is clicked, by default the entire form will reset to the default values.</p>
+<p>This is browser implemented functionality so it is worth checking that it actually does what is expected for the context used by the input form. If the default doesn&#39;t do what is anticipated then it might be better to have a button with JavaScript to reset the form.</p>
 <h3 id="image">Image</h3>
 <p><code>&lt;input id=&quot;image-input&quot; type=&quot;image&quot; src=&quot;button_image.png&quot;/&gt;</code></p>
+<p>The Image control is interesting because it defaults to acting as an alternate submit button when the user clicks on the image located by the <code>src</code>.</p>
 <h3 id="submit">Submit</h3>
 <p><code>&lt;input type=&quot;submit&quot;/&gt;</code></p>
+<p>The submit button will render as <code>submit</code>, if a <code>value</code> is added then this will be shown as the button name.</p>
+<p>By default the submit will submit using the <code>method</code> (e.g. post) and to the <code>action</code> url in the form. If these attributes are not present in the form then the page will refresh.</p>
+<p>The default processing can be overridden by JavaScript, and if this is the case it is worth testing the override carefully.</p>
 <h2 id="form-submission">Form Submission</h2>
 <h3 id="name">Name</h3>
 <pre><code>&lt;input <span class="hljs-built_in">id</span>=<span class="hljs-string">"text-input"</span> type=<span class="hljs-string">"text"</span> <span class="hljs-built_in">name</span>=<span class="hljs-string">"text"</span>/&gt;

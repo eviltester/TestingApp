@@ -4,12 +4,14 @@
     </p>
 </div>
 
-<h2 id="about-page">About Page</h2>
+<!-- TOC -->
+
+<h2 id="about-this-triangle-application">About This Triangle Application</h2>
 <p>There are three text input fields, each representing a side of a triangle.</p>
 <p>Press the button <code>Identify Triangle Type</code> to trigger the JavaScript functionality that reads the input fields and runs an algorithm to determine the type of triangle.</p>
 <p>Any field or algorithm errors will be displayed on the page.</p>
 <p>When the application believes you have entered a triangle it will also draw a representation of the triangle in the on page canvas element.</p>
-<h2 id="triangle-algorithm">Triangle Algorithm</h2>
+<h3 id="triangle-algorithm">Triangle Algorithm</h3>
 <ul>
     <li>A triangle has three sides.</li>
     <li>The sum of the length of any two sides must be greater than the length of the third side.</li>
@@ -17,22 +19,97 @@
     <li>Isosceles Triangle two sides are equal.</li>
     <li>Scalene no sides are equal.</li>
 </ul>
-<h2 id="dev-tools">Dev Tools</h2>
+<h3 id="dev-tools">Dev Tools</h3>
 <p>Use the Dev Tools and check that the description is correct, does the page actually send the form to the server? You should be able to see the form submission in the Network Tab.</p>
 <p>Getting into the habit of using the Dev Tools when testing will help you understand the applications that you work with very quickly.</p>
-<h2 id="automated-execution">Automated Execution</h2>
+<h3 id="automated-execution">Automated Execution</h3>
 <p>For automating, it is a simple form with a button.</p>
 <p>Since the application uses JavaScript you may need to write synchronization code.</p>
 <p>Detecting the validation errors and on screen error messages should be easy to find and assert on.</p>
 <p>The canvas will be harder to automate.</p>
-<h2 id="exploratory-testing">Exploratory Testing</h2>
+<h3 id="exploratory-testing">Exploratory Testing</h3>
 <p>The Triangle App is a classic Testing Case Study so you&#39;ll find plenty of ideas and documented approaches online.</p>
-<h2 id="javascript-hacking">JavaScript Hacking</h2>
+<h3 id="javascript-hacking">JavaScript Hacking</h3>
 <p>The JavaScript is visible in the page and hooked on to the DOM so it is possible to automate the application and test the functionality from the console or using JavaScript Executor.</p>
-<h2 id="multiple-versions">Multiple Versions</h2>
+<h3 id="multiple-versions">Multiple Versions</h3>
 <p>There are actually two slightly different implementations of the triangle app.</p>
 <p>They might have different issues.</p>
 <ul>
     <li>Automating might make it easier to repeat the same input and output scenarios across each application.</li>
     <li>Reviewing the code might help identify what risks to tackle.</li>
+</ul>
+<hr>
+<h2 id="what-is-the-triangle-problem-">What is The Triangle Problem?</h2>
+<p>The Triangle Problem is a &#39;classic&#39; from Software Testing, described in many books and training courses. This post describes the problem, links to some applications you can use to practice on and describes some nuances around the testing.</p>
+<p>The application context surrounding the Triangle Problem is usually:</p>
+<blockquote>
+    <p>Given an application which takes three inputs, each representing the length of one side of a triangle, the application will respond with a message identifying if the inputs are: invalid, or represent a triangle, if they represent a triangle then the application will respond with the type of triangle (equilateral, isosceles, scalene).</p>
+</blockquote>
+<p>The &#39;problem&#39; is usually presented as a test design problem:</p>
+<ul>
+    <li>How would you test this?</li>
+    <li>What inputs would you use to test this?</li>
+    <li>etc.</li>
+</ul>
+<h2 id="triangle-problem-exercises">Triangle Problem Exercises</h2>
+<h3 id="traditional-">Traditional:</h3>
+<ul>
+    <li>In advance of testing, create a set of inputs with expected results, try them in the application, review coverage</li>
+    <li>Work with others, repeat exercise above, compare inputs and coverage</li>
+    <li>Create a &#39;minimum&#39; input set for your testing.</li>
+</ul>
+<h3 id="using-either-of-the-implementations-">Using either of the implementations:</h3>
+<ul>
+    <li>The input design ignores the GUI implementation, what else do you need to do to test the GUI?</li>
+    <li>Test the drawing functionality, does that require different test input?</li>
+    <li>Can you spot any hidden functionality? If so, test it.</li>
+</ul>
+<h3 id="discuss-">Discuss:</h3>
+<ul>
+    <li>When would creating a &#39;minimum&#39; input set be helpful?</li>
+</ul>
+<h3 id="tool-support-working-with-test-pages-implementation-">Tool Support working with Test Pages Implementation:</h3>
+<ul>
+    <li>Are there any lightweight adhoc tools or approaches for automating that could help you as you perform exploratory testing?</li>
+</ul>
+<h3 id="automating-test-pages-implementation-">Automating Test Pages implementation:</h3>
+<ul>
+    <li>Review the implementation from the perspective of &quot;Is this automatable?&quot;</li>
+    <li>How many different ways could you automate this?</li>
+    <li>Would any changes to the implementation make automating easier?</li>
+    <li>Try automating the implementation.</li>
+</ul>
+<h3 id="code-review-">Code Review:</h3>
+<ul>
+    <li>Review the code for the Test Pages Implementation, does that help or hinder your testing?</li>
+</ul>
+<h3 id="using-the-test-pages-implementations-">Using the Test Pages implementations:</h3>
+<ul>
+    <li>Unit test the underlying JavaScript implementation, compare with your GUI approach and original test design.</li>
+    <li>Automate the Unit Testing from the console.</li>
+</ul>
+<p>Make up your own exercises to push your approach to testing this simple example as far as you can.</p>
+<h2 id="books-and-research-resources">Books and Research Resources</h2>
+<p>The Triangle Problem is described and referenced in the resources and books that follow.</p>
+<h3 id="books-">Books:</h3>
+<ul>
+    <li>The Art of Software Testing - Glenford Myers</li>
+    <li>Software Testing a Craftsman&#39;s Approach - Paul C. Jorgensen</li>
+    <li>Testing Object-oriented Systems - Robert Binder</li>
+    <li>Test Driven Development By Example - Kent Beck</li>
+</ul>
+<h3 id="additional-resources-">Additional Resources:</h3>
+<ul>
+    <li>Exercise: Analyzing the Triangle Problem by Ross Collard from the Third Annual Workshop on the Teaching of Software Testing 2004<ul>
+        <li>testingeducation.org used to have easy to find links to this material and details of the conference but the site seems to have invalidated the content.</li>
+        <li>there are various sites which have archived this pdf</li>
+        <li><a href="https://www.yumpu.com/en/document/view/13190450/exercise-analyzing-the-triangle-problem-testing-education">https://www.yumpu.com/en/document/view/13190450/exercise-analyzing-the-triangle-problem-testing-education</a></li>
+        <li><a href="https://pdf4pro.com/view/exercise-analyzing-the-triangle-problem-testing-9fc7.html">https://pdf4pro.com/view/exercise-analyzing-the-triangle-problem-testing-9fc7.html</a></li>
+    </ul>
+    </li>
+</ul>
+<h3 id="other-implementations-of-the-triangle-application">Other Implementations of the Triangle Application</h3>
+<p>During my research I found an implementation by <a href="https://www.mathwarehouse.com">MathWarehouse.com</a> the Triangle Calculator below:</p>
+<ul>
+    <li><a href="https://www.mathwarehouse.com/triangle-calculator/online.php">Triangle Calculator</a></li>
 </ul>

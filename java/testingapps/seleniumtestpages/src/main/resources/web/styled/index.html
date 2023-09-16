@@ -14,6 +14,21 @@
             window.location.href = window.location.href.replace("http://","https://");
         }
     </script>
+    <style>
+        div.thumblinkdesc{
+            clear: both;
+            min-height:300px;
+        }
+        div.thumblinkdesc div.thumb{
+            float:left;
+        }
+        div.thumblinkdesc:nth-of-type(even){
+            background: #e1f0f5;
+        }
+        div.thumblinkdesc:nth-of-type(odd){
+            background: #addcee;
+        }
+    </style>
 </head>
 <body>
 
@@ -161,6 +176,145 @@
     <h2>Micro Apps</h2>
     <p class="inline-explanation">These pages are also suitable for exploratory testing and longer exercises.</p>
 
+    <div class="thumbdesclist">
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='validation/input-validation.html'><img src="/images/microapps/input-validation-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="inputvalidation" href="validation/input-validation.html">Client Server Form Input Validation</a></p>
+            </div>
+            <div class="desc">
+                <p>This page has input validation using JavaScript, HTML5 and there is associated server side validation. For exploratory testing, this page may have been coded with some bugs. For automating, it is a relatively simple form with a submission.</p>
+            </div>
+        </div>
+
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='calculator'><img src="/images/microapps/simple-calculator-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="calculatetest" href="calculator">Calculator</a></p>
+            </div>
+            <div class="desc">
+                <p>When you submit the calculation the request is sent to the server and the returned web page contains the calculated answer.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='apps/calculator.html'><img src="/images/microapps/button-calculator-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="buttoncalculator" href="apps/calculator.html">Button Based Calculator</a></p>
+            </div>
+            <div class="desc">
+                <p>This is a simple button based calculator. Automate or explore for state based issues.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='apps/triangle/triangle001.html'><img src="/images/microapps/triangle-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="triangleapp" href="apps/triangle/triangle001.html">The Famous Triangle Application</a></p>
+            </div>
+            <div class="desc">
+                <p>The Classic Software Testing Exercise. Enter the lengths of the three sides of a triangle. The program will inform you if the triangle is equilateral, isosceles or scalene.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='gui-scribble.html'><img src="/images/microapps/canvas-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="scribbletest" href="gui-scribble.html">Canvas Scribble Test Page</a></p>
+            </div>
+            <div class="desc">
+                <p>Use the mouse and you can draw in the plain canvas.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='canvas-javascript-test.html'><img src="/images/microapps/canvas-javascript-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="canvastest" href="canvas-javascript-test.html">Canvas Drawing with JavaScript Example</a></p>
+            </div>
+            <div class="desc">
+                <p>A canvas drawing tool, with a basic GUI interface. The 'commands history' is shown on the right.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='javascript-countdown-test.html'><img src="/images/microapps/countdown-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="countdowntest" href="javascript-countdown-test.html">JavaScript Countdown Test Page</a></p>
+            </div>
+            <div class="desc">
+                <p>Configure and control the countdown timer using the input field and buttons.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='search'><img src="/images/microapps/search-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="searchtest" href="search">Search</a></p>
+            </div>
+            <div class="desc">
+                <p>A very simple server based search engine.</p>
+                <p>There is some matching of your search term to the hardcoded data in the backend, if not enough results are matched the the list of results will be filled with random results to make up the numbers.</p>
+                <p>There will always be the same number of results returned.</p>
+                <p>Cookies are used for the page and much of this page functionality concerns the cookies.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='apps/7charval/simple7charvalidation.html'><img src="/images/microapps/7charval-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="7charval" href="apps/7charval/simple7charvalidation.html">7 Char Val Validation</a></p>
+            </div>
+            <div class="desc">
+                <p>This is a simple JavaScript powered validation input. Only A-Z, a-z, 0-9, and * are valid characters.</p>
+            </div>
+        </div>
+    </div>
+    <div class="thumblinkdesc">
+        <div class="thumb">
+            <a href='apps/notes/simplenotes.html'><img src="/images/microapps/note-taker-300x300.png"></a>
+        </div>
+        <div class="linktitledesc">
+            <div class="titledesc">
+                <p><a id="simple-note-taker" href="apps/notes/simplenotes.html">Simple Note Taker</a> - session and localstorage</p>
+            </div>
+            <div class="desc">
+                <p>This is a simple note taking application where the notes are stored locally in the browser application storage.</p>
+            </div>
+        </div>
+    </div>
+
+    </div> <!-- end thumbdesclist -->
+
+    <!--
     <ul>
         <li><a id="inputvalidation" href="validation/input-validation.html">Client Server Form Input Validation</a></li>
         <li><a id="calculatetest" href="calculator">Calculator</a></li>
@@ -173,8 +327,9 @@
         <li><a id="7charval" href="apps/7charval/simple7charvalidation.html">7 Char Val Validation</a></li>
         <li><a id="simple-note-taker" href="apps/notes/simplenotes.html">Simple Note Taker</a> - session and localstorage</li>
     </ul>
+    -->
 
-    <div class="promomessage">
+    <div class="promomessage" style="clear: both">
         <p>Help keep this site free by joining our <a href="https://patreon.com/eviltester" target="_blank">Patreon Membership site</a>. Membership costs as little as $1 a month and includes access to exclusive <a href="https://www.testerhq.com/" target="_blank">e-books and online training courses</a>.</p>
     </div>
 

@@ -86,11 +86,26 @@ Test Ideas:
 <input type="button" value="A Button"/>
 ```
 
+A button in a form is usually there to trigger some JavaScript to validate, or set values on the form.
+
+The JavaScript might be visible in the `on...` attribute in the button, or you might have to use the Developer Tools to see the attached Event Listeners.
+
+The `value` is the text shown on the button.
+
+When the form is submitted, the 'value' is not sent through to the server.
+
+It is also possible to have buttons 'outside' a form, associated with the form by using a `form` attribute, there are other associated attributes to control a form like `formaction` and `formmethod`.
+
+So... don't assume that only `input` buttons in the form are related to the form. Check the full DOM.
+
+
 ### Checkbox
 
 ```html
 <input type="checkbox"/>
 ```
+
+A Checkbox is a boolean input. The value of the checkbox is passed to the server, when it is checked.
 
 ### Radio
 
@@ -99,11 +114,20 @@ Test Ideas:
 <input type="radio" name="choice" value="Two"/>
 ```
 
+When one of the radio buttons is selected, the others are deselected.
+
+Note that when an event on one radio button is triggered, events on other radio buttons are not triggered e.g. there is no 'unchecked' event fired.
+
+Also the radio buttons need to have the same `name`. The  value sent through to the server is the value of the selected radio button.
+
+If no radio button is selected, no value is sent through to the server.
+
 ## Text Input Elements
 
-The following are all plain text controls. The concept that a field might be a "Url" or "Email" suggests that additional validation is available but any validation is created by the developer, usually by using the [`pattern` attribute](https://www.w3schools.com/tags/att_input_pattern.asp).
+The following are all plain text controls. The concept that a field might be a "Url" or "Email" suggests that full validation is provided just by adding a type. Fields are only validated when they have a value and additional validation is created by the developer, usually by using the [`pattern` attribute](https://www.w3schools.com/tags/att_input_pattern.asp).
 
 The pattern attribute is a regex and needs to be tested. Because it is a Regex it could be automatically checked against a wide range of input data.
+
 Browsers may style the fields differently.
 
 A few gotchas:
@@ -142,6 +166,8 @@ Test Ideas:
 
 - [mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/search)
 
+This seems to be basically a `text` input. I'd expect to see this type used of the UI is offering some sort of 'search' capability, even though the type would offer no additional validation. It might be useful as a locator strategy to hook in JavaScript dynamically on to every search field.
+
 ### Password
 
 `<input type="password"/>`
@@ -159,13 +185,21 @@ Notes:
 
 `<input type="email"/>`
 
+If a value is entered, then the form will perform some basic validation on the email address.
+
+This is going to be syntactical validation i.e. does the email match a basic email format. But server side validation should apply to make sure the email is suitable for the application e.g. you may not want people signing up for paid plans to your application with a `mailinator.com` address.
+
 ### Url
 
 `<input type="url"/>`
 
+If a value is entered, then the form will perform some basic validation on the url.
+
 ### Tel
 
 `<input type="tel"/>`
+
+Validation is only performed if a `pattern` attribute is supplied. But you may well notice difference in the input presented to the user, particularly when this field is used on a mobile device.
 
 ## Number Controls
 
@@ -189,8 +223,15 @@ Test Ideas:
 
 `<input type="range"/>`
 
+If no attributes are provided for `min` and `max` then the range control defaults to `0` to `100`.
+
+The benefit of a range control, compared to a number control, is that a value will always be sent to the server.
 
 ## Special Format Controls
+
+The special format controls are browser implemented. You do not need to 'test' the rendered form. e.g. when you choose a colour, you do not need to 'test' the colour picker dialog.
+
+When we see Special Format Controls, we are interested in making sure that the server can handle the values generated and that any JavaScript code attached to events is processed correctly.
 
 ### Color
 
@@ -224,14 +265,25 @@ Test Ideas:
 
 `<input type="reset"/>`
 
+When `reset` is clicked, by default the entire form will reset to the default values.
+
+This is browser implemented functionality so it is worth checking that it actually does what is expected for the context used by the input form. If the default doesn't do what is anticipated then it might be better to have a button with JavaScript to reset the form.
+
 ### Image
 
 `<input id="image-input" type="image" src="button_image.png"/>`
+
+The Image control is interesting because it defaults to acting as an alternate submit button when the user clicks on the image located by the `src`.
 
 ### Submit
 
 `<input type="submit"/>`
 
+The submit button will render as `submit`, if a `value` is added then this will be shown as the button name.
+
+By default the submit will submit using the `method` (e.g. post) and to the `action` url in the form. If these attributes are not present in the form then the page will refresh.
+
+The default processing can be overridden by JavaScript, and if this is the case it is worth testing the override carefully.
 
 ## Form Submission
 
