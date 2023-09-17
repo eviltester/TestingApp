@@ -1,1 +1,2 @@
-Since the json formatting in the API response is not using a JSON parser it is possible to create invalid json as a response. 
+- Since the json formatting in the API response is not using a JSON parser it is possible to create invalid json as a response.
+- split on ":" username password uses 0 and 1 so it is possible to login with a username:password:whichisinvalid

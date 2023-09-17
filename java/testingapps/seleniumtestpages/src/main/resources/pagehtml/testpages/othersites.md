@@ -3,9 +3,9 @@
 <div class="explanation">
         <p>This is not the only practice site online. We've listed a few other
 sites that we know of below, that we think offer useful testing and automating challenges.</p>
-<p>NOTE: We have only listed sites that were created as practice applications.
-They are presented in Alphabetic order.
-        </p>
+<p>You can use these for automation testing practice and develop your test automation skills. The applications may well repeat similar components but the more you automate and practice the better you get.</p>
+<p>NOTE: We have only listed sites that were created as practice applications and those without extensive and intrusive ads.</p>
+<p>They are presented in Alphabetic order.</p>
 </div>
 
 <style>
@@ -19,6 +19,24 @@ They are presented in Alphabetic order.
 </style>
 
 <!-- TOC -->
+
+## How to Use These Testing Practice Sites
+
+This list of websites to practice test automation are not something to look at once. We recommend re-visiting the sites you like best and trying multiple ways to automate and test the examples.
+
+On each practice session you can try new approaches. I regularly revisit my own practice test applications and find new bugs and new ideas for practicing.
+
+### For Automating
+
+If you are using these sites to practice your automating and test automation skills then I recommend:
+
+- creating a public repository on Github where you can store all your code. This can act as a showcase for your developing automation skill.
+- create a repo for each tool or language that you use, rather than for each site. This helps demonstrate your skill with the tool.
+
+### For Testing
+
+- Make notes about your testing, using different styles. e.g. Mind Maps, Diagrams, State Transition Models, text files.
+- Make your notes public, either in a Github repo or on a blog. This helps demonstrate that you are serious about improving your skills and showcases your approaches.
 
 ## Buggy Games
 
@@ -51,6 +69,18 @@ REST API with full documentation.
 - Suitable for practicing: Automating, Testing
 
 An example e-commerce web site.
+
+## Practice Automation
+
+[![Practice Automation Screenshot](/images/othersites/practice-automation-300x300.png)](https://practice-automation.com/)
+
+[Practice Automation](https://practice-automation.com/)
+
+- Suitable for practicing: Automating
+
+The Practice Automation site from AutomateNow has a page dedicated to each of the included example types e.g. tables, sliders, delays, etc.
+
+
 
 ## Practice Software Testing Toolshop
 

@@ -73,7 +73,7 @@ public class BasicAuthProcessor {
             String usernamePassword = new String(Base64.getDecoder().decode(basicAuthDetails));
             String[] details = usernamePassword.split(":");
 
-            if(details == null || details.length!=2){
+            if(details == null || details.length<2){
                 this.reason = "Could not find a username and password in the encoded string.";
                 return false;
             }
