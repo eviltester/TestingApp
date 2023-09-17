@@ -1,0 +1,25 @@
+<h1 id="about-basic-auth-example">About Basic Auth Example</h1>
+<div class="explanation">
+    <p>The most basic form of HTTP authentication is Basic Authentication.
+        Where a username and password are base64 encoded in an Authentication header.
+    </p>
+</div>
+
+<h2 id="basic-authentication">Basic Authentication</h2>
+<p>When a page protected by basic authentication is accessed in a browser, a dialog will usually be shown so the user can enter a <code>username</code> and <code>password</code>.</p>
+<p>This will then be sent to the server in an <code>Authorization</code> header.</p>
+<p>To access the protected page, use the <code>username</code> and <code>password</code></p>
+<ul>
+    <li>username: <code>authorized</code></li>
+    <li>password: <code>password001</code></li>
+</ul>
+<p>After entering the details, the results page will show you if you have been authenticated or not, and the reason will also be displayed.</p>
+<h2 id="explore-using-the-dev-tools">Explore Using the Dev Tools</h2>
+<p>Using the browser dev tools you can see the network traffic.</p>
+<p>View the request send to the server and examine the <code>Authorization</code> header.</p>
+<p>Explore using different combinations of input and see which states the server checks for.</p>
+<h2 id="automating">Automating</h2>
+<p>Most tools for Automating Browsers have specific methods for accessing Basic Authenticated pages.</p>
+<h2 id="api-testing">API Testing</h2>
+<p>You could also treat the protected page as an API and create the <code>Authorization</code> header yourself.</p>
+<p>You should probably set the <code>Accept</code> header to return JSON.</p>

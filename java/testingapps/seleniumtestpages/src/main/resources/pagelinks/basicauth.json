@@ -1,0 +1,10 @@
+{
+  "title" : "Basic Auth Example Page",
+  "urls": [
+      {"title":"Page", "url":"/styled/auth/basic-auth-test.html"},
+      {"title":"About", "url":"/styled/page?app=basicauth&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/basicauth/about.html"
+  }
+}

@@ -1,0 +1,1 @@
+Since the json formatting in the API response is not using a JSON parser it is possible to create invalid json as a response. 

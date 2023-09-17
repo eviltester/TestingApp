@@ -111,6 +111,13 @@ public class SeleniumTestPagesForSpark {
             return page;
         });
 
+        // authentication
+        get("/styled/auth/basic-auth-results.html", (req, res) -> {
+            return new BasicAuthProcessor(req,res,
+                            "authorized", "password001")
+                    .get();
+        });
+
 
         get("/styled/page", (req, res) -> {
             {return new TemplateContentPage(req,res).get();}
