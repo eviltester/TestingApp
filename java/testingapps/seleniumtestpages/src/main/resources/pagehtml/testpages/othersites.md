@@ -157,6 +157,20 @@ A test REST API provided by swagger.
 
 - [code](https://github.com/swagger-api/swagger-petstore)
 
+## Sweet Shop
+
+[![Sweetshop Screenshot](/images/othersites/sweetshop-300x300.png)](https://sweetshop.netlify.app/)
+
+[Sweetshop](https://sweetshop.netlify.app/)
+
+- Suitable for practicing: Automating, Testing
+
+A Sweetshop designed to encourage you to explore the browser Dev Tools. Check out the cookies, local storage and network traffic.
+
+The site was created by [Viv Richards](https://vivrichards.co.uk/) and together we collaborated on a Dev Tools workshop. The slides are [available here](https://docs.google.com/presentation/d/17K-qiF5WB5BcNu8ZN8kevYf4Fapf2eeRpIMy_V0gjRs/edit?usp=sharing)
+
+There are exercises in the slide deck around the Sweetshop and other sites.
+
 ## Testing Challenges
 
 [![Testing Challenges Screenshot](/images/othersites/testing-challenges-300x300.png)](http://testingchallenges.thetestingmap.org/)
@@ -181,6 +195,16 @@ Be careful because the 'upload' page will upload your content. And it can be
 downloaded from the download page. Do not download anything already there as
 you don't know what it contains. And do not upload anything you don't want
 everyone to see.
+
+## The Test Pages
+
+[![The Test Pages Screenshot](/images/othersites/testpages-300x300.png)](https://testpages.eviltester.com/)
+
+[The Test Pages](https://testpages.eviltester.com/)
+
+- Suitable for practicing: Automating, Testing, JavaScript Hacking
+
+This very site. It would be inappropriate to miss it from the list. Every application has an about page with hints, tips and exercises. Suitable for automating and exploring.
 
 ## The Pulper
 
