@@ -171,6 +171,16 @@ The site was created by [Viv Richards](https://vivrichards.co.uk/) and together 
 
 There are exercises in the slide deck around the Sweetshop and other sites.
 
+## Tester's Playground
+
+[![Testers Playground Screenshot](/images/othersites/testers-playground-300x300.png)](http://playground.epizy.com/)
+
+[The Tester's Playground](http://playground.epizy.com/)
+
+- Suitable for practicing: Exploratory Testing, Dev Tools, JavaScript Hacking
+
+Another application from Viv Richards. This one is designed around a set of 'challenges' that encourage you to use the Dev Tools. There are often multiple ways to solve the challenges.
+
 ## Testing Challenges
 
 [![Testing Challenges Screenshot](/images/othersites/testing-challenges-300x300.png)](http://testingchallenges.thetestingmap.org/)
