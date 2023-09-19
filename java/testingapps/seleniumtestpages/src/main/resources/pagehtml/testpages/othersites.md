@@ -159,15 +159,15 @@ A test REST API provided by swagger.
 
 ## Sweet Shop
 
-[![Sweetshop Screenshot](/images/othersites/sweetshop-300x300.png)](https://sweetshop.netlify.app/)
+[![Sweetshop Screenshot](/images/othersites/sweetshop-300x300.png)](https://sweetshop.vivrichards.co.uk/)
 
-[Sweetshop](https://sweetshop.netlify.app/)
+[Sweetshop](https://sweetshop.vivrichards.co.uk/)
 
 - Suitable for practicing: Automating, Testing
 
 A Sweetshop designed to encourage you to explore the browser Dev Tools. Check out the cookies, local storage and network traffic.
 
-The site was created by [Viv Richards](https://vivrichards.co.uk/) and together we collaborated on a Dev Tools workshop. The slides are [available here](https://docs.google.com/presentation/d/17K-qiF5WB5BcNu8ZN8kevYf4Fapf2eeRpIMy_V0gjRs/edit?usp=sharing)
+The site was created by [Viv Richards](https://vivrichards.co.uk/) and together we collaborated on a Dev Tools workshop. The slides are [available here](https://github.com/eviltester/eviltester-talks/tree/main/london-testers-gathering/2019/devtools-workshop)
 
 There are exercises in the slide deck around the Sweetshop and other sites.
 
