@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Cookie Controlled Admin</title>
+    <title>Cookie Controlled Super Admin</title>
     <link rel="stylesheet" href="/css/testpages.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
@@ -20,7 +20,7 @@
              [<a id="navadminlogin" href="adminlogin.html">Admin Login</a>]
              [<a id="navadminview" href="adminview.html">Admin View</a>]
              [<a id="navadminsuperview" href="superadminview.html">Super Admin View</a>]
-            [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
+             [<a id="navadminlogout" onclick="new Admin().logout();" href="">Admin Logout</a>]
         </div>
         <div class="app-navigation">
             <a>Page</a>
@@ -29,18 +29,12 @@
     </div>
 
 
-    <h1>Admin View</h1>
+    <h1>Super Admin View</h1>
 
     <div class="explanation">
-        <p>You are logged in to the Admin View.
-        i.e. you should not be able to use the login page until you
-        logout because you are already logged in.</p>
-        <p>You should only be able to visit the
-            "Super Admin View"
-            page if you are logged in as SuperAdmin.</p>
-        <p>Try it and see - <a href="adminlogin.html">adminlogin.html</a> and
-            use dev tools to mess with the cookie or try and inject a cookie
-            with your automated execution</p>
+        <p>You are logged in to the Super Admin View.
+        i.e. you should not be able to use the login page until you logout because you are already logged in.</p>
+        <p><strong>You should be able to switch to the Admin View, because Super Admin is also an admin.</strong></p>
     </div>
 
     <div class="centered">
@@ -59,7 +53,7 @@
 
         admin.activateLoginLink();
 
-        if(!admin.userCanAccess("adminview.html")){
+        if(!admin.userCanAccess("superadminview.html")){
             window.location.href = admin.getLoggedInUrl();
         }
 

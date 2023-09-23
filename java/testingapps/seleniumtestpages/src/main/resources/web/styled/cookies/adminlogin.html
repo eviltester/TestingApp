@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>Cookie Controlled Admin</title>
+    <title>Cookie Controlled Admin Login</title>
     <link rel="stylesheet" href="/css/testpages.css">
     <link rel="shortcut icon" href="/favicon.ico">
     <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
@@ -65,13 +65,15 @@
     <script>
 
 
+        const admin = new Admin();
+
         function loginas(){
 
             var username = document.getElementsByName("username")[0].value;
             var password = document.getElementsByName("password")[0].value;
             var remember = document.getElementsByName("remember")[0].value=="on" ? true : false;
 
-            admin = new Admin();
+
             admin.login(username, password, remember, function(){
                 document.getElementsByClassName("loginmessage")[0].innerHTML = "Login Details Incorrect";
             });
@@ -79,10 +81,10 @@
             return false;
         }
 
-        new Admin().activateLoginLink();
+        admin.activateLoginLink();
 
-        if(new Admin().isLoggedIn()){
-            window.location.href = "adminview.html";
+        if(admin.isLoggedIn()){
+            window.location.href = admin.getLoggedInUrl();
         }
 
 
