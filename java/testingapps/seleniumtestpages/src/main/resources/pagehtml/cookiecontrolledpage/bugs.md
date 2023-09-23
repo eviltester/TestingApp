@@ -1,0 +1,1 @@
+- If the cookie is amended so the loggedin user name is not recognised then the login page will continually redirect to itself. This is done using JavaScript so need to switch off JavaScript to amend the cookie.

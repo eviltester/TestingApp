@@ -6,14 +6,21 @@
 
 <h2 id="functionality">Functionality</h2>
 <p>This page simulates a login process.</p>
-<p>You should not be able to visit the AdminView</p>
-<p>page until logged in. And (once logged in) you should not be able to come back to this page until you logout.</p></p>
+<p>You should not be able to visit the AdminView or SuperAdminView
+    pages without being &#39;logged in&#39; as the correct the user</p>
+<p>You should only be able to visit the SuperAdminView
+    page when logged in as <code>SuperAdmin</code>.</p>
+<p>And (once logged in) you should not be able to come back to this page until you logout.</p>
 <p>Try it and see - and use dev tools to mess with the cookie or try and inject a cookie with your automated execution</p>
-
-<p>When you type in the correct username (Admin) and password (AdminPass), a cookie is created, and you are redirected to the &#39;AdminView&#39;.</p>
+<p>When you type in the correct username (e.g. Admin) and password (AdminPass), a cookie is created, and you are redirected to the associated &#39;Admin View&#39; page.</p>
+<p>Users:</p>
+<ul>
+    <li><code>Admin</code> / <code>AdminPass</code></li>
+    <li><code>SuperAdmin</code> / <code>AdminPass</code></li>
+</ul>
 <p>The Cookie represents a session cookie that would be created upon successful login for a normal login process.</p>
 <p>Each page has JavaScript that detects the cookie.</p>
-<p>You can only access the <a href="/styled/cookies/adminview.html">AdminView page</a> when the cookie is set.</p>
+<p>You can only access the <a href="/styled/cookies/adminview.html">AdminView page</a> or <a href="/styled/cookies/superadminview.html">SuperAdminView page</a> when the cookie is set.</p>
 <p>When the cookie is set the <a href="/styled/cookies/adminlogin.html">login page</a> will redirect you to the AdminView Page.</p>
 <p>Use the <code>AdminLogout</code> link to remove the cookie.</p>
 <h2 id="cookies">Cookies</h2>

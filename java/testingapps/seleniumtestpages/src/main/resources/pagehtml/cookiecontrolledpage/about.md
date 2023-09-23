@@ -9,19 +9,28 @@
 
 This page simulates a login process.
 
-You should not be able to visit the AdminView
+You should not be able to visit the AdminView or SuperAdminView
+pages without being 'logged in' as the correct the user
 
+You should only be able to visit the SuperAdminView
+page when logged in as `SuperAdmin`.
 
-page until logged in. And (once logged in) you should not be able to come back to this page until you logout.</p>
-<p>Try it and see - and use dev tools to mess with the cookie or try and inject a cookie with your automated execution</p>
+And (once logged in) you should not be able to come back to this page until you logout.
 
-When you type in the correct username (Admin) and password (AdminPass), a cookie is created, and you are redirected to the 'AdminView'.
+Try it and see - and use dev tools to mess with the cookie or try and inject a cookie with your automated execution
+
+When you type in the correct username (e.g. Admin) and password (AdminPass), a cookie is created, and you are redirected to the associated 'Admin View' page.
+
+Users:
+
+- `Admin` / `AdminPass`
+- `SuperAdmin` / `AdminPass`
 
 The Cookie represents a session cookie that would be created upon successful login for a normal login process.
 
 Each page has JavaScript that detects the cookie.
 
-You can only access the [AdminView page](/styled/cookies/adminview.html) when the cookie is set.
+You can only access the [AdminView page](/styled/cookies/adminview.html) or [SuperAdminView page](/styled/cookies/superadminview.html) when the cookie is set.
 
 When the cookie is set the [login page](/styled/cookies/adminlogin.html) will redirect you to the AdminView Page.
 
