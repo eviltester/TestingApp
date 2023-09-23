@@ -6,6 +6,7 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
     <script src="notetaker.js"></script>
+    <script src="editui.js"></script>
 
     <style>
         #note-title-input{
@@ -52,6 +53,7 @@
         <div class="local-session-navigation">
             [<a id="local-storage-link" href="simplenotes.html">Local Storage</a>]
             [<a id="session-storage-link" href="#session">Session Storage</a>]
+            [<a id="manage-storage-link" href="managenotes.html">Manage List</a>]
         </div>
         <div class="note-taker">
 
@@ -114,6 +116,8 @@
 
             document.notetaker = new NoteTaker();
             document.notetaker.configure("default", useLocalStorage)
+
+            document.ui = new NoteTakerUI();
 
             validationAddition = undefined;
             function clearNoteDetails(){
@@ -241,38 +245,12 @@
                 clearAllNotes();
             })
 
-            function showLoadedNotes(){
-                listParent = document.getElementById("list-of-notes");
-                listItems = document.notetaker.notes.map(
-                    note => {
-                        elem = document.createElement("div");
-                        elem.classList.add("note-in-list");
-                        elem.setAttribute("data-key", note.id);
-
-                        elembdelete = document.createElement("button");
-                        elembdelete.setAttribute("data-key", note.id);
-                        elembdelete.innerText="X";
-                        elembdelete.classList.add("delete-note-in-list");
-                        elembdelete.addEventListener("click",deleteNote);
-
-                        elembedit = document.createElement("button");
-                        elembedit.setAttribute("data-key", note.id);
-                        elembedit.innerText="Edit";
-                        elembedit.classList.add("edit-note-in-list");
-                        elembedit.addEventListener("click",editNote);
-
-                        elemp = document.createElement("p");
-                        elemp.classList.add("title-note-in-list");
-                        elemp.setAttribute("data-key", note.id);
-                        elemp.innerText = note.title;
-
-                        elem.appendChild(elembdelete)
-                        elem.appendChild(elembedit)
-                        elem.appendChild(elemp)
-                        return elem;
-                    }
-                )
-                listParent.replaceChildren(...listItems);
+            function showLoadedNotes() {
+                document.ui.showLoadedNotes(
+                    document.notetaker, "list-of-notes",
+                    true, false,
+                    deleteNote, editNote
+                );
             }
 
             showNotesButton = document.getElementById("show-notes");
