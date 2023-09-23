@@ -52,7 +52,7 @@
     <div class="centered">
         <div class="local-session-navigation">
             [<a id="local-storage-link" href="simplenotes.html">Local Storage</a>]
-            [<a id="session-storage-link" href="#session">Session Storage</a>]
+            [<a id="session-storage-link" href="simplenotes.html">Session Storage</a>]
             [<a id="manage-storage-link" href="managenotes.html">Manage List</a>]
         </div>
         <div class="note-taker">
@@ -110,9 +110,24 @@
                 event.preventDefault();
             });
 
-            // add a query param to session load to allow refresh
-            sessionLink = document.getElementById("session-storage-link");
-            sessionLink.href = "?" + Math.random().toString().substring(2) + "#session";
+            sessionHashAppend = "?" + Math.random().toString().substring(2) + "#session";
+
+            if(!useLocalStorage) {
+                // we are using Session Storage
+                // disable session storage
+                sessionLink = document.getElementById("session-storage-link");
+                sessionLink.removeAttribute("href")
+
+                // make the manage link switch to session storage
+                editLink = document.getElementById("manage-storage-link");
+                editLink.href = editLink.href + sessionHashAppend
+            }else{
+                // we are using Local Storage
+                // disable local storage link
+                document.getElementById("local-storage-link").removeAttribute("href")
+                sessionLink = document.getElementById("session-storage-link");
+                sessionLink.href = sessionLink.href + sessionHashAppend
+            }
 
             document.notetaker = new NoteTaker();
             document.notetaker.configure("default", useLocalStorage)
