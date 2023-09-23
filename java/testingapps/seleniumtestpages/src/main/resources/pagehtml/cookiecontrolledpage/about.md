@@ -30,6 +30,8 @@ The Cookie represents a session cookie that would be created upon successful log
 
 Each page has JavaScript that detects the cookie.
 
+Note: The SuperAdminView page is protected at the server level by the cookie so there are slight behavioural differences to explore between the AdminView and SuperAdminView.
+
 You can only access the [AdminView page](/styled/cookies/adminview.html) or [SuperAdminView page](/styled/cookies/superadminview.html) when the cookie is set.
 
 When the cookie is set the [login page](/styled/cookies/adminlogin.html) will redirect you to the AdminView Page.

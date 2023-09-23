@@ -111,11 +111,24 @@ public class SeleniumTestPagesForSpark {
             return page;
         });
 
+
+
         // authentication
         get("/styled/auth/basic-auth-results.html", (req, res) -> {
             return new BasicAuthProcessor(req,res,
                             "authorized", "password001")
                     .get();
+        });
+
+        get("/styled/cookies/superadminview.html", (req, res) -> {
+            String username = req.cookie("loggedin");
+            if(username!=null && username.equals("SuperAdmin")){
+                String page = new ResourceReader().asString("/web/styled/cookies/superadminview.htm");
+                return page;
+            }
+            res.status(307); // temporary redirect
+            res.header("location", "adminlogin.html");
+            return "";
         });
 
 
