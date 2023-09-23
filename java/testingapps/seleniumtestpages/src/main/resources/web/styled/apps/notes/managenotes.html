@@ -52,7 +52,7 @@
     <div class="centered">
         <div class="local-session-navigation">
             [<a id="local-storage-link" href="managenotes.html">Local Storage</a>]
-            [<a id="session-storage-link" href="#session">Session Storage</a>]
+            [<a id="session-storage-link" href="managenotes.html">Session Storage</a>]
             [<a id="edit-storage-link" href="simplenotes.html">Edit List</a>]
         </div>
         <div class="note-taker">
@@ -81,10 +81,28 @@
                 }
             }
 
-            // add a query param to session load to allow refresh
-            sessionLink = document.getElementById("session-storage-link");
-            sessionLink.href = "?" + Math.random().toString().substring(2) + "#session";
+            sessionHashAppend = "?" + Math.random().toString().substring(2) + "#session";
 
+            if(!useLocalStorage) {
+                // we are using Session Storage
+                // disable session storage
+                sessionLink = document.getElementById("session-storage-link");
+                sessionLink.removeAttribute("href")
+
+                // make the edit link switch to session storage
+                editLink = document.getElementById("edit-storage-link");
+                editLink.href = editLink.href + sessionHashAppend
+            }else{
+                // we are using Local Storage
+                // disable local storage link
+                document.getElementById("local-storage-link").removeAttribute("href")
+                sessionLink = document.getElementById("session-storage-link");
+                sessionLink.href = sessionLink.href + sessionHashAppend
+            }
+
+
+            // TODO: enable edit button by adding hash values to control the
+            // edit and the key of the note to load in edit
 
             function updateNoteStatus(statusText){
                 document.getElementById("note-status-details").innerText = statusText;
