@@ -54,11 +54,24 @@ NoteTaker = function() {
         return true;
     }
 
-    this.addNote = function(aTitle = "", aNote = ""){
+    this.generateKey = function(){
+        return Date.now().toString() + "-" + Math.random().toString().substring(2);
+    }
+
+    this.addNote = function(aTitle = "", aNote = "", aKey = ""){
         if(!aTitle || aTitle.length < 1){ return false}
         if(!aNote || aNote.length < 1){ return false}
 
-        anId = Date.now().toString() + "-" + Math.random().toString().substring(2);
+        anId=aKey;
+        if(aKey==""){
+            anId = this.generateKey();
+        }
+
+        if(this.getNote(anId)){
+            // provided key exists so generate a new one
+            anId = this.generateKey();
+        }
+
         aNoteToAdd = {id: anId, title: aTitle, note: aNote};
 
         this.notes.push(aNoteToAdd)

@@ -117,7 +117,8 @@
 
             validationAddition = undefined;
             function clearNoteDetails(){
-                document.getElementById("edit-key").value = "";
+                document.getElementById("edit-key").value =
+                        document.notetaker.generateKey();
                 inputElem = document.getElementById("note-title-input");
                 // remove validation temporarily to allow clearing
                 inputElem.required = false;
@@ -136,6 +137,8 @@
                 document.getElementById("update-note").hidden = true;
             }
 
+            clearNoteDetails();
+
             function updateNoteStatus(statusText){
                 document.getElementById("note-status-details").innerText = statusText;
             }
@@ -144,9 +147,10 @@
             addNoteButton.addEventListener("click", function(){
                 //if(!document.forms["edit-form"].reportValidity()){return}
                 updateNoteStatus("Adding Note");
+                aKey = document.getElementById("edit-key").value
                 aTitle = document.getElementById("note-title-input").value
                 aNote = document.getElementById("note-details-input").value
-                if(document.notetaker.addNote(aTitle, aNote)){
+                if(document.notetaker.addNote(aTitle, aNote, aKey)){
                     updateNoteStatus("Added Note");
                     clearNoteDetails();
                     showLoadedNotes();
@@ -243,6 +247,7 @@
                     note => {
                         elem = document.createElement("div");
                         elem.classList.add("note-in-list");
+                        elem.setAttribute("data-key", note.id);
 
                         elembdelete = document.createElement("button");
                         elembdelete.setAttribute("data-key", note.id);
@@ -258,6 +263,7 @@
 
                         elemp = document.createElement("p");
                         elemp.classList.add("title-note-in-list");
+                        elemp.setAttribute("data-key", note.id);
                         elemp.innerText = note.title;
 
                         elem.appendChild(elembdelete)

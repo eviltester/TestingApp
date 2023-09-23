@@ -111,7 +111,8 @@
 
             validationAddition = undefined;
             function clearNoteDetails(){
-                document.getElementById("edit-key").value = "";
+                document.getElementById("edit-key").value =
+                        document.notetaker.generateKey();
                 inputElem = document.getElementById("note-title-input");
                 // remove validation temporarily to allow clearing
                 inputElem.required = false;
@@ -138,9 +139,10 @@
             addNoteButton.addEventListener("click", function(){
                 //if(!document.forms["edit-form"].reportValidity()){return}
                 updateNoteStatus("Adding Note");
-                aTitle = document.getElementById("note-title-input").value
-                aNote = document.getElementById("note-details-input").value
-                if(document.notetaker.addNote(aTitle, aNote)){
+                aKey = document.getElementById("edit-key").value;
+                aTitle = document.getElementById("note-title-input").value;
+                aNote = document.getElementById("note-details-input").value;
+                if(document.notetaker.addNote(aTitle, aNote, aKey)){
                     updateNoteStatus("Added Note");
                     clearNoteDetails();
                     showLoadedNotes();
@@ -151,9 +153,9 @@
 
             updateNoteButton = document.getElementById("update-note");
             updateNoteButton.addEventListener("click", function(elem){
-                key  = document.getElementById("edit-key").value
-                aTitle = document.getElementById("note-title-input").value
-                aNote = document.getElementById("note-details-input").value
+                key  = document.getElementById("edit-key").value;
+                aTitle = document.getElementById("note-title-input").value;
+                aNote = document.getElementById("note-details-input").value;
                 if(document.notetaker.updateNote(key, aTitle, aNote)){
                     updateNoteStatus("Updated Note");
                     clearNoteDetails();
@@ -237,6 +239,7 @@
                     note => {
                         elem = document.createElement("div");
                         elem.classList.add("note-in-list");
+                        elem.setAttribute("data-key", note.id);
 
                         elembdelete = document.createElement("button");
                         elembdelete.setAttribute("data-key", note.id);
@@ -252,6 +255,7 @@
 
                         elemp = document.createElement("p");
                         elemp.classList.add("title-note-in-list");
+                        elemp.setAttribute("data-key", note.id);
                         elemp.innerText = note.title;
 
                         elem.appendChild(elembdelete)
