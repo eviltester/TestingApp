@@ -97,10 +97,15 @@
     <script>
         window.addEventListener("load", (event) =>{
 
-            useLocalStorage=true
+            useLocalStorage=true;
+            editkey="";
             if(window.location.hash) {
                 if(window.location.hash.includes("session")){
                     useLocalStorage=false;
+                }
+                if(window.location.hash.includes("edit")){
+                    editkeypos = window.location.hash.indexOf("edit") + 4;
+                    editkey = window.location.hash.substring(editkeypos);
                 }
             }
 
@@ -217,6 +222,11 @@
                 }else{
                     updateNoteStatus("Could not find note to edit: " + key);
                 }
+            }
+
+            if(editkey.length>0){
+                document.notetaker.load();
+                editNote({target:{getAttribute:function(){return editkey;}}})
             }
 
             function deleteNote(event){

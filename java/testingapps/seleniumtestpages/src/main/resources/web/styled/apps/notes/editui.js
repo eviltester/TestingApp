@@ -33,14 +33,33 @@ NoteTakerUI = function() {
                 elemp.innerText = note.title;
 
                 if(showDesc){
-                    console.log(note.note);
+                    elemdetails = document.createElement("details");
+                    elemdetails.setAttribute("data-key", note.id);
+                    elemdetailssummary = document.createElement("summary");
+                    elemddetailscontent = document.createElement("p");
+                    const maxchars = 40;
+                    notedisplaysummary = "";
+                    const fullNoteText = note.note;
+                    if(fullNoteText.length>maxchars){
+                        notedisplaysummary = fullNoteText.substring(0,maxchars) + "...";
+                    }else{
+                        notedisplaysummary = fullNoteText;
+                    }
+                    notedisplaysummary = notedisplaysummary.replaceAll("\n"," ");
+                    elemdetailssummary.innerText = notedisplaysummary;
+                    elemddetailscontent.innerText = fullNoteText;
+                    elemdetails.appendChild(elemdetailssummary);
+                    elemdetails.appendChild(elemddetailscontent);
                 }
 
-                elem.appendChild(elembdelete)
+                elem.appendChild(elembdelete);
                 if(showEditButton) {
-                    elem.appendChild(elembedit)
+                    elem.appendChild(elembedit);
                 }
                 elem.appendChild(elemp)
+                if(showDesc) {
+                    elem.appendChild(elemdetails);
+                }
                 return elem;
             }
         )

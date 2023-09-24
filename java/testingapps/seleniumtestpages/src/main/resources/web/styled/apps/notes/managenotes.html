@@ -74,7 +74,7 @@
     <script>
         window.addEventListener("load", (event) =>{
 
-            useLocalStorage=true
+            useLocalStorage=true;
             if(window.location.hash) {
                 if(window.location.hash.includes("session")){
                     useLocalStorage=false;
@@ -100,11 +100,6 @@
                 sessionLink.href = sessionLink.href + sessionHashAppend
             }
 
-
-            // TODO: enable edit button by adding hash values to control the
-            // edit and the key of the note to load in edit
-
-            // TODO: show the note.note in an expandable control
 
             function updateNoteStatus(statusText){
                 document.getElementById("note-status-details").innerText = statusText;
@@ -158,11 +153,20 @@
                 clearAllNotes();
             })
 
+            function editNote(event){
+                key = event.target.getAttribute("data-key");
+                linkAppend = "#";
+                if(!useLocalStorage){
+                    linkAppend = sessionHashAppend;
+                }
+                document.location = "simplenotes.html" + linkAppend + "edit" + key;
+            }
+
             function showLoadedNotes(){
                 document.ui.showLoadedNotes(
                         document.notetaker, "list-of-notes",
-                        false, true,
-                        deleteNote
+                        true, true,
+                        deleteNote, editNote
                 );
             }
 
