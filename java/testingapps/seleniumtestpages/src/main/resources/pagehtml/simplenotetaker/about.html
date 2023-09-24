@@ -5,7 +5,6 @@
     </p>
 </div>
 
-
 <h2 id="use-session-or-local-storage">Use Session or Local Storage</h2>
 <p>You can switch between storing data in the Local Storage or the Session Storage by clicking on the associate link i.e. &quot;Local Storage&quot; to use Local Storage, or &quot;Session Storage&quot; to use Session Storage.</p>
 <p>Use the dev tools to view the Application Storage to see the data stored in the browser.</p>
@@ -20,7 +19,7 @@
     <li>Note must not be blank</li>
 </ul>
 <p>Click the <code>Add</code> button to store the note and show it in the browser.</p>
-<h2 id="managing-storage">Managing Storage</h2>
+<h2 id="managing-storage-in-edit-list-view">Managing Storage in Edit List View</h2>
 <p>By default the stored data is not loaded into the browser.</p>
 <p>Press:</p>
 <ul>
@@ -28,3 +27,15 @@
     <li><code>Show</code> to show the data in the browser</li>
     <li><code>Clear All</code> to clear all of the stored data</li>
 </ul>
+<h2 id="managing-storage-in-manage-list-view">Managing Storage in Manage List View</h2>
+<p>All data is loaded into the browser when editing in Manage List view.</p>
+<p>Note details are truncated to show in the details summary when it is a long note.</p>
+<p>Press:</p>
+<ul>
+    <li>[x] to <code>Delete</code> an item</li>
+    <li>[Edit] to <code>Edit</code> an item in the Edit List View</li>
+    <li>expand the details view to see the note</li>
+</ul>
+<h2 id="javascript-hacking">JavaScript Hacking</h2>
+<p>The main note taking application code is accessible in the <code>document</code>, so it is possible to work with the loaded and stored data entirely from the console using JavaScript.</p>
+<p>This might help with the creation of test data and automating without using the UI.</p>

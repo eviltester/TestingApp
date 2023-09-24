@@ -24,7 +24,7 @@ Validation is performed when adding the note details.
 
 Click the `Add` button to store the note and show it in the browser.
 
-## Managing Storage
+## Managing Storage in Edit List View
 
 By default the stored data is not loaded into the browser.
 
@@ -33,3 +33,21 @@ Press:
 - `Load` to load in the data from the currently chosen storage.
 - `Show` to show the data in the browser
 - `Clear All` to clear all of the stored data
+
+## Managing Storage in Manage List View
+
+All data is loaded into the browser when editing in Manage List view.
+
+Note details are truncated to show in the details summary when it is a long note.
+
+Press:
+
+- [x] to `Delete` an item
+- [Edit] to `Edit` an item in the Edit List View
+- expand the details view to see the note
+
+## JavaScript Hacking
+
+The main note taking application code is accessible in the `document`, so it is possible to work with the loaded and stored data entirely from the console using JavaScript.
+
+This might help with the creation of test data and automating without using the UI.
