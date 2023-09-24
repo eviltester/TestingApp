@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 The UI shows a canvas with some input fields.

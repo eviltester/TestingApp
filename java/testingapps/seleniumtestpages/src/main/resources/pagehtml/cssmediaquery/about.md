@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## CSS Media Queries
 
 CSS Media queries can be used to style the page differently based on the browser size.

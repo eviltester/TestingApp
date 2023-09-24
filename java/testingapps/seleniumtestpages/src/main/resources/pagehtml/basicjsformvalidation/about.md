@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## HTML Form
 
 This HTML Form shows a simple form with validation.

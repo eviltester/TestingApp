@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Example Page Fixed Text
 
 There are two main fixed text elements.

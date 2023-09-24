@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Button Events
 
 Every `click` event on the button is documented in the event list.

@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 This page contains an input field and a `search` button.

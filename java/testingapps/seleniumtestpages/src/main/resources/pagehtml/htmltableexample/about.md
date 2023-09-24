@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## HTML Tables
 
 Many web sites now use nested divs and complicated HTML to represent tabular data but for simple mult-column data lists you can't beat an HTML table.

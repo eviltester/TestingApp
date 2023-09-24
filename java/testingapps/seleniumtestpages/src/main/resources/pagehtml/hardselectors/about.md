@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Select Me By Id
 
 The element uses a valid ID, but it can be hard to use for some location strategies.

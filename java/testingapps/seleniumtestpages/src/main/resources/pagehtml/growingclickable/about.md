@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Clickable When Fully Grown
 
 Not all elements are instantly clickable, particularly when animations etc. are in use.

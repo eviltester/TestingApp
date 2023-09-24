@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 This page contains text displaying a countdown with `hours : minutes : seconds`.

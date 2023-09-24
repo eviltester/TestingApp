@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Alert Box
 
 The Alert Box is used for information, it contains a message and a single `[OK]` button to dismiss the alert.

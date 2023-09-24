@@ -6,6 +6,8 @@ Where a username and password are base64 encoded in an Authentication header.
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Basic Authentication
 
 When a page protected by basic authentication is accessed in a browser, a dialog will usually be shown so the user can enter a `username` and `password`.

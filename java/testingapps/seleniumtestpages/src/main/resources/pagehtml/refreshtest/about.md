@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Button
 
 Yuu can trigger a refresh by clicking the button.

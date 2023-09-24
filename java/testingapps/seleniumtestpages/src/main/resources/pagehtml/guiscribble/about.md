@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Canvas
 
 Canvas elements are hard to automate.

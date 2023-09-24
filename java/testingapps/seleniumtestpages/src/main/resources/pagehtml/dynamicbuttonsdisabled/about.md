@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Functionality
 
 This page has dynamic buttons. They are slightly harder to automate.

@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Alert, Confirm, Prompt Box
 
 JavaScript provides three types of alerts: Alert, Confirm, Prompt.

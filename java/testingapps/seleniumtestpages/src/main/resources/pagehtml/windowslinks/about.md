@@ -6,6 +6,8 @@ associated with them.
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Page Specific Details
 
 - This window is named 'windowsindex'.

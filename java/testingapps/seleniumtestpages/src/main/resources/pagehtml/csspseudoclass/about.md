@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Hover
 
 In this example the elements on the left have 'hover' implemented. If you hover over the element then you should see an effect.

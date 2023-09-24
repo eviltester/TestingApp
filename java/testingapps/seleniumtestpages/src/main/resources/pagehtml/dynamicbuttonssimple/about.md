@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Functionality
 
 All the buttons are added to the page dynamically using JavaScript.

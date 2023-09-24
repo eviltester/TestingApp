@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About
 
 If you hit the page with a browser, that the server thinks is a mobile browser then you will be redirected to the mobile version of this page. The server decides when to redirect based on the user-agent header in the request.

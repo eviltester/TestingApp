@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Simple List?
 
 The page looks like a simple list of elements with no hierarchy.

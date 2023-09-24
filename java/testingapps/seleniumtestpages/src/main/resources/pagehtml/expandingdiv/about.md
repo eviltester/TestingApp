@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Automating Expanding Div
 
 This is a CSS implemented expanding div.

@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 Not all functionality is based around a 'click' event. We might encounter systems based around 'blur' or 'mousedown' or a whole host of other "it made sense at the time" or "because on this device...".

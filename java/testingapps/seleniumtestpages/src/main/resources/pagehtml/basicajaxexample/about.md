@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Dynamic HTML Form
 
 JavaScript can be added a form so that the form is populated dynamically.

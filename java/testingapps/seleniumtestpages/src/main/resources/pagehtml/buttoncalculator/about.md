@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 This is a simple calculator. The GUI is a set of buttons styled with CSS and the functionality implemented using JavaScript

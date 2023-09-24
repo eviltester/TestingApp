@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Safe Upload File
 
 This upload process goes through the full uploading process but does not save your file to the server. This means you are safe to use any file.

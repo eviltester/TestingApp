@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Buttons
 
 Each button will redirect you to the same page, but the time taken to redirect will be different.

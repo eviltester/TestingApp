@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Dynamic HTML Table
 
 What makes this dynamic?

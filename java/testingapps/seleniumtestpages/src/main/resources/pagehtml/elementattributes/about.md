@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Use Dev Tools To Inspect The Page
 
 Use the inbuilt browser developer tools to inspect the DOM.

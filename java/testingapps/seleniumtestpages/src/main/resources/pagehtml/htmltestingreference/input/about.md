@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About the Example Page
 
 The example page is a form, with a range of input types.

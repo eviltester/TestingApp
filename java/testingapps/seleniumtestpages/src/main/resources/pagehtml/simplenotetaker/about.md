@@ -6,6 +6,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Use Session or Local Storage
 
 You can switch between storing data in the Local Storage or the Session Storage by clicking on the associate link i.e. "Local Storage" to use Local Storage, or "Session Storage" to use Session Storage.

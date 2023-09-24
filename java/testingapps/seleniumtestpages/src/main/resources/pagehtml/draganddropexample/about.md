@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## Drag And Drop
 
 Dragging the first yellow square to:

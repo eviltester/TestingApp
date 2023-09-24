@@ -5,6 +5,8 @@
         </p>
 </div>
 
+<!-- TOC -->
+
 ## About Page
 
 This page has input validation using JavaScript, HTML5 and there is associated server side validation.
