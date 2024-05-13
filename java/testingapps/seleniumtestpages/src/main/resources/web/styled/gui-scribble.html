@@ -40,13 +40,16 @@
 
     <br/>
 
-    <!--
+
+    <div>
+        <button id="show-events-button" onclick="showHideEvents()">Show Events</button>
+    </div>
     <div id="drawevents" style="display:none">
         <p>Events:</p>
         <ul id="draweventslist">
         </ul>
     </div>
-    -->
+
 
     <div class="page-footer">
         <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
@@ -82,12 +85,27 @@
 
         document.getElementById("canvas").addEventListener("mousemove", function (event) {
             if (drawcanvas == true) {
+                recordEvent(event);
                 canvas = document.getElementById("canvas");
                 var canvasrect = canvas.getBoundingClientRect();
                 plot(event.clientX - canvasrect.left, event.clientY - canvasrect.top)
             }
         });
 
+        function recordEvent(event){
+                var li = document.createElement("li");
+                li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
+                document.getElementById("draweventslist").appendChild(li);
+        }
+
+        function showHideEvents(){
+            events = document.getElementById("drawevents");
+            if(events.style.display=='none'){
+                events.style.display='block';
+            }else{
+                events.style.display='none';
+            }
+        }
 
 </script>
 </body>
