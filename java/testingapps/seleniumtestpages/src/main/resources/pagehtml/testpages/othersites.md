@@ -44,10 +44,23 @@ If you are using these sites to practice your automating and test automation ski
 
 [Buggy Games](https://eviltester.github.io/TestingApp/games/buggygames/)
 
-A small set of fun, and deliberately buggy or hackable games.
-
 - Suitable for practicing: Testing, JavaScript Hacking
 
+A small set of fun, and deliberately buggy or hackable games.
+
+
+
+## Cnarios
+
+[![Cnarios Screenshot](/images/othersites/cnarios-300x300.png)](https://www.cnarios.com/concepts)
+
+[Cnarios](https://www.cnarios.com/concepts)
+
+- Suitable for practicing: Automating, Testing
+
+Cnarios has interview question and answers. But more importantly, mini applications with sample scenarios.
+
+Use the scenarios for exploratory testing or automating.
 
 ## Contact List App
 

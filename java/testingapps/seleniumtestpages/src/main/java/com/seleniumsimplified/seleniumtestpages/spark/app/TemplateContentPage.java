@@ -103,11 +103,16 @@ public class TemplateContentPage {
 //        String enableGoogleAds = "<script async src=\"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7132305589272099\"\n" +
 //                "     crossorigin=\"anonymous\"></script>";
 
+        String sponsorMessage = new ResourceReader().
+                asString("/web/styled/partials/sponsor.html");
+        String sponsorCss = "\n<style>\n" + new ResourceReader().
+                asString("/web/styled/partials/sponsor.css") + "</style>\n";
 
         htmlPage = htmlPage.replace("<!-- TITLE -->", theTitle);
-        //htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + enableGoogleAds);
+        htmlPage = htmlPage.replace("<!-- HEAD -->", "<!-- HEAD -->" + "\n" + sponsorCss + "\n");
         htmlPage = htmlPage.replace("<!-- APPNAVIGATION CONTENT -->", appNavHtml);
         htmlPage = htmlPage.replace("<!-- BODY CONTENT -->", bodyText);
+        htmlPage = htmlPage.replace("<!-- SPONSOR CONTENT -->", sponsorMessage);
 
         // template must have included toc.js and toc.css to render properly
         htmlPage = htmlPage.replace("<!-- TOC -->","<div id='toc'></div>");

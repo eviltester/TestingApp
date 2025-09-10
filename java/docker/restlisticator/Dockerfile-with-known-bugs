@@ -1,0 +1,7 @@
+# syntax=docker/dockerfile:1
+# requires mvn package first
+FROM adoptopenjdk/openjdk11:alpine-jre
+WORKDIR /opt/app
+COPY ./testingapps/restlisticator/target/rest-list-system-1-2-2-jar-with-dependencies.jar .
+CMD ["java", "-jar", "rest-list-system-1-2-2-jar-with-dependencies.jar", "-bugfixes=false"]
+EXPOSE 4567

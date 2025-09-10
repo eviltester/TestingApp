@@ -118,3 +118,8 @@ Three docker files are provided in `/docker/selenium-test-pages`:
 | Dockerfile            | eclipse-temurin:11                | Yes       | 450MB |
 | Dockerfile-distroless | gcriodistroless/java11-debian11   | No        | 250MB |
 | Dockerfile-alpine-jre | adoptopenjdk/openjdk11:alpine-jre | Yes       | 152MB |
+
+
+## md to html
+
+Currently an online convertor like https://markdowntohtml.com/ is used to convert the `.md` to `.html`. This needs to be automated. 
