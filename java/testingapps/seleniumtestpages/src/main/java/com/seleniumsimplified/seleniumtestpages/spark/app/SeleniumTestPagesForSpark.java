@@ -62,6 +62,12 @@ public class SeleniumTestPagesForSpark {
         post("/legacy/form_processor.php", (req, res) -> {return new PhpFormProcessor(req,res).post();});
         get("/selenium/find_by_playground.php", (req, res) -> {return new ResourceReader().asString("/web/legacy/find_by_playground.html");});
 
+
+        // ideal page mappings
+        // TODO: these should be defined by some scannable meta data on the page
+        get("/page/basic-web-page", (req, res) -> {return new ResourceReader().asString("/web/styled/basic-web-page-test.html");});
+
+
         // some tests check the url of the asked for page so don't redirect this one
         get("/selenium/basic_web_page.html", (req, res) -> {return new ResourceReader().asString("/web/legacy/basic_web_page.html");});
         get("/selenium/gui_user_interactions.html", (req, res) -> {return new ResourceReader().asString("/web/legacy/gui_user_interactions.html");});
