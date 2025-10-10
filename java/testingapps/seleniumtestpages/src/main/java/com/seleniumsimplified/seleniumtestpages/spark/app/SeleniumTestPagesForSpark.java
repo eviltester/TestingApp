@@ -65,7 +65,9 @@ public class SeleniumTestPagesForSpark {
 
         // ideal page mappings
         // TODO: these should be defined by some scannable meta data on the page
+        get("/page/index.html", (req, res) -> {res.redirect("/styled/index.html"); return "";}); // reverse this so that /page/index is the main index page
         get("/page/basic-web-page", (req, res) -> {return new ResourceReader().asString("/web/styled/basic-web-page-test.html");});
+        get("/page/locator-approaches", (req, res) -> {return new ResourceReader().asString("/web/styled/locator-approaches.html");});
 
 
         // some tests check the url of the asked for page so don't redirect this one
@@ -139,6 +141,9 @@ public class SeleniumTestPagesForSpark {
 
 
         get("/styled/page", (req, res) -> {
+            {return new TemplateContentPage(req,res).get();}
+        });
+        get("/page/page", (req, res) -> {
             {return new TemplateContentPage(req,res).get();}
         });
 

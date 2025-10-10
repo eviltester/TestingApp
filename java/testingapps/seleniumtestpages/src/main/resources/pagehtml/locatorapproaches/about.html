@@ -1,0 +1,30 @@
+<h1 id="about-locator-approaches-page">About Locator Approaches Page</h1>
+<div class="explanation">
+    <p>There are many ways to locate elements on a page. Each li has elements which can be
+        found in different ways, and built around the locators offered by tooling.
+    </p>
+</div>
+
+<!-- TOC -->
+<h2 id="use-dev-tools-to-inspect-the-page">Use Dev Tools To Inspect The Page</h2>
+<p>Use the inbuilt browser developer tools to inspect the DOM.</p>
+<p>You&#39;ll see that the <code>li</code> items have attributes or elements with attributes that can be used for locating them.</p>
+<p>Try and find these using a variety of locators.</p>
+<h3 id="exercises-for-automating">Exercises for Automating</h3>
+<p>Locate each of the items below and automate an assertion against the element.</p>
+<ul>
+    <li><code>tagName li</code> - find the <code>li</code> item using the element&#39;s tag i.e. <code>li</code></li>
+    <li><code>id li</code> - find the <code>li</code> with the id <code>find-by-id</code></li>
+    <li><code>className li</code> - find the <code>li</code> with class <code>find-by-class-name</code></li>
+    <li><code>name button</code> - find the <code>button</code> with the name <code>find-by-name</code></li>
+    <li><code>partial link text link</code> - find the <code>a</code> with text <code>partial link text link</code> by using a partial match on the link text</li>
+    <li><code>full link text link</code> - find the <code>a</code> with text <code>full link text link</code> by using a full match on the link text</li>
+    <li><code>by css li</code> - find the <code>li</code> item with class <code>by-css</code> using a CSS selector</li>
+    <li><code>by xpath li</code> - find the <code>li</code> with a child span which has an id <code>child-of-li</code> using an XPath selector</li>
+    <li><code>image</code> button - find the image with the alt tag <code>an image of a button</code></li>
+    <li><code>testid li</code> - find the <code>li</code> with a test id attribute <code>data-testid</code></li>
+    <li><code>labeled input value</code> - find the input field with the label <code>labeled</code></li>
+    <li><code>find by placeholder</code> - find the input field with the placeholder <code>inputplaceholder</code></li>
+    <li><code>titled li</code> - find the <code>li</code> with title <code>li with title</code></li>
+    <li><code>presentation role li</code> - find the <code>li</code> with the Aria role <code>presentation</code></li>
+</ul>

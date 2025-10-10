@@ -1,7 +1,7 @@
 # Other Practice Sites
 
 <div class="explanation">
-        <p>This is not the only practice site online. We've listed a few other
+        <p>This is not the only practice site online. We have listed a few other
 sites that we know of below, that we think offer useful testing and automating challenges.</p>
 <p>You can use these for automation testing practice and develop your test automation skills. The applications may well repeat similar components but the more you automate and practice the better you get.</p>
 <p>NOTE: We have only listed sites that were created as practice applications and those without extensive and intrusive ads.</p>
@@ -83,6 +83,16 @@ REST API with full documentation.
 
 An example e-commerce web site.
 
+## Hands-On Selenium WebDriver with Java Practice Site
+
+[![Hands-on Selenium Webdriver Screenshot](/images/othersites/hands-on-selenium-300x300.png)](https://bonigarcia.dev/selenium-webdriver-java/)
+
+[Hands-On Selenium WebDriver with Java Practice Site](https://bonigarcia.dev/selenium-webdriver-java/)
+
+- Suitable for practicing: Automating
+
+The Hands-on Selenium WebDriver site is the supporting set of sample web pages for the book [Hands-On Selenium WebDriver with Java](https://www.oreilly.com/library/view/hands-on-selenium-webdriver/9781098109998/) by Boni Garcia (it's a good book). The example automation code is on [Github](https://github.com/bonigarcia/selenium-webdriver-java)
+
 ## Practice Automation
 
 [![Practice Automation Screenshot](/images/othersites/practice-automation-300x300.png)](https://practice-automation.com/)
@@ -94,7 +104,6 @@ An example e-commerce web site.
 The Practice Automation site from AutomateNow has a page dedicated to each of the included example types e.g. tables, sliders, delays, etc.
 
 
-
 ## Practice Software Testing Toolshop
 
 [![Toolshop screenshot](/images/othersites/toolshop-300x300.png)](https://practicesoftwaretesting.com/)
@@ -103,7 +112,7 @@ The Practice Automation site from AutomateNow has a page dedicated to each of th
 
 - Suitable for practicing: Automating, Testing
 
-An example e-commerce web site.
+An example e-commerce web site with UI and API. Also has built in tutorials, hints and exercises.
 
 ## React Shopping Cart
 

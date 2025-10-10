@@ -1,0 +1,10 @@
+{
+  "title" : "Locator Approaches Page",
+  "urls": [
+      {"title":"Page", "url":"/page/locator-approaches"},
+      {"title":"About", "url":"/page/page?app=locatorapproaches&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/locatorapproaches/about.html"
+  }
+}

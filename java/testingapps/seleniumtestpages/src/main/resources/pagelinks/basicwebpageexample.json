@@ -1,8 +1,8 @@
 {
   "title" : "Basic Example Page",
   "urls": [
-      {"title":"Page", "url":"/styled/basic-web-page-test.html"},
-      {"title":"About", "url":"/styled/page?app=basicwebpageexample&t=About"}
+      {"title":"Page", "url":"/page/basic-web-page"},
+      {"title":"About", "url":"/page/page?app=basicwebpageexample&t=About"}
     ],
   "content": {
     "about": "/pagehtml/basicwebpageexample/about.html"

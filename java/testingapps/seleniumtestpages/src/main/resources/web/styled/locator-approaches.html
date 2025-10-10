@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head>
+    <title>Locator Approaches</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="/page/page?app=locatorapproaches&t=About">About</a>
+        </div>
+    </div>
+
+    <!-- content starts here -->
+
+    <h1 id="approaches">Locator Approaches</h1>
+
+    <div class="explanation">
+        <p>The li elements on this page support accessing by different locator strategies.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <p>List items and elements with various locators available:</p>
+    </div>
+    <div id="items-to-find">
+        <ul id="findable-items" class="findable" name="list-of-locatable-items">
+            <li>tagName li</li>
+            <li id="find-by-id">id li</li>
+            <li class="find-by-class-name">className li</li>
+            <!-- name is only allowed on certain element types https://www.w3schools.com/tags/att_name.asp -->
+            <li><button name="find-by-name" onclick="changeNameButtonText()">name button</button></li>
+            <li><a href="#approaches">partial link text link</a></li>
+            <li><a href="#approaches">full link text link</a></li>
+            <li class="by-css">by css li</li>
+            <!-- xpath is useful for upwards selection i.e. find the child then the parent (..)-->
+            <li><span id="child-of-li">by xpath</span> li</li>
+            <li>by alt <img id="image-button" alt="an image of a button" src="/images/buttons/button_image.png" onclick="clickImageButton()"/></li>
+            <li data-testid="testid">testid li</li>
+            <li><label>labeled <input type="text" size="15" name="input-value" value="input value"/></label></li>
+            <li><input type="text" placeholder="inputplaceholder" name="by-placeholder" value="find by placeholder" size="20" onclick="clickPlaceholderInput()" /></li>
+            <li title="li with title">titled li</li>
+            <li role="presentation">presentation role li</li>
+        </ul>
+    </div>
+
+    <script>
+        function changeNameButtonText(){
+            const button = document.querySelector("[name='find-by-name']");
+            button.textContent="Clicked name button";
+            setTimeout(() => {
+              document.querySelector("[name='find-by-name']").textContent = 'name button';
+            }, 2000);
+        }
+        function clickImageButton(){
+            const li = document.querySelector("#image-button");
+            li.src="/images/buttons/black_button_image.png";
+            setTimeout(() => {
+              document.querySelector("#image-button").src = '/images/buttons/button_image.png';
+            }, 2000);
+        }
+        function clickPlaceholderInput(){
+            const input = document.querySelector("input[placeholder='inputplaceholder']");
+            input.value = '';
+            setTimeout(() => {
+              document.querySelector("input[placeholder='inputplaceholder']").value = 'find by placeholder';
+            }, 2000);
+        }
+    </script>
+
+    <!-- end added content-->
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+</body>
+</html>
