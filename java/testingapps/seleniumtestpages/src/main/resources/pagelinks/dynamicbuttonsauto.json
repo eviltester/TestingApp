@@ -1,0 +1,10 @@
+{
+  "title" : "Automatic Buttons Example",
+  "urls": [
+      {"title":"Page", "url":"/styled/dynamic-buttons-auto.html"},
+      {"title":"About", "url":"/styled/page?app=dynamicbuttonsauto&t=About"}
+    ],
+  "content": {
+    "about": "/pagehtml/dynamicbuttonsauto/about.html"
+  }
+}

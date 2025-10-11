@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+    <title>Automatic Dynamic Buttons</title>
+    <link rel="stylesheet" href="/css/testpages.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/styled/css/dynamic-buttons.css">
+    <script defer data-domain="testpages.eviltester.com" src="https://plausible.io/js/script.js"></script>
+
+    <!-- HEAD -->
+
+</head>
+
+<body>
+
+<div class="page-body">
+
+
+    <div class="navigation">
+        <div class="page-navigation">
+            <a href="index.html">Index</a>
+        </div>
+        <div class="app-navigation">
+            <a>Page</a>
+            <a href="page?app=dynamicbuttonsauto&t=About">About</a>
+        </div>
+    </div>
+
+    <h1>Automatic Dynamic Buttons</h1>
+
+    <div class="explanation">
+        <p>This page has a button that will be replaced by a new button automatically after a delay.
+        </p>
+    </div>
+
+    <div class="centered">
+
+        <p id="buttonmessage">Click the button.</p>
+
+        <div id="buttons">
+
+        </div>
+    </div>
+
+    <div>
+        <ul id="click-messages">
+        </ul>
+    </div>
+
+
+    <div class="page-footer">
+        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+    </div>
+
+</div>
+
+<!-- BODY END -->
+
+<script>
+
+    window.onload = function() {
+
+
+        function createButton(anId, text, where) {
+            var button = document.createElement("button");
+            button.innerHTML = text;
+            button.setAttribute("id", anId);
+            var body = document.getElementById(where);
+            body.appendChild(button);
+
+            return button;
+        }
+
+        function addClickMessage(id){
+            const messagesul = document.getElementById("click-messages");
+            var li = document.createElement("li");
+            li.setAttribute("data-buttonid","button" + id);
+            li.innerHTML = "Clicked Button " + id;
+            messagesul.prepend(li);
+        }
+
+        function replaceButton(nextId){
+            // delete button
+            document.getElementById("buttons").innerHTML = "";
+            fullyCreateButton(nextId)
+        }
+
+        function fullyCreateButton(id){
+        console.log(id);
+            button = createButton("button" + id, "Button " + id, "buttons");
+            button.onclick = function () {
+                addClickMessage(id);
+            }
+            setTimeout(replaceButton,2000, ++id);
+        }
+
+        fullyCreateButton(1);
+
+    }
+
+</script>
+</body>
+</html>
