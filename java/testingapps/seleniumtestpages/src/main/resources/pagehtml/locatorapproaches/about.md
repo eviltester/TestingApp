@@ -30,7 +30,8 @@ Locate each of the items below and automate an assertion against the element.
 - `by xpath li` - find the `li` with a child span which has an id `child-of-li` using an XPath selector
 - `image` button - find the image with the alt tag `an image of a button`
 - `testid li` - find the `li` with a test id attribute `data-testid`
-- `labeled input value` - find the input field with the label `labeled`
+- `labeled wrapped input value` - find the input field with the label `label wrapped` (the input field is a child of the label)
+- `label for labeled input` - the label element `label for` is 'for' the input element (the input is a peer of the label, the `for` matches the `id`) 
 - `find by placeholder` - find the input field with the placeholder `inputplaceholder`
 - `titled li` - find the `li` with title `li with title`
 - `presentation role li` - find the `li` with the Aria role `presentation`
