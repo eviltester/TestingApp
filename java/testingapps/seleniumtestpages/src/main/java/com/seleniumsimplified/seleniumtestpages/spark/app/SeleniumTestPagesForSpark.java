@@ -69,6 +69,7 @@ public class SeleniumTestPagesForSpark {
         get("/page/basic-web-page", (req, res) -> {return new ResourceReader().asString("/web/styled/basic-web-page-test.html");});
         get("/page/locator-approaches", (req, res) -> {return new ResourceReader().asString("/web/styled/locator-approaches.html");});
         get("/page/dynamic-buttons-auto", (req, res) -> {return new ResourceReader().asString("/web/styled/dynamic-buttons-auto.html");});
+        get("/page/dynamic-buttons-auto-config", (req, res) -> {return new ResourceReader().asString("/web/styled/dynamic-buttons-auto-config.html");});
 
 
         // some tests check the url of the asked for page so don't redirect this one

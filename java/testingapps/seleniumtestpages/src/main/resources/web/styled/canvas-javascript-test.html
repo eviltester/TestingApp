@@ -22,7 +22,7 @@
         function addCommandToHistory(text){
             var li = document.createElement("li");
             li.appendChild(document.createTextNode(text));
-            document.getElementById("commandlist").append(li);
+            document.getElementById("commandlist").prepend(li);
         }
 
         function draw(shape, x, y, size, colour) {
@@ -83,80 +83,91 @@
 
     <div class="centered">
 
-        <div id="commands" style="float:right">
-            <p>Actions:</p>
-            <ul id="commandlist" style="display:table">
-            </ul>
-        </div>
+        <style>
+            /* The container that holds the <ul> */
 
-        <div id="thecanvas">
-            <canvas style="border:2px solid #000000;" id="canvas" width="300" height="300"></canvas>
-        </div>
+            .scrollable {
+              max-height: 300px;
+              overflow-y: auto;           /* vertical scroll bar when needed */
+              border: 1px solid #ddd;
+              padding: 0;
+            }
+        </style>
 
-        <form name="userchanges">
+                  <div id="commands" class="scrollable" style="float:right">
+                      <p>Actions:</p>
+                      <ul id="commandlist" style="display:table">
+                      </ul>
+                  </div>
 
-            <div class="form-label">
-                <label for="xnum">X</label>
-                <input type="number" name="xnum" id="xnum" value="20" style="width:60px"/>
-                <label for="ynum">Y</label>
-                <input type="number" name="ynum" id="ynum" value="30" style="width:60px"/>
-                <label for="shapesize">Size</label>
-                <input type="number" name="shapesize" id="shapesize" value="65" style="width:60px"/>
-            </div>
+                  <div id="thecanvas">
+                      <canvas style="border:2px solid #000000;" id="canvas" width="300" height="300"></canvas>
+                  </div>
 
-            <div class="form-label">
-                <label for="colourselect">Colour</label>
+                  <form name="userchanges">
 
-                <select id="colourselect" name="colour">
-                    <option value="#000000">Black</option>
-                    <option value="#FF0000">Red</option>
-                    <option value="#00FF00">Green</option>
-                    <option value="#0000FF">Blue</option>
-                    <option value="#C0C0C0">Grey</option>
-                </select>
+                      <div class="form-label">
+                          <label for="xnum">X</label>
+                          <input type="number" name="xnum" id="xnum" value="20" style="width:60px"/>
+                          <label for="ynum">Y</label>
+                          <input type="number" name="ynum" id="ynum" value="30" style="width:60px"/>
+                          <label for="shapesize">Size</label>
+                          <input type="number" name="shapesize" id="shapesize" value="65" style="width:60px"/>
+                      </div>
 
-                <label for="shapeselect">Shape</label>
-                <select id="shapeselect" name="shape">
-                    <option value="1">Circle</option>
-                    <option value="0">Square</option>
-                </select>
-            </div>
+                      <div class="form-label">
+                          <label for="colourselect">Colour</label>
 
-            <div class="form-label">
-                <input name="gobutton" type="button" value="Show" onClick="handleUserShape()"/>
-                <input name="clearbutton" type="button" onClick="clearCanvas()" value="Clear"/>
-            </div>
+                          <select id="colourselect" name="colour">
+                              <option value="#000000">Black</option>
+                              <option value="#FF0000">Red</option>
+                              <option value="#00FF00">Green</option>
+                              <option value="#0000FF">Blue</option>
+                              <option value="#C0C0C0">Grey</option>
+                          </select>
 
-        </form>
+                          <label for="shapeselect">Shape</label>
+                          <select id="shapeselect" name="shape">
+                              <option value="1">Circle</option>
+                              <option value="0">Square</option>
+                          </select>
+                      </div>
 
-    </div>
+                      <div class="form-label">
+                          <input name="gobutton" type="button" value="Show" onClick="handleUserShape()"/>
+                          <input name="clearbutton" type="button" onClick="clearCanvas()" value="Clear"/>
+                      </div>
 
-    <!--
-    <div class="explanation">
-        <p>Instructions:</p>
-        <ul>
-            <li>command: draw(shape, x, y, size, "#colour")</li>
-            <li>command: clearCanvas()</li>
-        </ul>
-        <p>Note:</p>
-        <ul>
-            <li>shape is 1 for circle, 0 for square</li>
-            <li>colour is an rgb string e.g. "#FF1C0A"</li>
-            <li>size is in pixels</li>
-            <li>canvas is 300 x 300</li>
-        </ul>
-    </div>
-    -->
+                  </form>
+
+              </div>
+
+              <!--
+              <div class="explanation">
+                  <p>Instructions:</p>
+                  <ul>
+                      <li>command: draw(shape, x, y, size, "#colour")</li>
+                      <li>command: clearCanvas()</li>
+                  </ul>
+                  <p>Note:</p>
+                  <ul>
+                      <li>shape is 1 for circle, 0 for square</li>
+                      <li>colour is an rgb string e.g. "#FF1C0A"</li>
+                      <li>size is in pixels</li>
+                      <li>canvas is 300 x 300</li>
+                  </ul>
+              </div>
+              -->
 
 
-    <div class="page-footer">
-        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
-            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
-    </div>
+              <div class="page-footer">
+                  <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+                      <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+              </div>
 
-</div>
+          </div>
 
-<!-- BODY END -->
+          <!-- BODY END -->
 
-</body>
-</html>
+          </body>
+          </html>

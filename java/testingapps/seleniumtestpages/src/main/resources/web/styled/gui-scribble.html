@@ -44,69 +44,78 @@
     <div>
         <button id="show-events-button" onclick="showHideEvents()">Show Events</button>
     </div>
-    <div id="drawevents" style="display:none">
-        <p>Events:</p>
-        <ul id="draweventslist">
-        </ul>
-    </div>
 
-
-    <div class="page-footer">
-        <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
-            <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
-    </div>
-
-</div>
-
-<!-- BODY END -->
-
-
-<script>
-
-        var drawcanvas = false;
-
-        document.getElementById("canvas").addEventListener("mouseup", function () {
-            drawcanvas = false;
-        });
-
-        document.getElementById("canvas").addEventListener("mousedown", function () {
-            drawcanvas = true;
-        });
-
-        function plot(x, y){
-            canvas = document.getElementById("canvas");
-            mycanvas2d = canvas.getContext("2d");
-            mycanvas2d.fillStyle = "#000000";
-            mycanvas2d.beginPath();
-            mycanvas2d.rect(x, y, 2, 2);
-            mycanvas2d.closePath();
-            mycanvas2d.fill();
+    <style>
+        .scrollable {
+          max-height: 300px;
+          overflow-y: auto;           /* vertical scroll bar when needed */
+          border: 1px solid #ddd;
+          padding: 0;
         }
+    </style>
+          <div id="drawevents" class="scrollable" style="display:none">
+              <p>Events:</p>
+              <ul id="draweventslist">
+              </ul>
+          </div>
 
-        document.getElementById("canvas").addEventListener("mousemove", function (event) {
-            if (drawcanvas == true) {
-                recordEvent(event);
-                canvas = document.getElementById("canvas");
-                var canvasrect = canvas.getBoundingClientRect();
-                plot(event.clientX - canvasrect.left, event.clientY - canvasrect.top)
-            }
-        });
 
-        function recordEvent(event){
-                var li = document.createElement("li");
-                li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
-                document.getElementById("draweventslist").appendChild(li);
-        }
+          <div class="page-footer">
+              <p><a target="_blank" rel="noopener noreferrer" href="https://eviltester.com">EvilTester.com</a>,
+                  <a target="_blank" rel="noopener noreferrer" href="https://compendiumdev.co.uk">Compendium Developments</a></p>
+          </div>
 
-        function showHideEvents(){
-            events = document.getElementById("drawevents");
-            if(events.style.display=='none'){
-                events.style.display='block';
-            }else{
-                events.style.display='none';
-            }
-        }
+      </div>
 
-</script>
-</body>
-</html>
+      <!-- BODY END -->
+
+
+      <script>
+
+              var drawcanvas = false;
+
+              document.getElementById("canvas").addEventListener("mouseup", function () {
+                  drawcanvas = false;
+              });
+
+              document.getElementById("canvas").addEventListener("mousedown", function () {
+                  drawcanvas = true;
+              });
+
+              function plot(x, y){
+                  canvas = document.getElementById("canvas");
+                  mycanvas2d = canvas.getContext("2d");
+                  mycanvas2d.fillStyle = "#000000";
+                  mycanvas2d.beginPath();
+                  mycanvas2d.rect(x, y, 2, 2);
+                  mycanvas2d.closePath();
+                  mycanvas2d.fill();
+              }
+
+              document.getElementById("canvas").addEventListener("mousemove", function (event) {
+                  if (drawcanvas == true) {
+                      recordEvent(event);
+                      canvas = document.getElementById("canvas");
+                      var canvasrect = canvas.getBoundingClientRect();
+                      plot(event.clientX - canvasrect.left, event.clientY - canvasrect.top)
+                  }
+              });
+
+              function recordEvent(event){
+                      var li = document.createElement("li");
+                      li.appendChild(document.createTextNode("draw " + event.clientX + ", " + event.clientY));
+                      document.getElementById("draweventslist").prepend(li);
+              }
+
+              function showHideEvents(){
+                  events = document.getElementById("drawevents");
+                  if(events.style.display=='none'){
+                      events.style.display='block';
+                  }else{
+                      events.style.display='none';
+                  }
+              }
+
+      </script>
+      </body>
+      </html>
