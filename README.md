@@ -1,6 +1,6 @@
 # Evil Tester's Compendium of Testing Apps
 
-A Compendium of applications, pages and REST APIs that you can use to practice your testing and automating.
+A compendium of applications, pages and REST APIs that you can use to practice your testing and automation.
 
 These are also used in training provided by Alan Richardson (Evil Tester).
 
@@ -59,7 +59,7 @@ The GUI will change gradually over time and more applications will be added.
 
 ## Separate Apps
 
-All of the parts of the compilation can be built individually if you use the module projects in the sub directories, e.g. if you only want the REST Listicator API then you can build and run just the restlisticator, but most people will find the Compendium compilation as the easiest way to run the apps.
+All of the parts of the compilation can be built individually if you use the module projects in the sub directories, e.g. if you only want the REST Listicator API then you can build and run just the restlisticator, but most people will find the Compendium compilation the easiest way to run the apps.
 
 ## This Compendium Contains:
 
@@ -73,7 +73,7 @@ All of the parts of the compilation can be built individually if you use the mod
 
 Remember that these are testing apps, some bugs are to be expected.
 
-But if you find anything that causes the local application to crash (that should not happen) or find something that prevents you moving forward then let me know, either via github or [contact me via my website](https://compendiumdev.co.uk/contact)
+But if you find anything that causes the local application to crash (that should not happen) or find something that prevents you moving forward, then let me know, either via github or [contact me via my website](https://compendiumdev.co.uk/contact)
 
 The [releases](https://github.com/eviltester/TestingApp/releases) should work. Their @Test methods were run during the build. And some interactive investigation would have been performed prior to release. Snapshot is not guaranteed to run, but the build status (as reported by travis) can be seen here [![Current Snapshot Build Status](https://travis-ci.org/eviltester/TestingApp.svg?branch=master)](https://travis-ci.org/eviltester/TestingApp).
 
