@@ -5,7 +5,8 @@ FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
 
 # Copy pom and source code as if from root of project
-COPY ./java/testingapps ./
+COPY ./java/pom.xml .
+COPY ./java/testingapps ./testingapps
 
 # Build the application
 RUN mvn clean package -DskipTests
