@@ -7,6 +7,43 @@ These are also used in training provided by Alan Richardson (Evil Tester).
 - https://compendiumdev.co.uk
 - https://eviltester.com
 
+## Legacy status and migration
+
+This project is now a legacy distribution. The actively maintained static apps, tools, and games have moved to [testpages.eviltester.com](https://testpages.eviltester.com/), with the source work now in the sibling `../testpages` project.
+
+For a route-by-route mapping from the old GitHub Pages URLs to the new Test Pages URLs, see [MIGRATED_URLS.md](MIGRATED_URLS.md).
+
+Use the new sections on Test Pages:
+
+- [Apps](https://testpages.eviltester.com/apps/)
+- [Tools](https://testpages.eviltester.com/tools/)
+- [Fun and Games](https://testpages.eviltester.com/fun-and-games/)
+
+Migrated applications and tools:
+
+- [7 Char Val](https://testpages.eviltester.com/apps/7-char-val/)
+- [E-Primer](https://testpages.eviltester.com/apps/e-primer/)
+- [Bookmarklet Generator](https://testpages.eviltester.com/tools/bookmarklet-generator/)
+- [CounterString Generator](https://testpages.eviltester.com/tools/counterstring-generator/)
+
+Migrated games:
+
+- [Test With A.T.T.I.T.U.D.E](https://testpages.eviltester.com/fun-and-games/test-with-attitude/)
+- [Cellular Automata](https://testpages.eviltester.com/fun-and-games/cellular-automata/)
+- [Console Driver](https://testpages.eviltester.com/fun-and-games/console-driver/)
+- [Canvas Driver](https://testpages.eviltester.com/fun-and-games/canvas-driver/)
+- [Coloured Square Game](https://testpages.eviltester.com/fun-and-games/coloured-square-game/)
+- [Coloured Square Changing Game](https://testpages.eviltester.com/fun-and-games/coloured-square-changing-game/)
+- [Number Hover Text Game](https://testpages.eviltester.com/fun-and-games/number-hover-text-game/)
+- [Random Walker](https://testpages.eviltester.com/fun-and-games/random-walker/)
+- [Multi-Level Random Walker](https://testpages.eviltester.com/fun-and-games/multi-level-random-walker/)
+- [Grid Walker](https://testpages.eviltester.com/fun-and-games/grid-walker/)
+- [One To Nine Calculator](https://testpages.eviltester.com/fun-and-games/one-to-nine-calculator/)
+- [Protect The Square](https://testpages.eviltester.com/fun-and-games/protect-the-square/)
+- [Think of a Number](https://testpages.eviltester.com/fun-and-games/think-of-a-number/) variants: [v1](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-1/), [v2](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-2/), [v3](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-3/), [v4](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-4/), [v5](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-5/), [v6](https://testpages.eviltester.com/fun-and-games/think-of-a-number/version-6/)
+
+The I-frame Search Engine and Responsive Test Tool are not being migrated. Newer browser security restrictions mean those iframe-based tools no longer work reliably, so the legacy copies in this project are deprecated.
+
 ## How to use
 
 Download the current release `.jar` file or clone the repo and build it yourself.
